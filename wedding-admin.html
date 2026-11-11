@@ -1,1 +1,251 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Client - Votura Wedding</title>
+  <style>
+    :root {
+      --bg: #fafaf9;
+      --card-bg: #ffffff;
+      --text: #1a1a1a;
+      --accent: #e11d48;
+      --border: 2px solid #1a1a1a;
+      --shadow: 4px 4px 0px #1a1a1a;
+    }
 
+    * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); padding: 20px; margin: 0; }
+    .container { max-width: 700px; margin: 0 auto; }
+    
+    header {
+      background: #fda4af;
+      border: var(--border);
+      box-shadow: var(--shadow);
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    header h1 { margin: 0; font-size: 20px; text-transform: uppercase; }
+    header p { margin: 5px 0 0 0; font-size: 13px; font-weight: bold; }
+
+    .card {
+      background: var(--card-bg);
+      border: var(--border);
+      box-shadow: var(--shadow);
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+
+    .form-group { margin-bottom: 15px; text-align: left; }
+    label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px; }
+    input, textarea {
+      width: 100%;
+      padding: 10px;
+      border: var(--border);
+      font-size: 14px;
+      outline: none;
+      background: #fafafa;
+    }
+
+    button {
+      background: var(--accent);
+      color: white;
+      font-weight: bold;
+      border: var(--border);
+      box-shadow: var(--shadow);
+      padding: 12px 20px;
+      cursor: pointer;
+      text-transform: uppercase;
+      width: 100%;
+    }
+    button:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px #1a1a1a; }
+
+    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+    th, td { border: var(--border); padding: 10px; text-align: left; font-size: 13px; }
+    th { background: #ffe4e6; }
+
+    /* MODAL POPUP */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center;
+      z-index: 999;
+    }
+    .modal-box {
+      background: white; border: 3px solid #1a1a1a; box-shadow: 6px 6px 0px #1a1a1a;
+      width: 90%; max-width: 350px; padding: 20px; text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>Pengaturan Undangan Digital</h1>
+      <p id="event-id-display">EVENT ID: Memuat...</p>
+    </header>
+
+    <!-- FORM EDIT INFORMASI NIKAH -->
+    <div class="card">
+      <h3>Edit Informasi Acara</h3>
+      <form id="wedding-admin-form">
+        <div class="form-group">
+          <label for="couple-name">Nama Pasangan Pengantin:</label>
+          <input type="text" id="couple-name" placeholder="contoh: Amelia & Riyan" required>
+        </div>
+
+        <div class="form-group">
+          <label for="wedding-date">Tanggal & Waktu Acara:</label>
+          <input type="text" id="wedding-date" placeholder="contoh: Sabtu, 12 Desember 2026" required>
+        </div>
+
+        <div class="form-group">
+          <label for="wedding-location">Lokasi Acara (Nama Tempat/Gedung):</label>
+          <textarea id="wedding-location" rows="2" placeholder="contoh: Warung D'Empang, Balaraja, Tangerang" required></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="maps-url">Link Google Maps (URL):</label>
+          <input type="url" id="maps-url" placeholder="https://maps.google.com/...">
+        </div>
+
+        <button type="submit" id="save-btn">Simpan Data Undangan 💾</button>
+      </form>
+    </div>
+
+    <!-- REKAP DATA RSVP TAMU -->
+    <div class="card">
+      <h3>Daftar Konfirmasi Tamu (RSVP)</h3>
+      <table>
+        <thead>
+          <tr>
+            <th>Nama Tamu</th>
+            <th>Kehadiran</th>
+            <th>Ucapan & Doa</th>
+          </tr>
+        </thead>
+        <tbody id="rsvp-table-body">
+          <tr>
+            <td colspan="3" style="text-align: center;">Memuat rekap RSVP...</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- CUSTOM MODAL -->
+  <div class="modal-overlay" id="custom-modal">
+    <div class="modal-box">
+      <h3 id="modal-title">Notifikasi</h3>
+      <p id="modal-message">Pesan...</p>
+      <button onclick="closeModal()" style="padding: 8px 16px; font-size: 12px;">Tutup</button>
+    </div>
+  </div>
+
+  <!-- FIREBASE SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAvCF0gKmZ9n28JltwoOS5QqcnlHhGz4Ww",
+      authDomain: "votura-studio.firebaseapp.com",
+      projectId: "votura-studio",
+      storageBucket: "votura-studio.firebasestorage.app"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const eventId = urlParams.get('event');
+
+    const form = document.getElementById('wedding-admin-form');
+    const coupleInput = document.getElementById('couple-name');
+    const dateInput = document.getElementById('wedding-date');
+    const locationInput = document.getElementById('wedding-location');
+    const mapsInput = document.getElementById('maps-url');
+    const rsvpTableBody = document.getElementById('rsvp-table-body');
+    const saveBtn = document.getElementById('save-btn');
+
+    function showModal(title, msg) {
+      document.getElementById('modal-title').textContent = title;
+      document.getElementById('modal-message').textContent = msg;
+      document.getElementById('custom-modal').style.display = 'flex';
+    }
+    function closeModal() { document.getElementById('custom-modal').style.display = 'none'; }
+
+    // 1. Load Data Event dari Firestore
+    function loadEventData() {
+      if (!eventId) {
+        showModal("Error", "ID Event tidak ditemukan di URL!");
+        return;
+      }
+      document.getElementById('event-id-display').textContent = `EVENT ID: ${eventId.toUpperCase()}`;
+
+      db.collection("events").doc(eventId).get().then((doc) => {
+        if (doc.exists) {
+          const data = doc.data();
+          coupleInput.value = data.coupleName || data.name || "";
+          dateInput.value = data.weddingDate || "";
+          locationInput.value = data.weddingLocation || "";
+          mapsInput.value = data.mapsUrl || "";
+        } else {
+          showModal("Error", "Event tidak ditemukan!");
+        }
+      });
+
+      loadRSVPData();
+    }
+
+    // 2. Simpan Data ke Firestore
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      saveBtn.disabled = true;
+      saveBtn.textContent = "Menyimpan... ⏳";
+
+      try {
+        await db.collection("events").doc(eventId).update({
+          coupleName: coupleInput.value,
+          weddingDate: dateInput.value,
+          weddingLocation: locationInput.value,
+          mapsUrl: mapsInput.value
+        });
+
+        showModal("Sukses", "Informasi pernikahan berhasil diperbarui!");
+      } catch (err) {
+        showModal("Gagal", "Error: " + err.message);
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.textContent = "Simpan Data Undangan 💾";
+      }
+    });
+
+    // 3. Load Rekap RSVP Tamu Real-time
+    function loadRSVPData() {
+      db.collection("events").doc(eventId).collection("rsvps")
+        .orderBy("createdAt", "desc")
+        .onSnapshot((snapshot) => {
+          rsvpTableBody.innerHTML = "";
+
+          if (snapshot.empty) {
+            rsvpTableBody.innerHTML = `<tr><td colspan="3" style="text-align: center;">Belum ada tamu yang mengisi RSVP.</td></tr>`;
+            return;
+          }
+
+          snapshot.forEach((doc) => {
+            const data = doc.data();
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+              <td><strong>${data.name}</strong></td>
+              <td>${data.status}</td>
+              <td>${data.message}</td>
+            `;
+            rsvpTableBody.appendChild(tr);
+          });
+        });
+    }
+
+    loadEventData();
+  </script>
+</body>
+</html>
