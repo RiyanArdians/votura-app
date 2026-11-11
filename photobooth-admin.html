@@ -1,1 +1,231 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Client - Votura Photobooth</title>
+  <style>
+    :root {
+      --bg: #f4f4f0;
+      --card-bg: #ffffff;
+      --text: #1a1a1a;
+      --accent: #8b5cf6;
+      --border: 2px solid #1a1a1a;
+      --shadow: 4px 4px 0px #1a1a1a;
+    }
 
+    * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); padding: 20px; margin: 0; }
+    .container { max-width: 600px; margin: 0 auto; }
+    
+    header {
+      background: #c084fc;
+      border: var(--border);
+      box-shadow: var(--shadow);
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+    header h1 { margin: 0; font-size: 20px; text-transform: uppercase; }
+    header p { margin: 5px 0 0 0; font-size: 13px; font-weight: bold; }
+
+    .card {
+      background: var(--card-bg);
+      border: var(--border);
+      box-shadow: var(--shadow);
+      padding: 20px;
+      margin-bottom: 24px;
+    }
+
+    .form-group { margin-bottom: 15px; text-align: left; }
+    label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px; }
+    input, select {
+      width: 100%;
+      padding: 10px;
+      border: var(--border);
+      font-size: 14px;
+      outline: none;
+      background: #fafafa;
+    }
+
+    button {
+      background: var(--accent);
+      color: white;
+      font-weight: bold;
+      border: var(--border);
+      box-shadow: var(--shadow);
+      padding: 12px 20px;
+      cursor: pointer;
+      text-transform: uppercase;
+      width: 100%;
+    }
+    button:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px #1a1a1a; }
+
+    .preview-box {
+      width: 100%;
+      height: 250px;
+      border: var(--border);
+      background: #e2e8f0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 10px;
+      overflow: hidden;
+      position: relative;
+    }
+    .preview-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
+
+    /* MODAL POPUP */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center;
+      z-index: 999;
+    }
+    .modal-box {
+      background: white; border: 3px solid #1a1a1a; box-shadow: 6px 6px 0px #1a1a1a;
+      width: 90%; max-width: 350px; padding: 20px; text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>Pengaturan Photobooth</h1>
+      <p id="event-id-display">EVENT ID: Memuat...</p>
+    </header>
+
+    <div class="card">
+      <h3>Edit Detail Event</h3>
+      <form id="admin-form">
+        <div class="form-group">
+          <label for="event-name">Nama Event / Acara:</label>
+          <input type="text" id="event-name" required>
+        </div>
+
+        <div class="form-group">
+          <label for="frame-file">Upload Frame Custom PNG (Transparan):</label>
+          <input type="file" id="frame-file" accept="image/png">
+        </div>
+
+        <div class="form-group">
+          <label>Preview Frame Aktif:</label>
+          <div class="preview-box" id="preview-container">
+            <span id="preview-text" style="color: #64748b; font-size: 13px;">Belum ada frame diunggah</span>
+            <img id="frame-preview-img" style="display: none;" alt="Preview Frame">
+          </div>
+        </div>
+
+        <button type="submit" id="save-btn">Simpan Perubahan 💾</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- CUSTOM MODAL -->
+  <div class="modal-overlay" id="custom-modal">
+    <div class="modal-box">
+      <h3 id="modal-title">Notifikasi</h3>
+      <p id="modal-message">Pesan...</p>
+      <button onclick="closeModal()" style="padding: 8px 16px; font-size: 12px;">Tutup</button>
+    </div>
+  </div>
+
+  <!-- FIREBASE SDK (Firestore & Storage) -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAvCF0gKmZ9n28JltwoOS5QqcnlHhGz4Ww",
+      authDomain: "votura-studio.firebaseapp.com",
+      projectId: "votura-studio",
+      storageBucket: "votura-studio.firebasestorage.app"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const storage = firebase.storage();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const eventId = urlParams.get('event');
+
+    const form = document.getElementById('admin-form');
+    const nameInput = document.getElementById('event-name');
+    const fileInput = document.getElementById('frame-file');
+    const previewImg = document.getElementById('frame-preview-img');
+    const previewText = document.getElementById('preview-text');
+    const saveBtn = document.getElementById('save-btn');
+
+    function showModal(title, msg) {
+      document.getElementById('modal-title').textContent = title;
+      document.getElementById('modal-message').textContent = msg;
+      document.getElementById('custom-modal').style.display = 'flex';
+    }
+    function closeModal() { document.getElementById('custom-modal').style.display = 'none'; }
+
+    // 1. Load Data Event dari Firestore
+    function loadEventData() {
+      if (!eventId) {
+        showModal("Error", "ID Event tidak ditemukan di URL!");
+        return;
+      }
+      document.getElementById('event-id-display').textContent = `EVENT ID: ${eventId.toUpperCase()}`;
+
+      db.collection("events").doc(eventId).get().then((doc) => {
+        if (doc.exists) {
+          const data = doc.data();
+          nameInput.value = data.name || "";
+          if (data.frameUrl) {
+            previewImg.src = data.frameUrl;
+            previewImg.style.display = 'block';
+            previewText.style.display = 'none';
+          }
+        } else {
+          showModal("Error", "Event tidak ditemukan!");
+        }
+      });
+    }
+
+    // 2. Simpan Data & Upload Frame ke Firebase Storage
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      saveBtn.disabled = true;
+      saveBtn.textContent = "Menyimpan... ⏳";
+
+      const newName = nameInput.value;
+      const file = fileInput.files[0];
+      let frameUrl = previewImg.src || "";
+
+      try {
+        // Jika ada file frame baru yang dipilih
+        if (file) {
+          const storageRef = storage.ref(`frames/${eventId}_${Date.now()}.png`);
+          await storageRef.put(file);
+          frameUrl = await storageRef.getDownloadURL();
+        }
+
+        // Update ke Firestore
+        await db.collection("events").doc(eventId).update({
+          name: newName,
+          frameUrl: frameUrl
+        });
+
+        if (frameUrl) {
+          previewImg.src = frameUrl;
+          previewImg.style.display = 'block';
+          previewText.style.display = 'none';
+        }
+
+        showModal("Sukses", "Pengaturan photobooth berhasil diperbarui!");
+      } catch (err) {
+        showModal("Gagal", "Error: " + err.message);
+      } finally {
+        saveBtn.disabled = false;
+        saveBtn.textContent = "Simpan Perubahan 💾";
+      }
+    });
+
+    loadEventData();
+  </script>
+</body>
+</html>
