@@ -1,1 +1,256 @@
 
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Votura Wedding Invitation</title>
+  <style>
+    :root {
+      --bg: #fafaf9;
+      --card: #ffffff;
+      --text: #292524;
+      --accent: #e11d48;
+      --border: 2px solid #292524;
+      --shadow: 4px 4px 0px #292524;
+    }
+
+    * { box-sizing: border-box; font-family: 'Georgia', serif; }
+    body { background-color: var(--bg); color: var(--text); padding: 20px; margin: 0; text-align: center; }
+    .container { max-width: 500px; margin: 0 auto; }
+
+    header {
+      background: #ffe4e6;
+      border: var(--border);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      margin-bottom: 20px;
+    }
+    header h1 { margin: 0; font-size: 24px; text-transform: uppercase; font-family: sans-serif; letter-spacing: 1px; }
+    header p { margin: 8px 0 0 0; font-size: 14px; font-style: italic; }
+
+    .card {
+      background: var(--card);
+      border: var(--border);
+      box-shadow: var(--shadow);
+      padding: 20px;
+      margin-bottom: 20px;
+      font-family: sans-serif;
+    }
+
+    #lock-screen { display: none; color: #dc2626; }
+    #wedding-screen { display: none; }
+
+    .couple-names { font-size: 28px; font-weight: bold; margin: 15px 0; color: #9f1239; }
+    .event-detail { font-size: 15px; margin-bottom: 8px; line-height: 1.5; }
+    
+    .btn-maps {
+      display: inline-block;
+      background: #0284c7;
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+      padding: 10px 20px;
+      border: var(--border);
+      box-shadow: 3px 3px 0px #292524;
+      margin-top: 10px;
+      text-transform: uppercase;
+      font-size: 13px;
+    }
+
+    /* RSVP Form */
+    .form-group { text-align: left; margin-bottom: 12px; }
+    label { font-weight: bold; font-size: 13px; display: block; margin-bottom: 4px; }
+    input, select, textarea {
+      width: 100%; padding: 8px; border: var(--border); outline: none; font-size: 14px; background: #fafafa;
+    }
+    .btn-submit {
+      background: var(--accent); color: white; font-weight: bold; border: var(--border);
+      box-shadow: var(--shadow); padding: 10px; width: 100%; cursor: pointer; text-transform: uppercase;
+    }
+
+    .rsvp-item {
+      border-bottom: 1px dashed #ccc; padding: 8px 0; text-align: left; font-size: 13px;
+    }
+    .rsvp-item strong { color: #9f1239; }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1>WEDDING INVITATION</h1>
+      <p id="sub-header">Memuat Undangan...</p>
+    </header>
+
+    <!-- LOADING SCREEN -->
+    <div class="card" id="loading-screen">
+      <p>Mengambil data acara...</p>
+    </div>
+
+    <!-- LOCKED SCREEN -->
+    <div class="card" id="lock-screen">
+      <h2>Undangan Tidak Aktif 🔒</h2>
+      <p id="lock-msg">Acara ini sudah berakhir atau terkunci.</p>
+    </div>
+
+    <!-- WEDDING CONTENT SCREEN -->
+    <div id="wedding-screen">
+      <div class="card">
+        <p style="font-style: italic; margin-0;">Tanpa mengurangi rasa hormat, kami mengundang Anda ke pernikahan:</p>
+        <div class="couple-names" id="couple-title">- & -</div>
+        
+        <div class="event-detail" id="event-date"><strong>Tanggal:</strong> -</div>
+        <div class="event-detail" id="event-location"><strong>Lokasi:</strong> -</div>
+
+        <a href="#" id="maps-link" target="_blank" class="btn-maps" style="display: none;">Buka Google Maps 📍</a>
+      </div>
+
+      <!-- FORM RSVP -->
+      <div class="card">
+        <h3>Konfirmasi Kehadiran (RSVP)</h3>
+        <form id="rsvp-form">
+          <div class="form-group">
+            <label for="guest-name">Nama Tamu:</label>
+            <input type="text" id="guest-name" placeholder="Isikan nama Anda" required>
+          </div>
+          <div class="form-group">
+            <label for="guest-status">Kehadiran:</label>
+            <select id="guest-status">
+              <option value="Hadir">Hadir</option>
+              <option value="Tidak Hadir">Tidak Hadir</option>
+              <option value="Ragu-ragu">Ragu-ragu</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="guest-message">Ucapan / Doa:</label>
+            <textarea id="guest-message" rows="3" placeholder="Tuliskan ucapan selamat..." required></textarea>
+          </div>
+          <button type="submit" class="btn-submit">Kirim Ucapan 💌</button>
+        </form>
+      </div>
+
+      <!-- LIST UCAPAN TAMU -->
+      <div class="card">
+        <h3>Ucapan & Doa Tamu</h3>
+        <div id="rsvp-list">
+          <p style="color: #78716c; font-size: 13px;">Belum ada ucapan.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FIREBASE SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAvCF0gKmZ9n28JltwoOS5QqcnlHhGz4Ww",
+      authDomain: "votura-studio.firebaseapp.com",
+      projectId: "votura-studio",
+      storageBucket: "votura-studio.firebasestorage.app"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const eventId = urlParams.get('event');
+
+    const loadingScreen = document.getElementById('loading-screen');
+    const lockScreen = document.getElementById('lock-screen');
+    const weddingScreen = document.getElementById('wedding-screen');
+    const rsvpForm = document.getElementById('rsvp-form');
+    const rsvpList = document.getElementById('rsvp-list');
+
+    function checkWeddingAccess() {
+      if (!eventId) {
+        showLocked("ID Event tidak ditemukan di URL!");
+        return;
+      }
+
+      db.collection("events").doc(eventId).onSnapshot((doc) => {
+        loadingScreen.style.display = 'none';
+
+        if (!doc.exists) {
+          showLocked(`Undangan ID "${eventId}" tidak terdaftar.`);
+          return;
+        }
+
+        const data = doc.data();
+        if (data.status !== 'active') {
+          showLocked("Masa aktif undangan ini telah berakhir.");
+        } else {
+          lockScreen.style.display = 'none';
+          weddingScreen.style.display = 'block';
+
+          document.getElementById('sub-header').textContent = data.name;
+          document.getElementById('couple-title').textContent = data.coupleName || data.name;
+          document.getElementById('event-date').innerHTML = `<strong>Tanggal:</strong> ${data.weddingDate || 'Menunggu pembaruan'}`;
+          document.getElementById('event-location').innerHTML = `<strong>Lokasi:</strong> ${data.weddingLocation || 'Menunggu pembaruan'}`;
+
+          if (data.mapsUrl) {
+            const mapsBtn = document.getElementById('maps-link');
+            mapsBtn.href = data.mapsUrl;
+            mapsBtn.style.display = 'inline-block';
+          }
+
+          loadRSVP();
+        }
+      });
+    }
+
+    function showLocked(msg) {
+      loadingScreen.style.display = 'none';
+      weddingScreen.style.display = 'none';
+      lockScreen.style.display = 'block';
+      document.getElementById('lock-msg').textContent = msg;
+    }
+
+    // SIMPAN RSVP
+    rsvpForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('guest-name').value;
+      const status = document.getElementById('guest-status').value;
+      const msg = document.getElementById('guest-message').value;
+
+      db.collection("events").doc(eventId).collection("rsvps").add({
+        name: name,
+        status: status,
+        message: msg,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp()
+      }).then(() => {
+        alert("Terima kasih atas konfirmasi dan ucapannya!");
+        rsvpForm.reset();
+      });
+    });
+
+    // LOAD DAFTAR RSVP REAL-TIME
+    function loadRSVP() {
+      db.collection("events").doc(eventId).collection("rsvps")
+        .orderBy("createdAt", "desc")
+        .onSnapshot((snapshot) => {
+          rsvpList.innerHTML = "";
+          if (snapshot.empty) {
+            rsvpList.innerHTML = `<p style="color: #78716c; font-size: 13px;">Belum ada ucapan.</p>`;
+            return;
+          }
+
+          snapshot.forEach((doc) => {
+            const data = doc.data();
+            const item = document.createElement('div');
+            item.className = 'rsvp-item';
+            item.innerHTML = `
+              <strong>${data.name}</strong> (${data.status})<br>
+              <span style="color: #44403c;">"${data.message}"</span>
+            `;
+            rsvpList.appendChild(item);
+          });
+        });
+    }
+
+    checkWeddingAccess();
+  </script>
+</body>
+</html>
