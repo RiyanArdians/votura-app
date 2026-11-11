@@ -168,15 +168,18 @@
 
   <script>
     // ==========================================
-    // 1. TEMPEL KODE FIREBASE CONFIG KAMU DI SINI
+    // FIREBASE CONFIG HASIL UBAHAN REAL
     // ==========================================
     const firebaseConfig = {
       apiKey: "AIzaSyAvCF0gKmZ9n28JltwoOS5QqcnlHhGz4Ww",
       authDomain: "votura-studio.firebaseapp.com",
       projectId: "votura-studio",
-      storageBucket: "votura-studio.firebasestorage.app",
-      messagingSenderId: "PASTE_SENDER_ID_DI_SINI",
-      appId: "PASTE_APP_ID_DI_SINI"
+      storageBucket: "votura-studio.firebasestorage.app"
+    };
+
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
     };
 
     firebase.initializeApp(firebaseConfig);
