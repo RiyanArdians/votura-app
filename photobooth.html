@@ -1,1 +1,229 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Votura Virtual Photobooth</title>
+  <style>
+    :root {
+      --bg: #121212;
+      --card: #1e1e1e;
+      --text: #ffffff;
+      --accent: #2563eb;
+      --border: 2px solid #ffffff;
+      --shadow: 4px 4px 0px #ffffff;
+    }
 
+    * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    body { background-color: var(--bg); color: var(--text); padding: 20px; margin: 0; text-align: center; }
+    .container { max-width: 500px; margin: 0 auto; }
+
+    header {
+      background: #facc15;
+      color: #1a1a1a;
+      border: 2px solid #1a1a1a;
+      box-shadow: 4px 4px 0px #ffffff;
+      padding: 15px;
+      margin-bottom: 20px;
+    }
+    header h1 { margin: 0; font-size: 20px; text-transform: uppercase; }
+    header p { margin: 5px 0 0 0; font-size: 13px; font-weight: bold; }
+
+    .card {
+      background: var(--card);
+      border: var(--border);
+      box-shadow: var(--shadow);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    /* SCREEN STATES */
+    #lock-screen { display: none; color: #ef4444; }
+    #lock-screen h2 { text-transform: uppercase; margin-top: 0; }
+    
+    #photobooth-screen { display: none; }
+
+    /* CAMERA & CANVAS CONTAINER */
+    .camera-box {
+      position: relative;
+      width: 100%;
+      max-width: 400px;
+      height: 400px;
+      margin: 0 auto 15px auto;
+      border: var(--border);
+      background: #000;
+      overflow: hidden;
+    }
+    video, canvas {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    button {
+      background: var(--accent);
+      color: white;
+      font-weight: bold;
+      border: var(--border);
+      box-shadow: var(--shadow);
+      padding: 12px 24px;
+      font-size: 16px;
+      cursor: pointer;
+      text-transform: uppercase;
+      width: 100%;
+    }
+    button:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px #ffffff; }
+
+    .badge-status {
+      display: inline-block;
+      background: #22c55e;
+      color: black;
+      font-weight: bold;
+      padding: 4px 8px;
+      font-size: 12px;
+      margin-bottom: 10px;
+      border: 1px solid white;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <h1 id="event-title-header">VOTURA PHOTOBOOTH</h1>
+      <p id="event-id-sub">Memuat Event...</p>
+    </header>
+
+    <!-- LOADING SCREEN -->
+    <div class="card" id="loading-screen">
+      <p>Verifikasi Akses Event...</p>
+    </div>
+
+    <!-- LOCKED / EXPIRED SCREEN -->
+    <div class="card" id="lock-screen">
+      <h2>Akses Terkunci 🔒</h2>
+      <p id="lock-message">Maaf, event photobooth ini sedang tidak aktif atau sudah berakhir.</p>
+    </div>
+
+    <!-- PHOTOBOOTH ACTIVE SCREEN -->
+    <div class="card" id="photobooth-screen">
+      <div class="badge-status">● LIVE CAMERA</div>
+      
+      <div class="camera-box">
+        <video id="webcam" autoplay playsinline></video>
+        <canvas id="photo-canvas" style="display: none;"></canvas>
+      </div>
+
+      <button id="snap-btn" onclick="takePhoto()">Ambil Foto 📸</button>
+      <button id="retake-btn" onclick="startCamera()" style="display: none; background: #6b7280; margin-top: 10px;">Foto Ulang 🔄</button>
+    </div>
+  </div>
+
+  <!-- FIREBASE SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAvCF0gKmZ9n28JltwoOS5QqcnlHhGz4Ww",
+      authDomain: "votura-studio.firebaseapp.com",
+      projectId: "votura-studio",
+      storageBucket: "votura-studio.firebasestorage.app"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    // 1. Ambil Parameter Event dari URL (?event=xxx)
+    const urlParams = new URLSearchParams(window.location.search);
+    const eventId = urlParams.get('event');
+
+    const loadingScreen = document.getElementById('loading-screen');
+    const lockScreen = document.getElementById('lock-screen');
+    const photoboothScreen = document.getElementById('photobooth-screen');
+    const video = document.getElementById('webcam');
+    const canvas = document.getElementById('photo-canvas');
+    let streamInstance = null;
+
+    // 2. Cek Akses Event ke Firestore
+    function checkEventAccess() {
+      if (!eventId) {
+        showLocked("ID Event tidak ditemukan di URL!");
+        return;
+      }
+
+      db.collection("events").doc(eventId).onSnapshot((doc) => {
+        loadingScreen.style.display = 'none';
+
+        if (!doc.exists) {
+          showLocked(`Event dengan ID "${eventId}" tidak terdaftar.`);
+          return;
+        }
+
+        const data = doc.data();
+        document.getElementById('event-title-header').textContent = data.name;
+        document.getElementById('event-id-sub').textContent = `EVENT ID: ${doc.id.toUpperCase()}`;
+
+        if (data.status !== 'active') {
+          showLocked("Acara ini telah dikunci oleh penyelenggara.");
+          stopCamera();
+        } else {
+          lockScreen.style.display = 'none';
+          photoboothScreen.style.display = 'block';
+          startCamera();
+        }
+      }, (error) => {
+        showLocked("Gagal terhubung ke server: " + error.message);
+      });
+    }
+
+    function showLocked(msg) {
+      loadingScreen.style.display = 'none';
+      photoboothScreen.style.display = 'none';
+      lockScreen.style.display = 'block';
+      document.getElementById('lock-message').textContent = msg;
+    }
+
+    // 3. Kontrol Kamera (Webcam / HP)
+    async function startCamera() {
+      document.getElementById('snap-btn').style.display = 'block';
+      document.getElementById('retake-btn').style.display = 'none';
+      video.style.display = 'block';
+      canvas.style.display = 'none';
+
+      try {
+        streamInstance = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: "user", width: { ideal: 1080 }, height: { ideal: 1080 } },
+          audio: false
+        });
+        video.srcObject = streamInstance;
+      } catch (err) {
+        alert("Tidak dapat mengakses kamera: " + err.message);
+      }
+    }
+
+    function stopCamera() {
+      if (streamInstance) {
+        streamInstance.getTracks().forEach(track => track.stop());
+      }
+    }
+
+    // 4. Ambil Foto
+    function takePhoto() {
+      const context = canvas.getContext('2d');
+      canvas.width = video.videoWidth || 400;
+      canvas.height = video.videoHeight || 400;
+      context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+      video.style.display = 'none';
+      canvas.style.display = 'block';
+
+      document.getElementById('snap-btn').style.display = 'none';
+      document.getElementById('retake-btn').style.display = 'block';
+    }
+
+    // Jalankan Pengecekan
+    checkEventAccess();
+  </script>
+</body>
+</html>
