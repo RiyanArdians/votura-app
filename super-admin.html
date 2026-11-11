@@ -17,7 +17,7 @@
 
     * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     body { background-color: var(--bg); color: var(--text); padding: 20px; margin: 0; }
-    .container { max-width: 900px; margin: 0 auto; }
+    .container { max-width: 1000px; margin: 0 auto; }
     
     header {
       background: #facc15;
@@ -61,7 +61,7 @@
     button:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px #1a1a1a; }
 
     table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-    th, td { border: var(--border); padding: 10px; text-align: left; font-size: 14px; }
+    th, td { border: var(--border); padding: 10px; text-align: left; font-size: 14px; vertical-align: middle; }
     th { background: #e2e8f0; }
 
     .badge {
@@ -75,9 +75,27 @@
     .badge-active { background: #bbf7d0; color: #166534; border: 1px solid #166534; }
     .badge-locked { background: #fecaca; color: #991b1b; border: 1px solid #991b1b; }
     
-    .btn-sm { padding: 4px 8px; font-size: 12px; box-shadow: 2px 2px 0px #1a1a1a; margin-right: 4px; }
+    .btn-sm { padding: 5px 10px; font-size: 12px; box-shadow: 2px 2px 0px #1a1a1a; margin-right: 4px; text-decoration: none; display: inline-block; }
+    .btn-open { background: #3b82f6; color: white; }
+    .btn-admin { background: #8b5cf6; color: white; }
     .btn-toggle { background: #f59e0b; color: white; }
     .btn-delete { background: var(--danger); color: white; }
+
+    /* CUSTOM NEO-BRUTALISM MODAL POPUP */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center;
+      z-index: 999;
+    }
+    .modal-box {
+      background: white; border: 3px solid #1a1a1a; box-shadow: 6px 6px 0px #1a1a1a;
+      width: 90%; max-width: 400px; padding: 24px; text-align: center;
+    }
+    .modal-box h3 { margin-top: 0; text-transform: uppercase; font-size: 18px; }
+    .modal-box p { font-size: 14px; color: #4b5563; margin-bottom: 20px; }
+    .modal-actions { display: flex; gap: 10px; justify-content: center; }
+    .modal-btn-confirm { background: var(--accent); color: white; }
+    .modal-btn-cancel { background: #9ca3af; color: white; }
   </style>
 </head>
 <body>
@@ -94,7 +112,7 @@
       <form id="create-event-form">
         <div class="form-group">
           <label for="event-id">ID Event (Unik, Tanpa Spasi/Simbol):</label>
-          <input type="text" id="event-id" placeholder="contoh: nikah-amel-riyan atau photobooth-ultah-budi" required>
+          <input type="text" id="event-id" placeholder="contoh: nikah-amel-riyan atau ultah-budi" required>
         </div>
         <div class="form-group">
           <label for="event-name">Nama Event / Client:</label>
@@ -121,7 +139,7 @@
             <th>Nama Event</th>
             <th>Tipe</th>
             <th>Status</th>
-            <th>Aksi</th>
+            <th>Aksi & Link Access</th>
           </tr>
         </thead>
         <tbody id="event-table-body">
@@ -133,7 +151,18 @@
     </div>
   </div>
 
-  <!-- FIREBASE SDK (COMPAT VERSION FOR EASY HTML USE) -->
+  <!-- CUSTOM MODAL HTML -->
+  <div class="modal-overlay" id="custom-modal">
+    <div class="modal-box">
+      <h3 id="modal-title">Notifikasi</h3>
+      <p id="modal-message">Pesan notifikasi...</p>
+      <div class="modal-actions" id="modal-actions">
+        <button class="btn-sm modal-btn-confirm" onclick="closeModal()">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- FIREBASE SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
@@ -142,7 +171,7 @@
     // 1. TEMPEL KODE FIREBASE CONFIG KAMU DI SINI
     // ==========================================
     const firebaseConfig = {
-      apiKey: "AIzaSyAvCF0gKmZ9n28JltwoOS5QqcnlHhGz4Ww",
+      apiKey: "PASTE_API_KEY_DI_SINI",
       authDomain: "votura-studio.firebaseapp.com",
       projectId: "votura-studio",
       storageBucket: "votura-studio.firebasestorage.app",
@@ -150,13 +179,37 @@
       appId: "PASTE_APP_ID_DI_SINI"
     };
 
-    // Initialize Firebase
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    // Elements
     const form = document.getElementById('create-event-form');
     const tableBody = document.getElementById('event-table-body');
+
+    // HELPER: Modal Custom UI
+    function showModal(title, message, isConfirm = false, onConfirm = null) {
+      document.getElementById('modal-title').textContent = title;
+      document.getElementById('modal-message').textContent = message;
+      const actionsEl = document.getElementById('modal-actions');
+      
+      if (isConfirm) {
+        actionsEl.innerHTML = `
+          <button class="btn-sm modal-btn-confirm" id="confirm-btn">Ya, Hapus</button>
+          <button class="btn-sm modal-btn-cancel" onclick="closeModal()">Batal</button>
+        `;
+        document.getElementById('confirm-btn').onclick = () => {
+          closeModal();
+          if (onConfirm) onConfirm();
+        };
+      } else {
+        actionsEl.innerHTML = `<button class="btn-sm modal-btn-confirm" onclick="closeModal()">OK</button>`;
+      }
+      
+      document.getElementById('custom-modal').style.display = 'flex';
+    }
+
+    function closeModal() {
+      document.getElementById('custom-modal').style.display = 'none';
+    }
 
     // READ: Load Events dari Firestore
     function loadEvents() {
@@ -164,76 +217,4 @@
         tableBody.innerHTML = "";
 
         if (snapshot.empty) {
-          tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center;">Belum ada event yang dibuat.</td></tr>`;
-          return;
-        }
-
-        snapshot.forEach((doc) => {
-          const data = doc.data();
-          const docId = doc.id;
-
-          const tr = document.createElement('tr');
-          tr.innerHTML = `
-            <td><strong>${docId}</strong></td>
-            <td>${data.name}</td>
-            <td>${data.type.toUpperCase()}</td>
-            <td>
-              <span class="badge ${data.status === 'active' ? 'badge-active' : 'badge-locked'}">
-                ${data.status}
-              </span>
-            </td>
-            <td>
-              <button class="btn-sm btn-toggle" onclick="toggleStatus('${docId}', '${data.status}')">
-                ${data.status === 'active' ? 'Lock' : 'Unlock'}
-              </button>
-              <button class="btn-sm btn-delete" onclick="deleteEvent('${docId}')">Delete</button>
-            </td>
-          `;
-          tableBody.appendChild(tr);
-        });
-      });
-    }
-
-    // CREATE: Tambah Event Baru
-    form.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const rawId = document.getElementById('event-id').value.trim().toLowerCase();
-      const eventId = rawId.replace(/[^a-z0-9-]/g, '-'); // Sanitize ID
-      const name = document.getElementById('event-name').value;
-      const type = document.getElementById('event-type').value;
-
-      db.collection("events").doc(eventId).set({
-        name: name,
-        type: type,
-        status: "active",
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      })
-      .then(() => {
-        alert("Event berhasil ditambahkan!");
-        form.reset();
-      })
-      .catch((error) => {
-        alert("Gagal menambahkan event: " + error.message);
-      });
-    });
-
-    // UPDATE: Lock / Unlock Event
-    window.toggleStatus = function(id, currentStatus) {
-      const newStatus = currentStatus === 'active' ? 'locked' : 'active';
-      db.collection("events").doc(id).update({
-        status: newStatus
-      });
-    };
-
-    // DELETE: Hapus Event
-    window.deleteEvent = function(id) {
-      if (confirm(`Yakin ingin menghapus event ID: "${id}"?`)) {
-        db.collection("events").doc(id).delete();
-      }
-    };
-
-    // Jalankan Load Events pertama kali
-    loadEvents();
-  </script>
-</body>
-</html>
+          tableBody.innerHTML = `<tr><td colspan="5" style="text-align:center;">Belum ada event
