@@ -180,6 +180,16 @@
       transition: border-color 0.2s ease;
     }
 
+    input[type="color"] {
+      width: 100%;
+      height: 42px;
+      padding: 4px 6px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      cursor: pointer;
+    }
+
     input:focus, select:focus, textarea:focus { border-color: var(--accent); background: #FFFFFF; }
 
     .dynamic-item {
@@ -203,6 +213,24 @@
     }
 
     .item-header strong { font-size: 14px; }
+
+    /* PANEL PENGATURAN TEMA & WARNA CLIENT */
+    .theme-config-box {
+      background: #FFFFFF;
+      border: 1px solid rgba(140, 115, 85, 0.28);
+      border-radius: 14px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .theme-config-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
 
     /* AREA UPLOAD GAMBAR LANGSUNG KE FIRESTORE (GRATIS TANPA STORAGE) */
     .img-upload-row {
@@ -345,7 +373,7 @@
     <header>
       <div>
         <h1>Votura Studio — Pusat Kendali Visual</h1>
-        <p>Unggah foto &amp; bingkai langsung dari perangkat (100% gratis tersimpan otomatis di database tanpa Storage).</p>
+        <p>Atur konten utama, demo, 5 preset tema visual klien, warna, font, serta unggah foto &amp; frame langsung dari perangkat.</p>
       </div>
       <div class="header-actions">
         <a href="index.html" target="_blank" class="btn btn-outline btn-sm">Web Utama</a>
@@ -647,7 +675,7 @@
           </div>
         </div>
         <div class="section-sub">
-          Data ditarik otomatis dari koleksi <code>events</code> milik <strong>Super Admin</strong>. Unggah langsung foto sampul atau bingkai PNG khusus untuk setiap pesanan client di bawah ini.
+          Data ditarik otomatis dari koleksi <code>events</code> milik <strong>Super Admin</strong>. Pilih salah satu dari <strong>5 Preset Tema</strong>, ubah warna &amp; font sesuai permintaan klien, serta unggah foto sampul atau bingkai PNG khusus.
         </div>
         <div id="clients-editor-list">
           <p style="font-size: 13px; color: var(--ink-muted);">Menghubungkan ke database Super Admin...</p>
@@ -691,9 +719,53 @@
     let activeTabId = "tab-landing";
 
     /* ============================================================
+       5 PRESET PALET TEMA VISUAL CLIENT (WEDDING & PHOTOBOOTH)
+       ============================================================ */
+    const THEME_PRESET_PALETTES = {
+      "theme-editorial": {
+        label: "1. Editorial Warm Arch",
+        bgMain: "#EFECE6",
+        accent: "#8C7355",
+        ink: "#23211E",
+        fontH: "'Cormorant Garamond', serif",
+        fontB: "'Plus Jakarta Sans', sans-serif"
+      },
+      "theme-royal-heritage": {
+        label: "2. Royal Heritage / Adat",
+        bgMain: "#142923",
+        accent: "#D4AF37",
+        ink: "#F5EFE0",
+        fontH: "'Cinzel', serif",
+        fontB: "'Lora', serif"
+      },
+      "theme-botanical": {
+        label: "3. Sage Botanical Garden",
+        bgMain: "#F4F7F3",
+        accent: "#5F7A61",
+        ink: "#263327",
+        fontH: "'Playfair Display', serif",
+        fontB: "'DM Sans', sans-serif"
+      },
+      "theme-monochrome": {
+        label: "4. Modern Clean Monochrome",
+        bgMain: "#FFFFFF",
+        accent: "#18181B",
+        ink: "#18181B",
+        fontH: "'Space Grotesk', sans-serif",
+        fontB: "'Inter', sans-serif"
+      },
+      "theme-midnight-luxe": {
+        label: "5. Midnight Velvet Luxe",
+        bgMain: "#121214",
+        accent: "#E2B49A",
+        ink: "#F4F1EE",
+        fontH: "'Bodoni Moda', serif",
+        fontB: "'Montserrat', sans-serif"
+      }
+    };
+
+    /* ============================================================
        KOMPRESI GAMBAR OTOMATIS DI BROWSER -> DATA URL (GRATIS TANPA STORAGE)
-       - keepTransparency = true  -> output PNG teroptimasi (untuk frame photobooth)
-       - keepTransparency = false -> output WebP/JPEG ringan (untuk foto biasa)
        ============================================================ */
     function handleCompressedImage(inputEl, keepTransparency, onSuccess) {
       if (!inputEl.files || !inputEl.files[0]) return;
@@ -729,7 +801,6 @@
 
           let dataUrl;
           if (keepTransparency) {
-            // Coba WebP lossless/high quality (mendukung alpha transparan & jauh lebih kecil dari PNG)
             dataUrl = canvas.toDataURL('image/webp', 0.85);
             if (!dataUrl.startsWith('data:image/webp')) {
               dataUrl = canvas.toDataURL('image/png');
@@ -741,10 +812,8 @@
             }
           }
 
-          // Cek perkiraan ukuran string agar aman di bawah limit 1MB Firestore
           const approxBytes = Math.round((dataUrl.length * 3) / 4);
           if (approxBytes > 750 * 1024) {
-            // Jika masih di atas 750KB, perkecil resolusi ke 640px
             const ratio = 640 / Math.max(width, height);
             canvas.width = Math.round(width * ratio);
             canvas.height = Math.round(height * ratio);
@@ -1297,6 +1366,7 @@
 
     /* ============================================================
        4. WEB VISUAL PESANAN KLIEN (REAL-TIME DARI KOLEKSI "events" SUPER ADMIN)
+       DILENGKAPI 5 PRESET TEMA + KUSTOM WARNA & FONT PER CLIENT
        ============================================================ */
     function listenSuperAdminEvents() {
       const container = document.getElementById('clients-editor-list');
@@ -1315,6 +1385,89 @@
           container.innerHTML = `<p style="font-size: 13px; color: var(--danger);">Gagal menyinkronkan data dari Super Admin: ${escapeHtml(err.message)}</p>`;
         }
       });
+    }
+
+    function buildClientThemeEditorHtml(ev) {
+      const currentTheme = ev.themeId || "theme-editorial";
+      const preset = THEME_PRESET_PALETTES[currentTheme] || THEME_PRESET_PALETTES["theme-editorial"];
+      const style = ev.customStyle || {};
+
+      const bgMain = style.bgMain || preset.bgMain;
+      const accent = style.accent || preset.accent;
+      const ink = style.ink || preset.ink;
+      const fontH = style.fontHeading || preset.fontH;
+      const fontB = style.fontBody || preset.fontB;
+
+      return `
+        <div class="theme-config-box">
+          <div class="theme-config-header">
+            <strong style="font-size:13px;">Pengaturan Tema, Warna &amp; Tipografi Client</strong>
+            <button type="button" class="btn btn-outline btn-sm" onclick="applyPresetDefaultsToClientInputs('${escapeHtml(ev.id)}', document.getElementById('sa-theme-${escapeHtml(ev.id)}').value)">Reset ke Warna Bawaan Tema</button>
+          </div>
+          <div class="grid-3">
+            <div class="form-group">
+              <label>Preset Tema Visual</label>
+              <select id="sa-theme-${escapeHtml(ev.id)}" onchange="applyPresetDefaultsToClientInputs('${escapeHtml(ev.id)}', this.value)">
+                <option value="theme-editorial" ${currentTheme === 'theme-editorial' ? 'selected' : ''}>1. Editorial Warm Arch</option>
+                <option value="theme-royal-heritage" ${currentTheme === 'theme-royal-heritage' ? 'selected' : ''}>2. Royal Heritage / Adat</option>
+                <option value="theme-botanical" ${currentTheme === 'theme-botanical' ? 'selected' : ''}>3. Sage Botanical Garden</option>
+                <option value="theme-monochrome" ${currentTheme === 'theme-monochrome' ? 'selected' : ''}>4. Modern Clean Monochrome</option>
+                <option value="theme-midnight-luxe" ${currentTheme === 'theme-midnight-luxe' ? 'selected' : ''}>5. Midnight Velvet Luxe</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Gaya Font Judul</label>
+              <select id="sa-font-h-${escapeHtml(ev.id)}">
+                <option value="'Cormorant Garamond', serif" ${fontH === "'Cormorant Garamond', serif" ? 'selected' : ''}>Cormorant Garamond (Editorial)</option>
+                <option value="'Cinzel', serif" ${fontH === "'Cinzel', serif" ? 'selected' : ''}>Cinzel (Royal / Klasik)</option>
+                <option value="'Playfair Display', serif" ${fontH === "'Playfair Display', serif" ? 'selected' : ''}>Playfair Display (Botanical)</option>
+                <option value="'Space Grotesk', sans-serif" ${fontH === "'Space Grotesk', sans-serif" ? 'selected' : ''}>Space Grotesk (Modern)</option>
+                <option value="'Bodoni Moda', serif" ${fontH === "'Bodoni Moda', serif" ? 'selected' : ''}>Bodoni Moda (Luxury)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Gaya Font Teks Isi</label>
+              <select id="sa-font-b-${escapeHtml(ev.id)}">
+                <option value="'Plus Jakarta Sans', sans-serif" ${fontB === "'Plus Jakarta Sans', sans-serif" ? 'selected' : ''}>Plus Jakarta Sans</option>
+                <option value="'Lora', serif" ${fontB === "'Lora', serif" ? 'selected' : ''}>Lora Serif</option>
+                <option value="'DM Sans', sans-serif" ${fontB === "'DM Sans', sans-serif" ? 'selected' : ''}>DM Sans</option>
+                <option value="'Inter', sans-serif" ${fontB === "'Inter', sans-serif" ? 'selected' : ''}>Inter Clean</option>
+                <option value="'Montserrat', sans-serif" ${fontB === "'Montserrat', sans-serif" ? 'selected' : ''}>Montserrat</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid-3">
+            <div class="form-group" style="margin-bottom:0;">
+              <label>Warna Latar Utama</label>
+              <input type="color" id="sa-bg-${escapeHtml(ev.id)}" value="${escapeHtml(bgMain)}">
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label>Warna Aksen &amp; Tombol</label>
+              <input type="color" id="sa-acc-${escapeHtml(ev.id)}" value="${escapeHtml(accent)}">
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label>Warna Teks Utama</label>
+              <input type="color" id="sa-ink-${escapeHtml(ev.id)}" value="${escapeHtml(ink)}">
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function applyPresetDefaultsToClientInputs(eventId, themeId) {
+      const p = THEME_PRESET_PALETTES[themeId];
+      if (!p) return;
+      const bgEl = document.getElementById(`sa-bg-${eventId}`);
+      const accEl = document.getElementById(`sa-acc-${eventId}`);
+      const inkEl = document.getElementById(`sa-ink-${eventId}`);
+      const fontHEl = document.getElementById(`sa-font-h-${eventId}`);
+      const fontBEl = document.getElementById(`sa-font-b-${eventId}`);
+
+      if (bgEl) bgEl.value = p.bgMain;
+      if (accEl) accEl.value = p.accent;
+      if (inkEl) inkEl.value = p.ink;
+      if (fontHEl) fontHEl.value = p.fontH;
+      if (fontBEl) fontBEl.value = p.fontB;
     }
 
     function renderSuperAdminClients() {
@@ -1336,6 +1489,7 @@
         const adminFile = isWedding ? 'wedding-admin.html' : 'photobooth-admin.html';
         const frames = Array.isArray(ev.frames) ? ev.frames : [];
         const defaultPhoto = "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=400&q=80";
+        const themeBoxHtml = buildClientThemeEditorHtml(ev);
 
         const div = document.createElement('div');
         div.className = 'dynamic-item';
@@ -1354,9 +1508,12 @@
                 <button type="button" class="btn btn-dark btn-sm" onclick="saveSuperAdminClientVisual('${escapeHtml(ev.id)}', 'wedding')">Simpan Visual</button>
               </div>
             </div>
+
+            ${themeBoxHtml}
+
             <div class="grid-3">
               <div class="form-group">
-                <label>Nama Event / Pasangan (Dari Super Admin)</label>
+                <label>Nama Event / Pasangan</label>
                 <input type="text" id="sa-name-${ev.id}" value="${escapeHtml(ev.name || '')}">
               </div>
               <div class="form-group">
@@ -1368,18 +1525,38 @@
                 <input type="text" id="sa-venue-${ev.id}" value="${escapeHtml(ev.venue || '')}" placeholder="Contoh: Gedung Serbaguna">
               </div>
             </div>
-            <div class="form-group">
-              <label>Link Google Maps</label>
-              <input type="text" id="sa-maps-${ev.id}" value="${escapeHtml(ev.mapsUrl || '')}" placeholder="https://maps.google.com/...">
+            <div class="grid-2">
+              <div class="form-group">
+                <label>Nama Lengkap Mempelai Pria</label>
+                <input type="text" id="sa-groom-${ev.id}" value="${escapeHtml(ev.groomName || '')}" placeholder="Putra Bpk. ... & Ibu ...">
+              </div>
+              <div class="form-group">
+                <label>Nama Lengkap Mempelai Wanita</label>
+                <input type="text" id="sa-bride-${ev.id}" value="${escapeHtml(ev.brideName || '')}" placeholder="Putri Bpk. ... & Ibu ...">
+              </div>
+            </div>
+            <div class="grid-2">
+              <div class="form-group">
+                <label>Alamat Lengkap Lokasi</label>
+                <input type="text" id="sa-address-${ev.id}" value="${escapeHtml(ev.venueAddress || '')}" placeholder="Jl. Raya...">
+              </div>
+              <div class="form-group">
+                <label>Link Google Maps</label>
+                <input type="text" id="sa-maps-${ev.id}" value="${escapeHtml(ev.mapsUrl || '')}" placeholder="https://maps.google.com/...">
+              </div>
             </div>
             <div class="form-group">
+              <label>Kutipan / Ayat Pembuka Undangan</label>
+              <textarea rows="2" id="sa-quote-${ev.id}" placeholder="Kutipan doa atau ayat pembuka...">${escapeHtml(ev.quote || '')}</textarea>
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
               <label>Foto Sampul Utama Client (Unggah dari perangkat)</label>
               <div class="img-upload-row">
                 <img src="${escapeHtml(ev.coverUrl || defaultPhoto)}" id="sa-cover-prev-${ev.id}" class="img-preview" alt="Sampul Client">
                 <div class="upload-controls">
                   <input type="file" id="sa-cover-file-${ev.id}" accept="image/*" style="display:none;" onchange="handleCompressedImage(this, false, (dataUrl) => { setClientPhotoCache('${ev.id}', 'coverUrl', dataUrl); document.getElementById('sa-cover-prev-${ev.id}').src = dataUrl; })">
                   <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('sa-cover-file-${ev.id}').click()">Unggah Foto Sampul</button>
-                  <div class="upload-hint">Klik "Simpan Visual" setelah mengunggah foto agar tersimpan ke halaman undangan client.</div>
+                  <div class="upload-hint">Klik "Simpan Visual" setelah mengunggah foto atau mengubah tema agar tersimpan ke halaman undangan client.</div>
                 </div>
               </div>
             </div>
@@ -1422,9 +1599,12 @@
                 <button type="button" class="btn btn-dark btn-sm" onclick="saveSuperAdminClientVisual('${escapeHtml(ev.id)}', 'photobooth')">Simpan Visual</button>
               </div>
             </div>
+
+            ${themeBoxHtml}
+
             <div class="grid-2">
               <div class="form-group">
-                <label>Nama Event / Pasangan (Dari Super Admin)</label>
+                <label>Nama Event / Pasangan</label>
                 <input type="text" id="sa-name-${ev.id}" value="${escapeHtml(ev.name || '')}">
               </div>
               <div class="form-group">
@@ -1494,16 +1674,29 @@
 
       const updatedName = document.getElementById(`sa-name-${eventId}`)?.value.trim() || target.name;
       const updatedDate = document.getElementById(`sa-date-${eventId}`)?.value.trim() || "";
+      const selectedTheme = document.getElementById(`sa-theme-${eventId}`)?.value || "theme-editorial";
 
       let payload = {
         name: updatedName,
         eventDate: updatedDate,
+        themeId: selectedTheme,
+        customStyle: {
+          bgMain: document.getElementById(`sa-bg-${eventId}`)?.value || "#EFECE6",
+          accent: document.getElementById(`sa-acc-${eventId}`)?.value || "#8C7355",
+          ink: document.getElementById(`sa-ink-${eventId}`)?.value || "#23211E",
+          fontHeading: document.getElementById(`sa-font-h-${eventId}`)?.value || "'Cormorant Garamond', serif",
+          fontBody: document.getElementById(`sa-font-b-${eventId}`)?.value || "'Plus Jakarta Sans', sans-serif"
+        },
         updatedAt: firebase.firestore.FieldValue.serverTimestamp()
       };
 
       if (type === 'wedding') {
         payload.venue = document.getElementById(`sa-venue-${eventId}`)?.value.trim() || "";
+        payload.groomName = document.getElementById(`sa-groom-${eventId}`)?.value.trim() || "";
+        payload.brideName = document.getElementById(`sa-bride-${eventId}`)?.value.trim() || "";
+        payload.venueAddress = document.getElementById(`sa-address-${eventId}`)?.value.trim() || "";
         payload.mapsUrl = document.getElementById(`sa-maps-${eventId}`)?.value.trim() || "";
+        payload.quote = document.getElementById(`sa-quote-${eventId}`)?.value.trim() || "";
         payload.coverUrl = target.coverUrl || "";
       } else {
         payload.heroUrl = target.heroUrl || "";
@@ -1512,7 +1705,7 @@
 
       try {
         await db.collection("events").doc(eventId).set(payload, { merge: true });
-        showCmsModal("Visual Client Tersimpan", `Perubahan visual & unggahan foto untuk client "${updatedName}" (ID: ${eventId}) berhasil disimpan.`);
+        showCmsModal("Visual & Tema Client Tersimpan", `Pengaturan tema "${selectedTheme}", warna, font, serta unggahan foto untuk client "${updatedName}" (ID: ${eventId}) berhasil disimpan.`);
       } catch (err) {
         showCmsModal("Gagal Menyimpan", "Pastikan ukuran total gambar dalam 1 client tidak melebihi batas dokumen: " + err.message);
       }
