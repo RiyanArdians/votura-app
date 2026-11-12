@@ -204,21 +204,22 @@
 
     .item-header strong { font-size: 14px; }
 
+    /* AREA UPLOAD GAMBAR BERSIH TANPA INPUT LINK */
     .img-upload-row {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 16px;
       flex-wrap: wrap;
       background: #FFFFFF;
-      padding: 12px;
-      border-radius: 12px;
-      border: 1px dashed var(--border);
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1.5px dashed rgba(140, 115, 85, 0.35);
     }
 
     .img-preview {
-      width: 68px;
-      height: 68px;
-      border-radius: 10px;
+      width: 74px;
+      height: 74px;
+      border-radius: 12px;
       object-fit: cover;
       background: var(--bg-base);
       border: 1px solid var(--border);
@@ -226,14 +227,25 @@
     }
 
     .img-preview-frame {
-      width: 58px;
-      height: 86px;
-      border-radius: 8px;
+      width: 62px;
+      height: 92px;
+      border-radius: 10px;
       object-fit: contain;
       background: #2C2223;
       border: 1px solid var(--border);
       padding: 4px;
       flex-shrink: 0;
+    }
+
+    .upload-controls {
+      flex: 1;
+      min-width: 190px;
+    }
+
+    .upload-hint {
+      font-size: 12px;
+      color: var(--ink-muted);
+      margin-top: 6px;
     }
 
     .badge-pill {
@@ -260,17 +272,17 @@
     .client-frame-sublist {
       background: #FFFFFF;
       border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 14px;
-      margin-top: 10px;
+      border-radius: 14px;
+      padding: 16px;
+      margin-top: 12px;
     }
 
     .client-frame-row {
-      display: grid;
-      grid-template-columns: 50px 1.2fr 0.8fr 1.6fr auto;
-      gap: 10px;
+      display: flex;
       align-items: center;
-      padding: 8px 0;
+      gap: 14px;
+      flex-wrap: wrap;
+      padding: 12px 0;
       border-bottom: 1px dashed var(--border);
     }
 
@@ -323,7 +335,6 @@
     @media (max-width: 760px) {
       .mode-switcher { grid-template-columns: 1fr 1fr; }
       .grid-2, .grid-3 { grid-template-columns: 1fr; }
-      .client-frame-row { grid-template-columns: 1fr; }
       .save-bar { width: 92%; justify-content: space-between; }
     }
   </style>
@@ -334,7 +345,7 @@
     <header>
       <div>
         <h1>Votura Studio — Pusat Kendali Visual</h1>
-        <p>Kelola tampilan web utama, dua web demo interaktif, serta visual pesanan klien dari Super Admin.</p>
+        <p>Unggah foto &amp; bingkai langsung dari perangkat untuk web utama, dua web demo, serta pesanan client.</p>
       </div>
       <div class="header-actions">
         <a href="index.html" target="_blank" class="btn btn-outline btn-sm">Web Utama</a>
@@ -393,7 +404,7 @@
 
       <div class="section-card">
         <div class="section-title">2. Bagian Pembuka (Hero Section) &amp; Visual</div>
-        <div class="section-sub">Atur judul besar, deskripsi utama, tautan demo cepat, dan gambar ilustrasi kartu utama.</div>
+        <div class="section-sub">Atur judul besar, deskripsi utama, tautan demo cepat, dan unggah gambar kartu showcase utama.</div>
         <div class="grid-2">
           <div class="form-group">
             <label>Teks Kecil Atas (Eyebrow)</label>
@@ -414,8 +425,11 @@
             <input type="text" id="hero-demo-label">
           </div>
           <div class="form-group">
-            <label>URL Tombol Demo Hero</label>
-            <input type="url" id="hero-demo-url">
+            <label>Halaman Tujuan Tombol Demo</label>
+            <select id="hero-demo-url">
+              <option value="demo-wedding.html">Demo Wedding Invitation (demo-wedding.html)</option>
+              <option value="demo-photobooth.html">Demo Virtual Photobooth (demo-photobooth.html)</option>
+            </select>
           </div>
         </div>
         <div class="grid-2" style="margin-top: 10px;">
@@ -429,12 +443,13 @@
           </div>
         </div>
         <div class="form-group">
-          <label>Gambar Latar Kartu Showcase (Opsional — Unggah atau kosongkan untuk gradasi gelap)</label>
+          <label>Gambar Latar Kartu Showcase (Unggah langsung dari perangkat)</label>
           <div class="img-upload-row">
             <img src="https://raw.githubusercontent.com/RiyanArdians/votura-app/main/assets/votura-icon.png" id="hero-img-preview" class="img-preview" alt="Preview">
-            <div style="flex: 1;">
-              <input type="file" id="hero-img-file" accept="image/*" style="font-size: 12px; margin-bottom: 6px;">
-              <input type="text" id="hero-img-url" placeholder="URL Gambar (otomatis terisi saat unggah file)">
+            <div class="upload-controls">
+              <input type="file" id="hero-img-file" accept="image/*" style="display:none;" onchange="handleDirectUpload(this, 'landing', (url) => { currentData.heroImageUrl = url; document.getElementById('hero-img-preview').src = url; })">
+              <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('hero-img-file').click()">Pilih &amp; Unggah Gambar</button>
+              <div class="upload-hint" id="hero-img-status">Format JPG/PNG/WEBP. Otomatis tersimpan ke cloud.</div>
             </div>
             <button type="button" class="btn btn-danger" onclick="clearHeroImage()">Hapus Gambar</button>
           </div>
@@ -461,7 +476,7 @@
           <span>4. Katalog Produk &amp; Layanan</span>
           <button type="button" class="btn btn-dark btn-sm" onclick="addProductItem()">+ Tambah Produk</button>
         </div>
-        <div class="section-sub">Tambah produk baru, ubah harga, ganti tautan demo, atau hapus produk lama.</div>
+        <div class="section-sub">Tambah produk baru, ubah harga, pilih halaman demo, atau hapus produk lama.</div>
         <div id="products-editor-list"></div>
       </div>
 
@@ -490,10 +505,10 @@
     <div id="tab-demo-wedding" class="tab-panel">
       <div class="section-card">
         <div class="section-title">
-          <span>1. Identitas &amp; Acara Demo Undangan Digital</span>
+          <span>1. Identitas &amp; Foto Sampul Demo Undangan</span>
           <a href="demo-wedding.html" target="_blank" class="btn btn-outline btn-sm">Buka Demo Undangan</a>
         </div>
-        <div class="section-sub">Atur nama pasangan, tanggal, tempat acara, dan kutipan pada halaman <strong>demo-wedding.html</strong>.</div>
+        <div class="section-sub">Atur nama pasangan, tanggal, tempat acara, dan unggah foto sampul halaman <strong>demo-wedding.html</strong>.</div>
         <div class="grid-2">
           <div class="form-group">
             <label>Nama Pasangan (Judul Undangan)</label>
@@ -532,9 +547,10 @@
           <label>Foto Sampul Utama Demo Undangan</label>
           <div class="img-upload-row">
             <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=400&q=80" id="dw-cover-preview" class="img-preview" alt="Cover Demo">
-            <div style="flex: 1;">
-              <input type="file" id="dw-cover-file" accept="image/*" style="font-size: 12px; margin-bottom: 6px;">
-              <input type="text" id="dw-cover-url" placeholder="URL Foto Sampul">
+            <div class="upload-controls">
+              <input type="file" id="dw-cover-file" accept="image/*" style="display:none;" onchange="handleDirectUpload(this, 'demo_wedding', (url) => { demoWeddingData.coverUrl = url; document.getElementById('dw-cover-preview').src = url; })">
+              <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('dw-cover-file').click()">Unggah Foto Sampul</button>
+              <div class="upload-hint">Pilih foto pasangan untuk sampul pembuka demo undangan.</div>
             </div>
           </div>
         </div>
@@ -551,10 +567,10 @@
 
       <div class="section-card">
         <div class="section-title">
-          <span>3. Galeri Foto Prewedding Demo (Tambah / Kurangi)</span>
-          <button type="button" class="btn btn-dark btn-sm" onclick="addDwGalleryItem()">+ Tambah Foto Galeri</button>
+          <span>3. Galeri Foto Prewedding Demo (Unggah / Hapus)</span>
+          <button type="button" class="btn btn-dark btn-sm" onclick="addDwGalleryItem()">+ Tambah Slot Foto</button>
         </div>
-        <div class="section-sub">Tambah atau hapus foto prewedding yang tampil di galeri demo undangan.</div>
+        <div class="section-sub">Unggah foto prewedding langsung dari galeri perangkat atau hapus foto lama.</div>
         <div id="dw-gallery-list"></div>
       </div>
     </div>
@@ -568,7 +584,7 @@
           <span>1. Tampilan Visual Demo Photobooth</span>
           <a href="demo-photobooth.html" target="_blank" class="btn btn-outline btn-sm">Buka Demo Photobooth</a>
         </div>
-        <div class="section-sub">Atur teks amplop, nama pasangan, foto hero, dan tombol WhatsApp di atas halaman <strong>demo-photobooth.html</strong>.</div>
+        <div class="section-sub">Atur teks amplop, nama pasangan, tombol WhatsApp, dan unggah foto hero halaman <strong>demo-photobooth.html</strong>.</div>
         <div class="grid-2">
           <div class="form-group">
             <label>Nama Pasangan di Amplop &amp; Beranda</label>
@@ -595,9 +611,10 @@
           <label>Foto Mempelai di Bingkai Kapsul Beranda</label>
           <div class="img-upload-row">
             <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=400&q=80" id="dp-hero-preview" class="img-preview" alt="Hero Photobooth">
-            <div style="flex: 1;">
-              <input type="file" id="dp-hero-file" accept="image/*" style="font-size: 12px; margin-bottom: 6px;">
-              <input type="text" id="dp-hero-url" placeholder="URL Foto Mempelai">
+            <div class="upload-controls">
+              <input type="file" id="dp-hero-file" accept="image/*" style="display:none;" onchange="handleDirectUpload(this, 'demo_photobooth', (url) => { demoPhotoboothData.heroUrl = url; document.getElementById('dp-hero-preview').src = url; })">
+              <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('dp-hero-file').click()">Unggah Foto Beranda</button>
+              <div class="upload-hint">Foto pasangan yang muncul di halaman depan demo photobooth.</div>
             </div>
           </div>
         </div>
@@ -605,10 +622,10 @@
 
       <div class="section-card">
         <div class="section-title">
-          <span>2. Kelola Bingkai / Frame Photobooth (Tambah, Edit &amp; Hapus)</span>
+          <span>2. Kelola Bingkai / Frame Photobooth (Unggah, Tambah &amp; Hapus)</span>
           <button type="button" class="btn btn-dark btn-sm" onclick="addDpFrameItem()">+ Tambah Frame Baru</button>
         </div>
-        <div class="section-sub">Tambahkan desain frame baru (PNG transparan via upload atau URL GitHub <code>raw.githubusercontent.com</code>), atur jumlah foto (1, 2, atau 3 slot), atau hapus frame yang tidak dipakai.</div>
+        <div class="section-sub">Unggah file frame PNG transparan langsung dari perangkat, pilih jumlah slot foto (1, 2, atau 3 slot), atau hapus frame.</div>
         <div id="dp-frames-list"></div>
       </div>
     </div>
@@ -630,7 +647,7 @@
           </div>
         </div>
         <div class="section-sub">
-          Data di bawah ini ditarik otomatis secara real-time dari koleksi Firestore <code>events</code> milik <strong>Super Admin</strong>. Setiap client baru yang dibuat di Super Admin akan langsung muncul di sini untuk diedit tampilan visual &amp; frame-nya.
+          Data ditarik otomatis dari koleksi <code>events</code> milik <strong>Super Admin</strong>. Unggah langsung foto sampul atau bingkai PNG khusus untuk setiap pesanan client di bawah ini.
         </div>
         <div id="clients-editor-list">
           <p style="font-size: 13px; color: var(--ink-muted);">Menghubungkan ke database Super Admin...</p>
@@ -674,6 +691,32 @@
     const GITHUB_RAW_BASE = "https://raw.githubusercontent.com/RiyanArdians/votura-app/main/assets";
 
     let activeTabId = "tab-landing";
+
+    /* ============================================================
+       HELPER UPLOAD LANGSUNG KE FIREBASE STORAGE
+       ============================================================ */
+    async function handleDirectUpload(inputEl, folderName, onSuccess) {
+      if (!inputEl.files || !inputEl.files[0]) return;
+      const file = inputEl.files[0];
+      const statusText = document.getElementById('status-text');
+      const prevStatus = statusText.textContent;
+      statusText.textContent = `Mengunggah ${file.name}...`;
+
+      try {
+        const cleanName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+        const ref = storage.ref(`${folderName}/${Date.now()}_${cleanName}`);
+        await ref.put(file);
+        const downloadUrl = await ref.getDownloadURL();
+        if (onSuccess) onSuccess(downloadUrl);
+        statusText.textContent = "Gambar berhasil diunggah!";
+        setTimeout(() => { statusText.textContent = prevStatus; }, 2500);
+      } catch (err) {
+        statusText.textContent = "Gagal mengunggah";
+        showCmsModal("Gagal Unggah Gambar", "Pastikan aturan Firebase Storage mengizinkan upload atau cek koneksi Anda: " + err.message);
+      } finally {
+        inputEl.value = "";
+      }
+    }
 
     /* ============================================================
        DEFAULT DATA UNTUK 3 KONFIGURASI UTAMA
@@ -866,8 +909,6 @@
       populateLandingForm();
       populateDemoWeddingForm();
       populateDemoPhotoboothForm();
-
-      // LISTENER REAL-TIME KE KOLEKSI "events" DARI SUPER ADMIN
       listenSuperAdminEvents();
     }
 
@@ -884,10 +925,9 @@
       document.getElementById('hero-title').value = currentData.heroTitle || "";
       document.getElementById('hero-subtitle').value = currentData.heroSubtitle || "";
       document.getElementById('hero-demo-label').value = currentData.heroDemoLabel || "";
-      document.getElementById('hero-demo-url').value = currentData.heroDemoUrl || "";
+      document.getElementById('hero-demo-url').value = currentData.heroDemoUrl || "demo-wedding.html";
       document.getElementById('showcase-title').value = currentData.showcaseTitle || "";
       document.getElementById('showcase-desc').value = currentData.showcaseDesc || "";
-      document.getElementById('hero-img-url').value = currentData.heroImageUrl || "";
       document.getElementById('hero-img-preview').src = currentData.heroImageUrl || `${GITHUB_RAW_BASE}/votura-icon.png`;
 
       document.getElementById('stat1-val').value = currentData.stat1Val || "";
@@ -905,7 +945,7 @@
     }
 
     function clearHeroImage() {
-      document.getElementById('hero-img-url').value = "";
+      currentData.heroImageUrl = "";
       document.getElementById('hero-img-file').value = "";
       document.getElementById('hero-img-preview').src = `${GITHUB_RAW_BASE}/votura-icon.png`;
     }
@@ -953,8 +993,11 @@
               <input type="text" value="${escapeHtml(prod.demoLabel)}" onchange="updateProd(${idx}, 'demoLabel', this.value)">
             </div>
             <div class="form-group">
-              <label>URL Link Demo</label>
-              <input type="text" value="${escapeHtml(prod.demoUrl)}" onchange="updateProd(${idx}, 'demoUrl', this.value)">
+              <label>Halaman Demo Tujuan</label>
+              <select onchange="updateProd(${idx}, 'demoUrl', this.value)">
+                <option value="demo-wedding.html" ${prod.demoUrl === 'demo-wedding.html' ? 'selected' : ''}>Demo Wedding (demo-wedding.html)</option>
+                <option value="demo-photobooth.html" ${prod.demoUrl === 'demo-photobooth.html' ? 'selected' : ''}>Demo Photobooth (demo-photobooth.html)</option>
+              </select>
             </div>
             <div class="form-group">
               <label>Teks Tombol WhatsApp</label>
@@ -1043,7 +1086,6 @@
       document.getElementById('dw-maps-url').value = demoWeddingData.mapsUrl || "";
       document.getElementById('dw-venue-address').value = demoWeddingData.venueAddress || "";
       document.getElementById('dw-quote').value = demoWeddingData.quote || "";
-      document.getElementById('dw-cover-url').value = demoWeddingData.coverUrl || "";
       document.getElementById('dw-cover-preview').src = demoWeddingData.coverUrl || "";
 
       renderDwSchedulesEditor();
@@ -1102,33 +1144,16 @@
             <button type="button" class="btn btn-danger" onclick="removeDwGallery(${idx})">Hapus Foto</button>
           </div>
           <div class="img-upload-row">
-            <img src="${escapeHtml(item.url)}" class="img-preview" id="dw-gal-prev-${idx}" alt="Foto">
-            <div style="flex: 1;">
-              <input type="file" accept="image/*" style="font-size:12px; margin-bottom:6px;" onchange="uploadDwGalleryPhoto(${idx}, this)">
-              <input type="text" value="${escapeHtml(item.url)}" placeholder="URL Foto" onchange="demoWeddingData.gallery[${idx}].url = this.value; document.getElementById('dw-gal-prev-${idx}').src = this.value;">
-              <input type="text" value="${escapeHtml(item.caption)}" placeholder="Keterangan singkat foto" style="margin-top:6px;" onchange="demoWeddingData.gallery[${idx}].caption = this.value">
+            <img src="${escapeHtml(item.url)}" class="img-preview" alt="Foto">
+            <div class="upload-controls">
+              <input type="file" id="dw-gal-input-${idx}" accept="image/*" style="display:none;" onchange="handleDirectUpload(this, 'demo_wedding_gallery', (url) => { demoWeddingData.gallery[${idx}].url = url; renderDwGalleryEditor(); })">
+              <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('dw-gal-input-${idx}').click()">Unggah / Ganti Foto</button>
+              <input type="text" value="${escapeHtml(item.caption)}" placeholder="Keterangan singkat foto" style="margin-top:8px;" onchange="demoWeddingData.gallery[${idx}].caption = this.value">
             </div>
           </div>
         `;
         container.appendChild(div);
       });
-    }
-
-    async function uploadDwGalleryPhoto(idx, inputEl) {
-      if (!inputEl.files || !inputEl.files[0]) return;
-      const status = document.getElementById('status-text');
-      status.textContent = "Mengunggah foto galeri...";
-      try {
-        const file = inputEl.files[0];
-        const ref = storage.ref(`demo_wedding/gallery_${Date.now()}_${file.name}`);
-        await ref.put(file);
-        const url = await ref.getDownloadURL();
-        demoWeddingData.gallery[idx].url = url;
-        renderDwGalleryEditor();
-        status.textContent = "Foto galeri berhasil diunggah";
-      } catch (err) {
-        showCmsModal("Gagal Unggah", err.message);
-      }
     }
 
     function addDwGalleryItem() {
@@ -1153,7 +1178,6 @@
       document.getElementById('dp-wa-number').value = demoPhotoboothData.waNumber || "";
       document.getElementById('dp-cta-label').value = demoPhotoboothData.ctaLabel || "";
       document.getElementById('dp-welcome-quote').value = demoPhotoboothData.welcomeQuote || "";
-      document.getElementById('dp-hero-url').value = demoPhotoboothData.heroUrl || "";
       document.getElementById('dp-hero-preview').src = demoPhotoboothData.heroUrl || "";
 
       renderDpFramesEditor();
@@ -1192,33 +1216,16 @@
             </div>
           </div>
           <div class="img-upload-row">
-            <img src="${escapeHtml(frame.path)}" class="img-preview-frame" id="dp-frame-prev-${idx}" alt="Preview Frame">
-            <div style="flex: 1;">
-              <label style="margin-bottom:4px;">Unggah File Frame PNG Transparan atau Isi URL GitHub</label>
-              <input type="file" accept="image/png,image/webp" style="font-size:12px; margin-bottom:6px;" onchange="uploadDpFrameFile(${idx}, this)">
-              <input type="text" value="${escapeHtml(frame.path)}" placeholder="https://raw.githubusercontent.com/RiyanArdians/votura-app/main/assets/frame/..." onchange="demoPhotoboothData.frames[${idx}].path = this.value; document.getElementById('dp-frame-prev-${idx}').src = this.value;">
+            <img src="${escapeHtml(frame.path)}" class="img-preview-frame" alt="Preview Frame">
+            <div class="upload-controls">
+              <input type="file" id="dp-frame-input-${idx}" accept="image/png,image/webp" style="display:none;" onchange="handleDirectUpload(this, 'demo_photobooth_frames', (url) => { demoPhotoboothData.frames[${idx}].path = url; renderDpFramesEditor(); })">
+              <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('dp-frame-input-${idx}').click()">Unggah File Frame PNG</button>
+              <div class="upload-hint">Unggah file PNG transparan (rasio potret 2:3) langsung dari perangkat Anda.</div>
             </div>
           </div>
         `;
         container.appendChild(div);
       });
-    }
-
-    async function uploadDpFrameFile(idx, inputEl) {
-      if (!inputEl.files || !inputEl.files[0]) return;
-      const status = document.getElementById('status-text');
-      status.textContent = "Mengunggah desain frame...";
-      try {
-        const file = inputEl.files[0];
-        const ref = storage.ref(`demo_photobooth/frame_${Date.now()}_${file.name}`);
-        await ref.put(file);
-        const url = await ref.getDownloadURL();
-        demoPhotoboothData.frames[idx].path = url;
-        renderDpFramesEditor();
-        status.textContent = "Desain frame berhasil diunggah";
-      } catch (err) {
-        showCmsModal("Gagal Unggah Frame", err.message);
-      }
     }
 
     function addDpFrameItem() {
@@ -1271,11 +1278,12 @@
       }
 
       container.innerHTML = "";
-      filtered.forEach((ev, idx) => {
+      filtered.forEach((ev) => {
         const isWedding = ev.type === 'wedding';
         const pageFile = isWedding ? 'wedding.html' : 'photobooth.html';
         const adminFile = isWedding ? 'wedding-admin.html' : 'photobooth-admin.html';
         const frames = Array.isArray(ev.frames) ? ev.frames : [];
+        const defaultPhoto = "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=400&q=80";
 
         const div = document.createElement('div');
         div.className = 'dynamic-item';
@@ -1308,29 +1316,44 @@
                 <input type="text" id="sa-venue-${ev.id}" value="${escapeHtml(ev.venue || '')}" placeholder="Contoh: Gedung Serbaguna">
               </div>
             </div>
-            <div class="grid-2">
-              <div class="form-group">
-                <label>Link Google Maps</label>
-                <input type="text" id="sa-maps-${ev.id}" value="${escapeHtml(ev.mapsUrl || '')}" placeholder="https://maps.google.com/...">
-              </div>
-              <div class="form-group">
-                <label>URL Foto Sampul Utama Client</label>
-                <input type="text" id="sa-cover-${ev.id}" value="${escapeHtml(ev.coverUrl || '')}" placeholder="https://...">
+            <div class="form-group">
+              <label>Link Google Maps</label>
+              <input type="text" id="sa-maps-${ev.id}" value="${escapeHtml(ev.mapsUrl || '')}" placeholder="https://maps.google.com/...">
+            </div>
+            <div class="form-group">
+              <label>Foto Sampul Utama Client (Unggah dari perangkat)</label>
+              <div class="img-upload-row">
+                <img src="${escapeHtml(ev.coverUrl || defaultPhoto)}" id="sa-cover-prev-${ev.id}" class="img-preview" alt="Sampul Client">
+                <div class="upload-controls">
+                  <input type="file" id="sa-cover-file-${ev.id}" accept="image/*" style="display:none;" onchange="handleDirectUpload(this, 'clients/${ev.id}', (url) => { setClientPhotoCache('${ev.id}', 'coverUrl', url); document.getElementById('sa-cover-prev-${ev.id}').src = url; })">
+                  <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('sa-cover-file-${ev.id}').click()">Unggah Foto Sampul</button>
+                  <div class="upload-hint">Klik "Simpan Visual" setelah mengunggah foto agar tersimpan ke halaman undangan client.</div>
+                </div>
               </div>
             </div>
           `;
         } else {
           const framesRowsHtml = frames.map((fr, fIdx) => `
             <div class="client-frame-row">
-              <img src="${escapeHtml(fr.path || '')}" class="img-preview-frame" style="width:42px; height:62px;" alt="Frame">
-              <input type="text" value="${escapeHtml(fr.name || '')}" placeholder="Nama Frame" onchange="updateClientFrameField('${escapeHtml(ev.id)}', ${fIdx}, 'name', this.value)">
-              <select onchange="updateClientFrameField('${escapeHtml(ev.id)}', ${fIdx}, 'count', parseInt(this.value, 10))">
-                <option value="1" ${Number(fr.count) === 1 ? 'selected' : ''}>1 Foto</option>
-                <option value="2" ${Number(fr.count) === 2 ? 'selected' : ''}>2 Foto</option>
-                <option value="3" ${Number(fr.count) === 3 ? 'selected' : ''}>3 Foto</option>
-              </select>
-              <input type="text" value="${escapeHtml(fr.path || '')}" placeholder="URL PNG Frame (GitHub / Storage)" onchange="updateClientFrameField('${escapeHtml(ev.id)}', ${fIdx}, 'path', this.value)">
-              <button type="button" class="btn btn-danger" onclick="removeClientFrame('${escapeHtml(ev.id)}', ${fIdx})">Hapus</button>
+              <img src="${escapeHtml(fr.path || `${GITHUB_RAW_BASE}/frame/dsg3.png`)}" class="img-preview-frame" alt="Frame">
+              <div style="flex:1; min-width:160px;">
+                <label style="margin-bottom:4px;">Nama Frame</label>
+                <input type="text" value="${escapeHtml(fr.name || '')}" placeholder="Nama Frame" onchange="updateClientFrameField('${escapeHtml(ev.id)}', ${fIdx}, 'name', this.value)">
+              </div>
+              <div style="width:120px;">
+                <label style="margin-bottom:4px;">Jumlah Slot</label>
+                <select onchange="updateClientFrameField('${escapeHtml(ev.id)}', ${fIdx}, 'count', parseInt(this.value, 10))">
+                  <option value="1" ${Number(fr.count) === 1 ? 'selected' : ''}>1 Foto</option>
+                  <option value="2" ${Number(fr.count) === 2 ? 'selected' : ''}>2 Foto</option>
+                  <option value="3" ${Number(fr.count) === 3 ? 'selected' : ''}>3 Foto</option>
+                </select>
+              </div>
+              <div>
+                <label style="margin-bottom:4px;">Desain Bingkai PNG</label>
+                <input type="file" id="cl-fr-file-${ev.id}-${fIdx}" accept="image/png,image/webp" style="display:none;" onchange="handleDirectUpload(this, 'clients/${ev.id}/frames', (url) => { updateClientFrameField('${escapeHtml(ev.id)}', ${fIdx}, 'path', url); renderSuperAdminClients(); })">
+                <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('cl-fr-file-${ev.id}-${fIdx}').click()">Unggah PNG</button>
+              </div>
+              <button type="button" class="btn btn-danger" style="align-self:flex-end;" onclick="removeClientFrame('${escapeHtml(ev.id)}', ${fIdx})">Hapus</button>
             </div>
           `).join('');
 
@@ -1347,7 +1370,7 @@
                 <button type="button" class="btn btn-dark btn-sm" onclick="saveSuperAdminClientVisual('${escapeHtml(ev.id)}', 'photobooth')">Simpan Visual</button>
               </div>
             </div>
-            <div class="grid-3">
+            <div class="grid-2">
               <div class="form-group">
                 <label>Nama Event / Pasangan (Dari Super Admin)</label>
                 <input type="text" id="sa-name-${ev.id}" value="${escapeHtml(ev.name || '')}">
@@ -1356,9 +1379,16 @@
                 <label>Tanggal Acara</label>
                 <input type="text" id="sa-date-${ev.id}" value="${escapeHtml(ev.eventDate || '')}" placeholder="Contoh: 20 DESEMBER 2026">
               </div>
-              <div class="form-group">
-                <label>URL Foto Hero Beranda Photobooth</label>
-                <input type="text" id="sa-hero-${ev.id}" value="${escapeHtml(ev.heroUrl || '')}" placeholder="https://...">
+            </div>
+            <div class="form-group">
+              <label>Foto Hero Beranda Photobooth Client (Unggah dari perangkat)</label>
+              <div class="img-upload-row">
+                <img src="${escapeHtml(ev.heroUrl || defaultPhoto)}" id="sa-hero-prev-${ev.id}" class="img-preview" alt="Hero Client">
+                <div class="upload-controls">
+                  <input type="file" id="sa-hero-file-${ev.id}" accept="image/*" style="display:none;" onchange="handleDirectUpload(this, 'clients/${ev.id}', (url) => { setClientPhotoCache('${ev.id}', 'heroUrl', url); document.getElementById('sa-hero-prev-${ev.id}').src = url; })">
+                  <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('sa-hero-file-${ev.id}').click()">Unggah Foto Beranda</button>
+                  <div class="upload-hint">Foto pasangan/acara yang tampil di halaman depan photobooth client.</div>
+                </div>
               </div>
             </div>
             <div class="client-frame-sublist">
@@ -1366,13 +1396,18 @@
                 <strong style="font-size:12.5px;">Daftar Frame Khusus Client (${frames.length} Frame)</strong>
                 <button type="button" class="btn btn-accent btn-sm" onclick="addClientFrame('${escapeHtml(ev.id)}')">+ Tambah Frame Client</button>
               </div>
-              ${frames.length > 0 ? framesRowsHtml : '<p style="font-size:12px; color:var(--ink-muted);">Belum ada frame khusus. Klik "+ Tambah Frame Client" untuk menambahkan.</p>'}
+              ${frames.length > 0 ? framesRowsHtml : '<p style="font-size:12px; color:var(--ink-muted);">Belum ada frame khusus. Klik "+ Tambah Frame Client" lalu unggah file PNG frame.</p>'}
             </div>
           `;
         }
 
         container.appendChild(div);
       });
+    }
+
+    function setClientPhotoCache(eventId, fieldKey, url) {
+      const target = superAdminEvents.find(e => e.id === eventId);
+      if (target) target[fieldKey] = url;
     }
 
     function addClientFrame(eventId) {
@@ -1417,15 +1452,15 @@
       if (type === 'wedding') {
         payload.venue = document.getElementById(`sa-venue-${eventId}`)?.value.trim() || "";
         payload.mapsUrl = document.getElementById(`sa-maps-${eventId}`)?.value.trim() || "";
-        payload.coverUrl = document.getElementById(`sa-cover-${eventId}`)?.value.trim() || "";
+        payload.coverUrl = target.coverUrl || "";
       } else {
-        payload.heroUrl = document.getElementById(`sa-hero-${eventId}`)?.value.trim() || "";
+        payload.heroUrl = target.heroUrl || "";
         payload.frames = Array.isArray(target.frames) ? target.frames : [];
       }
 
       try {
         await db.collection("events").doc(eventId).set(payload, { merge: true });
-        showCmsModal("Visual Client Tersimpan", `Perubahan visual untuk client "${updatedName}" (ID: ${eventId}) berhasil disinkronkan ke Firestore.`);
+        showCmsModal("Visual Client Tersimpan", `Perubahan visual & unggahan foto untuk client "${updatedName}" (ID: ${eventId}) berhasil disimpan.`);
       } catch (err) {
         showCmsModal("Gagal Menyimpan", err.message);
       }
@@ -1451,19 +1486,6 @@
       status.textContent = "Menyimpan Web Utama...";
 
       try {
-        let heroImgUrl = document.getElementById('hero-img-url').value.trim();
-        const fileInput = document.getElementById('hero-img-file');
-        if (fileInput.files && fileInput.files[0]) {
-          status.textContent = "Mengunggah gambar hero...";
-          const file = fileInput.files[0];
-          const ref = storage.ref(`landing/hero_${Date.now()}_${file.name}`);
-          await ref.put(file);
-          heroImgUrl = await ref.getDownloadURL();
-          document.getElementById('hero-img-url').value = heroImgUrl;
-          document.getElementById('hero-img-preview').src = heroImgUrl;
-          fileInput.value = "";
-        }
-
         const payload = {
           waNumber: document.getElementById('cfg-wa').value.trim(),
           navCta: document.getElementById('cfg-nav-cta').value.trim(),
@@ -1473,10 +1495,10 @@
           heroTitle: document.getElementById('hero-title').value.trim(),
           heroSubtitle: document.getElementById('hero-subtitle').value.trim(),
           heroDemoLabel: document.getElementById('hero-demo-label').value.trim(),
-          heroDemoUrl: document.getElementById('hero-demo-url').value.trim(),
+          heroDemoUrl: document.getElementById('hero-demo-url').value,
           showcaseTitle: document.getElementById('showcase-title').value.trim(),
           showcaseDesc: document.getElementById('showcase-desc').value.trim(),
-          heroImageUrl: heroImgUrl,
+          heroImageUrl: currentData.heroImageUrl || "",
           stat1Val: document.getElementById('stat1-val').value.trim(),
           stat1Lbl: document.getElementById('stat1-lbl').value.trim(),
           stat2Val: document.getElementById('stat2-val').value.trim(),
@@ -1513,19 +1535,6 @@
       status.textContent = "Menyimpan Demo Undangan...";
 
       try {
-        let coverUrl = document.getElementById('dw-cover-url').value.trim();
-        const fileInput = document.getElementById('dw-cover-file');
-        if (fileInput.files && fileInput.files[0]) {
-          status.textContent = "Mengunggah foto sampul...";
-          const file = fileInput.files[0];
-          const ref = storage.ref(`demo_wedding/cover_${Date.now()}_${file.name}`);
-          await ref.put(file);
-          coverUrl = await ref.getDownloadURL();
-          document.getElementById('dw-cover-url').value = coverUrl;
-          document.getElementById('dw-cover-preview').src = coverUrl;
-          fileInput.value = "";
-        }
-
         const payload = {
           coupleTitle: document.getElementById('dw-couple-title').value.trim(),
           eventDate: document.getElementById('dw-event-date').value.trim(),
@@ -1535,7 +1544,7 @@
           mapsUrl: document.getElementById('dw-maps-url').value.trim(),
           venueAddress: document.getElementById('dw-venue-address').value.trim(),
           quote: document.getElementById('dw-quote').value.trim(),
-          coverUrl,
+          coverUrl: demoWeddingData.coverUrl || "",
           schedules: demoWeddingData.schedules,
           gallery: demoWeddingData.gallery
         };
@@ -1562,26 +1571,13 @@
       status.textContent = "Menyimpan Demo Photobooth...";
 
       try {
-        let heroUrl = document.getElementById('dp-hero-url').value.trim();
-        const fileInput = document.getElementById('dp-hero-file');
-        if (fileInput.files && fileInput.files[0]) {
-          status.textContent = "Mengunggah foto beranda...";
-          const file = fileInput.files[0];
-          const ref = storage.ref(`demo_photobooth/hero_${Date.now()}_${file.name}`);
-          await ref.put(file);
-          heroUrl = await ref.getDownloadURL();
-          document.getElementById('dp-hero-url').value = heroUrl;
-          document.getElementById('dp-hero-preview').src = heroUrl;
-          fileInput.value = "";
-        }
-
         const payload = {
           eventTitle: document.getElementById('dp-event-title').value.trim(),
           eventDate: document.getElementById('dp-event-date').value.trim(),
           waNumber: document.getElementById('dp-wa-number').value.trim(),
           ctaLabel: document.getElementById('dp-cta-label').value.trim(),
           welcomeQuote: document.getElementById('dp-welcome-quote').value.trim(),
-          heroUrl,
+          heroUrl: demoPhotoboothData.heroUrl || "",
           frames: demoPhotoboothData.frames
         };
 
