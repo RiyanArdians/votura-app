@@ -715,16 +715,9 @@
   </a>
 </div>
 
-<!-- MUSIK ROMANTIS OPEN-SOURCE (TANPA CROSSORIGIN BLOCKING) -->
-<audio id="bg-music" loop preload="auto" playsinline>
-  <source src="https://upload.wikimedia.org/wikipedia/commons/3/35/Gymnopedie_No_1.ogg" type="audio/ogg">
-  <source src="https://upload.wikimedia.org/wikipedia/commons/transcoded/3/35/Gymnopedie_No_1.ogg/Gymnopedie_No_1.ogg.mp3" type="audio/mpeg">
-  <source src="https://upload.wikimedia.org/wikipedia/commons/transcoded/b/be/Clair_de_Lune_%28Debussy%29_-_Suite_bergamasque.ogg/Clair_de_Lune_%28Debussy%29_-_Suite_bergamasque.ogg.mp3" type="audio/mpeg">
-</audio>
-
 <!-- TOMBOL KONTROL MUSIK MELAYANG -->
 <button type="button" id="music-control-btn" class="music-btn-floating" aria-label="Putar atau Jeda Musik">
-  <i id="music-icon" class="fa-solid fa-compact-disc"></i>
+  <i id="music-icon" class="fa-solid fa-play"></i>
 </button>
 
 <div class="app-viewport">
@@ -1073,13 +1066,64 @@
     document.getElementById('input-nama').value = clean;
   }
 
-  // 5. KONTROL MUSIK ROMANTIS (HTML5 AUDIO + WEB AUDIO PIANO FALLBACK)
-  const bgMusic = document.getElementById('bg-music');
+  // 5. MUSIK PIANO ROMANTIS (CANON IN D / ROMANTIC WEDDING BALLAD - 100% ANTI-BLOKIR)
   const musicBtn = document.getElementById('music-control-btn');
   const musicIcon = document.getElementById('music-icon');
   let isPlaying = false;
-  let fallbackPianoTimer = null;
   let audioCtx = null;
+  let melodyTimer = null;
+  let noteStep = 0;
+
+  // Melodi Piano Canon in D (Pachelbel) + Harmoni Bass Lembut
+  const weddingMelodySequence = [
+    { melody: 659.25, bass: 146.83 }, // F#5 + D3
+    { melody: 587.33, bass: null },   // D5
+    { melody: 493.88, bass: 110.00 }, // B4 + A2
+    { melody: 554.37, bass: null },   // C#5
+    { melody: 587.33, bass: 123.47 }, // D5 + B2
+    { melody: 493.88, bass: null },   // B4
+    { melody: 440.00, bass: 92.50 },  // A4 + F#2
+    { melody: 493.88, bass: null },   // B4
+    { melody: 392.00, bass: 98.00 },  // G4 + G2
+    { melody: 440.00, bass: null },   // A4
+    { melody: 493.88, bass: 73.42 },  // B4 + D2
+    { melody: 554.37, bass: null },   // C#5
+    { melody: 587.33, bass: 98.00 },  // D5 + G2
+    { melody: 659.25, bass: null },   // E5
+    { melody: 554.37, bass: 110.00 }, // C#5 + A2
+    { melody: 493.88, bass: null }    // B4
+  ];
+
+  function triggerPianoTone(freq, duration, volume) {
+    if (!audioCtx || !freq) return;
+    const now = audioCtx.currentTime;
+    const oscMain = audioCtx.createOscillator();
+    const oscOver = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+
+    oscMain.type = 'sine';
+    oscMain.frequency.setValueAtTime(freq, now);
+
+    oscOver.type = 'triangle';
+    oscOver.frequency.setValueAtTime(freq * 2, now);
+
+    const overGain = audioCtx.createGain();
+    overGain.gain.setValueAtTime(0.12, now);
+
+    gain.gain.setValueAtTime(0.0001, now);
+    gain.gain.linearRampToValueAtTime(volume, now + 0.04);
+    gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+
+    oscMain.connect(gain);
+    oscOver.connect(overGain);
+    overGain.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    oscMain.start(now);
+    oscOver.start(now);
+    oscMain.stop(now + duration + 0.05);
+    oscOver.stop(now + duration + 0.05);
+  }
 
   function setMusicVisualState(playing) {
     isPlaying = playing;
@@ -1088,76 +1132,45 @@
       musicBtn.style.opacity = '1';
     } else {
       musicIcon.className = 'fa-solid fa-play';
-      musicBtn.style.opacity = '0.85';
-    }
-  }
-
-  function startRomanticSynthFallback() {
-    if (fallbackPianoTimer) return;
-    try {
-      const AudioContext = window.AudioContext || window.webkitAudioContext;
-      if (!audioCtx) audioCtx = new AudioContext();
-      if (audioCtx.state === 'suspended') audioCtx.resume();
-
-      const chords = [
-        [261.63, 329.63, 392.00, 493.88],
-        [196.00, 246.94, 293.66, 392.00],
-        [220.00, 261.63, 329.63, 392.00],
-        [174.61, 220.00, 261.63, 349.23]
-      ];
-      let step = 0;
-      const playChord = () => {
-        if (!isPlaying || !audioCtx) return;
-        const notes = chords[step % chords.length];
-        notes.forEach((freq, idx) => {
-          const osc = audioCtx.createOscillator();
-          const gain = audioCtx.createGain();
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(freq, audioCtx.currentTime + idx * 0.18);
-          gain.gain.setValueAtTime(0.0001, audioCtx.currentTime + idx * 0.18);
-          gain.gain.exponentialRampToValueAtTime(0.045, audioCtx.currentTime + idx * 0.18 + 0.15);
-          gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + idx * 0.18 + 2.4);
-          osc.connect(gain);
-          gain.connect(audioCtx.destination);
-          osc.start(audioCtx.currentTime + idx * 0.18);
-          osc.stop(audioCtx.currentTime + idx * 0.18 + 2.5);
-        });
-        step++;
-      };
-      playChord();
-      fallbackPianoTimer = setInterval(playChord, 2600);
-    } catch (e) {
-      console.warn(e);
-    }
-  }
-
-  function stopRomanticSynthFallback() {
-    if (fallbackPianoTimer) {
-      clearInterval(fallbackPianoTimer);
-      fallbackPianoTimer = null;
+      musicBtn.style.opacity = '0.9';
     }
   }
 
   function playMusic() {
-    bgMusic.volume = 0.7;
-    const playPromise = bgMusic.play();
-    if (playPromise !== undefined) {
-      playPromise.then(() => {
-        stopRomanticSynthFallback();
-        setMusicVisualState(true);
-      }).catch(() => {
-        setMusicVisualState(true);
-        startRomanticSynthFallback();
-      });
-    } else {
+    try {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!audioCtx) {
+        audioCtx = new AudioContext();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume();
+      }
+
+      if (melodyTimer) return;
       setMusicVisualState(true);
-      startRomanticSynthFallback();
+
+      const playStep = () => {
+        if (!isPlaying) return;
+        const item = weddingMelodySequence[noteStep % weddingMelodySequence.length];
+        triggerPianoTone(item.melody, 1.35, 0.14);
+        if (item.bass) {
+          triggerPianoTone(item.bass, 2.2, 0.09);
+        }
+        noteStep++;
+      };
+
+      playStep();
+      melodyTimer = setInterval(playStep, 720);
+    } catch (e) {
+      console.warn("Audio init:", e);
     }
   }
 
   function pauseMusic() {
-    bgMusic.pause();
-    stopRomanticSynthFallback();
+    if (melodyTimer) {
+      clearInterval(melodyTimer);
+      melodyTimer = null;
+    }
     setMusicVisualState(false);
   }
 
@@ -1173,18 +1186,17 @@
     }
   }
 
-  // Event listener langsung agar tombol musik selalu merespons klik maupun sentuhan layar HP
   musicBtn.addEventListener('click', toggleMusic);
 
   // 6. ANIMASI PEMBUKAAN AMPLOP
   let isEnvelopeOpened = false;
 
   function triggerOpenInvitation() {
+    playMusic();
     if (isEnvelopeOpened) return;
     isEnvelopeOpened = true;
 
     window.scrollTo({ top: 0, behavior: 'instant' });
-    playMusic();
 
     const envelopeBox = document.getElementById('envelope-box');
     const btnContainer = document.getElementById('btn-container');
