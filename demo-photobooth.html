@@ -1,1 +1,623 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Demo Virtual Photobooth — Votura Studio</title>
+  <link rel="icon" type="image/png" href="assets/votura-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-base: #EFECE6;
+      --surface: #F8F6F2;
+      --glass: rgba(255, 255, 255, 0.72);
+      --glass-strong: rgba(255, 255, 255, 0.92);
+      --ink: #23211E;
+      --ink-muted: #68635C;
+      --accent-warm: #8C7355;
+      --pill-dark: #262421;
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-pill: 999px;
+      --transition: cubic-bezier(0.22, 1, 0.36, 1);
+    }
 
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--ink);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      line-height: 1.6;
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .serif { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 500; }
+
+    /* TOP DEMO RIBBON */
+    .demo-banner {
+      background: var(--pill-dark);
+      color: #F8F6F2;
+      padding: 10px 20px;
+      font-size: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .demo-banner span { color: rgba(248, 246, 242, 0.82); }
+    .demo-banner a {
+      color: #FFFFFF;
+      text-decoration: none;
+      font-weight: 600;
+      background: rgba(255, 255, 255, 0.14);
+      padding: 5px 14px;
+      border-radius: var(--radius-pill);
+    }
+
+    .booth-container {
+      max-width: 1080px;
+      margin: 24px auto;
+      padding: 0 20px 60px 20px;
+    }
+
+    .booth-header {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    .eyebrow {
+      font-size: 10.5px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      font-weight: 600;
+      display: block;
+    }
+
+    .booth-header h1 {
+      font-size: clamp(32px, 4vw, 44px);
+      line-height: 1.1;
+      margin: 6px 0;
+    }
+
+    .booth-header p {
+      font-size: 13.5px;
+      color: var(--ink-muted);
+    }
+
+    /* WORKSPACE LAYOUT */
+    .workspace-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 0.75fr;
+      gap: 24px;
+      align-items: start;
+    }
+
+    .panel-card {
+      background: var(--surface);
+      border: 1px solid #FFFFFF;
+      border-radius: var(--radius-xl);
+      padding: 24px;
+      box-shadow: 0 20px 50px rgba(35, 33, 30, 0.06);
+    }
+
+    /* VIEWPORT CAMERA */
+    .camera-viewport {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      background: #1B1917;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      margin-bottom: 18px;
+    }
+
+    video#cam-stream {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scaleX(-1);
+      transition: filter 0.3s ease;
+    }
+
+    video#cam-stream.unmirrored { transform: scaleX(1); }
+
+    .countdown-overlay {
+      position: absolute;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(27, 25, 23, 0.28);
+      color: #FFFFFF;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 96px;
+      font-weight: 600;
+      z-index: 10;
+    }
+
+    .flash-layer {
+      position: absolute;
+      inset: 0;
+      background: #FFFFFF;
+      opacity: 0;
+      pointer-events: none;
+      z-index: 20;
+      transition: opacity 0.25s ease;
+    }
+
+    .pose-indicator {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: rgba(27, 25, 23, 0.72);
+      backdrop-filter: blur(8px);
+      color: #FFFFFF;
+      padding: 5px 14px;
+      border-radius: var(--radius-pill);
+      font-size: 11.5px;
+      font-weight: 600;
+      z-index: 5;
+    }
+
+    /* FILTER CHIPS */
+    .control-label {
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--ink-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 18px;
+    }
+
+    .chip-btn {
+      padding: 8px 15px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(35, 33, 30, 0.14);
+      background: #FFFFFF;
+      color: var(--ink);
+      font-size: 12.5px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .chip-btn.active {
+      background: var(--pill-dark);
+      color: #FFFFFF;
+      border-color: var(--pill-dark);
+    }
+
+    .action-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn-dark-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: var(--pill-dark);
+      color: #FFFFFF;
+      padding: 13px 24px;
+      border-radius: var(--radius-pill);
+      font-size: 13.5px;
+      font-weight: 500;
+      border: none;
+      cursor: pointer;
+      transition: all 0.3s var(--transition);
+    }
+
+    .btn-dark-pill:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(38, 36, 33, 0.2);
+    }
+
+    .btn-dark-pill:disabled { opacity: 0.55; cursor: not-allowed; }
+
+    .btn-outline-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 18px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(35, 33, 30, 0.2);
+      background: #FFFFFF;
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* STRIP PREVIEW & FRAME SELECTOR */
+    .strip-preview-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    canvas#strip-canvas {
+      width: 100%;
+      max-width: 260px;
+      height: auto;
+      border-radius: 14px;
+      box-shadow: 0 14px 36px rgba(35, 33, 30, 0.14);
+      margin-bottom: 18px;
+      background: #FFFFFF;
+    }
+
+    .frame-swatches {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      width: 100%;
+      margin-bottom: 18px;
+    }
+
+    .swatch-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(35, 33, 30, 0.14);
+      background: #FFFFFF;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink);
+      cursor: pointer;
+      text-align: left;
+    }
+
+    .swatch-btn.active {
+      border-color: var(--pill-dark);
+      background: var(--bg-base);
+    }
+
+    .swatch-dot {
+      width: 16px;
+      height: 16px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      border: 1px solid rgba(0, 0, 0, 0.15);
+    }
+
+    @media (max-width: 860px) {
+      .workspace-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP DEMO RIBBON -->
+  <div class="demo-banner">
+    <span>Pratinjau Interaktif &mdash; Votura Virtual Photobooth</span>
+    <a href="https://wa.me/6282298966860?text=Halo%20Votura%20Studio,%20saya%20baru%20coba%20demo%20Virtual%20Photobooth-nya%20dan%20tertarik%20tanya-tanya." target="_blank">Pesan Untuk Acaramu</a>
+  </div>
+
+  <div class="booth-container">
+    <div class="booth-header">
+      <span class="eyebrow">Votura Studio Photobooth Experience</span>
+      <h1 class="serif">Abadikan Momen dalam 3 Pose</h1>
+      <p>Ambil 3 foto berurutan dengan timer otomatis, pilih desain bingkai Votura, lalu unduh hasilnya langsung ke ponsel.</p>
+    </div>
+
+    <div class="workspace-grid">
+      <!-- LEFT: CAMERA & CONTROLS -->
+      <div class="panel-card">
+        <div class="camera-viewport">
+          <div class="pose-indicator" id="pose-badge">Siap Mengambil Foto (3 Pose)</div>
+          <div class="countdown-overlay" id="countdown-num">3</div>
+          <div class="flash-layer" id="flash-fx"></div>
+          <video id="cam-stream" autoplay playsinline muted></video>
+        </div>
+
+        <span class="control-label">Pilih Nuansa Warna</span>
+        <div class="chip-row" id="filter-chips">
+          <button type="button" class="chip-btn active" data-filter="none">Natural</button>
+          <button type="button" class="chip-btn" data-filter="sepia(0.22) contrast(1.05) brightness(1.03)">Warm Sand</button>
+          <button type="button" class="chip-btn" data-filter="grayscale(1) contrast(1.15)">Editorial B&amp;W</button>
+          <button type="button" class="chip-btn" data-filter="contrast(0.95) saturate(1.2) brightness(1.04)">Soft Film</button>
+        </div>
+
+        <div class="action-row">
+          <button type="button" class="btn-dark-pill" id="start-session-btn" onclick="startPhotoSession()" style="flex: 1;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+            <span>Mulai Sesi Foto (3x)</span>
+          </button>
+          <button type="button" class="btn-outline-pill" onclick="toggleMirror()">Balik Kamera</button>
+          <button type="button" class="btn-outline-pill" onclick="resetPhotos()">Ulangi</button>
+        </div>
+      </div>
+
+      <!-- RIGHT: PHOTO STRIP RESULT & FRAME DESIGN -->
+      <div class="panel-card strip-preview-wrap">
+        <span class="control-label" style="align-self: flex-start;">Desain Bingkai Votura</span>
+        <div class="frame-swatches" id="frame-swatches">
+          <button type="button" class="swatch-btn active" data-theme="sand">
+            <span class="swatch-dot" style="background: #F4F0E8;"></span>
+            <span>Votura Sand</span>
+          </button>
+          <button type="button" class="swatch-btn" data-theme="obsidian">
+            <span class="swatch-dot" style="background: #23211E;"></span>
+            <span>Obsidian Dark</span>
+          </button>
+          <button type="button" class="swatch-btn" data-theme="sage">
+            <span class="swatch-dot" style="background: #DDE3DC;"></span>
+            <span>Sage Editorial</span>
+          </button>
+          <button type="button" class="swatch-btn" data-theme="terracotta">
+            <span class="swatch-dot" style="background: #EADAD1;"></span>
+            <span>Warm Blush</span>
+          </button>
+        </div>
+
+        <canvas id="strip-canvas" width="600" height="1560"></canvas>
+
+        <button type="button" class="btn-dark-pill" id="download-btn" onclick="downloadStrip()" style="width: 100%;" disabled>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span>Unduh Photo Strip</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const video = document.getElementById('cam-stream');
+    const canvas = document.getElementById('strip-canvas');
+    const ctx = canvas.getContext('2d');
+
+    let capturedFrames = [null, null, null];
+    let activeFilter = 'none';
+    let activeTheme = 'sand';
+    let isMirrored = true;
+    let isCapturing = false;
+
+    const frameThemes = {
+      sand: {
+        bg: '#F4F0E8',
+        border: '#DFD7C8',
+        text: '#23211E',
+        sub: '#7A7267',
+        slotBg: '#E6DFD3'
+      },
+      obsidian: {
+        bg: '#23211E',
+        border: '#3A3631',
+        text: '#F8F6F2',
+        sub: '#A8A29E',
+        slotBg: '#322F2B'
+      },
+      sage: {
+        bg: '#E2E7E1',
+        border: '#C6D0C4',
+        text: '#222B24',
+        sub: '#5C6B5E',
+        slotBg: '#D1D9D0'
+      },
+      terracotta: {
+        bg: '#EFE1D9',
+        border: '#DEC6B8',
+        text: '#2E211B',
+        sub: '#7D6356',
+        slotBg: '#E3CFC4'
+      }
+    };
+
+    // 1. INITIALIZE CAMERA
+    async function initCamera() {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 960 } },
+          audio: false
+        });
+        video.srcObject = stream;
+      } catch (err) {
+        document.getElementById('pose-badge').textContent = "Izinkan akses kamera pada browser untuk mencoba demo";
+      }
+    }
+
+    // 2. FILTER & FRAME EVENT LISTENERS
+    document.querySelectorAll('#filter-chips .chip-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#filter-chips .chip-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeFilter = btn.dataset.filter;
+        video.style.filter = activeFilter;
+      });
+    });
+
+    document.querySelectorAll('#frame-swatches .swatch-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        document.querySelectorAll('#frame-swatches .swatch-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        activeTheme = btn.dataset.theme;
+        renderPhotoStrip();
+      });
+    });
+
+    function toggleMirror() {
+      isMirrored = !isMirrored;
+      video.classList.toggle('unmirrored', !isMirrored);
+    }
+
+    // 3. MULTI-POSE CAPTURE SEQUENCE (3 POSES)
+    async function startPhotoSession() {
+      if (isCapturing) return;
+      isCapturing = true;
+      capturedFrames = [null, null, null];
+      renderPhotoStrip();
+
+      const startBtn = document.getElementById('start-session-btn');
+      const downloadBtn = document.getElementById('download-btn');
+      startBtn.disabled = true;
+      downloadBtn.disabled = true;
+
+      for (let i = 0; i < 3; i++) {
+        document.getElementById('pose-badge').textContent = `Bersiap Pose ${i + 1} dari 3`;
+        await runCountdown(3);
+        triggerFlash();
+        capturedFrames[i] = captureSingleFrame();
+        renderPhotoStrip();
+        await wait(650);
+      }
+
+      document.getElementById('pose-badge').textContent = "Sesi Foto Selesai";
+      startBtn.disabled = false;
+      downloadBtn.disabled = false;
+      isCapturing = false;
+    }
+
+    function runCountdown(seconds) {
+      return new Promise(resolve => {
+        const el = document.getElementById('countdown-num');
+        el.style.display = 'flex';
+        let count = seconds;
+        el.textContent = count;
+
+        const timer = setInterval(() => {
+          count--;
+          if (count > 0) {
+            el.textContent = count;
+          } else {
+            clearInterval(timer);
+            el.style.display = 'none';
+            resolve();
+          }
+        }, 1000);
+      });
+    }
+
+    function triggerFlash() {
+      const flash = document.getElementById('flash-fx');
+      flash.style.opacity = '0.9';
+      setTimeout(() => { flash.style.opacity = '0'; }, 180);
+    }
+
+    function wait(ms) {
+      return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    function captureSingleFrame() {
+      const offscreen = document.createElement('canvas');
+      offscreen.width = 520;
+      offscreen.height = 390;
+      const oCtx = offscreen.getContext('2d');
+
+      oCtx.filter = activeFilter;
+      if (isMirrored) {
+        oCtx.translate(offscreen.width, 0);
+        oCtx.scale(-1, 1);
+      }
+
+      const vw = video.videoWidth || 640;
+      const vh = video.videoHeight || 480;
+      const targetRatio = 4 / 3;
+      let sx = 0, sy = 0, sw = vw, sh = vh;
+
+      if (vw / vh > targetRatio) {
+        sw = vh * targetRatio;
+        sx = (vw - sw) / 2;
+      } else {
+        sh = vw / targetRatio;
+        sy = (vh - sh) / 2;
+      }
+
+      oCtx.drawImage(video, sx, sy, sw, sh, 0, 0, offscreen.width, offscreen.height);
+      return offscreen;
+    }
+
+    // 4. RENDER EDITORIAL PHOTO STRIP ON CANVAS
+    function renderPhotoStrip() {
+      const theme = frameThemes[activeTheme];
+      const W = canvas.width;
+      const H = canvas.height;
+
+      // Background
+      ctx.fillStyle = theme.bg;
+      ctx.fillRect(0, 0, W, H);
+
+      // Subtle Editorial Outer Frame Line
+      ctx.strokeStyle = theme.border;
+      ctx.lineWidth = 4;
+      ctx.strokeRect(18, 18, W - 36, H - 36);
+
+      // Top Header Branding
+      ctx.fillStyle = theme.sub;
+      ctx.font = '600 16px "Plus Jakarta Sans", sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('SPECIAL EDITION', W / 2, 66);
+
+      ctx.fillStyle = theme.text;
+      ctx.font = '600 34px "Cormorant Garamond", Georgia, serif';
+      ctx.fillText('Votura Studio', W / 2, 104);
+
+      // 3 Photo Slots
+      const slotW = 520;
+      const slotH = 390;
+      const startX = (W - slotW) / 2;
+      const startY = 134;
+      const gap = 26;
+
+      for (let i = 0; i < 3; i++) {
+        const y = startY + i * (slotH + gap);
+        ctx.fillStyle = theme.slotBg;
+        ctx.fillRect(startX, y, slotW, slotH);
+
+        if (capturedFrames[i]) {
+          ctx.drawImage(capturedFrames[i], startX, y, slotW, slotH);
+        } else {
+          ctx.fillStyle = theme.sub;
+          ctx.font = '500 18px "Plus Jakarta Sans", sans-serif';
+          ctx.fillText(`POSE 0${i + 1}`, W / 2, y + slotH / 2 + 6);
+        }
+      }
+
+      // Bottom Footer Caption
+      const dateStr = new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' });
+      ctx.fillStyle = theme.text;
+      ctx.font = 'italic 26px "Cormorant Garamond", Georgia, serif';
+      ctx.fillText('Moments That Connect', W / 2, H - 115);
+
+      ctx.fillStyle = theme.sub;
+      ctx.font = '600 14px "Plus Jakarta Sans", sans-serif';
+      ctx.fillText(`${dateStr.toUpperCase()}  •  VOTURASTUDIO.SITE`, W / 2, H - 76);
+    }
+
+    function resetPhotos() {
+      if (isCapturing) return;
+      capturedFrames = [null, null, null];
+      document.getElementById('pose-badge').textContent = "Siap Mengambil Foto (3 Pose)";
+      document.getElementById('download-btn').disabled = true;
+      renderPhotoStrip();
+    }
+
+    function downloadStrip() {
+      const link = document.createElement('a');
+      link.download = `Votura-Photobooth-${Date.now()}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+
+    initCamera();
+    renderPhotoStrip();
+  </script>
+</body>
+</html>
