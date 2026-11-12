@@ -4,348 +4,1494 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Votura Studio — Digital Wedding & Virtual Photobooth</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #f4f4f0;
-      --card: #ffffff;
-      --text: #18181b;
-      --muted: #52525b;
-      --yellow: #facc15;
-      --blue: #2563eb;
-      --rose: #e11d48;
-      --green: #16a34a;
-      --border: 2px solid #18181b;
-      --shadow: 4px 4px 0px #18181b;
-      --shadow-lg: 6px 6px 0px #18181b;
+      --bg-base: #EFECE6;
+      --surface: #F8F6F2;
+      --glass: rgba(255, 255, 255, 0.58);
+      --glass-strong: rgba(255, 255, 255, 0.82);
+      --glass-border: rgba(255, 255, 255, 0.75);
+      --ink: #23211E;
+      --ink-muted: #68635C;
+      --accent-warm: #8C7355;
+      --pill-dark: #262421;
+      --radius-xl: 28px;
+      --radius-lg: 22px;
+      --radius-pill: 999px;
+      --transition: cubic-bezier(0.22, 1, 0.36, 1);
     }
 
-    * { box-sizing: border-box; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; scroll-behavior: smooth; }
-    body { background-color: var(--bg); color: var(--text); margin: 0; padding: 0; line-height: 1.6; }
-    .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
-
-    /* NAVBAR */
-    nav {
-      background: var(--card);
-      border-bottom: var(--border);
-      padding: 15px 0;
-      position: sticky;
-      top: 0;
-      z-index: 100;
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      scroll-behavior: smooth;
     }
-    .nav-wrap { display: flex; justify-content: space-between; align-items: center; }
-    .brand { font-weight: 900; font-size: 20px; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
-    .brand span { background: var(--yellow); border: var(--border); padding: 2px 8px; }
-    .nav-links { display: flex; gap: 16px; align-items: center; }
-    .nav-links a { text-decoration: none; color: var(--text); font-weight: 700; font-size: 14px; }
-    .nav-links a:hover { text-decoration: underline; }
 
-    /* BUTTONS */
-    .btn {
-      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
-      font-weight: 800; text-transform: uppercase; text-decoration: none;
-      border: var(--border); box-shadow: var(--shadow);
-      padding: 12px 20px; font-size: 14px; cursor: pointer; transition: 0.1s;
+    body {
+      background-color: var(--bg-base);
+      color: var(--ink);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
     }
-    .btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px #18181b; }
-    .btn-yellow { background: var(--yellow); color: var(--text); }
-    .btn-blue { background: var(--blue); color: #fff; }
-    .btn-rose { background: var(--rose); color: #fff; }
-    .btn-green { background: var(--green); color: #fff; }
-    .btn-white { background: #fff; color: var(--text); }
+
+    /* EDITORIAL TYPOGRAPHY */
+    .serif {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-weight: 500;
+      letter-spacing: -0.02em;
+    }
+
+    .serif-accent {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      color: var(--accent-warm);
+      font-weight: 500;
+    }
+
+    /* MAIN CANVAS WRAPPER */
+    .canvas-shell {
+      max-width: 1360px;
+      margin: 18px auto;
+      background: var(--surface);
+      border-radius: 34px;
+      box-shadow: 0 24px 60px rgba(35, 33, 30, 0.08);
+      overflow: hidden;
+      position: relative;
+      border: 1px solid rgba(255, 255, 255, 0.9);
+    }
+
+    /* TOP NAVIGATION BAR */
+    .top-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 22px 36px;
+      position: relative;
+      z-index: 30;
+    }
+
+    .brand-logo {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+
+    .brand-logo img {
+      height: 32px;
+      width: auto;
+      object-fit: contain;
+      display: block;
+    }
+
+    .nav-pill-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--glass);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid var(--glass-border);
+      padding: 6px;
+      border-radius: var(--radius-pill);
+      box-shadow: 0 8px 24px rgba(35, 33, 30, 0.04);
+    }
+
+    .nav-pill-group a {
+      text-decoration: none;
+      color: var(--ink-muted);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 9px 18px;
+      border-radius: var(--radius-pill);
+      transition: all 0.35s var(--transition);
+    }
+
+    .nav-pill-group a:hover {
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.6);
+    }
+
+    .nav-pill-group a.active {
+      background: var(--pill-dark);
+      color: #FFFFFF;
+    }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .circle-icon-btn {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: var(--glass);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--glass-border);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink);
+      text-decoration: none;
+      cursor: pointer;
+      transition: transform 0.3s var(--transition), background 0.3s var(--transition);
+    }
+
+    .circle-icon-btn:hover {
+      transform: translateY(-2px);
+      background: #FFFFFF;
+    }
+
+    .cta-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--pill-dark);
+      color: #FFFFFF;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      padding: 6px 6px 6px 20px;
+      border-radius: var(--radius-pill);
+      transition: transform 0.35s var(--transition), box-shadow 0.35s var(--transition);
+      border: none;
+      cursor: pointer;
+    }
+
+    .cta-pill:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 24px rgba(38, 36, 33, 0.2);
+    }
+
+    .cta-pill .arrow-badge {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      color: var(--pill-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.35s var(--transition);
+    }
+
+    .cta-pill:hover .arrow-badge {
+      transform: rotate(45deg);
+    }
+
+    /* FLOATING LEFT DOCK (DESKTOP) */
+    .side-dock {
+      position: fixed;
+      left: 28px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: var(--glass-strong);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-pill);
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+      z-index: 90;
+      box-shadow: 0 12px 32px rgba(35, 33, 30, 0.08);
+    }
+
+    .dock-item {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--ink-muted);
+      text-decoration: none;
+      transition: all 0.3s var(--transition);
+      position: relative;
+    }
+
+    .dock-item:hover, .dock-item.active {
+      background: var(--pill-dark);
+      color: #FFFFFF;
+    }
+
+    .dock-divider {
+      width: 20px;
+      height: 1px;
+      background: rgba(35, 33, 30, 0.12);
+    }
 
     /* HERO SECTION */
-    .hero {
-      padding: 60px 0 40px 0;
-    }
-    .hero-box {
-      background: var(--yellow);
-      border: var(--border);
-      box-shadow: var(--shadow-lg);
-      padding: 40px 30px;
-    }
-    .tag {
-      display: inline-block; background: #fff; border: var(--border);
-      padding: 4px 12px; font-size: 12px; font-weight: 800; text-transform: uppercase;
-      margin-bottom: 16px;
-    }
-    .hero h1 { font-size: 36px; line-height: 1.2; margin: 0 0 16px 0; font-weight: 900; text-transform: uppercase; }
-    .hero p { font-size: 16px; max-width: 650px; margin: 0 0 24px 0; font-weight: 500; }
-    .hero-cta { display: flex; flex-wrap: wrap; gap: 12px; }
-
-    /* SECTION TITLE */
-    .section { padding: 40px 0; }
-    .section-header { margin-bottom: 24px; }
-    .section-header h2 { font-size: 26px; text-transform: uppercase; margin: 0; font-weight: 900; }
-    .section-header p { margin: 4px 0 0 0; color: var(--muted); font-size: 15px; }
-
-    /* GRID & CARDS */
-    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
-    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
-
-    .card {
-      background: var(--card);
-      border: var(--border);
-      box-shadow: var(--shadow);
-      padding: 24px;
+    .hero-section {
+      position: relative;
+      padding: 28px 36px 36px 96px;
+      min-height: 640px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      background: 
+        radial-gradient(circle at 78% 35%, rgba(214, 198, 178, 0.45) 0%, rgba(248, 246, 242, 0) 55%),
+        linear-gradient(125deg, #F8F6F2 0%, #EFEAE1 52%, #E2D9CC 100%);
     }
-    .card h3 { margin: 0 0 8px 0; font-size: 20px; text-transform: uppercase; }
-    .price { font-size: 26px; font-weight: 900; margin: 12px 0; }
-    .price small { font-size: 13px; font-weight: 600; color: var(--muted); }
-    .feature-list { list-style: none; padding: 0; margin: 0 0 20px 0; font-size: 14px; }
-    .feature-list li { margin-bottom: 8px; padding-left: 20px; position: relative; }
-    .feature-list li::before { content: "✓"; position: absolute; left: 0; font-weight: 900; color: var(--green); }
-    .card-actions { display: flex; flex-direction: column; gap: 10px; }
 
-    /* PAYMENT / REKENING BOX */
-    .payment-card {
-      background: #e0f2fe;
-      border: var(--border);
-      box-shadow: var(--shadow);
-      padding: 24px;
+    .hero-top-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 18px;
     }
-    .rek-box {
-      background: #fff;
-      border: var(--border);
-      padding: 14px 18px;
+
+    .eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      font-weight: 600;
+    }
+
+    .pillars-list {
+      text-align: right;
+      font-size: 10.5px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      line-height: 1.85;
+      font-weight: 600;
+    }
+
+    .hero-main-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 32px;
+      align-items: center;
+      margin-bottom: 36px;
+    }
+
+    .hero-headline {
+      font-size: clamp(42px, 5.4vw, 68px);
+      line-height: 1.05;
+      margin-bottom: 18px;
+      color: var(--ink);
+    }
+
+    .hero-subtitle {
+      font-size: 15px;
+      color: var(--ink-muted);
+      max-width: 460px;
+      margin-bottom: 28px;
+      line-height: 1.7;
+    }
+
+    .hero-cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .btn-dark-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--pill-dark);
+      color: #FFFFFF;
+      padding: 13px 24px;
+      border-radius: var(--radius-pill);
+      text-decoration: none;
+      font-size: 13.5px;
+      font-weight: 500;
+      transition: all 0.35s var(--transition);
+    }
+
+    .btn-dark-pill:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(38, 36, 33, 0.18);
+    }
+
+    .btn-ghost-demo {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 13.5px;
+      font-weight: 600;
+      padding: 8px 12px;
+      border-radius: var(--radius-pill);
+      transition: opacity 0.3s ease;
+    }
+
+    .btn-ghost-demo:hover {
+      opacity: 0.75;
+    }
+
+    .play-ring {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid rgba(35, 33, 30, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(255, 255, 255, 0.5);
+    }
+
+    /* HERO VISUAL DEVICE SHOWCASE */
+    .hero-visual-card {
+      background: var(--glass);
+      backdrop-filter: blur(18px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      padding: 22px;
+      box-shadow: 0 20px 45px rgba(35, 33, 30, 0.06);
+      position: relative;
+    }
+
+    .mockup-preview {
+      background: linear-gradient(145deg, #2B2825 0%, #1B1917 100%);
+      border-radius: 20px;
+      padding: 24px;
+      color: #F8F6F2;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .mockup-badge {
+      display: inline-block;
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 255, 255, 0.12);
+      margin-bottom: 14px;
+    }
+
+    .mockup-preview h3 {
+      font-size: 26px;
+      margin-bottom: 6px;
+    }
+
+    .mockup-preview p {
+      font-size: 12.5px;
+      color: rgba(248, 246, 242, 0.72);
+      margin-bottom: 18px;
+    }
+
+    .mockup-meta-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.12);
+      font-size: 12px;
+    }
+
+    /* HERO BOTTOM BENTO ROW (MATCHING REFERENCE) */
+    .hero-bento-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 0.72fr;
+      gap: 18px;
+      align-items: stretch;
+    }
+
+    .bento-featured {
+      background: var(--glass-strong);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      padding: 16px;
+      display: grid;
+      grid-template-columns: 145px 1fr;
+      gap: 18px;
+      align-items: center;
+      box-shadow: 0 12px 30px rgba(35, 33, 30, 0.04);
+    }
+
+    .featured-thumb {
+      height: 148px;
+      border-radius: 18px;
+      background: linear-gradient(135deg, #D8CFC2 0%, #B8A996 100%);
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      color: var(--ink);
+    }
+
+    .featured-thumb span {
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    .featured-info-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .featured-info-top h4 {
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .slide-counter {
+      font-size: 11px;
+      color: var(--ink-muted);
+      font-weight: 600;
+    }
+
+    .featured-desc {
+      font-size: 12.5px;
+      color: var(--ink-muted);
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
+    .featured-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .link-subtle {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink);
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .slider-btns {
+      display: flex;
+      gap: 6px;
+    }
+
+    .slider-btn {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      border: 1px solid rgba(35, 33, 30, 0.2);
+      background: transparent;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .slider-btn.dark {
+      background: var(--pill-dark);
+      color: #FFFFFF;
+      border-color: var(--pill-dark);
+    }
+
+    .slider-btn:hover {
+      transform: scale(1.06);
+    }
+
+    .bento-stats {
+      background: var(--glass);
+      backdrop-filter: blur(18px);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-xl);
+      padding: 22px 24px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      align-items: center;
+    }
+
+    .stat-item svg {
+      color: var(--ink-muted);
+      margin-bottom: 10px;
+    }
+
+    .stat-item strong {
+      display: block;
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1.1;
+      margin-bottom: 4px;
+    }
+
+    .stat-item span {
+      font-size: 11px;
+      color: var(--ink-muted);
+      display: block;
+      line-height: 1.3;
+    }
+
+    .bento-dark-cta {
+      background: var(--pill-dark);
+      color: #FFFFFF;
+      border-radius: var(--radius-xl);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      text-decoration: none;
+      transition: transform 0.35s var(--transition);
+    }
+
+    .bento-dark-cta:hover {
+      transform: translateY(-3px);
+    }
+
+    .dark-cta-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .mini-orb {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #A38A6B, #5E4E3C);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .arrow-up-right {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      color: var(--pill-dark);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .bento-dark-cta h4 {
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.35;
+      margin: 14px 0 4px 0;
+    }
+
+    .bento-dark-cta p {
+      font-size: 11.5px;
+      color: rgba(255, 255, 255, 0.65);
+    }
+
+    /* CONTENT SECTIONS */
+    .content-section {
+      padding: 64px 36px 64px 96px;
+      border-top: 1px solid rgba(35, 33, 30, 0.06);
+    }
+
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 36px;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .section-head h2 {
+      font-size: clamp(30px, 3.6vw, 42px);
+      line-height: 1.12;
+      margin-top: 6px;
+    }
+
+    .section-head p {
+      max-width: 420px;
+      font-size: 14px;
+      color: var(--ink-muted);
+    }
+
+    /* SERVICES / PRODUCTS CARDS */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 24px;
+    }
+
+    .product-card {
+      background: #FFFFFF;
+      border: 1px solid rgba(35, 33, 30, 0.08);
+      border-radius: var(--radius-xl);
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: transform 0.35s var(--transition), box-shadow 0.35s var(--transition);
+    }
+
+    .product-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 40px rgba(35, 33, 30, 0.06);
+    }
+
+    .product-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      padding: 5px 12px;
+      border-radius: var(--radius-pill);
+      background: var(--bg-base);
+      color: var(--ink);
+      margin-bottom: 16px;
+    }
+
+    .product-card h3 {
+      font-size: 26px;
+      margin-bottom: 10px;
+    }
+
+    .product-desc {
+      font-size: 14px;
+      color: var(--ink-muted);
+      margin-bottom: 20px;
+    }
+
+    .product-price {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 20px;
+      padding-bottom: 20px;
+      border-bottom: 1px solid rgba(35, 33, 30, 0.08);
+    }
+
+    .product-price span {
+      font-size: 13px;
+      font-weight: 400;
+      color: var(--ink-muted);
+    }
+
+    .clean-list {
+      list-style: none;
+      margin-bottom: 28px;
+    }
+
+    .clean-list li {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13.5px;
+      color: var(--ink);
+      margin-bottom: 11px;
+    }
+
+    .clean-list li svg {
+      color: var(--accent-warm);
+      flex-shrink: 0;
+    }
+
+    .product-actions {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 12px;
+    }
+
+    .btn-outline-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 18px;
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(35, 33, 30, 0.22);
+      color: var(--ink);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+    }
+
+    .btn-outline-pill:hover {
+      background: var(--bg-base);
+    }
+
+    /* PAYMENT & TRANSACTION SECTION */
+    .payment-wrapper {
+      background: #EFECE6;
+      border-radius: var(--radius-xl);
+      padding: 32px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .bank-card {
+      background: #FFFFFF;
+      border-radius: var(--radius-lg);
+      padding: 22px 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      border: 1px solid rgba(35, 33, 30, 0.06);
+    }
+
+    .bank-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--ink-muted);
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .bank-number {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--ink);
+      margin-bottom: 2px;
+    }
+
+    .bank-holder {
+      font-size: 13px;
+      color: var(--ink-muted);
+    }
+
+    .copy-pill-btn {
+      background: var(--surface);
+      border: 1px solid rgba(35, 33, 30, 0.16);
+      color: var(--ink);
+      padding: 10px 16px;
+      border-radius: var(--radius-pill);
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.25s ease;
+    }
+
+    .copy-pill-btn:hover {
+      background: var(--pill-dark);
+      color: #FFFFFF;
+    }
+
+    .payment-footer-bar {
+      grid-column: 1 / -1;
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 12px;
+      gap: 16px;
+      padding-top: 12px;
     }
-    .rek-info strong { display: block; font-size: 13px; color: var(--muted); text-transform: uppercase; }
-    .rek-number { font-size: 20px; font-weight: 900; letter-spacing: 1px; font-family: monospace; }
-    .rek-owner { font-size: 13px; font-weight: 600; }
+
+    .payment-note {
+      font-size: 13px;
+      color: var(--ink-muted);
+    }
 
     /* TESTIMONIALS */
-    .testi-quote { font-style: italic; font-size: 14px; margin: 0 0 14px 0; color: #27272a; }
-    .testi-author { font-weight: 800; font-size: 14px; }
-    .testi-event { font-size: 12px; color: var(--muted); }
-
-    /* FOOTER & SOSMED */
-    footer {
-      background: #18181b;
-      color: #fff;
-      padding: 40px 0;
-      margin-top: 40px;
-      border-top: var(--border);
-    }
-    .footer-wrap { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
-    .sosmed-links { display: flex; gap: 12px; flex-wrap: wrap; }
-    .sosmed-btn {
-      background: #fff; color: #18181b; border: 2px solid #fff;
-      padding: 8px 16px; text-decoration: none; font-weight: 800; font-size: 13px;
-      text-transform: uppercase;
-    }
-    .sosmed-btn:hover { background: var(--yellow); border-color: var(--yellow); }
-
-    /* TOAST NOTIFICATION */
-    .toast {
-      position: fixed; bottom: 24px; right: 24px;
-      background: #18181b; color: #facc15;
-      border: 2px solid #facc15; box-shadow: 4px 4px 0px #000;
-      padding: 12px 20px; font-weight: 800; font-size: 14px;
-      display: none; z-index: 999;
+    .testi-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
     }
 
-    @media (max-width: 600px) {
-      .hero h1 { font-size: 26px; }
-      .nav-links { display: none; }
+    .testi-card {
+      background: #FFFFFF;
+      border-radius: var(--radius-lg);
+      padding: 26px;
+      border: 1px solid rgba(35, 33, 30, 0.07);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .testi-text {
+      font-size: 14px;
+      color: var(--ink);
+      line-height: 1.65;
+      margin-bottom: 20px;
+    }
+
+    .testi-client strong {
+      display: block;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .testi-client span {
+      font-size: 12px;
+      color: var(--ink-muted);
+    }
+
+    /* FOOTER */
+    .studio-footer {
+      background: var(--pill-dark);
+      color: #F8F6F2;
+      padding: 48px 36px 48px 96px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 24px;
+    }
+
+    .footer-brand p {
+      font-size: 13px;
+      color: rgba(248, 246, 242, 0.65);
+      margin-top: 8px;
+      max-width: 340px;
+    }
+
+    .social-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .social-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 18px;
+      border-radius: var(--radius-pill);
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      color: #FFFFFF;
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .social-pill:hover {
+      background: #FFFFFF;
+      color: var(--pill-dark);
+    }
+
+    /* CUSTOM GLASS TOAST & MODAL (MATCHING THEME) */
+    .glass-toast {
+      position: fixed;
+      bottom: 28px;
+      right: 28px;
+      background: var(--pill-dark);
+      color: #FFFFFF;
+      padding: 14px 22px;
+      border-radius: var(--radius-pill);
+      font-size: 13px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.22);
+      opacity: 0;
+      transform: translateY(16px);
+      pointer-events: none;
+      transition: all 0.4s var(--transition);
+      z-index: 200;
+    }
+
+    .glass-toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(35, 33, 30, 0.45);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 300;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-panel {
+      background: var(--surface);
+      border: 1px solid #FFFFFF;
+      border-radius: var(--radius-xl);
+      max-width: 420px;
+      width: 100%;
+      padding: 32px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.18);
+      animation: modalIn 0.35s var(--transition);
+    }
+
+    @keyframes modalIn {
+      from { opacity: 0; transform: scale(0.95) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    /* RESPONSIVE ADAPTATION (TABLET & MOBILE) */
+    @media (max-width: 1024px) {
+      .hero-main-grid,
+      .hero-bento-grid,
+      .products-grid,
+      .payment-wrapper {
+        grid-template-columns: 1fr;
+      }
+
+      .testi-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .canvas-shell {
+        margin: 0;
+        border-radius: 0;
+        border: none;
+      }
+
+      .top-nav {
+        padding: 18px 20px;
+      }
+
+      .nav-pill-group {
+        display: none;
+      }
+
+      /* Transform Left Dock into Bottom Floating Bar on Mobile */
+      .side-dock {
+        left: 50%;
+        top: auto;
+        bottom: 16px;
+        transform: translateX(-50%);
+        flex-direction: row;
+        padding: 6px 12px;
+        gap: 8px;
+      }
+
+      .dock-divider {
+        width: 1px;
+        height: 18px;
+      }
+
+      .hero-section,
+      .content-section,
+      .studio-footer {
+        padding-left: 20px;
+        padding-right: 20px;
+      }
+
+      .studio-footer {
+        padding-bottom: 88px;
+      }
+
+      .testi-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .product-actions {
+        grid-template-columns: 1fr;
+      }
+
+      .bento-featured {
+        grid-template-columns: 1fr;
+      }
+
+      .featured-thumb {
+        height: 110px;
+      }
+
+      .glass-toast {
+        bottom: 76px;
+        right: 16px;
+        left: 16px;
+        justify-content: center;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- NAVBAR -->
-  <nav>
-    <div class="container nav-wrap">
-      <div class="brand"><span>VOTURA</span> STUDIO</div>
-      <div class="nav-links">
+  <!-- FLOATING NAVIGATION DOCK -->
+  <aside class="side-dock" aria-label="Navigasi Cepat">
+    <a href="#beranda" class="dock-item active" title="Beranda">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+    </a>
+    <a href="#produk" class="dock-item" title="Layanan & Produk">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
+    </a>
+    <a href="#transaksi" class="dock-item" title="Transaksi & Rekening">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+    </a>
+    <a href="#testimoni" class="dock-item" title="Testimoni Klien">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+    </a>
+    <div class="dock-divider"></div>
+    <a href="#kontak" class="dock-item" title="Kontak & Sosial Media">
+      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+    </a>
+  </aside>
+
+  <div class="canvas-shell" id="beranda">
+    <!-- TOP HEADER -->
+    <header class="top-nav">
+      <a href="#beranda" class="brand-logo">
+        <img src="assets/votura-horizontal.png" alt="Votura Studio">
+      </a>
+
+      <nav class="nav-pill-group">
+        <a href="#beranda" class="active">Beranda</a>
         <a href="#produk">Produk</a>
-        <a href="#pembayaran">Pembayaran</a>
+        <a href="#transaksi">Transaksi</a>
         <a href="#testimoni">Testimoni</a>
         <a href="#kontak">Kontak</a>
-      </div>
-      <a href="#produk" class="btn btn-yellow" style="padding: 8px 14px; font-size: 12px;">Pesan Sekarang</a>
-    </div>
-  </nav>
+      </nav>
 
-  <!-- HERO / PROFILE -->
-  <section class="hero">
-    <div class="container">
-      <div class="hero-box">
-        <span class="tag">Digital Event & Creative Studio</span>
-        <h1>Bikin Momen Spesialmu Lebih Modern & Interaktif</h1>
-        <p><strong>Votura Studio</strong> menyediakan layanan Undangan Digital berbasis web dan Virtual Photobooth interaktif yang bisa diakses langsung dari smartphone tamu tanpa perlu instal aplikasi.</p>
-        <div class="hero-cta">
-          <a href="#produk" class="btn btn-blue">Lihat Katalog Produk 👇</a>
-          <a href="https://wa.me/6281234567890?text=Halo%20Votura%20Studio,%20saya%20mau%20tanya-tanya%20produk%20digitalnya." target="_blank" class="btn btn-green">Chat WhatsApp 💬</a>
+      <div class="nav-actions">
+        <a href="https://instagram.com/voturastudio" target="_blank" class="circle-icon-btn" aria-label="Instagram Votura Studio">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        </a>
+        <button type="button" class="cta-pill" onclick="openOrderModal('Konsultasi Layanan Votura Studio')">
+          <span>Mulai Pesan</span>
+          <span class="arrow-badge">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </span>
+        </button>
+      </div>
+    </header>
+
+    <!-- HERO SECTION -->
+    <section class="hero-section">
+      <div class="hero-top-meta">
+        <span class="eyebrow">Digital Invitation &mdash; Virtual Photobooth &mdash; Creative Studio</span>
+        <div class="pillars-list">
+          Modern<br>
+          Seamless<br>
+          Interactive<br>
+          Timeless
         </div>
       </div>
-    </div>
-  </section>
 
-  <!-- KATALOG PRODUK & DEMO -->
-  <section class="section" id="produk">
-    <div class="container">
-      <div class="section-header">
-        <h2>Produk & Layanan Votura</h2>
-        <p>Pilih layanan yang sesuai dengan kebutuhan acaramu. Bisa coba demo langsung!</p>
+      <div class="hero-main-grid">
+        <div>
+          <h1 class="hero-headline serif">
+            Moments<br>
+            That <span class="serif-accent">Connect</span>
+          </h1>
+          <p class="hero-subtitle">
+            Votura Studio menghadirkan undangan pernikahan digital dan virtual photobooth berbasis web yang dirancang elegan, ringan, serta langsung dapat diakses tamu tanpa perlu mengunduh aplikasi.
+          </p>
+          <div class="hero-cta-row">
+            <a href="#produk" class="btn-dark-pill">
+              <span>Jelajahi Layanan</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+            <a href="wedding.html?event=nikah-amel-riyan" target="_blank" class="btn-ghost-demo">
+              <span class="play-ring">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
+              </span>
+              <span>Lihat Demo Undangan</span>
+            </a>
+          </div>
+        </div>
+
+        <div class="hero-visual-card">
+          <div class="mockup-preview">
+            <span class="mockup-badge">Live Web Experience</span>
+            <h3 class="serif">Votura Studio Suite</h3>
+            <p>Satu ekosistem digital untuk mengelola daftar kehadiran tamu, ucapan real-time, hingga sesi foto interaktif dengan bingkai khusus acaramu.</p>
+            <div class="mockup-meta-row">
+              <span>Akses Instan via Browser</span>
+              <span>voturastudio.site</span>
+            </div>
+          </div>
+        </div>
       </div>
 
-      <div class="grid-2">
-        <!-- PRODUK 1: WEDDING -->
-        <div class="card">
+      <!-- BOTTOM BENTO ROW -->
+      <div class="hero-bento-grid">
+        <!-- FEATURED SLIDER CARD -->
+        <div class="bento-featured">
+          <div class="featured-thumb" id="featured-thumb">
+            <span id="featured-tag">Featured Product</span>
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+          </div>
           <div>
-            <span class="tag" style="background: #ffe4e6;">Best Seller</span>
-            <h3>Votura Wedding Invitation</h3>
-            <p style="font-size: 14px; color: var(--muted);">Undangan pernikahan digital praktis dengan fitur RSVP real-time dan navigasi lokasi akurat.</p>
-            <div class="price">Rp 99.000 <small>/ event</small></div>
-            <ul class="feature-list">
-              <li>Link khusus acara dengan domain profesional</li>
-              <li>Konfirmasi kehadiran (RSVP) & ucapan tamu live</li>
-              <li>Integrasi tombol navigasi Google Maps</li>
-              <li>Dashboard Admin khusus pengantin untuk edit data</li>
+            <div class="featured-info-top">
+              <h4 id="featured-title">Wedding Invitation</h4>
+              <span class="slide-counter" id="featured-count">01 / 02</span>
+            </div>
+            <p class="featured-desc" id="featured-desc">
+              Undangan pernikahan digital berdesain bersih dengan fitur konfirmasi kehadiran (RSVP) dan navigasi peta.
+            </p>
+            <div class="featured-controls">
+              <a href="wedding.html?event=nikah-amel-riyan" target="_blank" id="featured-link" class="link-subtle">
+                <span>Buka Pratinjau</span>
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+              </a>
+              <div class="slider-btns">
+                <button type="button" class="slider-btn" onclick="prevSlide()" aria-label="Sebelumnya">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                </button>
+                <button type="button" class="slider-btn dark" onclick="nextSlide()" aria-label="Berikutnya">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- METRICS CARD -->
+        <div class="bento-stats">
+          <div class="stat-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            <strong>100%</strong>
+            <span>Berbasis Web Tanpa Instalasi</span>
+          </div>
+          <div class="stat-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <strong>Real-Time</strong>
+            <span>Rekap RSVP & Ucapan Tamu</span>
+          </div>
+          <div class="stat-item">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <strong>&lt; 24 Jam</strong>
+            <span>Proses Aktivasi Link Acara</span>
+          </div>
+        </div>
+
+        <!-- DARK CTA CARD -->
+        <a href="#transaksi" class="bento-dark-cta">
+          <div class="dark-cta-top">
+            <span class="mini-orb"></span>
+            <span class="arrow-up-right">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+            </span>
+          </div>
+          <div>
+            <h4>Wujudkan Acara Digitalmu</h4>
+            <p>Lihat detail paket dan metode pembayaran resmi.</p>
+          </div>
+        </a>
+      </div>
+    </section>
+
+    <!-- PRODUK & LAYANAN -->
+    <section class="content-section" id="produk">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Katalog Layanan</span>
+          <h2 class="serif">Pilihan Produk <span class="serif-accent">Votura</span></h2>
+        </div>
+        <p>Setiap paket dilengkapi halaman pengaturan khusus sehingga informasi acara dapat diperbarui kapan saja dengan mudah.</p>
+      </div>
+
+      <div class="products-grid">
+        <!-- WEDDING INVITATION -->
+        <article class="product-card">
+          <div>
+            <span class="product-tag">Votura Wedding</span>
+            <h3 class="serif">Digital Wedding Invitation</h3>
+            <p class="product-desc">Undangan pernikahan berbasis web dengan tampilan bersih, navigasi lokasi akurat, serta buku tamu digital yang tersimpan rapi.</p>
+            <div class="product-price">Rp 99.000 <span>/ acara</span></div>
+            <ul class="clean-list">
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Tautan khusus acara di domain voturastudio.site</span>
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Konfirmasi kehadiran (RSVP) dan doa tamu real-time</span>
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Integrasi langsung dengan titik lokasi Google Maps</span>
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Panel Admin Klien untuk kelola detail acara & rekap tamu</span>
+              </li>
             </ul>
           </div>
-          <div class="card-actions">
-            <a href="wedding.html?event=nikah-amel-riyan" target="_blank" class="btn btn-white">Lihat Live Demo 🔍</a>
-            <a href="https://wa.me/6281234567890?text=Halo%20Votura%20Studio,%20saya%20mau%20order%20*Votura%20Wedding%20Invitation*." target="_blank" class="btn btn-rose">Order Wedding via WA 💌</a>
-          </div>
-        </div>
 
-        <!-- PRODUK 2: PHOTOBOOTH -->
-        <div class="card">
+          <div class="product-actions">
+            <a href="wedding.html?event=nikah-amel-riyan" target="_blank" class="btn-outline-pill">Lihat Demo</a>
+            <button type="button" class="btn-dark-pill" style="justify-content: center;" onclick="openOrderModal('Votura Wedding Invitation (Rp 99.000)')">Pesan Paket Ini</button>
+          </div>
+        </article>
+
+        <!-- VIRTUAL PHOTOBOOTH -->
+        <article class="product-card">
           <div>
-            <span class="tag" style="background: #dbeafe;">Interactive Event</span>
-            <h3>Votura Virtual Photobooth</h3>
-            <p style="font-size: 14px; color: var(--muted);">Photobooth digital langsung dari kamera HP tamu dengan frame custom sesuai tema acaramu.</p>
-            <div class="price">Rp 149.000 <small>/ event</small></div>
-            <ul class="feature-list">
-              <li>Akses langsung via browser HP tanpa instal aplikasi</li>
-              <li>Custom Frame Overlay PNG sesuai tema acara</li>
-              <li>Panel Admin Client untuk ganti frame mandiri</li>
-              <li>Cocok untuk Wedding, Ulang Tahun, & Gathering</li>
+            <span class="product-tag">Votura Photobooth</span>
+            <h3 class="serif">Virtual Event Photobooth</h3>
+            <p class="product-desc">Pengalaman berfoto interaktif langsung dari kamera ponsel tamu menggunakan bingkai acara yang dapat disesuaikan sepenuhnya.</p>
+            <div class="product-price">Rp 149.000 <span>/ acara</span></div>
+            <ul class="clean-list">
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Akses langsung melalui peramban ponsel tanpa aplikasi</span>
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Dukungan bingkai transparan (PNG) sesuai tema acara</span>
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Dashboard Admin untuk mengganti bingkai secara mandiri</span>
+              </li>
+              <li>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+                <span>Ideal untuk pernikahan, ulang tahun, hingga acara kampus</span>
+              </li>
             </ul>
           </div>
-          <div class="card-actions">
-            <a href="photobooth.html?event=001" target="_blank" class="btn btn-white">Coba Live Demo 📸</a>
-            <a href="https://wa.me/6281234567890?text=Halo%20Votura%20Studio,%20saya%20mau%20order%20*Votura%20Virtual%20Photobooth*." target="_blank" class="btn btn-blue">Order Photobooth via WA 🚀</a>
+
+          <div class="product-actions">
+            <a href="photobooth.html?event=001" target="_blank" class="btn-outline-pill">Coba Kamera</a>
+            <button type="button" class="btn-dark-pill" style="justify-content: center;" onclick="openOrderModal('Votura Virtual Photobooth (Rp 149.000)')">Pesan Paket Ini</button>
           </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- METODE PEMBAYARAN -->
+    <section class="content-section" id="transaksi">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Transaksi Resmi</span>
+          <h2 class="serif">Metode <span class="serif-accent">Pembayaran</span></h2>
         </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- TRANSAKSI & NOMOR REKENING -->
-  <section class="section" id="pembayaran">
-    <div class="container">
-      <div class="section-header">
-        <h2>Metode Pembayaran & Transaksi</h2>
-        <p>Klik tombol salin untuk menyalin nomor rekening secara otomatis, lalu kirim bukti transfer ke WhatsApp.</p>
+        <p>Salin nomor rekening tujuan di bawah ini, lalu kirimkan bukti transfer melalui WhatsApp untuk aktivasi layanan.</p>
       </div>
 
-      <div class="payment-card">
-        <div class="grid-2">
-          <!-- REKENING 1 -->
-          <div class="rek-box">
-            <div class="rek-info">
-              <strong>Bank BCA</strong>
-              <span class="rek-number" id="rek-bca">1234567890</span>
-              <span class="rek-owner">a.n. Riyan Ardiansyah</span>
-            </div>
-            <button class="btn btn-yellow" style="padding: 8px 14px; font-size: 12px;" onclick="copyText('rek-bca', 'Nomor Rekening BCA')">Salin 📋</button>
-          </div>
-
-          <!-- REKENING 2 / E-WALLET -->
-          <div class="rek-box">
-            <div class="rek-info">
-              <strong>SeaBank / DANA / GoPay</strong>
-              <span class="rek-number" id="rek-ewallet">081234567890</span>
-              <span class="rek-owner">a.n. Riyan Ardiansyah</span>
-            </div>
-            <button class="btn btn-yellow" style="padding: 8px 14px; font-size: 12px;" onclick="copyText('rek-ewallet', 'Nomor E-Wallet')">Salin 📋</button>
-          </div>
-        </div>
-
-        <div style="margin-top: 20px; text-align: center;">
-          <a href="https://wa.me/6281234567890?text=Halo%20Votura%20Studio,%20saya%20sudah%20melakukan%20pembayaran.%20Berikut%20bukti%20transfernya:" target="_blank" class="btn btn-green">Konfirmasi Pembayaran via WhatsApp ✅</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- TESTIMONI KLIEN -->
-  <section class="section" id="testimoni">
-    <div class="container">
-      <div class="section-header">
-        <h2>Kata Mereka Tentang Votura</h2>
-        <p>Pengalaman klien yang sudah menggunakan layanan digital Votura Studio.</p>
-      </div>
-
-      <div class="grid-3">
-        <div class="card">
-          <p class="testi-quote">"Undangan digitalnya simpel banget dan gampang dibuka tamu. Fitur RSVP-nya ngebantu banget buat rekap tamu yang bakal hadir."</p>
+      <div class="payment-wrapper">
+        <div class="bank-card">
           <div>
-            <div class="testi-author">Nadia & Dimas</div>
-            <div class="testi-event">Klien Wedding Invitation</div>
+            <div class="bank-label">Transfer Bank &mdash; BCA</div>
+            <div class="bank-number" id="rek-bca">1234567890</div>
+            <div class="bank-holder">a.n. Riyan Ardiansyah</div>
+          </div>
+          <button type="button" class="copy-pill-btn" onclick="copyAccount('rek-bca', 'Rekening BCA')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span>Salin</span>
+          </button>
+        </div>
+
+        <div class="bank-card">
+          <div>
+            <div class="bank-label">SeaBank / DANA / GoPay</div>
+            <div class="bank-number" id="rek-ewallet">081234567890</div>
+            <div class="bank-holder">a.n. Riyan Ardiansyah</div>
+          </div>
+          <button type="button" class="copy-pill-btn" onclick="copyAccount('rek-ewallet', 'Nomor E-Wallet')">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+            <span>Salin</span>
+          </button>
+        </div>
+
+        <div class="payment-footer-bar">
+          <span class="payment-note">Pastikan nama penerima sesuai sebelum menyelesaikan transaksi.</span>
+          <a href="https://wa.me/6281234567890?text=Halo%20Votura%20Studio,%20saya%20ingin%20mengirimkan%20bukti%20pembayaran%20untuk%20aktivasi%20layanan." target="_blank" class="btn-dark-pill">
+            <span>Konfirmasi via WhatsApp</span>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- TESTIMONI KLIEN -->
+    <section class="content-section" id="testimoni">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Ulasan Klien</span>
+          <h2 class="serif">Cerita di Balik <span class="serif-accent">Setiap Acara</span></h2>
+        </div>
+        <p>Kepercayaan dari berbagai pasangan dan penyelenggara acara yang telah menggunakan layanan Votura Studio.</p>
+      </div>
+
+      <div class="testi-grid">
+        <div class="testi-card">
+          <p class="testi-text">&ldquo;Tampilan undangannya sangat bersih dan mudah dibuka oleh keluarga maupun tamu. Fitur rekap RSVP-nya membantu kami memperkirakan jumlah tamu yang hadir.&rdquo;</p>
+          <div class="testi-client">
+            <strong>Nadia &amp; Dimas</strong>
+            <span>Votura Wedding Invitation</span>
           </div>
         </div>
 
-        <div class="card">
-          <p class="testi-quote">"Virtual photobooth-nya seru parah! Tamu acara ulang tahun tinggal scan link langsung bisa foto pakai frame acara kita."</p>
-          <div>
-            <div class="testi-author">Raka Pratama</div>
-            <div class="testi-event">Klien Virtual Photobooth</div>
+        <div class="testi-card">
+          <p class="testi-text">&ldquo;Tamu acara sangat antusias mencoba virtual photobooth-nya. Cukup buka tautan dari ponsel, langsung bisa berfoto dengan bingkai khusus acara kami.&rdquo;</p>
+          <div class="testi-client">
+            <strong>Raka Pratama</strong>
+            <span>Votura Virtual Photobooth</span>
           </div>
         </div>
 
-        <div class="card">
-          <p class="testi-quote">"Adminnya fast respon, dibantu setting dari awal sampai beres. Harganya juga sangat terjangkau buat acara kampus."</p>
-          <div>
-            <div class="testi-author">Panitia Dies Natalis</div>
-            <div class="testi-event">Klien Event Kampus</div>
+        <div class="testi-card">
+          <p class="testi-text">&ldquo;Proses penyiapan tautan sangat cepat dan responsif. Tampilannya terasa modern dan rapi saat dibagikan kepada seluruh peserta kegiatan.&rdquo;</p>
+          <div class="testi-client">
+            <strong>Panitia Dies Natalis</strong>
+            <span>Event Kampus &amp; Komunitas</span>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- FOOTER & SOCIAL MEDIA -->
+    <footer class="studio-footer" id="kontak">
+      <div class="footer-brand">
+        <strong style="font-size: 18px; letter-spacing: 0.06em; text-transform: uppercase;">Votura Studio</strong>
+        <p>Studio produk digital untuk kebutuhan undangan pernikahan modern dan pengalaman photobooth interaktif berbasis web.</p>
+      </div>
+
+      <div class="social-pills">
+        <a href="https://wa.me/6281234567890" target="_blank" class="social-pill">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+          <span>WhatsApp</span>
+        </a>
+        <a href="https://instagram.com/voturastudio" target="_blank" class="social-pill">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          <span>Instagram</span>
+        </a>
+        <a href="https://tiktok.com/@voturastudio" target="_blank" class="social-pill">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>
+          <span>TikTok</span>
+        </a>
+      </div>
+    </footer>
+  </div>
+
+  <!-- MATCHING GLASS TOAST NOTIFICATION -->
+  <div class="glass-toast" id="glass-toast" role="status" aria-live="polite">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+    <span id="toast-text">Nomor berhasil disalin</span>
+  </div>
+
+  <!-- MATCHING ORDER MODAL -->
+  <div class="modal-backdrop" id="order-modal" onclick="closeModalOnOutside(event)">
+    <div class="modal-panel">
+      <span class="eyebrow" style="display: block; margin-bottom: 6px;">Konfirmasi Pesanan</span>
+      <h3 class="serif" style="font-size: 28px; margin-bottom: 10px;" id="modal-package-title">Paket Votura</h3>
+      <p style="font-size: 13.5px; color: var(--ink-muted); margin-bottom: 22px;">
+        Lanjutkan pemesanan melalui WhatsApp resmi Votura Studio untuk penentuan ID tautan acara dan aktivasi.
+      </p>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <a href="#" id="modal-wa-link" target="_blank" class="btn-dark-pill" style="justify-content: center;">
+          <span>Lanjut ke WhatsApp</span>
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+        </a>
+        <button type="button" class="btn-outline-pill" onclick="closeOrderModal()">Tutup</button>
       </div>
     </div>
-  </section>
-
-  <!-- FOOTER & SOSIAL MEDIA -->
-  <footer id="kontak">
-    <div class="container footer-wrap">
-      <div>
-        <div class="brand" style="color: #fff; margin-bottom: 6px;"><span style="color: #18181b;">VOTURA</span> STUDIO</div>
-        <p style="margin: 0; font-size: 13px; color: #a1a1aa;">Solusi Undangan Digital & Virtual Photobooth Modern.</p>
-      </div>
-
-      <div class="sosmed-links">
-        <a href="https://instagram.com/voturastudio" target="_blank" class="sosmed-btn">Instagram ↗</a>
-        <a href="https://tiktok.com/@voturastudio" target="_blank" class="sosmed-btn">TikTok ↗</a>
-        <a href="https://wa.me/6281234567890" target="_blank" class="sosmed-btn">WhatsApp ↗</a>
-      </div>
-    </div>
-  </footer>
-
-  <!-- NOTIFIKASI COPY TOAST -->
-  <div class="toast" id="toast-notif">Berhasil disalin!</div>
+  </div>
 
   <script>
-    function copyText(elementId, label) {
-      const text = document.getElementById(elementId).innerText;
-      navigator.clipboard.writeText(text).then(() => {
-        const toast = document.getElementById('toast-notif');
-        toast.textContent = `✓ ${label} (${text}) berhasil disalin!`;
-        toast.style.display = 'block';
-        setTimeout(() => {
-          toast.style.display = 'none';
+    // 1. FEATURED PRODUCT SLIDER DATA
+    const slides = [
+      {
+        tag: "01 — Wedding Suite",
+        title: "Wedding Invitation",
+        count: "01 / 02",
+        desc: "Undangan pernikahan digital berdesain bersih dengan fitur konfirmasi kehadiran (RSVP) dan navigasi peta.",
+        link: "wedding.html?event=nikah-amel-riyan",
+        bg: "linear-gradient(135deg, #D8CFC2 0%, #B8A996 100%)"
+      },
+      {
+        tag: "02 — Interactive Booth",
+        title: "Virtual Photobooth",
+        count: "02 / 02",
+        desc: "Sesi foto interaktif langsung melalui browser HP tamu dengan dukungan frame custom transparan.",
+        link: "photobooth.html?event=001",
+        bg: "linear-gradient(135deg, #C7CED6 0%, #99A4B0 100%)"
+      }
+    ];
+
+    let currentSlide = 0;
+
+    function renderSlide() {
+      const item = slides[currentSlide];
+      document.getElementById('featured-tag').textContent = item.tag;
+      document.getElementById('featured-title').textContent = item.title;
+      document.getElementById('featured-count').textContent = item.count;
+      document.getElementById('featured-desc').textContent = item.desc;
+      document.getElementById('featured-link').href = item.link;
+      document.getElementById('featured-thumb').style.background = item.bg;
+    }
+
+    function nextSlide() {
+      currentSlide = (currentSlide + 1) % slides.length;
+      renderSlide();
+    }
+
+    function prevSlide() {
+      currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+      renderSlide();
+    }
+
+    // 2. COPY BANK ACCOUNT WITH TOAST FEEDBACK
+    let toastTimer;
+    function copyAccount(elementId, label) {
+      const value = document.getElementById(elementId).innerText.trim();
+      navigator.clipboard.writeText(value).then(() => {
+        const toast = document.getElementById('glass-toast');
+        document.getElementById('toast-text').textContent = `${label} (${value}) berhasil disalin`;
+        toast.classList.add('show');
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(() => {
+          toast.classList.remove('show');
         }, 3000);
       });
     }
+
+    // 3. ORDER MODAL CONTROLLER
+    const waNumber = "6281234567890"; // Ganti dengan nomor WhatsApp bisnis kamu
+
+    function openOrderModal(packageName) {
+      document.getElementById('modal-package-title').textContent = packageName;
+      const text = encodeURIComponent(`Halo Votura Studio, saya tertarik memesan layanan: ${packageName}. Mohon info langkah selanjutnya.`);
+      document.getElementById('modal-wa-link').href = `https://wa.me/${waNumber}?text=${text}`;
+      document.getElementById('order-modal').classList.add('open');
+    }
+
+    function closeOrderModal() {
+      document.getElementById('order-modal').classList.remove('open');
+    }
+
+    function closeModalOnOutside(e) {
+      if (e.target.id === 'order-modal') {
+        closeOrderModal();
+      }
+    }
+
+    // 4. ACTIVE NAVIGATION HIGHLIGHT ON SCROLL
+    const sections = document.querySelectorAll('section[id], footer[id], div[id="beranda"]');
+    const navLinks = document.querySelectorAll('.nav-pill-group a, .side-dock a');
+
+    window.addEventListener('scroll', () => {
+      let current = 'beranda';
+      sections.forEach(sec => {
+        const top = sec.offsetTop - 160;
+        if (window.scrollY >= top) {
+          current = sec.getAttribute('id');
+        }
+      });
+
+      navLinks.forEach(link => {
+        link.classList.remove('active');
+        if (link.getAttribute('href') === `#${current}`) {
+          link.classList.add('active');
+        }
+      });
+    }, { passive: true });
   </script>
 </body>
 </html>
