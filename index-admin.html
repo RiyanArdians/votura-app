@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CMS Admin — Votura Studio</title>
-  <link rel="icon" type="image/png" href="assets/votura-icon.png">
+  <title>CMS Admin Terpadu — Votura Studio</title>
+  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/RiyanArdians/votura-app/main/assets/votura-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg-base: #EFECE6;
@@ -18,6 +18,7 @@
       --accent: #8C7355;
       --dark: #262421;
       --danger: #B91C1C;
+      --success: #15803D;
       --border: rgba(35, 33, 30, 0.12);
       --radius-lg: 20px;
       --radius-pill: 999px;
@@ -30,17 +31,17 @@
       color: var(--ink);
       font-family: 'Plus Jakarta Sans', sans-serif;
       line-height: 1.5;
-      padding: 24px 16px 80px 16px;
+      padding: 24px 16px 96px 16px;
     }
 
-    .container { max-width: 920px; margin: 0 auto; }
+    .container { max-width: 960px; margin: 0 auto; }
 
     header {
       background: var(--surface);
       border: 1px solid #FFFFFF;
       border-radius: 26px;
       padding: 24px 28px;
-      margin-bottom: 24px;
+      margin-bottom: 18px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -57,7 +58,62 @@
 
     header p { font-size: 13px; color: var(--ink-muted); margin-top: 4px; }
 
-    .header-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+    .header-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    /* NAVIGASI PILIHAN MODE ADMIN */
+    .mode-switcher {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      background: var(--surface);
+      padding: 8px;
+      border-radius: 22px;
+      border: 1px solid #FFFFFF;
+      margin-bottom: 24px;
+      box-shadow: 0 8px 24px rgba(35, 33, 30, 0.04);
+    }
+
+    .mode-tab {
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 16px;
+      padding: 12px 14px;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.25s var(--transition);
+      color: var(--ink-muted);
+    }
+
+    .mode-tab:hover {
+      background: rgba(255, 255, 255, 0.65);
+      color: var(--ink);
+    }
+
+    .mode-tab.active {
+      background: var(--dark);
+      color: #FFFFFF;
+      box-shadow: 0 8px 20px rgba(38, 36, 33, 0.18);
+    }
+
+    .mode-tab-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      opacity: 0.75;
+      margin-bottom: 2px;
+    }
+
+    .mode-tab-title {
+      display: block;
+      font-size: 13.5px;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
 
     .btn {
       display: inline-flex;
@@ -76,6 +132,8 @@
 
     .btn-dark { background: var(--dark); color: #FFFFFF; }
     .btn-dark:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(38, 36, 33, 0.2); }
+    .btn-accent { background: var(--accent); color: #FFFFFF; }
+    .btn-accent:hover { opacity: 0.92; }
     .btn-outline { background: #FFFFFF; color: var(--ink); border: 1px solid var(--border); }
     .btn-outline:hover { background: var(--bg-base); }
     .btn-danger { background: #FEE2E2; color: var(--danger); padding: 7px 14px; font-size: 12px; }
@@ -98,15 +156,18 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
     .section-sub { font-size: 12.5px; color: var(--ink-muted); margin-bottom: 20px; }
 
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
     .form-group { margin-bottom: 14px; }
     label { display: block; font-size: 12px; font-weight: 600; color: var(--ink-muted); margin-bottom: 6px; }
 
-    input[type="text"], input[type="url"], textarea {
+    input[type="text"], input[type="url"], input[type="number"], select, textarea {
       width: 100%;
       padding: 11px 14px;
       border-radius: 12px;
@@ -119,7 +180,7 @@
       transition: border-color 0.2s ease;
     }
 
-    input:focus, textarea:focus { border-color: var(--accent); background: #FFFFFF; }
+    input:focus, select:focus, textarea:focus { border-color: var(--accent); background: #FFFFFF; }
 
     .dynamic-item {
       background: var(--surface);
@@ -137,6 +198,8 @@
       margin-bottom: 14px;
       padding-bottom: 10px;
       border-bottom: 1px solid var(--border);
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
     .item-header strong { font-size: 13.5px; }
@@ -153,12 +216,39 @@
     }
 
     .img-preview {
-      width: 64px;
-      height: 64px;
+      width: 68px;
+      height: 68px;
       border-radius: 10px;
       object-fit: cover;
       background: var(--bg-base);
       border: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .img-preview-frame {
+      width: 58px;
+      height: 86px;
+      border-radius: 8px;
+      object-fit: contain;
+      background: #2C2223;
+      border: 1px solid var(--border);
+      padding: 4px;
+      flex-shrink: 0;
+    }
+
+    .badge-pill {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      background: #EFECE6;
+      color: var(--ink);
+    }
+
+    .badge-active {
+      background: #DCFCE7;
+      color: var(--success);
     }
 
     /* FLOATING SAVE BAR */
@@ -167,7 +257,7 @@
       bottom: 20px;
       left: 50%;
       transform: translateX(-50%);
-      background: rgba(38, 36, 33, 0.94);
+      background: rgba(38, 36, 33, 0.95);
       backdrop-filter: blur(12px);
       color: #FFFFFF;
       padding: 12px 24px;
@@ -175,11 +265,11 @@
       display: flex;
       align-items: center;
       gap: 16px;
-      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.22);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
       z-index: 100;
     }
 
-    .save-bar span { font-size: 13px; color: rgba(255, 255, 255, 0.85); }
+    .save-bar span { font-size: 13px; color: rgba(255, 255, 255, 0.9); white-space: nowrap; }
 
     /* MATCHING GLASS MODAL */
     .modal-backdrop {
@@ -205,8 +295,9 @@
       box-shadow: 0 24px 60px rgba(0, 0, 0, 0.18);
     }
 
-    @media (max-width: 700px) {
-      .grid-2 { grid-template-columns: 1fr; }
+    @media (max-width: 760px) {
+      .mode-switcher { grid-template-columns: 1fr 1fr; }
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
       .save-bar { width: 92%; justify-content: space-between; }
     }
   </style>
@@ -216,167 +307,351 @@
   <div class="container">
     <header>
       <div>
-        <h1>Pengelola Konten Halaman Utama</h1>
-        <p>Ubah teks, gambar, katalog produk, dan ulasan klien untuk <strong>index.html</strong> secara real-time.</p>
+        <h1>Votura Studio — Pusat Kendali Visual</h1>
+        <p>Kelola tampilan web utama, dua web demo interaktif, serta visual pesanan klien dalam satu panel.</p>
       </div>
       <div class="header-actions">
-        <a href="index.html" target="_blank" class="btn btn-outline">Lihat Halaman Utama</a>
-        <a href="super-admin.html" class="btn btn-outline">Super Admin</a>
+        <a href="index.html" target="_blank" class="btn btn-outline btn-sm">Web Utama</a>
+        <a href="demo-wedding.html" target="_blank" class="btn btn-outline btn-sm">Demo Undangan</a>
+        <a href="demo-photobooth.html" target="_blank" class="btn btn-outline btn-sm">Demo Photobooth</a>
+        <a href="super-admin.html" class="btn btn-outline btn-sm">Super Admin</a>
       </div>
     </header>
 
-    <!-- 1. KONTAK & SOSIAL MEDIA -->
-    <div class="section-card">
-      <div class="section-title">1. Kontak WhatsApp &amp; Sosial Media</div>
-      <div class="section-sub">Nomor WhatsApp digunakan di seluruh tombol konsultasi dan pemesanan paket.</div>
-      <div class="grid-2">
-        <div class="form-group">
-          <label>Nomor WhatsApp Bisnis (Awali 62)</label>
-          <input type="text" id="cfg-wa" placeholder="6282298966860">
-        </div>
-        <div class="form-group">
-          <label>Label Tombol Utama Header</label>
-          <input type="text" id="cfg-nav-cta" placeholder="Ngobrol Dulu">
-        </div>
-        <div class="form-group">
-          <label>URL Instagram</label>
-          <input type="url" id="cfg-ig" placeholder="https://instagram.com/voturastudio">
-        </div>
-        <div class="form-group">
-          <label>URL TikTok</label>
-          <input type="url" id="cfg-tiktok" placeholder="https://tiktok.com/@voturastudio">
-        </div>
-      </div>
+    <!-- PILIHAN AREA PENGELOLAAN -->
+    <div class="mode-switcher" role="tablist">
+      <button type="button" class="mode-tab active" data-tab="tab-landing" onclick="switchAdminTab('tab-landing', this)">
+        <span class="mode-tab-badge">Halaman Utama</span>
+        <span class="mode-tab-title">Web Promosi &amp; Katalog</span>
+      </button>
+      <button type="button" class="mode-tab" data-tab="tab-demo-wedding" onclick="switchAdminTab('tab-demo-wedding', this)">
+        <span class="mode-tab-badge">Demo #1</span>
+        <span class="mode-tab-title">Demo Wedding Invitation</span>
+      </button>
+      <button type="button" class="mode-tab" data-tab="tab-demo-photobooth" onclick="switchAdminTab('tab-demo-photobooth', this)">
+        <span class="mode-tab-badge">Demo #2</span>
+        <span class="mode-tab-title">Demo Photobooth &amp; Frame</span>
+      </button>
+      <button type="button" class="mode-tab" data-tab="tab-clients" onclick="switchAdminTab('tab-clients', this)">
+        <span class="mode-tab-badge">Pesanan Aktif</span>
+        <span class="mode-tab-title">Web Visual Klien</span>
+      </button>
     </div>
 
-    <!-- 2. HERO SECTION & GAMBAR UTAMA -->
-    <div class="section-card">
-      <div class="section-title">2. Bagian Pembuka (Hero Section) &amp; Visual</div>
-      <div class="section-sub">Atur judul besar, deskripsi utama, tautan demo cepat, dan gambar ilustrasi kartu utama.</div>
-      <div class="grid-2">
-        <div class="form-group">
-          <label>Teks Kecil Atas (Eyebrow)</label>
-          <input type="text" id="hero-eyebrow">
-        </div>
-        <div class="form-group">
-          <label>Judul Utama (Gunakan *kata* untuk warna aksen)</label>
-          <input type="text" id="hero-title" placeholder="Moments That *Connect*">
-        </div>
-      </div>
-      <div class="form-group">
-        <label>Deskripsi Utama Hero</label>
-        <textarea id="hero-subtitle" rows="3"></textarea>
-      </div>
-      <div class="grid-2">
-        <div class="form-group">
-          <label>Teks Tombol Demo Hero</label>
-          <input type="text" id="hero-demo-label">
-        </div>
-        <div class="form-group">
-          <label>URL Tombol Demo Hero</label>
-          <input type="url" id="hero-demo-url">
-        </div>
-      </div>
-
-      <div class="grid-2" style="margin-top: 10px;">
-        <div class="form-group">
-          <label>Judul Kartu Showcase Kanan</label>
-          <input type="text" id="showcase-title">
-        </div>
-        <div class="form-group">
-          <label>Deskripsi Kartu Showcase Kanan</label>
-          <input type="text" id="showcase-desc">
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label>Gambar Latar Kartu Showcase (Opsional — Unggah atau kosongkan untuk gradasi gelap)</label>
-        <div class="img-upload-row">
-          <img src="assets/votura-icon.png" id="hero-img-preview" class="img-preview" alt="Preview">
-          <div style="flex: 1;">
-            <input type="file" id="hero-img-file" accept="image/*" style="font-size: 12px; margin-bottom: 6px;">
-            <input type="text" id="hero-img-url" placeholder="URL Gambar (otomatis terisi saat unggah file)">
+    <!-- =========================================================
+         PANEL 1: WEB UTAMA / TAMPILAN PROMOSI (index.html)
+         ========================================================= -->
+    <div id="tab-landing" class="tab-panel active">
+      <div class="section-card">
+        <div class="section-title">1. Kontak WhatsApp &amp; Sosial Media</div>
+        <div class="section-sub">Nomor WhatsApp digunakan di seluruh tombol konsultasi dan pemesanan paket halaman utama.</div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label>Nomor WhatsApp Bisnis (Awali 62)</label>
+            <input type="text" id="cfg-wa" placeholder="6282298966860">
           </div>
-          <button type="button" class="btn btn-danger" onclick="clearHeroImage()">Hapus Gambar</button>
+          <div class="form-group">
+            <label>Label Tombol Utama Header</label>
+            <input type="text" id="cfg-nav-cta" placeholder="Ngobrol Dulu">
+          </div>
+          <div class="form-group">
+            <label>URL Instagram</label>
+            <input type="url" id="cfg-ig" placeholder="https://instagram.com/voturastudio">
+          </div>
+          <div class="form-group">
+            <label>URL TikTok</label>
+            <input type="url" id="cfg-tiktok" placeholder="https://tiktok.com/@voturastudio">
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-title">2. Bagian Pembuka (Hero Section) &amp; Visual</div>
+        <div class="section-sub">Atur judul besar, deskripsi utama, tautan demo cepat, dan gambar ilustrasi kartu utama.</div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label>Teks Kecil Atas (Eyebrow)</label>
+            <input type="text" id="hero-eyebrow">
+          </div>
+          <div class="form-group">
+            <label>Judul Utama (Gunakan *kata* untuk warna aksen)</label>
+            <input type="text" id="hero-title" placeholder="Moments That *Connect*">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Deskripsi Utama Hero</label>
+          <textarea id="hero-subtitle" rows="3"></textarea>
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label>Teks Tombol Demo Hero</label>
+            <input type="text" id="hero-demo-label">
+          </div>
+          <div class="form-group">
+            <label>URL Tombol Demo Hero</label>
+            <input type="url" id="hero-demo-url">
+          </div>
+        </div>
+        <div class="grid-2" style="margin-top: 10px;">
+          <div class="form-group">
+            <label>Judul Kartu Showcase Kanan</label>
+            <input type="text" id="showcase-title">
+          </div>
+          <div class="form-group">
+            <label>Deskripsi Kartu Showcase Kanan</label>
+            <input type="text" id="showcase-desc">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Gambar Latar Kartu Showcase (Opsional — Unggah atau kosongkan untuk gradasi gelap)</label>
+          <div class="img-upload-row">
+            <img src="https://raw.githubusercontent.com/RiyanArdians/votura-app/main/assets/votura-icon.png" id="hero-img-preview" class="img-preview" alt="Preview">
+            <div style="flex: 1;">
+              <input type="file" id="hero-img-file" accept="image/*" style="font-size: 12px; margin-bottom: 6px;">
+              <input type="text" id="hero-img-url" placeholder="URL Gambar (otomatis terisi saat unggah file)">
+            </div>
+            <button type="button" class="btn btn-danger" onclick="clearHeroImage()">Hapus Gambar</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-title">3. Kartu Keunggulan (3 Kolom) &amp; Ajakan Diskusi</div>
+        <div class="section-sub">Sorotan keunggulan layanan di bagian bawah Hero.</div>
+        <div class="grid-2">
+          <div class="form-group"><label>Keunggulan 1 — Angka/Judul</label><input type="text" id="stat1-val"></div>
+          <div class="form-group"><label>Keunggulan 1 — Keterangan</label><input type="text" id="stat1-lbl"></div>
+          <div class="form-group"><label>Keunggulan 2 — Angka/Judul</label><input type="text" id="stat2-val"></div>
+          <div class="form-group"><label>Keunggulan 2 — Keterangan</label><input type="text" id="stat2-lbl"></div>
+          <div class="form-group"><label>Keunggulan 3 — Angka/Judul</label><input type="text" id="stat3-val"></div>
+          <div class="form-group"><label>Keunggulan 3 — Keterangan</label><input type="text" id="stat3-lbl"></div>
+          <div class="form-group"><label>Judul Kartu Gelap (CTA Kanan)</label><input type="text" id="cta-box-title"></div>
+          <div class="form-group"><label>Subjudul Kartu Gelap (CTA Kanan)</label><input type="text" id="cta-box-sub"></div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-title">
+          <span>4. Katalog Produk &amp; Layanan</span>
+          <button type="button" class="btn btn-dark btn-sm" onclick="addProductItem()">+ Tambah Produk</button>
+        </div>
+        <div class="section-sub">Tambah produk baru, ubah harga, ganti tautan demo, atau hapus produk lama.</div>
+        <div id="products-editor-list"></div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-title">
+          <span>5. Ulasan &amp; Testimoni Klien</span>
+          <button type="button" class="btn btn-dark btn-sm" onclick="addTestiItem()">+ Tambah Ulasan</button>
+        </div>
+        <div class="section-sub">Kelola cerita pengalaman klien yang tampil di halaman utama.</div>
+        <div id="testi-editor-list"></div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-title">6. Teks Penutup (Footer)</div>
+        <div class="section-sub">Deskripsi singkat studio di bagian paling bawah halaman.</div>
+        <div class="form-group">
+          <label>Deskripsi Footer Votura Studio</label>
+          <textarea id="footer-desc" rows="2"></textarea>
         </div>
       </div>
     </div>
 
-    <!-- 3. BENTO METRICS & AJAKAN DISKUSI -->
-    <div class="section-card">
-      <div class="section-title">3. Kartu Keunggulan (3 Kolom) &amp; Ajakan Diskusi</div>
-      <div class="section-sub">Sorotan keunggulan layanan di bagian bawah Hero.</div>
-      <div class="grid-2">
-        <div class="form-group">
-          <label>Keunggulan 1 — Angka/Judul</label>
-          <input type="text" id="stat1-val">
+    <!-- =========================================================
+         PANEL 2: DEMO WEDDING INVITATION (demo-wedding.html)
+         ========================================================= -->
+    <div id="tab-demo-wedding" class="tab-panel">
+      <div class="section-card">
+        <div class="section-title">
+          <span>1. Identitas &amp; Acara Demo Undangan Digital</span>
+          <a href="demo-wedding.html" target="_blank" class="btn btn-outline btn-sm">Buka Demo Undangan</a>
+        </div>
+        <div class="section-sub">Atur nama pasangan, tanggal, tempat acara, dan nomor WhatsApp CTA pada halaman <strong>demo-wedding.html</strong>.</div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label>Nama Pasangan (Judul Undangan)</label>
+            <input type="text" id="dw-couple-title" placeholder="Pria &amp; Wanita">
+          </div>
+          <div class="form-group">
+            <label>Tanggal Acara</label>
+            <input type="text" id="dw-event-date" placeholder="Sabtu, 18 Oktober 2027">
+          </div>
+          <div class="form-group">
+            <label>Nama Lengkap Mempelai Pria</label>
+            <input type="text" id="dw-groom-name" placeholder="Putra Pertama dari Bpk. Ahmad &amp; Ibu Siti">
+          </div>
+          <div class="form-group">
+            <label>Nama Lengkap Mempelai Wanita</label>
+            <input type="text" id="dw-bride-name" placeholder="Putri Kedua dari Bpk. Hendra &amp; Ibu Rina">
+          </div>
+          <div class="form-group">
+            <label>Nama Gedung / Lokasi Resepsi</label>
+            <input type="text" id="dw-venue-name" placeholder="Grand Ballroom Hotel Mulia">
+          </div>
+          <div class="form-group">
+            <label>Link Google Maps Lokasi</label>
+            <input type="url" id="dw-maps-url" placeholder="https://maps.google.com/?q=...">
+          </div>
         </div>
         <div class="form-group">
-          <label>Keunggulan 1 — Keterangan</label>
-          <input type="text" id="stat1-lbl">
+          <label>Alamat Lengkap Lokasi</label>
+          <textarea id="dw-venue-address" rows="2"></textarea>
         </div>
         <div class="form-group">
-          <label>Keunggulan 2 — Angka/Judul</label>
-          <input type="text" id="stat2-val">
+          <label>Kutipan / Ayat Pembuka Undangan</label>
+          <textarea id="dw-quote" rows="2"></textarea>
         </div>
         <div class="form-group">
-          <label>Keunggulan 2 — Keterangan</label>
-          <input type="text" id="stat2-lbl">
+          <label>Foto Sampul Utama Demo Undangan</label>
+          <div class="img-upload-row">
+            <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=400&q=80" id="dw-cover-preview" class="img-preview" alt="Cover Demo">
+            <div style="flex: 1;">
+              <input type="file" id="dw-cover-file" accept="image/*" style="font-size: 12px; margin-bottom: 6px;">
+              <input type="text" id="dw-cover-url" placeholder="URL Foto Sampul">
+            </div>
+          </div>
         </div>
-        <div class="form-group">
-          <label>Keunggulan 3 — Angka/Judul</label>
-          <input type="text" id="stat3-val">
+      </div>
+
+      <div class="section-card">
+        <div class="section-title">
+          <span>2. Susunan Acara / Love Story (Tambah / Kurangi)</span>
+          <button type="button" class="btn btn-dark btn-sm" onclick="addDwScheduleItem()">+ Tambah Sesi Acara</button>
         </div>
-        <div class="form-group">
-          <label>Keunggulan 3 — Keterangan</label>
-          <input type="text" id="stat3-lbl">
+        <div class="section-sub">Kelola sesi Akad, Resepsi, atau tahapan cerita cinta di demo undangan.</div>
+        <div id="dw-schedules-list"></div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-title">
+          <span>3. Galeri Foto Prewedding Demo (Tambah / Kurangi)</span>
+          <button type="button" class="btn btn-dark btn-sm" onclick="addDwGalleryItem()">+ Tambah Foto Galeri</button>
         </div>
-        <div class="form-group">
-          <label>Judul Kartu Gelap (CTA Kanan)</label>
-          <input type="text" id="cta-box-title">
-        </div>
-        <div class="form-group">
-          <label>Subjudul Kartu Gelap (CTA Kanan)</label>
-          <input type="text" id="cta-box-sub">
-        </div>
+        <div class="section-sub">Tambah atau hapus foto prewedding yang tampil di galeri demo undangan.</div>
+        <div id="dw-gallery-list"></div>
       </div>
     </div>
 
-    <!-- 4. KATALOG PRODUK (DINAMIS: TAMBAH / EDIT / HAPUS) -->
-    <div class="section-card">
-      <div class="section-title">
-        <span>4. Katalog Produk &amp; Layanan</span>
-        <button type="button" class="btn btn-dark btn-sm" onclick="addProductItem()">+ Tambah Produk</button>
+    <!-- =========================================================
+         PANEL 3: DEMO VIRTUAL PHOTOBOOTH (demo-photobooth.html)
+         ========================================================= -->
+    <div id="tab-demo-photobooth" class="tab-panel">
+      <div class="section-card">
+        <div class="section-title">
+          <span>1. Tampilan Visual Demo Photobooth</span>
+          <a href="demo-photobooth.html" target="_blank" class="btn btn-outline btn-sm">Buka Demo Photobooth</a>
+        </div>
+        <div class="section-sub">Atur teks amplop, nama pasangan, foto hero, dan tombol WhatsApp di atas halaman <strong>demo-photobooth.html</strong>.</div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label>Nama Pasangan di Amplop &amp; Beranda</label>
+            <input type="text" id="dp-event-title" placeholder="Pria &amp; Wanita">
+          </div>
+          <div class="form-group">
+            <label>Tanggal Acara</label>
+            <input type="text" id="dp-event-date" placeholder="18 OKTOBER 2027">
+          </div>
+          <div class="form-group">
+            <label>Nomor WhatsApp Tombol CTA Atas</label>
+            <input type="text" id="dp-wa-number" placeholder="6282298966860">
+          </div>
+          <div class="form-group">
+            <label>Teks Tombol CTA Atas</label>
+            <input type="text" id="dp-cta-label" placeholder="Wujudkan photobooth impianmu • Pesan Sekarang">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Kutipan Beranda Photobooth</label>
+          <textarea id="dp-welcome-quote" rows="2"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Foto Mempelai di Bingkai Kapsul Beranda</label>
+          <div class="img-upload-row">
+            <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=400&q=80" id="dp-hero-preview" class="img-preview" alt="Hero Photobooth">
+            <div style="flex: 1;">
+              <input type="file" id="dp-hero-file" accept="image/*" style="font-size: 12px; margin-bottom: 6px;">
+              <input type="text" id="dp-hero-url" placeholder="URL Foto Mempelai">
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="section-sub">Kamu bisa menambah produk baru, mengubah harga, mengganti tautan demo, atau menghapus produk lama.</div>
-      <div id="products-editor-list"></div>
+
+      <div class="section-card">
+        <div class="section-title">
+          <span>2. Kelola Bingkai / Frame Photobooth (Tambah, Edit &amp; Hapus)</span>
+          <button type="button" class="btn btn-dark btn-sm" onclick="addDpFrameItem()">+ Tambah Frame Baru</button>
+        </div>
+        <div class="section-sub">Tambahkan desain frame baru (PNG transparan via upload atau URL GitHub <code>raw.githubusercontent.com</code>), atur jumlah foto (1, 2, atau 3 slot), atau hapus frame yang tidak dipakai.</div>
+        <div id="dp-frames-list"></div>
+      </div>
     </div>
 
-    <!-- 5. ULASAN KLIEN / TESTIMONI (DINAMIS: TAMBAH / EDIT / HAPUS) -->
-    <div class="section-card">
-      <div class="section-title">
-        <span>5. Ulasan &amp; Testimoni Klien</span>
-        <button type="button" class="btn btn-dark btn-sm" onclick="addTestiItem()">+ Tambah Ulasan</button>
+    <!-- =========================================================
+         PANEL 4: WEB VISUAL PESANAN KLIEN
+         ========================================================= -->
+    <div id="tab-clients" class="tab-panel">
+      <div class="section-card">
+        <div class="section-title">
+          <span>1. Buat Pesanan Visual Klien Baru</span>
+        </div>
+        <div class="section-sub">Tambahkan proyek klien baru (Undangan Digital atau Virtual Photobooth) agar langsung tersimpan di database klien aktif.</div>
+        <div class="grid-3">
+          <div class="form-group">
+            <label>Slug / Kode Link Klien</label>
+            <input type="text" id="new-client-slug" placeholder="misal: budi-sarah">
+          </div>
+          <div class="form-group">
+            <label>Nama Pasangan / Judul Acara</label>
+            <input type="text" id="new-client-title" placeholder="Budi &amp; Sarah">
+          </div>
+          <div class="form-group">
+            <label>Jenis Layanan</label>
+            <select id="new-client-type">
+              <option value="Wedding Invitation">Wedding Invitation (Rp 99.000)</option>
+              <option value="Virtual Photobooth">Virtual Photobooth (Rp 149.000)</option>
+              <option value="Bundling Wedding + Photobooth">Bundling Lengkap</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid-3">
+          <div class="form-group">
+            <label>Tanggal Acara</label>
+            <input type="text" id="new-client-date" placeholder="20 Desember 2026">
+          </div>
+          <div class="form-group">
+            <label>URL Frame Custom Utama (Opsional)</label>
+            <input type="url" id="new-client-frame" placeholder="https://raw.githubusercontent.com/...">
+          </div>
+          <div class="form-group">
+            <label>Status Pesanan</label>
+            <select id="new-client-status">
+              <option value="Aktif">Aktif (Tayang)</option>
+              <option value="Draft">Draft / Revisi</option>
+              <option value="Selesai">Selesai Acara</option>
+            </select>
+          </div>
+        </div>
+        <button type="button" class="btn btn-dark" onclick="createClientOrder()">+ Simpan Pesanan Klien</button>
       </div>
-      <div class="section-sub">Kelola cerita pengalaman klien yang tampil di halaman utama.</div>
-      <div id="testi-editor-list"></div>
-    </div>
 
-    <!-- 6. FOOTER -->
-    <div class="section-card">
-      <div class="section-title">6. Teks Penutup (Footer)</div>
-      <div class="section-sub">Deskripsi singkat studio di bagian paling bawah halaman.</div>
-      <div class="form-group">
-        <label>Deskripsi Footer Votura Studio</label>
-        <textarea id="footer-desc" rows="2"></textarea>
+      <div class="section-card">
+        <div class="section-title">
+          <span>2. Daftar Web Visual Pesanan Klien</span>
+          <button type="button" class="btn btn-outline btn-sm" onclick="loadClientOrders()">Muat Ulang Daftar</button>
+        </div>
+        <div class="section-sub">Edit detail visual, ganti URL frame khusus klien, atau hapus pesanan klien yang sudah selesai.</div>
+        <div id="clients-editor-list">
+          <p style="font-size: 13px; color: var(--ink-muted);">Memuat daftar pesanan klien...</p>
+        </div>
       </div>
     </div>
   </div>
 
   <!-- FLOATING SAVE BAR -->
-  <div class="save-bar">
-    <span id="status-text">Perubahan siap disimpan</span>
-    <button type="button" class="btn btn-outline" id="save-all-btn" onclick="saveLandingData()">Simpan Perubahan</button>
+  <div class="save-bar" id="floating-save-bar">
+    <span id="status-text">Mode: Web Utama &amp; Promosi</span>
+    <button type="button" class="btn btn-outline" id="save-all-btn" onclick="saveCurrentActiveTab()">Simpan Perubahan</button>
   </div>
 
   <!-- MATCHING GLASS MODAL -->
@@ -405,7 +680,13 @@
     const db = firebase.firestore();
     const storage = firebase.storage();
     const CACHE_KEY = "votura_landing_cache_v1";
+    const GITHUB_RAW_BASE = "https://raw.githubusercontent.com/RiyanArdians/votura-app/main/assets";
 
+    let activeTabId = "tab-landing";
+
+    /* ============================================================
+       DEFAULT DATA UNTUK 3 KONFIGURASI UTAMA
+       ============================================================ */
     const defaultContent = {
       waNumber: "6282298966860",
       navCta: "Ngobrol Dulu",
@@ -481,7 +762,80 @@
       ]
     };
 
+    const defaultDemoWedding = {
+      coupleTitle: "Pria & Wanita",
+      eventDate: "Sabtu, 18 Oktober 2027",
+      groomName: "Putra Pertama dari Bpk. Ahmad & Ibu Siti",
+      brideName: "Putri Kedua dari Bpk. Hendra & Ibu Rina",
+      venueName: "Grand Ballroom Hotel Mulia",
+      mapsUrl: "https://maps.google.com",
+      venueAddress: "Jl. Asia Afrika Senayan, Jakarta Pusat",
+      quote: "Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu pasangan hidup dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya.",
+      coverUrl: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=650&q=85",
+      schedules: [
+        { title: "Akad Nikah", time: "08.00 - 10.00 WIB", place: "Masjid / Ruang Akad Utama" },
+        { title: "Resepsi Pernikahan", time: "11.00 - 14.00 WIB", place: "Grand Ballroom" }
+      ],
+      gallery: [
+        { url: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=650&q=85", caption: "Momen Kebersamaan" },
+        { url: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=650&q=85", caption: "Menuju Hari Bahagia" }
+      ]
+    };
+
+    const defaultDemoPhotobooth = {
+      eventTitle: "Pria & Wanita",
+      eventDate: "18 OKTOBER 2027",
+      waNumber: "6282298966860",
+      ctaLabel: "Wujudkan photobooth impianmu • Pesan Sekarang",
+      welcomeQuote: "Satu foto menyimpan sejuta kenangan. Terima kasih telah menjadi bagian dari hari bahagia kami!",
+      heroUrl: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=650&q=85",
+      frames: [
+        { name: "Classic Royal (3 Foto)", tag: "ROYAL EDITION", count: 3, path: `${GITHUB_RAW_BASE}/frame/dsg3.png` },
+        { name: "Classic Royal (2 Foto)", tag: "ROYAL EDITION", count: 2, path: `${GITHUB_RAW_BASE}/frame/dsg2.png` },
+        { name: "Classic Royal (1 Foto)", tag: "ROYAL EDITION", count: 1, path: `${GITHUB_RAW_BASE}/frame/dsg1.png` },
+        { name: "Floral Romance (3 Foto)", tag: "FLORAL COLLECTION", count: 3, path: `${GITHUB_RAW_BASE}/frame/flower3.png` },
+        { name: "Floral Romance (2 Foto)", tag: "FLORAL COLLECTION", count: 2, path: `${GITHUB_RAW_BASE}/frame/flower2.png` },
+        { name: "Floral Romance (1 Foto)", tag: "FLORAL COLLECTION", count: 1, path: `${GITHUB_RAW_BASE}/frame/flower1.png` },
+        { name: "Minimalist Modern (3 Foto)", tag: "MINIMALIST STYLE", count: 3, path: `${GITHUB_RAW_BASE}/frame/line%203.png` },
+        { name: "Minimalist Modern (2 Foto)", tag: "MINIMALIST STYLE", count: 2, path: `${GITHUB_RAW_BASE}/frame/line%202.png` },
+        { name: "Minimalist Modern (1 Foto)", tag: "MINIMALIST STYLE", count: 1, path: `${GITHUB_RAW_BASE}/frame/line%201.png` }
+      ]
+    };
+
     let currentData = JSON.parse(JSON.stringify(defaultContent));
+    let demoWeddingData = JSON.parse(JSON.stringify(defaultDemoWedding));
+    let demoPhotoboothData = JSON.parse(JSON.stringify(defaultDemoPhotobooth));
+    let clientOrdersList = [];
+
+    /* ============================================================
+       NAVIGASI TAB PILIHAN MODE
+       ============================================================ */
+    function switchAdminTab(tabId, btnEl) {
+      activeTabId = tabId;
+      document.querySelectorAll('.mode-tab').forEach(b => b.classList.remove('active'));
+      if (btnEl) btnEl.classList.add('active');
+
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      const targetPanel = document.getElementById(tabId);
+      if (targetPanel) targetPanel.classList.add('active');
+
+      const saveBar = document.getElementById('floating-save-bar');
+      const statusText = document.getElementById('status-text');
+
+      if (tabId === 'tab-landing') {
+        saveBar.style.display = 'flex';
+        statusText.textContent = "Mode: Web Utama & Promosi";
+      } else if (tabId === 'tab-demo-wedding') {
+        saveBar.style.display = 'flex';
+        statusText.textContent = "Mode: Demo Wedding Invitation";
+      } else if (tabId === 'tab-demo-photobooth') {
+        saveBar.style.display = 'flex';
+        statusText.textContent = "Mode: Demo Photobooth & Frame";
+      } else if (tabId === 'tab-clients') {
+        saveBar.style.display = 'none';
+        loadClientOrders();
+      }
+    }
 
     function showCmsModal(title, msg) {
       document.getElementById('modal-title').textContent = title;
@@ -493,19 +847,41 @@
       document.getElementById('cms-modal').classList.remove('open');
     }
 
-    async function initCms() {
-      try {
-        const doc = await db.collection("settings").doc("landing_page").get();
-        if (doc.exists) {
-          currentData = { ...defaultContent, ...doc.data() };
-        }
-      } catch (err) {
-        console.warn("Menggunakan data default:", err);
-      }
-      populateForm();
+    function escapeHtml(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
     }
 
-    function populateForm() {
+    /* ============================================================
+       INISIALISASI & MUAT DATA DARI FIRESTORE
+       ============================================================ */
+    async function initCms() {
+      try {
+        const [landingDoc, weddingDoc, photoboothDoc] = await Promise.all([
+          db.collection("settings").doc("landing_page").get(),
+          db.collection("settings").doc("demo_wedding").get(),
+          db.collection("settings").doc("demo_photobooth").get()
+        ]);
+
+        if (landingDoc.exists) currentData = { ...defaultContent, ...landingDoc.data() };
+        if (weddingDoc.exists) demoWeddingData = { ...defaultDemoWedding, ...weddingDoc.data() };
+        if (photoboothDoc.exists) demoPhotoboothData = { ...defaultDemoPhotobooth, ...photoboothDoc.data() };
+      } catch (err) {
+        console.warn("Menggunakan konfigurasi bawaan:", err);
+      }
+
+      populateLandingForm();
+      populateDemoWeddingForm();
+      populateDemoPhotoboothForm();
+    }
+
+    /* ============================================================
+       1. FORM WEB UTAMA (landing_page)
+       ============================================================ */
+    function populateLandingForm() {
       document.getElementById('cfg-wa').value = currentData.waNumber || "";
       document.getElementById('cfg-nav-cta').value = currentData.navCta || "";
       document.getElementById('cfg-ig').value = currentData.igUrl || "";
@@ -519,7 +895,7 @@
       document.getElementById('showcase-title').value = currentData.showcaseTitle || "";
       document.getElementById('showcase-desc').value = currentData.showcaseDesc || "";
       document.getElementById('hero-img-url').value = currentData.heroImageUrl || "";
-      document.getElementById('hero-img-preview').src = currentData.heroImageUrl || "assets/votura-icon.png";
+      document.getElementById('hero-img-preview').src = currentData.heroImageUrl || `${GITHUB_RAW_BASE}/votura-icon.png`;
 
       document.getElementById('stat1-val').value = currentData.stat1Val || "";
       document.getElementById('stat1-lbl').value = currentData.stat1Lbl || "";
@@ -538,7 +914,7 @@
     function clearHeroImage() {
       document.getElementById('hero-img-url').value = "";
       document.getElementById('hero-img-file').value = "";
-      document.getElementById('hero-img-preview').src = "assets/votura-icon.png";
+      document.getElementById('hero-img-preview').src = `${GITHUB_RAW_BASE}/votura-icon.png`;
     }
 
     function renderProductsEditor() {
@@ -549,7 +925,7 @@
         div.className = 'dynamic-item';
         div.innerHTML = `
           <div class="item-header">
-            <strong>Produk #${idx + 1} — ${prod.title || 'Produk Baru'}</strong>
+            <strong>Produk #${idx + 1} — ${escapeHtml(prod.title || 'Produk Baru')}</strong>
             <button type="button" class="btn btn-danger" onclick="removeProduct(${idx})">Hapus Produk</button>
           </div>
           <div class="grid-2">
@@ -578,14 +954,14 @@
             <label>Daftar Fitur (Pisahkan per baris / Enter)</label>
             <textarea rows="4" onchange="updateProdFeatures(${idx}, this.value)">${escapeHtml((prod.features || []).join('\n'))}</textarea>
           </div>
-          <div class="grid-2">
+          <div class="grid-3">
             <div class="form-group">
               <label>Teks Tombol Demo</label>
               <input type="text" value="${escapeHtml(prod.demoLabel)}" onchange="updateProd(${idx}, 'demoLabel', this.value)">
             </div>
             <div class="form-group">
               <label>URL Link Demo</label>
-              <input type="url" value="${escapeHtml(prod.demoUrl)}" onchange="updateProd(${idx}, 'demoUrl', this.value)">
+              <input type="text" value="${escapeHtml(prod.demoUrl)}" onchange="updateProd(${idx}, 'demoUrl', this.value)">
             </div>
             <div class="form-group">
               <label>Teks Tombol WhatsApp</label>
@@ -597,14 +973,8 @@
       });
     }
 
-    function updateProd(idx, key, val) {
-      currentData.products[idx][key] = val;
-    }
-
-    function updateProdFeatures(idx, val) {
-      currentData.products[idx].features = val.split('\n').map(s => s.trim()).filter(Boolean);
-    }
-
+    function updateProd(idx, key, val) { currentData.products[idx][key] = val; }
+    function updateProdFeatures(idx, val) { currentData.products[idx].features = val.split('\n').map(s => s.trim()).filter(Boolean); }
     function addProductItem() {
       currentData.products.push({
         tag: "Layanan Baru",
@@ -619,7 +989,6 @@
       });
       renderProductsEditor();
     }
-
     function removeProduct(idx) {
       currentData.products.splice(idx, 1);
       renderProductsEditor();
@@ -633,7 +1002,7 @@
         div.className = 'dynamic-item';
         div.innerHTML = `
           <div class="item-header">
-            <strong>Ulasan #${idx + 1} — ${item.author || 'Klien'}</strong>
+            <strong>Ulasan #${idx + 1} — ${escapeHtml(item.author || 'Klien')}</strong>
             <button type="button" class="btn btn-danger" onclick="removeTesti(${idx})">Hapus Ulasan</button>
           </div>
           <div class="grid-2">
@@ -655,10 +1024,7 @@
       });
     }
 
-    function updateTesti(idx, key, val) {
-      currentData.testimonials[idx][key] = val;
-    }
-
+    function updateTesti(idx, key, val) { currentData.testimonials[idx][key] = val; }
     function addTestiItem() {
       currentData.testimonials.push({
         text: "Pelayanan ramah dan hasil tautan acaranya sangat memuaskan!",
@@ -667,31 +1033,373 @@
       });
       renderTestiEditor();
     }
-
     function removeTesti(idx) {
       currentData.testimonials.splice(idx, 1);
       renderTestiEditor();
     }
 
-    function escapeHtml(str) {
-      return String(str || "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;");
+    /* ============================================================
+       2. FORM DEMO WEDDING INVITATION (demo_wedding)
+       ============================================================ */
+    function populateDemoWeddingForm() {
+      document.getElementById('dw-couple-title').value = demoWeddingData.coupleTitle || "";
+      document.getElementById('dw-event-date').value = demoWeddingData.eventDate || "";
+      document.getElementById('dw-groom-name').value = demoWeddingData.groomName || "";
+      document.getElementById('dw-bride-name').value = demoWeddingData.brideName || "";
+      document.getElementById('dw-venue-name').value = demoWeddingData.venueName || "";
+      document.getElementById('dw-maps-url').value = demoWeddingData.mapsUrl || "";
+      document.getElementById('dw-venue-address').value = demoWeddingData.venueAddress || "";
+      document.getElementById('dw-quote').value = demoWeddingData.quote || "";
+      document.getElementById('dw-cover-url').value = demoWeddingData.coverUrl || "";
+      document.getElementById('dw-cover-preview').src = demoWeddingData.coverUrl || "";
+
+      renderDwSchedulesEditor();
+      renderDwGalleryEditor();
+    }
+
+    function renderDwSchedulesEditor() {
+      const container = document.getElementById('dw-schedules-list');
+      container.innerHTML = "";
+      (demoWeddingData.schedules || []).forEach((item, idx) => {
+        const div = document.createElement('div');
+        div.className = 'dynamic-item';
+        div.innerHTML = `
+          <div class="item-header">
+            <strong>Sesi #${idx + 1} — ${escapeHtml(item.title || 'Acara Baru')}</strong>
+            <button type="button" class="btn btn-danger" onclick="removeDwSchedule(${idx})">Hapus Sesi</button>
+          </div>
+          <div class="grid-3">
+            <div class="form-group">
+              <label>Nama Sesi / Tahapan</label>
+              <input type="text" value="${escapeHtml(item.title)}" onchange="demoWeddingData.schedules[${idx}].title = this.value">
+            </div>
+            <div class="form-group">
+              <label>Waktu / Tahun</label>
+              <input type="text" value="${escapeHtml(item.time)}" onchange="demoWeddingData.schedules[${idx}].time = this.value">
+            </div>
+            <div class="form-group">
+              <label>Tempat / Keterangan</label>
+              <input type="text" value="${escapeHtml(item.place)}" onchange="demoWeddingData.schedules[${idx}].place = this.value">
+            </div>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function addDwScheduleItem() {
+      demoWeddingData.schedules.push({ title: "Sesi Tambahan", time: "15.00 WIB", place: "Area Taman" });
+      renderDwSchedulesEditor();
+    }
+
+    function removeDwSchedule(idx) {
+      demoWeddingData.schedules.splice(idx, 1);
+      renderDwSchedulesEditor();
+    }
+
+    function renderDwGalleryEditor() {
+      const container = document.getElementById('dw-gallery-list');
+      container.innerHTML = "";
+      (demoWeddingData.gallery || []).forEach((item, idx) => {
+        const div = document.createElement('div');
+        div.className = 'dynamic-item';
+        div.innerHTML = `
+          <div class="item-header">
+            <strong>Foto Galeri #${idx + 1}</strong>
+            <button type="button" class="btn btn-danger" onclick="removeDwGallery(${idx})">Hapus Foto</button>
+          </div>
+          <div class="img-upload-row">
+            <img src="${escapeHtml(item.url)}" class="img-preview" id="dw-gal-prev-${idx}" alt="Foto">
+            <div style="flex: 1;">
+              <input type="file" accept="image/*" style="font-size:12px; margin-bottom:6px;" onchange="uploadDwGalleryPhoto(${idx}, this)">
+              <input type="text" value="${escapeHtml(item.url)}" placeholder="URL Foto" onchange="demoWeddingData.gallery[${idx}].url = this.value; document.getElementById('dw-gal-prev-${idx}').src = this.value;">
+              <input type="text" value="${escapeHtml(item.caption)}" placeholder="Keterangan singkat foto" style="margin-top:6px;" onchange="demoWeddingData.gallery[${idx}].caption = this.value">
+            </div>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    async function uploadDwGalleryPhoto(idx, inputEl) {
+      if (!inputEl.files || !inputEl.files[0]) return;
+      const status = document.getElementById('status-text');
+      status.textContent = "Mengunggah foto galeri...";
+      try {
+        const file = inputEl.files[0];
+        const ref = storage.ref(`demo_wedding/gallery_${Date.now()}_${file.name}`);
+        await ref.put(file);
+        const url = await ref.getDownloadURL();
+        demoWeddingData.gallery[idx].url = url;
+        renderDwGalleryEditor();
+        status.textContent = "Foto galeri berhasil diunggah";
+      } catch (err) {
+        showCmsModal("Gagal Unggah", err.message);
+      }
+    }
+
+    function addDwGalleryItem() {
+      demoWeddingData.gallery.push({
+        url: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=650&q=85",
+        caption: "Momen Spesial"
+      });
+      renderDwGalleryEditor();
+    }
+
+    function removeDwGallery(idx) {
+      demoWeddingData.gallery.splice(idx, 1);
+      renderDwGalleryEditor();
+    }
+
+    /* ============================================================
+       3. FORM DEMO PHOTOBOOTH & KELOLA FRAME (demo_photobooth)
+       ============================================================ */
+    function populateDemoPhotoboothForm() {
+      document.getElementById('dp-event-title').value = demoPhotoboothData.eventTitle || "";
+      document.getElementById('dp-event-date').value = demoPhotoboothData.eventDate || "";
+      document.getElementById('dp-wa-number').value = demoPhotoboothData.waNumber || "";
+      document.getElementById('dp-cta-label').value = demoPhotoboothData.ctaLabel || "";
+      document.getElementById('dp-welcome-quote').value = demoPhotoboothData.welcomeQuote || "";
+      document.getElementById('dp-hero-url').value = demoPhotoboothData.heroUrl || "";
+      document.getElementById('dp-hero-preview').src = demoPhotoboothData.heroUrl || "";
+
+      renderDpFramesEditor();
+    }
+
+    function renderDpFramesEditor() {
+      const container = document.getElementById('dp-frames-list');
+      container.innerHTML = "";
+      (demoPhotoboothData.frames || []).forEach((frame, idx) => {
+        const div = document.createElement('div');
+        div.className = 'dynamic-item';
+        div.innerHTML = `
+          <div class="item-header">
+            <div>
+              <strong>Frame #${idx + 1} — ${escapeHtml(frame.name || 'Frame Baru')}</strong>
+              <span class="badge-pill" style="margin-left:8px;">${frame.count || 3} Slot Foto</span>
+            </div>
+            <button type="button" class="btn btn-danger" onclick="removeDpFrame(${idx})">Hapus Frame</button>
+          </div>
+          <div class="grid-3">
+            <div class="form-group">
+              <label>Nama Tampilan Frame</label>
+              <input type="text" value="${escapeHtml(frame.name)}" onchange="demoPhotoboothData.frames[${idx}].name = this.value">
+            </div>
+            <div class="form-group">
+              <label>Kategori / Edisi</label>
+              <input type="text" value="${escapeHtml(frame.tag)}" onchange="demoPhotoboothData.frames[${idx}].tag = this.value">
+            </div>
+            <div class="form-group">
+              <label>Jumlah Slot Foto</label>
+              <select onchange="demoPhotoboothData.frames[${idx}].count = parseInt(this.value, 10)">
+                <option value="1" ${Number(frame.count) === 1 ? 'selected' : ''}>1 Foto</option>
+                <option value="2" ${Number(frame.count) === 2 ? 'selected' : ''}>2 Foto</option>
+                <option value="3" ${Number(frame.count) === 3 ? 'selected' : ''}>3 Foto</option>
+              </select>
+            </div>
+          </div>
+          <div class="img-upload-row">
+            <img src="${escapeHtml(frame.path)}" class="img-preview-frame" id="dp-frame-prev-${idx}" alt="Preview Frame">
+            <div style="flex: 1;">
+              <label style="margin-bottom:4px;">Unggah File Frame PNG Transparan atau Isi URL GitHub</label>
+              <input type="file" accept="image/png,image/webp" style="font-size:12px; margin-bottom:6px;" onchange="uploadDpFrameFile(${idx}, this)">
+              <input type="text" value="${escapeHtml(frame.path)}" placeholder="https://raw.githubusercontent.com/RiyanArdians/votura-app/main/assets/frame/..." onchange="demoPhotoboothData.frames[${idx}].path = this.value; document.getElementById('dp-frame-prev-${idx}').src = this.value;">
+            </div>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    async function uploadDpFrameFile(idx, inputEl) {
+      if (!inputEl.files || !inputEl.files[0]) return;
+      const status = document.getElementById('status-text');
+      status.textContent = "Mengunggah desain frame...";
+      try {
+        const file = inputEl.files[0];
+        const ref = storage.ref(`demo_photobooth/frame_${Date.now()}_${file.name}`);
+        await ref.put(file);
+        const url = await ref.getDownloadURL();
+        demoPhotoboothData.frames[idx].path = url;
+        renderDpFramesEditor();
+        status.textContent = "Desain frame berhasil diunggah";
+      } catch (err) {
+        showCmsModal("Gagal Unggah Frame", err.message);
+      }
+    }
+
+    function addDpFrameItem() {
+      demoPhotoboothData.frames.push({
+        name: "Custom Frame Baru (3 Foto)",
+        tag: "NEW COLLECTION",
+        count: 3,
+        path: `${GITHUB_RAW_BASE}/frame/dsg3.png`
+      });
+      renderDpFramesEditor();
+    }
+
+    function removeDpFrame(idx) {
+      demoPhotoboothData.frames.splice(idx, 1);
+      renderDpFramesEditor();
+    }
+
+    /* ============================================================
+       4. WEB VISUAL PESANAN KLIEN (Koleksi Firestore: clients)
+       ============================================================ */
+    async function loadClientOrders() {
+      const container = document.getElementById('clients-editor-list');
+      container.innerHTML = '<p style="font-size: 13px; color: var(--ink-muted);">Memuat daftar pesanan klien...</p>';
+
+      try {
+        const snap = await db.collection("clients").get();
+        clientOrdersList = [];
+        snap.forEach(doc => {
+          clientOrdersList.push({ id: doc.id, ...doc.data() });
+        });
+
+        if (clientOrdersList.length === 0) {
+          container.innerHTML = '<p style="font-size: 13px; color: var(--ink-muted);">Belum ada pesanan klien tersimpan di database. Gunakan formulir di atas untuk menambahkan klien baru.</p>';
+          return;
+        }
+
+        container.innerHTML = "";
+        clientOrdersList.forEach((client, idx) => {
+          const div = document.createElement('div');
+          div.className = 'dynamic-item';
+          div.innerHTML = `
+            <div class="item-header">
+              <div>
+                <strong>${escapeHtml(client.title || client.id)}</strong>
+                <span class="badge-pill badge-active" style="margin-left:8px;">${escapeHtml(client.status || 'Aktif')}</span>
+                <span class="badge-pill" style="margin-left:4px;">/${escapeHtml(client.id)}</span>
+              </div>
+              <div style="display:flex; gap:8px;">
+                <button type="button" class="btn btn-accent btn-sm" onclick="updateClientOrder('${escapeHtml(client.id)}', ${idx})">Simpan Klien</button>
+                <button type="button" class="btn btn-danger" onclick="deleteClientOrder('${escapeHtml(client.id)}')">Hapus</button>
+              </div>
+            </div>
+            <div class="grid-3">
+              <div class="form-group">
+                <label>Nama Pasangan / Judul Acara</label>
+                <input type="text" id="cl-title-${idx}" value="${escapeHtml(client.title || '')}">
+              </div>
+              <div class="form-group">
+                <label>Jenis Layanan</label>
+                <input type="text" id="cl-type-${idx}" value="${escapeHtml(client.serviceType || '')}">
+              </div>
+              <div class="form-group">
+                <label>Tanggal Acara</label>
+                <input type="text" id="cl-date-${idx}" value="${escapeHtml(client.eventDate || '')}">
+              </div>
+            </div>
+            <div class="grid-2">
+              <div class="form-group">
+                <label>URL Frame Custom / Visual Utama Klien</label>
+                <input type="text" id="cl-frame-${idx}" value="${escapeHtml(client.customFrameUrl || '')}">
+              </div>
+              <div class="form-group">
+                <label>Status Pesanan</label>
+                <select id="cl-status-${idx}">
+                  <option value="Aktif" ${(client.status || 'Aktif') === 'Aktif' ? 'selected' : ''}>Aktif (Tayang)</option>
+                  <option value="Draft" ${client.status === 'Draft' ? 'selected' : ''}>Draft / Revisi</option>
+                  <option value="Selesai" ${client.status === 'Selesai' ? 'selected' : ''}>Selesai Acara</option>
+                </select>
+              </div>
+            </div>
+          `;
+          container.appendChild(div);
+        });
+      } catch (err) {
+        container.innerHTML = `<p style="font-size: 13px; color: var(--danger);">Gagal memuat data klien: ${escapeHtml(err.message)}</p>`;
+      }
+    }
+
+    async function createClientOrder() {
+      const rawSlug = document.getElementById('new-client-slug').value.trim().toLowerCase().replace(/[^a-z0-9-]/g, '-');
+      const title = document.getElementById('new-client-title').value.trim();
+      const serviceType = document.getElementById('new-client-type').value;
+      const eventDate = document.getElementById('new-client-date').value.trim();
+      const customFrameUrl = document.getElementById('new-client-frame').value.trim();
+      const status = document.getElementById('new-client-status').value;
+
+      if (!rawSlug || !title) {
+        showCmsModal("Data Belum Lengkap", "Isi Slug Link Klien dan Nama Pasangan / Judul Acara terlebih dahulu.");
+        return;
+      }
+
+      try {
+        await db.collection("clients").doc(rawSlug).set({
+          title,
+          serviceType,
+          eventDate,
+          customFrameUrl,
+          status,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+
+        document.getElementById('new-client-slug').value = "";
+        document.getElementById('new-client-title').value = "";
+        document.getElementById('new-client-date').value = "";
+        document.getElementById('new-client-frame').value = "";
+
+        showCmsModal("Pesanan Klien Dibuat", `Data visual untuk "${title}" berhasil disimpan ke database.`);
+        loadClientOrders();
+      } catch (err) {
+        showCmsModal("Gagal Menyimpan", err.message);
+      }
+    }
+
+    async function updateClientOrder(docId, idx) {
+      try {
+        const payload = {
+          title: document.getElementById(`cl-title-${idx}`).value.trim(),
+          serviceType: document.getElementById(`cl-type-${idx}`).value.trim(),
+          eventDate: document.getElementById(`cl-date-${idx}`).value.trim(),
+          customFrameUrl: document.getElementById(`cl-frame-${idx}`).value.trim(),
+          status: document.getElementById(`cl-status-${idx}`).value,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        };
+        await db.collection("clients").doc(docId).set(payload, { merge: true });
+        showCmsModal("Klien Diperbarui", `Pengaturan visual untuk "${payload.title}" berhasil disimpan.`);
+      } catch (err) {
+        showCmsModal("Gagal Memperbarui", err.message);
+      }
+    }
+
+    async function deleteClientOrder(docId) {
+      try {
+        await db.collection("clients").doc(docId).delete();
+        showCmsModal("Pesanan Dihapus", `Data klien "${docId}" telah dihapus dari daftar.`);
+        loadClientOrders();
+      } catch (err) {
+        showCmsModal("Gagal Menghapus", err.message);
+      }
+    }
+
+    /* ============================================================
+       SIMPAN PERUBAHAN SESUAI TAB YANG AKTIF
+       ============================================================ */
+    async function saveCurrentActiveTab() {
+      if (activeTabId === 'tab-landing') {
+        await saveLandingData();
+      } else if (activeTabId === 'tab-demo-wedding') {
+        await saveDemoWeddingData();
+      } else if (activeTabId === 'tab-demo-photobooth') {
+        await saveDemoPhotoboothData();
+      }
     }
 
     async function saveLandingData() {
       const btn = document.getElementById('save-all-btn');
       const status = document.getElementById('status-text');
       btn.disabled = true;
-      status.textContent = "Menyimpan perubahan...";
+      status.textContent = "Menyimpan Web Utama...";
 
       try {
         let heroImgUrl = document.getElementById('hero-img-url').value.trim();
         const fileInput = document.getElementById('hero-img-file');
         if (fileInput.files && fileInput.files[0]) {
-          status.textContent = "Mengunggah gambar...";
+          status.textContent = "Mengunggah gambar hero...";
           const file = fileInput.files[0];
           const ref = storage.ref(`landing/hero_${Date.now()}_${file.name}`);
           await ref.put(file);
@@ -733,11 +1441,105 @@
         });
 
         localStorage.setItem(CACHE_KEY, JSON.stringify(payload));
-        status.textContent = "Tersimpan otomatis";
+        status.textContent = "Web Utama tersimpan";
         showCmsModal("Berhasil Disimpan", "Seluruh perubahan konten halaman utama Votura Studio telah diperbarui.");
       } catch (err) {
         status.textContent = "Gagal menyimpan";
         showCmsModal("Terjadi Kendala", "Gagal menyimpan data: " + err.message);
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    async function saveDemoWeddingData() {
+      const btn = document.getElementById('save-all-btn');
+      const status = document.getElementById('status-text');
+      btn.disabled = true;
+      status.textContent = "Menyimpan Demo Undangan...";
+
+      try {
+        let coverUrl = document.getElementById('dw-cover-url').value.trim();
+        const fileInput = document.getElementById('dw-cover-file');
+        if (fileInput.files && fileInput.files[0]) {
+          status.textContent = "Mengunggah foto sampul...";
+          const file = fileInput.files[0];
+          const ref = storage.ref(`demo_wedding/cover_${Date.now()}_${file.name}`);
+          await ref.put(file);
+          coverUrl = await ref.getDownloadURL();
+          document.getElementById('dw-cover-url').value = coverUrl;
+          document.getElementById('dw-cover-preview').src = coverUrl;
+          fileInput.value = "";
+        }
+
+        const payload = {
+          coupleTitle: document.getElementById('dw-couple-title').value.trim(),
+          eventDate: document.getElementById('dw-event-date').value.trim(),
+          groomName: document.getElementById('dw-groom-name').value.trim(),
+          brideName: document.getElementById('dw-bride-name').value.trim(),
+          venueName: document.getElementById('dw-venue-name').value.trim(),
+          mapsUrl: document.getElementById('dw-maps-url').value.trim(),
+          venueAddress: document.getElementById('dw-venue-address').value.trim(),
+          quote: document.getElementById('dw-quote').value.trim(),
+          coverUrl,
+          schedules: demoWeddingData.schedules,
+          gallery: demoWeddingData.gallery
+        };
+
+        await db.collection("settings").doc("demo_wedding").set({
+          ...payload,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        status.textContent = "Demo Undangan tersimpan";
+        showCmsModal("Berhasil Disimpan", "Konfigurasi visual Demo Wedding Invitation telah diperbarui di Firestore.");
+      } catch (err) {
+        status.textContent = "Gagal menyimpan";
+        showCmsModal("Terjadi Kendala", "Gagal menyimpan Demo Undangan: " + err.message);
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    async function saveDemoPhotoboothData() {
+      const btn = document.getElementById('save-all-btn');
+      const status = document.getElementById('status-text');
+      btn.disabled = true;
+      status.textContent = "Menyimpan Demo Photobooth...";
+
+      try {
+        let heroUrl = document.getElementById('dp-hero-url').value.trim();
+        const fileInput = document.getElementById('dp-hero-file');
+        if (fileInput.files && fileInput.files[0]) {
+          status.textContent = "Mengunggah foto beranda...";
+          const file = fileInput.files[0];
+          const ref = storage.ref(`demo_photobooth/hero_${Date.now()}_${file.name}`);
+          await ref.put(file);
+          heroUrl = await ref.getDownloadURL();
+          document.getElementById('dp-hero-url').value = heroUrl;
+          document.getElementById('dp-hero-preview').src = heroUrl;
+          fileInput.value = "";
+        }
+
+        const payload = {
+          eventTitle: document.getElementById('dp-event-title').value.trim(),
+          eventDate: document.getElementById('dp-event-date').value.trim(),
+          waNumber: document.getElementById('dp-wa-number').value.trim(),
+          ctaLabel: document.getElementById('dp-cta-label').value.trim(),
+          welcomeQuote: document.getElementById('dp-welcome-quote').value.trim(),
+          heroUrl,
+          frames: demoPhotoboothData.frames
+        };
+
+        await db.collection("settings").doc("demo_photobooth").set({
+          ...payload,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        status.textContent = "Demo Photobooth tersimpan";
+        showCmsModal("Berhasil Disimpan", "Pengaturan visual & daftar frame Demo Photobooth telah diperbarui.");
+      } catch (err) {
+        status.textContent = "Gagal menyimpan";
+        showCmsModal("Terjadi Kendala", "Gagal menyimpan Demo Photobooth: " + err.message);
       } finally {
         btn.disabled = false;
       }
