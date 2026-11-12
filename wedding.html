@@ -1,142 +1,383 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Votura Wedding Invitation</title>
+  <title>Undangan Pernikahan — Votura Studio</title>
+  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/RiyanArdians/votura-app/main/assets/votura-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <!-- Memuat seluruh font untuk 5 preset tema -->
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,600;0,700;1,500&family=Cinzel:wght@600;700&family=Cormorant+Garamond:ital,wght@0,600;0,700;1,500&family=DM+Sans:wght@400;500;700&family=Inter:wght@400;500;700&family=Lora:ital,wght@0,400;0,600;1,400&family=Montserrat:wght@400;500;600&family=Playfair+Display:ital,wght@0,600;0,700;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+
   <style>
+    /* =================================================================
+       1. VARIABEL DASAR & PRESET 5 TEMA VISUAL
+       ================================================================= */
     :root {
-      --bg: #fafaf9;
-      --card: #ffffff;
-      --text: #292524;
-      --accent: #e11d48;
-      --border: 2px solid #292524;
-      --shadow: 4px 4px 0px #292524;
+      --bg-main: #EFECE6;
+      --bg-card: #FFFFFF;
+      --ink: #23211E;
+      --ink-muted: #68635C;
+      --accent: #8C7355;
+      --accent-ink: #FFFFFF;
+      --border-color: rgba(35, 33, 30, 0.14);
+      --font-heading: 'Cormorant Garamond', serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+      --card-radius: 26px;
+      --frame-radius: 999px 999px 24px 24px;
+      --btn-radius: 999px;
     }
 
-    * { box-sizing: border-box; font-family: 'Georgia', serif; }
-    body { background-color: var(--bg); color: var(--text); padding: 20px; margin: 0; text-align: center; }
-    .container { max-width: 500px; margin: 0 auto; }
+    /* TEMA 1: EDITORIAL WARM ARCH (Default) */
+    body.theme-editorial {
+      --bg-main: #EFECE6;
+      --bg-card: rgba(255, 255, 255, 0.88);
+      --ink: #23211E;
+      --ink-muted: #68635C;
+      --accent: #8C7355;
+      --accent-ink: #FFFFFF;
+      --border-color: rgba(140, 115, 85, 0.25);
+      --font-heading: 'Cormorant Garamond', serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
+      --card-radius: 28px;
+      --frame-radius: 999px 999px 20px 20px;
+      --btn-radius: 999px;
+    }
 
-    header {
-      background: #ffe4e6;
-      border: var(--border);
-      box-shadow: var(--shadow);
+    /* TEMA 2: ROYAL HERITAGE / NUSANTARA */
+    body.theme-royal-heritage {
+      --bg-main: #142923;
+      --bg-card: #1B362E;
+      --ink: #F5EFE0;
+      --ink-muted: #C2B9A3;
+      --accent: #D4AF37;
+      --accent-ink: #142923;
+      --border-color: rgba(212, 175, 55, 0.45);
+      --font-heading: 'Cinzel', serif;
+      --font-body: 'Lora', serif;
+      --card-radius: 12px;
+      --frame-radius: 140px 140px 12px 12px;
+      --btn-radius: 8px;
+    }
+
+    /* TEMA 3: SAGE BOTANICAL GARDEN */
+    body.theme-botanical {
+      --bg-main: #F4F7F3;
+      --bg-card: #FFFFFF;
+      --ink: #263327;
+      --ink-muted: #5C6E5D;
+      --accent: #5F7A61;
+      --accent-ink: #FFFFFF;
+      --border-color: rgba(95, 122, 97, 0.24);
+      --font-heading: 'Playfair Display', serif;
+      --font-body: 'DM Sans', sans-serif;
+      --card-radius: 32px;
+      --frame-radius: 32px;
+      --btn-radius: 999px;
+    }
+
+    /* TEMA 4: MODERN CLEAN MONOCHROME */
+    body.theme-monochrome {
+      --bg-main: #FFFFFF;
+      --bg-card: #F4F4F5;
+      --ink: #18181B;
+      --ink-muted: #52525B;
+      --accent: #18181B;
+      --accent-ink: #FFFFFF;
+      --border-color: rgba(24, 24, 27, 0.2);
+      --font-heading: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --card-radius: 4px;
+      --frame-radius: 4px;
+      --btn-radius: 4px;
+    }
+
+    /* TEMA 5: MIDNIGHT VELVET LUXE */
+    body.theme-midnight-luxe {
+      --bg-main: #121214;
+      --bg-card: #1C1C20;
+      --ink: #F4F1EE;
+      --ink-muted: #A19D98;
+      --accent: #E2B49A;
+      --accent-ink: #121214;
+      --border-color: rgba(226, 180, 154, 0.35);
+      --font-heading: 'Bodoni Moda', serif;
+      --font-body: 'Montserrat', sans-serif;
+      --card-radius: 20px;
+      --frame-radius: 999px;
+      --btn-radius: 999px;
+    }
+
+    /* =================================================================
+       2. LAYOUT & KOMPONEN DINAMIS MENGIKUTI TEMA
+       ================================================================= */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg-main);
+      color: var(--ink);
+      font-family: var(--font-body);
+      line-height: 1.65;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .wrapper {
+      max-width: 520px;
+      margin: 0 auto;
+      padding: 24px 18px 80px 18px;
+    }
+
+    /* AMPLOP PEMBUKA (COVER MODAL) */
+    .envelope-overlay {
+      position: fixed;
+      inset: 0;
+      background-color: var(--bg-main);
+      z-index: 999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       padding: 24px;
-      margin-bottom: 20px;
+      text-align: center;
+      transition: opacity 0.6s ease, visibility 0.6s ease;
     }
-    header h1 { margin: 0; font-size: 24px; text-transform: uppercase; font-family: sans-serif; letter-spacing: 1px; }
-    header p { margin: 8px 0 0 0; font-size: 14px; font-style: italic; }
+    .envelope-overlay.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
 
     .card {
-      background: var(--card);
-      border: var(--border);
-      box-shadow: var(--shadow);
-      padding: 20px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: var(--card-radius);
+      padding: 32px 24px;
       margin-bottom: 20px;
-      font-family: sans-serif;
+      position: relative;
+      overflow: hidden;
     }
 
-    #lock-screen { display: none; color: #dc2626; }
-    #wedding-screen { display: none; }
+    /* ORNAMEN KHUSUS ROYAL HERITAGE (DOUBLE BORDER & CORNER) */
+    body.theme-royal-heritage .card::after {
+      content: "";
+      position: absolute;
+      inset: 8px;
+      border: 1px solid var(--border-color);
+      border-radius: calc(var(--card-radius) - 4px);
+      pointer-events: none;
+    }
 
-    .couple-names { font-size: 28px; font-weight: bold; margin: 15px 0; color: #9f1239; }
-    .event-detail { font-size: 15px; margin-bottom: 8px; line-height: 1.5; }
-    
-    .btn-maps {
-      display: inline-block;
-      background: #0284c7;
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-      padding: 10px 20px;
-      border: var(--border);
-      box-shadow: 3px 3px 0px #292524;
-      margin-top: 10px;
+    /* ORNAMEN KHUSUS BOTANICAL (AKSEN SUDUT DAUN SVG) */
+    .botanical-leaf {
+      display: none;
+      position: absolute;
+      width: 90px;
+      height: 90px;
+      color: var(--accent);
+      opacity: 0.22;
+      pointer-events: none;
+    }
+    body.theme-botanical .botanical-leaf { display: block; }
+    .leaf-tr { top: -10px; right: -10px; }
+    .leaf-bl { bottom: -10px; left: -10px; transform: rotate(180deg); }
+
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 2px;
       text-transform: uppercase;
-      font-size: 13px;
+      color: var(--accent);
+      margin-bottom: 10px;
     }
 
-    /* RSVP Form */
-    .form-group { text-align: left; margin-bottom: 12px; }
-    label { font-weight: bold; font-size: 13px; display: block; margin-bottom: 4px; }
+    h1, h2, h3 {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      line-height: 1.18;
+    }
+
+    .couple-heading {
+      font-size: 38px;
+      margin: 12px 0;
+      color: var(--ink);
+    }
+
+    .cover-photo {
+      width: 220px;
+      height: 290px;
+      object-fit: cover;
+      border-radius: var(--frame-radius);
+      border: 2px solid var(--border-color);
+      margin: 18px auto;
+      display: block;
+    }
+
+    body.theme-monochrome .cover-photo {
+      width: 100%;
+      height: 320px;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background-color: var(--accent);
+      color: var(--accent-ink);
+      border: none;
+      border-radius: var(--btn-radius);
+      padding: 13px 26px;
+      font-family: var(--font-body);
+      font-size: 13.5px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+    .btn-primary:hover { transform: translateY(-2px); opacity: 0.92; }
+
+    /* COUNTDOWN GRID */
+    .countdown-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .cd-box {
+      border: 1px solid var(--border-color);
+      border-radius: calc(var(--card-radius) / 2);
+      padding: 12px 6px;
+      text-align: center;
+    }
+    .cd-num {
+      font-family: var(--font-heading);
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .cd-lbl {
+      font-size: 11px;
+      color: var(--ink-muted);
+      margin-top: 4px;
+    }
+
+    /* GALERI FOTO */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-top: 16px;
+    }
+    .gallery-grid img {
+      width: 100%;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      border-radius: calc(var(--card-radius) / 2);
+      border: 1px solid var(--border-color);
+    }
+
+    /* FORM RSVP & UCAPAN */
     input, select, textarea {
-      width: 100%; padding: 8px; border: var(--border); outline: none; font-size: 14px; background: #fafafa;
+      width: 100%;
+      padding: 12px 14px;
+      margin-bottom: 12px;
+      border-radius: calc(var(--btn-radius) / 4 + 6px);
+      border: 1px solid var(--border-color);
+      background: transparent;
+      color: var(--ink);
+      font-family: var(--font-body);
+      font-size: 13.5px;
+      outline: none;
     }
-    .btn-submit {
-      background: var(--accent); color: white; font-weight: bold; border: var(--border);
-      box-shadow: var(--shadow); padding: 10px; width: 100%; cursor: pointer; text-transform: uppercase;
-    }
+    select option { color: #18181B; background: #FFFFFF; }
 
-    .rsvp-item {
-      border-bottom: 1px dashed #ccc; padding: 8px 0; text-align: left; font-size: 13px;
+    .wish-item {
+      border-top: 1px solid var(--border-color);
+      padding: 14px 0;
     }
-    .rsvp-item strong { color: #9f1239; }
+    .wish-item:first-child { border-top: none; }
+    .wish-badge {
+      display: inline-block;
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 2px 9px;
+      border-radius: 999px;
+      background: var(--accent);
+      color: var(--accent-ink);
+      margin-left: 6px;
+    }
   </style>
 </head>
-<body>
+<body class="theme-editorial">
 
-  <div class="container">
-    <header>
-      <h1>WEDDING INVITATION</h1>
-      <p id="sub-header">Memuat Undangan...</p>
-    </header>
+  <!-- AMPLOP PEMBUKA -->
+  <div class="envelope-overlay" id="envelope-cover">
+    <div class="card" style="width: 100%; max-width: 440px;">
+      <svg class="botanical-leaf leaf-tr" viewBox="0 0 100 100" fill="currentColor"><path d="M90,10 C60,10 30,35 20,75 C55,65 85,40 90,10 Z"/></svg>
+      <div class="eyebrow">The Wedding of</div>
+      <h1 class="couple-heading" id="env-couple-name">Memuat Undangan...</h1>
+      <img id="env-cover-img" class="cover-photo" src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=650&q=85" alt="Cover">
+      <p style="font-size: 12.5px; color: var(--ink-muted);">Kepada Yth. Bapak/Ibu/Saudara/i:</p>
+      <h3 style="font-size: 20px; margin: 4px 0 18px 0;" id="guest-name-display">Tamu Undangan</h3>
+      <button type="button" class="btn-primary" onclick="openInvitation()">Buka Undangan</button>
+    </div>
+  </div>
 
-    <!-- LOADING SCREEN -->
-    <div class="card" id="loading-screen">
-      <p>Mengambil data acara...</p>
+  <!-- KONTEN UTAMA UNDANGAN -->
+  <div class="wrapper">
+    <!-- HERO SECTION -->
+    <div class="card" style="text-align: center;">
+      <svg class="botanical-leaf leaf-tr" viewBox="0 0 100 100" fill="currentColor"><path d="M90,10 C60,10 30,35 20,75 C55,65 85,40 90,10 Z"/></svg>
+      <svg class="botanical-leaf leaf-bl" viewBox="0 0 100 100" fill="currentColor"><path d="M90,10 C60,10 30,35 20,75 C55,65 85,40 90,10 Z"/></svg>
+      <div class="eyebrow">Save The Date</div>
+      <h1 class="couple-heading" id="main-couple-name">Pasangan Mempelai</h1>
+      <p style="font-size: 14px; font-weight: 600; color: var(--accent);" id="main-event-date">-</p>
+      <img id="main-cover-img" class="cover-photo" src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=650&q=85" alt="Mempelai">
+      <p style="font-size: 13.5px; color: var(--ink-muted); font-style: italic;" id="main-quote">
+        "Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu pasangan hidup agar kamu merasa tenteram kepadanya."
+      </p>
     </div>
 
-    <!-- LOCKED SCREEN -->
-    <div class="card" id="lock-screen">
-      <h2>Undangan Tidak Aktif 🔒</h2>
-      <p id="lock-msg">Acara ini sudah berakhir atau terkunci.</p>
+    <!-- MEMPELAI & LOKASI ACARA -->
+    <div class="card" style="text-align: center;">
+      <div class="eyebrow">Mempelai Berbahagia</div>
+      <h2 style="font-size: 24px; margin-bottom: 4px;" id="groom-fullname">Mempelai Pria</h2>
+      <p style="font-size: 13px; color: var(--ink-muted); margin-bottom: 14px;" id="groom-parents"></p>
+      <div style="font-family: var(--font-heading); font-size: 26px; color: var(--accent); margin: 8px 0;">&amp;</div>
+      <h2 style="font-size: 24px; margin-bottom: 4px;" id="bride-fullname">Mempelai Wanita</h2>
+      <p style="font-size: 13px; color: var(--ink-muted); margin-bottom: 22px;" id="bride-parents"></p>
+
+      <div style="border-top: 1px solid var(--border-color); padding-top: 20px;">
+        <div class="eyebrow">Waktu &amp; Tempat</div>
+        <h3 style="font-size: 22px; margin-bottom: 6px;" id="venue-title">Lokasi Acara</h3>
+        <p style="font-size: 13.5px; color: var(--ink-muted); margin-bottom: 16px;" id="venue-address">-</p>
+        <a href="#" target="_blank" id="maps-btn" class="btn-primary">Buka Google Maps</a>
+      </div>
     </div>
 
-    <!-- WEDDING CONTENT SCREEN -->
-    <div id="wedding-screen">
-      <div class="card">
-        <p style="font-style: italic; margin-0;">Tanpa mengurangi rasa hormat, kami mengundang Anda ke pernikahan:</p>
-        <div class="couple-names" id="couple-title">- & -</div>
-        
-        <div class="event-detail" id="event-date"><strong>Tanggal:</strong> -</div>
-        <div class="event-detail" id="event-location"><strong>Lokasi:</strong> -</div>
+    <!-- GALERI FOTO -->
+    <div class="card" id="gallery-section" style="display:none;">
+      <div class="eyebrow" style="text-align:center;">Our Moments</div>
+      <h2 style="font-size: 26px; text-align:center;">Galeri Kebersamaan</h2>
+      <div class="gallery-grid" id="gallery-grid"></div>
+    </div>
 
-        <a href="#" id="maps-link" target="_blank" class="btn-maps" style="display: none;">Buka Google Maps 📍</a>
-      </div>
+    <!-- FORM RSVP & DOA RESTU -->
+    <div class="card">
+      <div class="eyebrow">Konfirmasi Kehadiran</div>
+      <h2 style="font-size: 26px; margin-bottom: 14px;">RSVP &amp; Ucapan</h2>
+      <form id="rsvp-form" onsubmit="submitRsvp(event)">
+        <input type="text" id="rsvp-name" placeholder="Nama Anda" required>
+        <select id="rsvp-status">
+          <option value="Hadir">InsyaAllah Hadir</option>
+          <option value="Masih Ragu">Masih Ragu</option>
+          <option value="Tidak Hadir">Maaf Belum Bisa Hadir</option>
+        </select>
+        <textarea id="rsvp-wish" rows="3" placeholder="Tuliskan doa & ucapan terbaik untuk kedua mempelai..." required></textarea>
+        <button type="submit" class="btn-primary" style="width: 100%;" id="rsvp-submit-btn">Kirim Konfirmasi &amp; Ucapan</button>
+      </form>
 
-      <!-- FORM RSVP -->
-      <div class="card">
-        <h3>Konfirmasi Kehadiran (RSVP)</h3>
-        <form id="rsvp-form">
-          <div class="form-group">
-            <label for="guest-name">Nama Tamu:</label>
-            <input type="text" id="guest-name" placeholder="Isikan nama Anda" required>
-          </div>
-          <div class="form-group">
-            <label for="guest-status">Kehadiran:</label>
-            <select id="guest-status">
-              <option value="Hadir">Hadir</option>
-              <option value="Tidak Hadir">Tidak Hadir</option>
-              <option value="Ragu-ragu">Ragu-ragu</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="guest-message">Ucapan / Doa:</label>
-            <textarea id="guest-message" rows="3" placeholder="Tuliskan ucapan selamat..." required></textarea>
-          </div>
-          <button type="submit" class="btn-submit">Kirim Ucapan 💌</button>
-        </form>
-      </div>
-
-      <!-- LIST UCAPAN TAMU -->
-      <div class="card">
-        <h3>Ucapan & Doa Tamu</h3>
-        <div id="rsvp-list">
-          <p style="color: #78716c; font-size: 13px;">Belum ada ucapan.</p>
-        </div>
-      </div>
+      <div style="margin-top: 24px;" id="wishes-list"></div>
     </div>
   </div>
 
@@ -151,106 +392,122 @@
       projectId: "votura-studio",
       storageBucket: "votura-studio.firebasestorage.app"
     };
-
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    const urlParams = new URLSearchParams(window.location.search);
-    const eventId = urlParams.get('event');
+    const params = new URLSearchParams(window.location.search);
+    const eventId = params.get('event') || 'demo';
+    const guestName = params.get('to');
 
-    const loadingScreen = document.getElementById('loading-screen');
-    const lockScreen = document.getElementById('lock-screen');
-    const weddingScreen = document.getElementById('wedding-screen');
-    const rsvpForm = document.getElementById('rsvp-form');
-    const rsvpList = document.getElementById('rsvp-list');
+    if (guestName) {
+      document.getElementById('guest-name-display').textContent = guestName;
+      document.getElementById('rsvp-name').value = guestName;
+    }
 
-    function checkWeddingAccess() {
-      if (!eventId) {
-        showLocked("ID Event tidak ditemukan di URL!");
+    function openInvitation() {
+      document.getElementById('envelope-cover').classList.add('hidden');
+    }
+
+    /* TERAPKAN PRESET TEMA & KUSTOM WARNA / FONT DARI FIRESTORE */
+    function applyClientVisualTheme(data) {
+      const themeClass = data.themeId || 'theme-editorial';
+      document.body.className = themeClass;
+
+      const style = data.customStyle || {};
+      const root = document.documentElement;
+      if (style.bgMain) root.style.setProperty('--bg-main', style.bgMain);
+      if (style.bgCard) root.style.setProperty('--bg-card', style.bgCard);
+      if (style.accent) root.style.setProperty('--accent', style.accent);
+      if (style.ink) root.style.setProperty('--ink', style.ink);
+      if (style.fontHeading) root.style.setProperty('--font-heading', style.fontHeading);
+      if (style.fontBody) root.style.setProperty('--font-body', style.fontBody);
+    }
+
+    /* MUAT DATA EVENT DARI FIRESTORE */
+    db.collection("events").doc(eventId).onSnapshot((doc) => {
+      if (!doc.exists) return;
+      const data = doc.data();
+
+      applyClientVisualTheme(data);
+
+      document.title = `The Wedding of ${data.name || 'Mempelai'} — Votura Studio`;
+      document.getElementById('env-couple-name').textContent = data.name || 'Mempelai';
+      document.getElementById('main-couple-name').textContent = data.name || 'Mempelai';
+      document.getElementById('main-event-date').textContent = data.eventDate || '';
+      document.getElementById('venue-title').textContent = data.venue || 'Lokasi Acara';
+      document.getElementById('venue-address').textContent = data.venueAddress || '';
+      if (data.mapsUrl) document.getElementById('maps-btn').href = data.mapsUrl;
+      if (data.quote) document.getElementById('main-quote').textContent = data.quote;
+      if (data.groomName) document.getElementById('groom-fullname').textContent = data.groomName;
+      if (data.brideName) document.getElementById('bride-fullname').textContent = data.brideName;
+
+      if (data.coverUrl) {
+        document.getElementById('env-cover-img').src = data.coverUrl;
+        document.getElementById('main-cover-img').src = data.coverUrl;
+      }
+    });
+
+    /* MUAT GALERI FOTO DARI SUB-KOLEKSI TERPISAH (AMAN RATUSAN FOTO) */
+    db.collection("events").doc(eventId).collection("photos").onSnapshot((snap) => {
+      const grid = document.getElementById('gallery-grid');
+      const section = document.getElementById('gallery-section');
+      if (snap.empty) {
+        section.style.display = 'none';
         return;
       }
-
-      db.collection("events").doc(eventId).onSnapshot((doc) => {
-        loadingScreen.style.display = 'none';
-
-        if (!doc.exists) {
-          showLocked(`Undangan ID "${eventId}" tidak terdaftar.`);
-          return;
+      section.style.display = 'block';
+      grid.innerHTML = "";
+      snap.forEach(doc => {
+        const p = doc.data();
+        if (p.url) {
+          const img = document.createElement('img');
+          img.src = p.url;
+          img.alt = p.caption || "Galeri";
+          grid.appendChild(img);
         }
-
-        const data = doc.data();
-        if (data.status !== 'active') {
-          showLocked("Masa aktif undangan ini telah berakhir.");
-        } else {
-          lockScreen.style.display = 'none';
-          weddingScreen.style.display = 'block';
-
-          document.getElementById('sub-header').textContent = data.name;
-          document.getElementById('couple-title').textContent = data.coupleName || data.name;
-          document.getElementById('event-date').innerHTML = `<strong>Tanggal:</strong> ${data.weddingDate || 'Menunggu pembaruan'}`;
-          document.getElementById('event-location').innerHTML = `<strong>Lokasi:</strong> ${data.weddingLocation || 'Menunggu pembaruan'}`;
-
-          if (data.mapsUrl) {
-            const mapsBtn = document.getElementById('maps-link');
-            mapsBtn.href = data.mapsUrl;
-            mapsBtn.style.display = 'inline-block';
-          }
-
-          loadRSVP();
-        }
-      });
-    }
-
-    function showLocked(msg) {
-      loadingScreen.style.display = 'none';
-      weddingScreen.style.display = 'none';
-      lockScreen.style.display = 'block';
-      document.getElementById('lock-msg').textContent = msg;
-    }
-
-    // SIMPAN RSVP
-    rsvpForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      const name = document.getElementById('guest-name').value;
-      const status = document.getElementById('guest-status').value;
-      const msg = document.getElementById('guest-message').value;
-
-      db.collection("events").doc(eventId).collection("rsvps").add({
-        name: name,
-        status: status,
-        message: msg,
-        createdAt: firebase.firestore.FieldValue.serverTimestamp()
-      }).then(() => {
-        alert("Terima kasih atas konfirmasi dan ucapannya!");
-        rsvpForm.reset();
       });
     });
 
-    // LOAD DAFTAR RSVP REAL-TIME
-    function loadRSVP() {
-      db.collection("events").doc(eventId).collection("rsvps")
-        .orderBy("createdAt", "desc")
-        .onSnapshot((snapshot) => {
-          rsvpList.innerHTML = "";
-          if (snapshot.empty) {
-            rsvpList.innerHTML = `<p style="color: #78716c; font-size: 13px;">Belum ada ucapan.</p>`;
-            return;
-          }
+    /* KIRIM & TAMPILKAN RSVP + UCAPAN REAL-TIME */
+    async function submitRsvp(e) {
+      e.preventDefault();
+      const btn = document.getElementById('rsvp-submit-btn');
+      btn.disabled = true;
+      btn.textContent = "Mengirim...";
 
-          snapshot.forEach((doc) => {
-            const data = doc.data();
-            const item = document.createElement('div');
-            item.className = 'rsvp-item';
-            item.innerHTML = `
-              <strong>${data.name}</strong> (${data.status})<br>
-              <span style="color: #44403c;">"${data.message}"</span>
-            `;
-            rsvpList.appendChild(item);
-          });
+      try {
+        await db.collection("events").doc(eventId).collection("wishes").add({
+          name: document.getElementById('rsvp-name').value.trim(),
+          status: document.getElementById('rsvp-status').value,
+          wish: document.getElementById('rsvp-wish').value.trim(),
+          createdAt: firebase.firestore.FieldValue.serverTimestamp()
         });
+        document.getElementById('rsvp-wish').value = "";
+      } catch (err) {
+        alert("Gagal mengirim ucapan: " + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Kirim Konfirmasi & Ucapan";
+      }
     }
 
-    checkWeddingAccess();
+    db.collection("events").doc(eventId).collection("wishes")
+      .orderBy("createdAt", "desc")
+      .onSnapshot((snap) => {
+        const list = document.getElementById('wishes-list');
+        list.innerHTML = "";
+        snap.forEach(doc => {
+          const w = doc.data();
+          const div = document.createElement('div');
+          div.className = 'wish-item';
+          div.innerHTML = `
+            <strong style="font-size:13.5px;">${w.name}</strong>
+            <span class="wish-badge">${w.status}</span>
+            <p style="font-size:13px; color:var(--ink-muted); margin-top:4px;">${w.wish}</p>
+          `;
+          list.appendChild(div);
+        });
+      });
   </script>
 </body>
 </html>
