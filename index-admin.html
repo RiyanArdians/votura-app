@@ -404,8 +404,8 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
     const storage = firebase.storage();
+    const CACHE_KEY = "votura_landing_cache_v1";
 
-    // DEFAULT DATA (SAMA PERSIS DENGAN VERSI INDEX TERBARU)
     const defaultContent = {
       waNumber: "6282298966860",
       navCta: "Ngobrol Dulu",
@@ -415,7 +415,7 @@
       heroTitle: "Moments That *Connect*",
       heroSubtitle: "Buat momen spesialmu terasa lebih berkesan. Votura Studio menghadirkan undangan pernikahan digital yang elegan dan virtual photobooth interaktif—praktis dibuka tamu langsung dari ponsel tanpa ribet instal aplikasi.",
       heroDemoLabel: "Intip Demo Undangan",
-      heroDemoUrl: "https://voturastudio.site/",
+      heroDemoUrl: "demo-wedding.html",
       showcaseTitle: "Satu Tautan untuk Momen Berhargamu",
       showcaseDesc: "Mulai dari menyebar undangan, mencatat konfirmasi kehadiran tamu secara otomatis, hingga seru-seruan foto bersama dengan bingkai khusus acaramu.",
       heroImageUrl: "",
@@ -442,7 +442,7 @@
             "Halaman kelola mandiri untuk update info & rekap tamu"
           ],
           demoLabel: "Lihat Demo",
-          demoUrl: "https://voturastudio.site/",
+          demoUrl: "demo-wedding.html",
           ctaLabel: "Tanya Paket Ini"
         },
         {
@@ -458,7 +458,7 @@
             "Cocok untuk pernikahan, ulang tahun, maupun acara kampus"
           ],
           demoLabel: "Coba Photobooth",
-          demoUrl: "https://voturastudio.site/fotome/v2",
+          demoUrl: "demo-photobooth.html",
           ctaLabel: "Tanya Paket Ini"
         }
       ],
@@ -493,7 +493,6 @@
       document.getElementById('cms-modal').classList.remove('open');
     }
 
-    // LOAD DATA FROM FIRESTORE
     async function initCms() {
       try {
         const doc = await db.collection("settings").doc("landing_page").get();
@@ -542,7 +541,6 @@
       document.getElementById('hero-img-preview').src = "assets/votura-icon.png";
     }
 
-    // RENDER DYNAMIC PRODUCTS EDITOR
     function renderProductsEditor() {
       const container = document.getElementById('products-editor-list');
       container.innerHTML = "";
@@ -616,7 +614,7 @@
         unit: "/ acara",
         features: ["Akses langsung via browser", "Desain dapat disesuaikan"],
         demoLabel: "Lihat Demo",
-        demoUrl: "https://voturastudio.site/",
+        demoUrl: "demo-wedding.html",
         ctaLabel: "Tanya Paket Ini"
       });
       renderProductsEditor();
@@ -627,7 +625,6 @@
       renderProductsEditor();
     }
 
-    // RENDER DYNAMIC TESTIMONIALS EDITOR
     function renderTestiEditor() {
       const container = document.getElementById('testi-editor-list');
       container.innerHTML = "";
@@ -684,7 +681,6 @@
         .replace(/"/g, "&quot;");
     }
 
-    // SAVE ALL CHANGES TO FIRESTORE & STORAGE
     async function saveLandingData() {
       const btn = document.getElementById('save-all-btn');
       const status = document.getElementById('status-text');
@@ -728,11 +724,15 @@
           ctaBoxSub: document.getElementById('cta-box-sub').value.trim(),
           footerDesc: document.getElementById('footer-desc').value.trim(),
           products: currentData.products,
-          testimonials: currentData.testimonials,
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+          testimonials: currentData.testimonials
         };
 
-        await db.collection("settings").doc("landing_page").set(payload);
+        await db.collection("settings").doc("landing_page").set({
+          ...payload,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
+        localStorage.setItem(CACHE_KEY, JSON.stringify(payload));
         status.textContent = "Tersimpan otomatis";
         showCmsModal("Berhasil Disimpan", "Seluruh perubahan konten halaman utama Votura Studio telah diperbarui.");
       } catch (err) {
