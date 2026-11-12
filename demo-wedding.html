@@ -2,12 +2,17 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
   <meta name="theme-color" content="#8C6262">
 
   <!-- Meta Tag Utama -->
   <title>Demo Undangan Digital — Votura Studio</title>
   <meta name="description" content="Portofolio Demo Undangan Pernikahan Digital Eksklusif oleh Votura Studio.">
+
+  <!-- Favicon dari GitHub Repository RiyanArdians/votura-app/assets -->
+  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/RiyanArdians/votura-app/main/assets/votura-icon.png">
+  <link rel="shortcut icon" type="image/png" href="https://raw.githubusercontent.com/RiyanArdians/votura-app/main/assets/votura-icon.png">
+  <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/RiyanArdians/votura-app/main/assets/votura-icon.png">
 
   <!-- Google Fonts & Font Awesome Icons -->
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -43,6 +48,7 @@
       line-height: 1.6;
       overflow-x: hidden;
       scroll-behavior: smooth;
+      width: 100%;
     }
 
     .font-serif { font-family: 'Cormorant Garamond', serif; }
@@ -59,34 +65,36 @@
       box-shadow: 0 0 40px rgba(0,0,0,0.12);
     }
 
-    /* TOMBOL MARKETING CTA WHATSAPP DI ATAS (BERSIH TANPA IKON WA) */
+    /* TOMBOL MARKETING CTA WHATSAPP DI ATAS (1 BARIS RAPI & RESPONSIF DI MOBILE) */
     .demo-cta-banner {
       position: fixed;
-      top: 14px;
+      top: 12px;
       left: 50%;
       transform: translateX(-50%);
-      width: calc(100% - 32px);
-      max-width: 410px;
+      width: calc(100% - 24px);
+      max-width: 420px;
       z-index: 100000;
       display: flex;
       justify-content: center;
+      pointer-events: auto;
     }
 
     .btn-wa-marketing {
       background: linear-gradient(135deg, #4A2E2E 0%, #6E4444 100%);
       color: #FFFFFF !important;
       text-decoration: none;
-      padding: 10px 22px;
+      padding: 9px 18px;
       border-radius: 50px;
-      border: 1px solid rgba(229, 197, 149, 0.75);
+      border: 1px solid rgba(229, 197, 149, 0.8);
       box-shadow: 0 8px 22px rgba(45, 25, 25, 0.3);
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
-      font-size: 0.74rem;
+      text-align: center;
+      white-space: nowrap;
+      font-size: clamp(0.68rem, 3.1vw, 0.78rem);
       font-weight: 500;
-      letter-spacing: 0.4px;
+      letter-spacing: 0.2px;
       position: relative;
       overflow: hidden;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
@@ -99,7 +107,7 @@
     .btn-wa-marketing .cta-highlight {
       color: #FFE3B3;
       font-weight: 700;
-      letter-spacing: 0.6px;
+      margin-left: 4px;
     }
 
     .btn-wa-marketing::after {
@@ -114,57 +122,63 @@
       animation: shineSweep 3.8s infinite;
     }
 
-    /* TOMBOL KONTROL MUSIK MELAYANG */
+    /* TOMBOL KONTROL MUSIK MELAYANG (SELALU BISA DIKLIK) */
     .music-btn-floating {
       position: fixed;
-      bottom: 25px;
-      right: calc(50% - 200px);
-      width: 50px;
-      height: 50px;
+      bottom: 22px;
+      right: calc(50% - 205px);
+      width: 48px;
+      height: 48px;
       background-color: var(--dusty-rose-dark);
       color: #FFFFFF;
       border-radius: 50%;
       display: flex;
       justify-content: center;
       align-items: center;
-      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25);
-      z-index: 99999;
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.3);
+      z-index: 100001;
       cursor: pointer;
+      pointer-events: auto;
       border: 2px solid #FFFFFF;
-      transition: transform 0.3s ease;
+      transition: transform 0.25s ease, background-color 0.25s ease;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    @media (max-width: 480px) {
-      .music-btn-floating { right: 20px; }
+    @media (max-width: 460px) {
+      .music-btn-floating {
+        right: 18px;
+        bottom: 18px;
+      }
     }
 
-    .music-btn-floating i { font-size: 1.3rem; }
+    .music-btn-floating:active { transform: scale(0.92); }
+    .music-btn-floating i { font-size: 1.25rem; pointer-events: none; }
     .music-spin { animation: spin 3s linear infinite; }
     @keyframes spin { 100% { transform: rotate(360deg); } }
 
-    /* AMPLOP OVERLAY RESPONSIVE (MENGGUNAKAN FOTO OPEN-SOURCE UNSPLASH) */
+    /* AMPLOP OVERLAY RESPONSIVE */
     .cover-overlay {
       position: fixed;
       top: 0; left: 50%;
       transform: translateX(-50%);
-      width: 100%; max-width: 450px; height: 100vh;
+      width: 100%; max-width: 450px; height: 100dvh;
       background: linear-gradient(rgba(216, 180, 180, 0.88), rgba(140, 98, 98, 0.94)),
                   url('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=900&q=80') center/cover;
       display: flex; flex-direction: column; justify-content: center; align-items: center;
       z-index: 9999;
       transition: opacity 0.8s ease-in-out, visibility 0.8s ease-in-out;
-      padding: 70px 20px 20px;
+      padding: 68px 16px 20px;
     }
 
-    /* BENTUK AMPLOP REALISTIS */
+    /* BENTUK AMPLOP REALISTIS RESPONSIVE */
     .envelope-box {
       position: relative;
-      width: 320px;
-      height: 200px;
+      width: min(320px, 86vw);
+      height: min(200px, 54vw);
       background-color: var(--envelope-base) !important;
       border-radius: 10px;
       box-shadow: 0 18px 40px rgba(35, 20, 20, 0.45);
-      margin-bottom: 20px;
+      margin-bottom: 18px;
       border: 1px solid rgba(212, 175, 55, 0.35);
       cursor: pointer;
       perspective: 1000px;
@@ -174,14 +188,14 @@
     /* KARTU UNDANGAN DI DALAM AMPLOP */
     .envelope-card-insert {
       position: absolute;
-      top: 14px;
-      left: 15px;
-      width: 290px;
-      height: 172px;
+      top: 7%;
+      left: 5%;
+      width: 90%;
+      height: 86%;
       background-color: #FFFFFF !important;
       border: 1px solid var(--dusty-rose-main);
       border-radius: 8px;
-      padding: 12px 10px;
+      padding: 10px 8px;
       text-align: center;
       box-shadow: 0 4px 15px rgba(0,0,0,0.12);
       z-index: 1;
@@ -235,11 +249,11 @@
     /* SEGEL EMAS P&M */
     .envelope-seal {
       position: absolute;
-      top: 105px;
+      top: 52%;
       left: 50%;
       transform: translate(-50%, -50%);
-      width: 48px;
-      height: 48px;
+      width: 46px;
+      height: 46px;
       background: radial-gradient(circle at 30% 30%, #FFE8A3 0%, #B3927A 70%, #8C6D57 100%);
       border-radius: 50%;
       box-shadow: 0 4px 12px rgba(0,0,0,0.45), inset 0 2px 4px rgba(255,255,255,0.8);
@@ -258,14 +272,14 @@
 
     /* INPUT NAMA TAMU DEMO OPSIONAL */
     .demo-guest-input {
-      width: 300px;
-      padding: 11px 18px;
+      width: min(300px, 84vw);
+      padding: 11px 16px;
       border-radius: 30px;
       border: 1.5px solid rgba(255,255,255,0.85);
       background: #FFFFFF;
       color: var(--text-dark);
       font-family: 'Plus Jakarta Sans', sans-serif;
-      font-size: 0.84rem;
+      font-size: 0.82rem;
       text-align: center;
       outline: none;
       margin-bottom: 14px;
@@ -277,7 +291,7 @@
     }
 
     .guest-name-box {
-      font-size: 0.9rem;
+      font-size: 0.88rem;
       font-weight: 600;
       color: var(--dusty-rose-dark) !important;
       margin: 4px 0 0;
@@ -293,8 +307,8 @@
       background: linear-gradient(135deg, #B3927A 0%, #8C6D57 100%) !important;
       color: #FFFFFF !important;
       border: 1px solid rgba(255,255,255,0.4);
-      padding: 12px 28px;
-      font-size: 0.9rem;
+      padding: 12px 26px;
+      font-size: 0.88rem;
       font-weight: 700;
       border-radius: 30px;
       cursor: pointer;
@@ -340,9 +354,9 @@
     .envelope-box.open-flap .envelope-seal { opacity: 0; transform: translate(-50%, -50%) scale(0.4); }
     .envelope-box.open-flap .envelope-card-insert { opacity: 1; }
 
-    .envelope-card-insert.step-1-up { transform: translateY(-145px); z-index: 20; }
-    .envelope-card-insert.step-2-center { transform: translateY(15px) scale(1.08); z-index: 30; box-shadow: 0 15px 35px rgba(0,0,0,0.3); }
-    .envelope-card-insert.step-3-zoom { transform: translateY(15px) scale(3.8); opacity: 0; }
+    .envelope-card-insert.step-1-up { transform: translateY(-72%); z-index: 20; }
+    .envelope-card-insert.step-2-center { transform: translateY(8%) scale(1.06); z-index: 30; box-shadow: 0 15px 35px rgba(0,0,0,0.3); }
+    .envelope-card-insert.step-3-zoom { transform: translateY(8%) scale(3.6); opacity: 0; }
     .cover-overlay.fade-out { opacity: 0; visibility: hidden; pointer-events: none !important; }
 
     /* ANIMASI SCROLL REVEAL */
@@ -367,8 +381,8 @@
     /* HERO HEADER & FOTO MEMPELAI PROPORSI KAPSUL ANTI-TERPOTONG */
     .hero-header-custom {
       position: relative;
-      min-height: 100vh;
-      padding: 85px 20px 50px;
+      min-height: 100dvh;
+      padding: 78px 18px 45px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -382,7 +396,7 @@
       max-width: 380px;
       border: 2px solid var(--dusty-rose-main);
       border-radius: 200px 200px 28px 28px;
-      padding: 36px 20px 32px;
+      padding: 32px 18px 28px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -393,13 +407,13 @@
     }
 
     .hero-capsule-wrapper {
-      width: 205px;
-      height: 255px;
+      width: min(200px, 52vw);
+      height: min(250px, 65vw);
       border-radius: 105px;
       overflow: hidden;
       border: 3px solid #FFFFFF;
       box-shadow: 0 8px 22px rgba(140, 98, 98, 0.2);
-      margin-bottom: 20px;
+      margin-bottom: 18px;
       background-color: #F0E6E6;
       display: flex;
       align-items: center;
@@ -415,7 +429,7 @@
     }
 
     .hero-subtitle {
-      font-size: 0.8rem;
+      font-size: 0.78rem;
       color: var(--text-muted) !important;
       letter-spacing: 3px;
       margin-bottom: 6px;
@@ -423,7 +437,7 @@
     }
 
     .hero-title-names {
-      font-size: 1.9rem;
+      font-size: clamp(1.6rem, 6.5vw, 1.9rem);
       color: var(--dusty-rose-dark) !important;
       font-weight: 600;
       line-height: 1.25;
@@ -440,37 +454,38 @@
     }
 
     .hero-date-badge {
-      font-size: 0.78rem;
+      font-size: clamp(0.7rem, 3vw, 0.78rem);
       font-weight: 600;
       color: var(--dusty-rose-dark) !important;
-      letter-spacing: 1.8px;
+      letter-spacing: 1.6px;
       text-transform: uppercase;
       border-top: 1px solid var(--border-color);
       border-bottom: 1px solid var(--border-color);
-      padding: 8px 14px;
+      padding: 8px 12px;
+      text-align: center;
     }
 
     /* CARD GENERAL & MEMPELAI */
-    .section-card { padding: 35px 20px; text-align: center; }
+    .section-card { padding: 32px 18px; text-align: center; }
 
     .quote-card {
       background-color: #FFFFFF !important;
-      padding: 22px 18px; border-radius: 16px; margin: 20px;
+      padding: 22px 18px; border-radius: 16px; margin: 18px;
       box-shadow: 0 4px 18px rgba(216, 180, 180, 0.12); font-size: 0.88rem; border: 1px solid var(--border-color);
     }
 
     .mempelai-card {
       background-color: #FFFFFF !important;
       border-radius: 20px;
-      padding: 24px 18px;
-      margin: 15px 10px;
+      padding: 22px 16px;
+      margin: 14px 6px;
       box-shadow: 0 8px 24px rgba(140, 98, 98, 0.08);
       border: 1px solid var(--border-color);
     }
 
     .mempelai-img-wrapper {
-      width: 170px;
-      height: 220px;
+      width: 165px;
+      height: 215px;
       border-radius: 85px;
       overflow: hidden;
       margin: 0 auto 16px;
@@ -489,14 +504,14 @@
     .time-box {
       background-color: var(--dusty-rose-main) !important;
       color: #FFFFFF !important;
-      padding: 8px; border-radius: 8px; flex: 1;
+      padding: 8px 4px; border-radius: 8px; flex: 1;
     }
-    .time-box span { font-size: 1.2rem; font-weight: 700; display: block; }
-    .time-box p { font-size: 0.6rem; text-transform: uppercase; }
+    .time-box span { font-size: 1.15rem; font-weight: 700; display: block; }
+    .time-box p { font-size: 0.58rem; text-transform: uppercase; }
 
     .btn-outline {
       display: inline-block; border: 1px solid var(--dusty-rose-dark); color: var(--dusty-rose-dark) !important;
-      padding: 10px 20px; border-radius: 30px; text-decoration: none; font-size: 0.82rem; font-weight: 600;
+      padding: 10px 20px; border-radius: 30px; text-decoration: none; font-size: 0.8rem; font-weight: 600;
       margin-top: 10px;
     }
 
@@ -529,13 +544,13 @@
       display: block;
     }
 
-    .gallery-item.item-large { grid-column: span 2; height: 230px; }
-    .gallery-item.item-tall { height: 210px; }
+    .gallery-item.item-large { grid-column: span 2; height: 220px; }
+    .gallery-item.item-tall { height: 200px; }
 
     /* LIGHTBOX MODAL */
     .lightbox-modal {
       position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
-      background: rgba(0, 0, 0, 0.88); z-index: 10000; display: flex;
+      background: rgba(0, 0, 0, 0.88); z-index: 100002; display: flex;
       justify-content: center; align-items: center; padding: 20px;
       opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
     }
@@ -553,7 +568,7 @@
     }
 
     .story-node {
-      position: relative; z-index: 2; margin-bottom: 30px; width: 100%;
+      position: relative; z-index: 2; margin-bottom: 28px; width: 100%;
       background-color: #FFFFFF !important;
       padding: 16px; border-radius: 16px; border: 1px solid var(--border-color);
       box-shadow: 0 6px 20px rgba(140, 98, 98, 0.08);
@@ -561,7 +576,7 @@
 
     .story-img-container {
       width: 100%;
-      height: 210px;
+      height: 205px;
       border-radius: 12px;
       overflow: hidden;
       margin-bottom: 12px;
@@ -590,7 +605,7 @@
     /* BANK & RSVP */
     .bank-card, .rsvp-form-card {
       background-color: #FFFFFF !important;
-      padding: 18px; border-radius: 16px; margin: 15px 10px;
+      padding: 18px; border-radius: 16px; margin: 14px 6px;
       box-shadow: 0 4px 18px rgba(216, 180, 180, 0.12); border: 1px solid var(--border-color);
     }
 
@@ -599,7 +614,7 @@
       background-color: var(--dusty-rose-soft) !important;
     }
 
-    .wishes-list { margin: 15px 10px; text-align: left; max-height: 320px; overflow-y: auto; }
+    .wishes-list { margin: 14px 6px; text-align: left; max-height: 320px; overflow-y: auto; }
     .wish-box {
       background-color: #FFFFFF !important;
       padding: 12px 14px; border-radius: 10px; margin-bottom: 10px;
@@ -621,7 +636,7 @@
       top: 0; left: 0; width: 100%; height: 100vh;
       background: rgba(61, 43, 43, 0.65);
       backdrop-filter: blur(5px);
-      z-index: 999999;
+      z-index: 100003;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -693,23 +708,24 @@
 </head>
 <body>
 
-<!-- TOMBOL MARKETING CTA WHATSAPP (BERSIH TANPA IKON WA) -->
+<!-- TOMBOL MARKETING CTA WHATSAPP (SATU BARIS RAPI & ELEGAN) -->
 <div class="demo-cta-banner">
-  <a id="wa-order-link" href="#" target="_blank" rel="noopener noreferrer" class="btn-wa-marketing">
-    <span>Wujudkan undangan impian Anda &bull; <span class="cta-highlight">Pesan Tema Ini</span></span>
+  <a id="wa-order-link" href="https://wa.me/6282298966860" target="_blank" rel="noopener noreferrer" class="btn-wa-marketing">
+    <span>Wujudkan undangan impianmu &bull;<span class="cta-highlight">Pesan Sekarang</span></span>
   </a>
 </div>
 
-<!-- MUSIK ROMANTIS OPEN-SOURCE (WIKIMEDIA COMMONS PUBLIC DOMAIN) -->
-<audio id="bg-music" loop preload="auto" crossorigin="anonymous">
-  <source src="https://upload.wikimedia.org/wikipedia/commons/b/be/Clair_de_Lune_%28Debussy%29_-_Suite_bergamasque.ogg" type="audio/ogg">
+<!-- MUSIK ROMANTIS OPEN-SOURCE (TANPA CROSSORIGIN BLOCKING) -->
+<audio id="bg-music" loop preload="auto" playsinline>
+  <source src="https://upload.wikimedia.org/wikipedia/commons/3/35/Gymnopedie_No_1.ogg" type="audio/ogg">
+  <source src="https://upload.wikimedia.org/wikipedia/commons/transcoded/3/35/Gymnopedie_No_1.ogg/Gymnopedie_No_1.ogg.mp3" type="audio/mpeg">
   <source src="https://upload.wikimedia.org/wikipedia/commons/transcoded/b/be/Clair_de_Lune_%28Debussy%29_-_Suite_bergamasque.ogg/Clair_de_Lune_%28Debussy%29_-_Suite_bergamasque.ogg.mp3" type="audio/mpeg">
 </audio>
 
 <!-- TOMBOL KONTROL MUSIK MELAYANG -->
-<div id="music-control-btn" class="music-btn-floating" onclick="toggleMusic()" style="display: none;">
+<button type="button" id="music-control-btn" class="music-btn-floating" aria-label="Putar atau Jeda Musik">
   <i id="music-icon" class="fa-solid fa-compact-disc"></i>
-</div>
+</button>
 
 <div class="app-viewport">
 
@@ -723,9 +739,9 @@
       <div class="envelope-seal">P&amp;M</div>
 
       <div id="card-insert" class="envelope-card-insert">
-        <p style="color: var(--soft-mocha); font-size: 0.62rem; letter-spacing: 2px; font-weight: 600;">INTIMATE WEDDING INVITATION</p>
-        <h1 class="font-serif" style="font-size: 1.25rem; color: var(--dusty-rose-dark); margin: 3px 0; line-height: 1.2;">Mempelai Pria &amp; Mempelai Wanita</h1>
-        <p style="font-size: 0.7rem; color: var(--text-muted); margin-top: 2px;">Kepada Yth:</p>
+        <p style="color: var(--soft-mocha); font-size: 0.6rem; letter-spacing: 1.8px; font-weight: 600;">INTIMATE WEDDING INVITATION</p>
+        <h1 class="font-serif" style="font-size: 1.18rem; color: var(--dusty-rose-dark); margin: 3px 0; line-height: 1.2;">Mempelai Pria &amp; Mempelai Wanita</h1>
+        <p style="font-size: 0.68rem; color: var(--text-muted); margin-top: 2px;">Kepada Yth:</p>
         <div id="guest-name" class="guest-name-box">Tamu Undangan</div>
       </div>
 
@@ -740,7 +756,7 @@
 
     <!-- TOMBOL BUKA UNDANGAN -->
     <div id="btn-container" class="btn-open-container">
-      <button id="btn-open" class="btn-primary" onclick="triggerOpenInvitation()">
+      <button type="button" id="btn-open" class="btn-primary" onclick="triggerOpenInvitation()">
         <i class="fa-solid fa-envelope-open"></i> Buka Undangan
       </button>
     </div>
@@ -749,7 +765,7 @@
   <!-- MAIN CONTENT -->
   <main id="main-content">
 
-    <!-- FRAME 2: HERO HEADER (FOTO SAMPEL OPEN-SOURCE UNSPLASH PROPORSIONAL) -->
+    <!-- FRAME 2: HERO HEADER -->
     <section id="hero-section" class="hero-header-custom reveal-section">
       <div class="hero-arch-frame">
         <div class="hero-capsule-wrapper">
@@ -843,7 +859,7 @@
       </div>
     </section>
 
-    <!-- FRAME 6: GALERI FOTO (OPEN-SOURCE UNSPLASH) -->
+    <!-- FRAME 6: GALERI FOTO -->
     <section class="section-card reveal-section">
       <h2 class="font-serif fade-text delay-1" style="font-size: 1.8rem; color: var(--dusty-rose-dark);">Gallery</h2>
       <p class="fade-text delay-2" style="font-size: 0.75rem; color: var(--text-muted); margin-bottom: 12px;">Klik foto untuk memperbesar</p>
@@ -870,7 +886,7 @@
       <img id="lightbox-img" src="" alt="Zoom Foto">
     </div>
 
-    <!-- FRAME 7: LOVE STORY (OPEN-SOURCE UNSPLASH) -->
+    <!-- FRAME 7: LOVE STORY -->
     <section class="section-card reveal-section">
       <h2 class="font-serif fade-text delay-1" style="font-size: 2rem; color: var(--dusty-rose-dark);">Love Story</h2>
       <p class="font-serif fade-text delay-2" style="font-size: 1rem; color: var(--soft-mocha); margin-top: -4px;">Mempelai Pria &amp; Mempelai Wanita</p>
@@ -998,9 +1014,9 @@
 
 <script>
   /* ================= PENGATURAN DEMO VOTURA STUDIO ================= */
-  const WHATSAPP_NUMBER = "6281234567890"; // Ganti dengan nomor WhatsApp admin Votura Studio (format 628xxx)
+  const WHATSAPP_NUMBER = "6282298966860";
   const WHATSAPP_MESSAGE = "Halo Votura Studio! Saya tertarik memesan Undangan Pernikahan Digital tema Dusty Rose seperti di halaman demo. Boleh info pricelist & cara pemesanannya?";
-  const H_PLUS_DAYS = 30; // Otomatis H+30 hari dari tanggal klien membuka halaman demo
+  const H_PLUS_DAYS = 30;
   /* ================================================================= */
 
   // 1. SETUP LINK WHATSAPP MARKETING
@@ -1057,7 +1073,7 @@
     document.getElementById('input-nama').value = clean;
   }
 
-  // 5. KONTROL MUSIK ROMANTIS OPEN-SOURCE + WEB AUDIO PIANO FALLBACK
+  // 5. KONTROL MUSIK ROMANTIS (HTML5 AUDIO + WEB AUDIO PIANO FALLBACK)
   const bgMusic = document.getElementById('bg-music');
   const musicBtn = document.getElementById('music-control-btn');
   const musicIcon = document.getElementById('music-icon');
@@ -1065,11 +1081,24 @@
   let fallbackPianoTimer = null;
   let audioCtx = null;
 
+  function setMusicVisualState(playing) {
+    isPlaying = playing;
+    if (playing) {
+      musicIcon.className = 'fa-solid fa-compact-disc music-spin';
+      musicBtn.style.opacity = '1';
+    } else {
+      musicIcon.className = 'fa-solid fa-play';
+      musicBtn.style.opacity = '0.85';
+    }
+  }
+
   function startRomanticSynthFallback() {
     if (fallbackPianoTimer) return;
     try {
       const AudioContext = window.AudioContext || window.webkitAudioContext;
-      audioCtx = new AudioContext();
+      if (!audioCtx) audioCtx = new AudioContext();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+
       const chords = [
         [261.63, 329.63, 392.00, 493.88],
         [196.00, 246.94, 293.66, 392.00],
@@ -1086,7 +1115,7 @@
           osc.type = 'sine';
           osc.frequency.setValueAtTime(freq, audioCtx.currentTime + idx * 0.18);
           gain.gain.setValueAtTime(0.0001, audioCtx.currentTime + idx * 0.18);
-          gain.gain.exponentialRampToValueAtTime(0.04, audioCtx.currentTime + idx * 0.18 + 0.15);
+          gain.gain.exponentialRampToValueAtTime(0.045, audioCtx.currentTime + idx * 0.18 + 0.15);
           gain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + idx * 0.18 + 2.4);
           osc.connect(gain);
           gain.connect(audioCtx.destination);
@@ -1110,28 +1139,42 @@
   }
 
   function playMusic() {
-    musicBtn.style.display = 'flex';
-    bgMusic.volume = 0.65;
-    bgMusic.play().then(() => {
-      isPlaying = true;
-      musicIcon.classList.add('music-spin');
-    }).catch(() => {
-      isPlaying = true;
-      musicIcon.classList.add('music-spin');
+    bgMusic.volume = 0.7;
+    const playPromise = bgMusic.play();
+    if (playPromise !== undefined) {
+      playPromise.then(() => {
+        stopRomanticSynthFallback();
+        setMusicVisualState(true);
+      }).catch(() => {
+        setMusicVisualState(true);
+        startRomanticSynthFallback();
+      });
+    } else {
+      setMusicVisualState(true);
       startRomanticSynthFallback();
-    });
+    }
   }
 
-  function toggleMusic() {
+  function pauseMusic() {
+    bgMusic.pause();
+    stopRomanticSynthFallback();
+    setMusicVisualState(false);
+  }
+
+  function toggleMusic(e) {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
     if (isPlaying) {
-      bgMusic.pause();
-      stopRomanticSynthFallback();
-      musicIcon.classList.remove('music-spin');
-      isPlaying = false;
+      pauseMusic();
     } else {
       playMusic();
     }
   }
+
+  // Event listener langsung agar tombol musik selalu merespons klik maupun sentuhan layar HP
+  musicBtn.addEventListener('click', toggleMusic);
 
   // 6. ANIMASI PEMBUKAAN AMPLOP
   let isEnvelopeOpened = false;
