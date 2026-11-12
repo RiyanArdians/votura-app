@@ -49,6 +49,11 @@
       overflow: hidden;
       position: relative;
       border: 1px solid rgba(255, 255, 255, 0.9);
+      transition: opacity 0.35s var(--transition);
+    }
+
+    .canvas-shell.is-loading {
+      opacity: 0;
     }
 
     /* TOP NAVIGATION BAR */
@@ -593,7 +598,7 @@
     </a>
   </aside>
 
-  <div class="canvas-shell" id="beranda">
+  <div class="canvas-shell is-loading" id="beranda">
     <!-- TOP HEADER -->
     <header class="top-nav">
       <a href="#beranda" class="brand-logo">
@@ -637,7 +642,7 @@
               <span>Lihat Pilihan Paket</span>
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
             </a>
-            <a href="https://voturastudio.site/" target="_blank" id="hero-demo-link" class="btn-ghost-demo">
+            <a href="demo-wedding.html" target="_blank" id="hero-demo-link" class="btn-ghost-demo">
               <span class="play-ring">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
               </span>
@@ -676,7 +681,7 @@
               Sebar kabar bahagia dengan cara yang lebih berkelas. Tamu cukup klik satu tautan untuk melihat detail acara dan kirim doa.
             </p>
             <div class="featured-controls">
-              <a href="https://voturastudio.site/" target="_blank" id="featured-link" class="link-subtle">
+              <a href="demo-wedding.html" target="_blank" id="featured-link" class="link-subtle">
                 <span>Coba Demo</span>
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
               </a>
@@ -734,9 +739,7 @@
         <h2 class="serif">Pilihan Produk <span class="serif-accent">Votura</span></h2>
       </div>
 
-      <div class="products-grid" id="products-grid">
-        <!-- Diisi dinamis oleh Firestore (dengan default fallback) -->
-      </div>
+      <div class="products-grid" id="products-grid"></div>
     </section>
 
     <!-- TESTIMONI KLIEN -->
@@ -746,9 +749,7 @@
         <h2 class="serif">Cerita di Balik <span class="serif-accent">Setiap Acara</span></h2>
       </div>
 
-      <div class="testi-grid" id="testi-grid">
-        <!-- Diisi dinamis oleh Firestore (dengan default fallback) -->
-      </div>
+      <div class="testi-grid" id="testi-grid"></div>
     </section>
 
     <!-- FOOTER & SOCIAL MEDIA -->
@@ -775,7 +776,7 @@
     </footer>
   </div>
 
-  <!-- MATCHING CHAT MODAL -->
+  <!-- MATCHING GLASS MODAL -->
   <div class="modal-backdrop" id="chat-modal" onclick="closeModalOnOutside(event)">
     <div class="modal-panel">
       <span class="eyebrow" style="display: block; margin-bottom: 6px;">Mulai Obrolan</span>
@@ -821,7 +822,7 @@
       heroTitle: "Moments That *Connect*",
       heroSubtitle: "Buat momen spesialmu terasa lebih berkesan. Votura Studio menghadirkan undangan pernikahan digital yang elegan dan virtual photobooth interaktif—praktis dibuka tamu langsung dari ponsel tanpa ribet instal aplikasi.",
       heroDemoLabel: "Intip Demo Undangan",
-      heroDemoUrl: "https://voturastudio.site/",
+      heroDemoUrl: "demo-wedding.html",
       showcaseTitle: "Satu Tautan untuk Momen Berhargamu",
       showcaseDesc: "Mulai dari menyebar undangan, mencatat konfirmasi kehadiran tamu secara otomatis, hingga seru-seruan foto bersama dengan bingkai khusus acaramu.",
       heroImageUrl: "",
@@ -848,7 +849,7 @@
             "Halaman kelola mandiri untuk update info & rekap tamu"
           ],
           demoLabel: "Lihat Demo",
-          demoUrl: "https://voturastudio.site/",
+          demoUrl: "demo-wedding.html",
           ctaLabel: "Tanya Paket Ini"
         },
         {
@@ -864,7 +865,7 @@
             "Cocok untuk pernikahan, ulang tahun, maupun acara kampus"
           ],
           demoLabel: "Coba Photobooth",
-          demoUrl: "https://voturastudio.site/fotome/v2",
+          demoUrl: "demo-photobooth.html",
           ctaLabel: "Tanya Paket Ini"
         }
       ],
@@ -899,7 +900,7 @@
       document.getElementById('hero-headline').innerHTML = formatHeadline(data.heroTitle || "Moments That *Connect*");
       document.getElementById('hero-subtitle').textContent = data.heroSubtitle || "";
       document.getElementById('hero-demo-label').textContent = data.heroDemoLabel || "Intip Demo Undangan";
-      document.getElementById('hero-demo-link').href = data.heroDemoUrl || "https://voturastudio.site/";
+      document.getElementById('hero-demo-link').href = data.heroDemoUrl || "demo-wedding.html";
       document.getElementById('showcase-title').textContent = data.showcaseTitle || "";
       document.getElementById('showcase-desc').textContent = data.showcaseDesc || "";
 
@@ -924,7 +925,6 @@
       document.getElementById('footer-ig-link').href = data.igUrl || "https://instagram.com/voturastudio";
       document.getElementById('footer-tiktok-link').href = data.tiktokUrl || "https://tiktok.com/@voturastudio";
 
-      // Render Products
       const products = data.products && data.products.length ? data.products : fallbackData.products;
       const prodGrid = document.getElementById('products-grid');
       prodGrid.innerHTML = "";
@@ -955,7 +955,6 @@
         prodGrid.appendChild(article);
       });
 
-      // Update Featured Slider from Products
       sliderItems = products.map((p, i) => ({
         tag: `0${i + 1} — ${p.tag}`,
         title: p.title,
@@ -968,7 +967,6 @@
       currentSlide = 0;
       renderSlide();
 
-      // Render Testimonials
       const testis = data.testimonials && data.testimonials.length ? data.testimonials : fallbackData.testimonials;
       const testiGrid = document.getElementById('testi-grid');
       testiGrid.innerHTML = "";
@@ -1027,7 +1025,6 @@
       if (e.target.id === 'chat-modal') closeChatModal();
     }
 
-    // Active Navigation Highlight
     const sections = document.querySelectorAll('section[id], footer[id], div[id="beranda"]');
     const navLinks = document.querySelectorAll('.nav-pill-group a, .side-dock a');
 
@@ -1041,14 +1038,41 @@
       });
     }, { passive: true });
 
-    // Load default first for instant paint, then sync real-time from Firestore
-    applyPageContent(fallbackData);
+    // ANTI-FLICKER LOCAL CACHE & REAL-TIME FIRESTORE SYNC
+    const CACHE_KEY = "votura_landing_cache_v1";
+    const shellEl = document.getElementById("beranda");
+
+    function revealShell() {
+      shellEl.classList.remove("is-loading");
+    }
+
+    const cachedRaw = localStorage.getItem(CACHE_KEY);
+    if (cachedRaw) {
+      try {
+        const cachedData = JSON.parse(cachedRaw);
+        applyPageContent({ ...fallbackData, ...cachedData });
+        revealShell();
+      } catch (e) {
+        console.warn("Cache invalid, menunggu Firestore...");
+      }
+    }
 
     db.collection("settings").doc("landing_page").onSnapshot((doc) => {
       if (doc.exists) {
-        applyPageContent({ ...fallbackData, ...doc.data() });
+        const freshData = doc.data();
+        localStorage.setItem(CACHE_KEY, JSON.stringify(freshData));
+        applyPageContent({ ...fallbackData, ...freshData });
+      } else {
+        applyPageContent(fallbackData);
       }
+      revealShell();
+    }, (error) => {
+      console.warn("Gagal memuat Firestore, menggunakan fallback:", error);
+      applyPageContent(fallbackData);
+      revealShell();
     });
+
+    setTimeout(revealShell, 1500);
   </script>
 </body>
 </html>
