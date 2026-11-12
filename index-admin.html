@@ -204,7 +204,7 @@
 
     .item-header strong { font-size: 14px; }
 
-    /* AREA UPLOAD GAMBAR BERSIH TANPA INPUT LINK */
+    /* AREA UPLOAD GAMBAR LANGSUNG KE FIRESTORE (GRATIS TANPA STORAGE) */
     .img-upload-row {
       display: flex;
       align-items: center;
@@ -345,7 +345,7 @@
     <header>
       <div>
         <h1>Votura Studio — Pusat Kendali Visual</h1>
-        <p>Unggah foto &amp; bingkai langsung dari perangkat untuk web utama, dua web demo, serta pesanan client.</p>
+        <p>Unggah foto &amp; bingkai langsung dari perangkat (100% gratis tersimpan otomatis di database tanpa Storage).</p>
       </div>
       <div class="header-actions">
         <a href="index.html" target="_blank" class="btn btn-outline btn-sm">Web Utama</a>
@@ -447,9 +447,9 @@
           <div class="img-upload-row">
             <img src="https://raw.githubusercontent.com/RiyanArdians/votura-app/main/assets/votura-icon.png" id="hero-img-preview" class="img-preview" alt="Preview">
             <div class="upload-controls">
-              <input type="file" id="hero-img-file" accept="image/*" style="display:none;" onchange="handleDirectUpload(this, 'landing', (url) => { currentData.heroImageUrl = url; document.getElementById('hero-img-preview').src = url; })">
+              <input type="file" id="hero-img-file" accept="image/*" style="display:none;" onchange="handleCompressedImage(this, false, (dataUrl) => { currentData.heroImageUrl = dataUrl; document.getElementById('hero-img-preview').src = dataUrl; })">
               <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('hero-img-file').click()">Pilih &amp; Unggah Gambar</button>
-              <div class="upload-hint" id="hero-img-status">Format JPG/PNG/WEBP. Otomatis tersimpan ke cloud.</div>
+              <div class="upload-hint">Otomatis dikompresi ringan &amp; siap disimpan tanpa Firebase Storage.</div>
             </div>
             <button type="button" class="btn btn-danger" onclick="clearHeroImage()">Hapus Gambar</button>
           </div>
@@ -548,7 +548,7 @@
           <div class="img-upload-row">
             <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=400&q=80" id="dw-cover-preview" class="img-preview" alt="Cover Demo">
             <div class="upload-controls">
-              <input type="file" id="dw-cover-file" accept="image/*" style="display:none;" onchange="handleDirectUpload(this, 'demo_wedding', (url) => { demoWeddingData.coverUrl = url; document.getElementById('dw-cover-preview').src = url; })">
+              <input type="file" id="dw-cover-file" accept="image/*" style="display:none;" onchange="handleCompressedImage(this, false, (dataUrl) => { demoWeddingData.coverUrl = dataUrl; document.getElementById('dw-cover-preview').src = dataUrl; })">
               <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('dw-cover-file').click()">Unggah Foto Sampul</button>
               <div class="upload-hint">Pilih foto pasangan untuk sampul pembuka demo undangan.</div>
             </div>
@@ -612,7 +612,7 @@
           <div class="img-upload-row">
             <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=400&q=80" id="dp-hero-preview" class="img-preview" alt="Hero Photobooth">
             <div class="upload-controls">
-              <input type="file" id="dp-hero-file" accept="image/*" style="display:none;" onchange="handleDirectUpload(this, 'demo_photobooth', (url) => { demoPhotoboothData.heroUrl = url; document.getElementById('dp-hero-preview').src = url; })">
+              <input type="file" id="dp-hero-file" accept="image/*" style="display:none;" onchange="handleCompressedImage(this, false, (dataUrl) => { demoPhotoboothData.heroUrl = dataUrl; document.getElementById('dp-hero-preview').src = dataUrl; })">
               <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('dp-hero-file').click()">Unggah Foto Beranda</button>
               <div class="upload-hint">Foto pasangan yang muncul di halaman depan demo photobooth.</div>
             </div>
@@ -625,7 +625,7 @@
           <span>2. Kelola Bingkai / Frame Photobooth (Unggah, Tambah &amp; Hapus)</span>
           <button type="button" class="btn btn-dark btn-sm" onclick="addDpFrameItem()">+ Tambah Frame Baru</button>
         </div>
-        <div class="section-sub">Unggah file frame PNG transparan langsung dari perangkat, pilih jumlah slot foto (1, 2, atau 3 slot), atau hapus frame.</div>
+        <div class="section-sub">Unggah file frame PNG transparan langsung dari perangkat (transparansi tetap terjaga), pilih jumlah slot foto (1, 2, atau 3 slot), atau hapus frame.</div>
         <div id="dp-frames-list"></div>
       </div>
     </div>
@@ -671,10 +671,9 @@
     </div>
   </div>
 
-  <!-- FIREBASE SDK -->
+  <!-- FIREBASE SDK (HANYA FIRESTORE - 100% GRATIS SPARK PLAN) -->
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
 
   <script>
     const firebaseConfig = {
@@ -686,36 +685,89 @@
 
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
-    const storage = firebase.storage();
     const CACHE_KEY = "votura_landing_cache_v1";
     const GITHUB_RAW_BASE = "https://raw.githubusercontent.com/RiyanArdians/votura-app/main/assets";
 
     let activeTabId = "tab-landing";
 
     /* ============================================================
-       HELPER UPLOAD LANGSUNG KE FIREBASE STORAGE
+       KOMPRESI GAMBAR OTOMATIS DI BROWSER -> DATA URL (GRATIS TANPA STORAGE)
+       - keepTransparency = true  -> output PNG teroptimasi (untuk frame photobooth)
+       - keepTransparency = false -> output WebP/JPEG ringan (untuk foto biasa)
        ============================================================ */
-    async function handleDirectUpload(inputEl, folderName, onSuccess) {
+    function handleCompressedImage(inputEl, keepTransparency, onSuccess) {
       if (!inputEl.files || !inputEl.files[0]) return;
       const file = inputEl.files[0];
       const statusText = document.getElementById('status-text');
       const prevStatus = statusText.textContent;
-      statusText.textContent = `Mengunggah ${file.name}...`;
+      statusText.textContent = `Memproses ${file.name}...`;
 
-      try {
-        const cleanName = file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-        const ref = storage.ref(`${folderName}/${Date.now()}_${cleanName}`);
-        await ref.put(file);
-        const downloadUrl = await ref.getDownloadURL();
-        if (onSuccess) onSuccess(downloadUrl);
-        statusText.textContent = "Gambar berhasil diunggah!";
-        setTimeout(() => { statusText.textContent = prevStatus; }, 2500);
-      } catch (err) {
-        statusText.textContent = "Gagal mengunggah";
-        showCmsModal("Gagal Unggah Gambar", "Pastikan aturan Firebase Storage mengizinkan upload atau cek koneksi Anda: " + err.message);
-      } finally {
-        inputEl.value = "";
-      }
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+          const canvas = document.createElement('canvas');
+          const maxDim = keepTransparency ? 900 : 1080;
+          let width = img.width;
+          let height = img.height;
+
+          if (width > maxDim || height > maxDim) {
+            if (width > height) {
+              height = Math.round((height * maxDim) / width);
+              width = maxDim;
+            } else {
+              width = Math.round((width * maxDim) / height);
+              height = maxDim;
+            }
+          }
+
+          canvas.width = width;
+          canvas.height = height;
+          const ctx = canvas.getContext('2d');
+          ctx.clearRect(0, 0, width, height);
+          ctx.drawImage(img, 0, 0, width, height);
+
+          let dataUrl;
+          if (keepTransparency) {
+            // Coba WebP lossless/high quality (mendukung alpha transparan & jauh lebih kecil dari PNG)
+            dataUrl = canvas.toDataURL('image/webp', 0.85);
+            if (!dataUrl.startsWith('data:image/webp')) {
+              dataUrl = canvas.toDataURL('image/png');
+            }
+          } else {
+            dataUrl = canvas.toDataURL('image/webp', 0.80);
+            if (!dataUrl.startsWith('data:image/webp')) {
+              dataUrl = canvas.toDataURL('image/jpeg', 0.82);
+            }
+          }
+
+          // Cek perkiraan ukuran string agar aman di bawah limit 1MB Firestore
+          const approxBytes = Math.round((dataUrl.length * 3) / 4);
+          if (approxBytes > 750 * 1024) {
+            // Jika masih di atas 750KB, perkecil resolusi ke 640px
+            const ratio = 640 / Math.max(width, height);
+            canvas.width = Math.round(width * ratio);
+            canvas.height = Math.round(height * ratio);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            dataUrl = keepTransparency
+              ? canvas.toDataURL('image/webp', 0.78)
+              : canvas.toDataURL('image/jpeg', 0.75);
+          }
+
+          if (onSuccess) onSuccess(dataUrl);
+          const kbSize = Math.round((dataUrl.length * 3) / 4 / 1024);
+          statusText.textContent = `Siap disimpan (${kbSize} KB)`;
+          setTimeout(() => { statusText.textContent = prevStatus; }, 2500);
+          inputEl.value = "";
+        };
+        img.onerror = function() {
+          statusText.textContent = "Format gambar tidak didukung";
+          inputEl.value = "";
+        };
+        img.src = e.target.result;
+      };
+      reader.readAsDataURL(file);
     }
 
     /* ============================================================
@@ -1146,7 +1198,7 @@
           <div class="img-upload-row">
             <img src="${escapeHtml(item.url)}" class="img-preview" alt="Foto">
             <div class="upload-controls">
-              <input type="file" id="dw-gal-input-${idx}" accept="image/*" style="display:none;" onchange="handleDirectUpload(this, 'demo_wedding_gallery', (url) => { demoWeddingData.gallery[${idx}].url = url; renderDwGalleryEditor(); })">
+              <input type="file" id="dw-gal-input-${idx}" accept="image/*" style="display:none;" onchange="handleCompressedImage(this, false, (dataUrl) => { demoWeddingData.gallery[${idx}].url = dataUrl; renderDwGalleryEditor(); })">
               <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('dw-gal-input-${idx}').click()">Unggah / Ganti Foto</button>
               <input type="text" value="${escapeHtml(item.caption)}" placeholder="Keterangan singkat foto" style="margin-top:8px;" onchange="demoWeddingData.gallery[${idx}].caption = this.value">
             </div>
@@ -1218,7 +1270,7 @@
           <div class="img-upload-row">
             <img src="${escapeHtml(frame.path)}" class="img-preview-frame" alt="Preview Frame">
             <div class="upload-controls">
-              <input type="file" id="dp-frame-input-${idx}" accept="image/png,image/webp" style="display:none;" onchange="handleDirectUpload(this, 'demo_photobooth_frames', (url) => { demoPhotoboothData.frames[${idx}].path = url; renderDpFramesEditor(); })">
+              <input type="file" id="dp-frame-input-${idx}" accept="image/png,image/webp" style="display:none;" onchange="handleCompressedImage(this, true, (dataUrl) => { demoPhotoboothData.frames[${idx}].path = dataUrl; renderDpFramesEditor(); })">
               <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('dp-frame-input-${idx}').click()">Unggah File Frame PNG</button>
               <div class="upload-hint">Unggah file PNG transparan (rasio potret 2:3) langsung dari perangkat Anda.</div>
             </div>
@@ -1325,7 +1377,7 @@
               <div class="img-upload-row">
                 <img src="${escapeHtml(ev.coverUrl || defaultPhoto)}" id="sa-cover-prev-${ev.id}" class="img-preview" alt="Sampul Client">
                 <div class="upload-controls">
-                  <input type="file" id="sa-cover-file-${ev.id}" accept="image/*" style="display:none;" onchange="handleDirectUpload(this, 'clients/${ev.id}', (url) => { setClientPhotoCache('${ev.id}', 'coverUrl', url); document.getElementById('sa-cover-prev-${ev.id}').src = url; })">
+                  <input type="file" id="sa-cover-file-${ev.id}" accept="image/*" style="display:none;" onchange="handleCompressedImage(this, false, (dataUrl) => { setClientPhotoCache('${ev.id}', 'coverUrl', dataUrl); document.getElementById('sa-cover-prev-${ev.id}').src = dataUrl; })">
                   <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('sa-cover-file-${ev.id}').click()">Unggah Foto Sampul</button>
                   <div class="upload-hint">Klik "Simpan Visual" setelah mengunggah foto agar tersimpan ke halaman undangan client.</div>
                 </div>
@@ -1350,7 +1402,7 @@
               </div>
               <div>
                 <label style="margin-bottom:4px;">Desain Bingkai PNG</label>
-                <input type="file" id="cl-fr-file-${ev.id}-${fIdx}" accept="image/png,image/webp" style="display:none;" onchange="handleDirectUpload(this, 'clients/${ev.id}/frames', (url) => { updateClientFrameField('${escapeHtml(ev.id)}', ${fIdx}, 'path', url); renderSuperAdminClients(); })">
+                <input type="file" id="cl-fr-file-${ev.id}-${fIdx}" accept="image/png,image/webp" style="display:none;" onchange="handleCompressedImage(this, true, (dataUrl) => { updateClientFrameField('${escapeHtml(ev.id)}', ${fIdx}, 'path', dataUrl); renderSuperAdminClients(); })">
                 <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('cl-fr-file-${ev.id}-${fIdx}').click()">Unggah PNG</button>
               </div>
               <button type="button" class="btn btn-danger" style="align-self:flex-end;" onclick="removeClientFrame('${escapeHtml(ev.id)}', ${fIdx})">Hapus</button>
@@ -1385,7 +1437,7 @@
               <div class="img-upload-row">
                 <img src="${escapeHtml(ev.heroUrl || defaultPhoto)}" id="sa-hero-prev-${ev.id}" class="img-preview" alt="Hero Client">
                 <div class="upload-controls">
-                  <input type="file" id="sa-hero-file-${ev.id}" accept="image/*" style="display:none;" onchange="handleDirectUpload(this, 'clients/${ev.id}', (url) => { setClientPhotoCache('${ev.id}', 'heroUrl', url); document.getElementById('sa-hero-prev-${ev.id}').src = url; })">
+                  <input type="file" id="sa-hero-file-${ev.id}" accept="image/*" style="display:none;" onchange="handleCompressedImage(this, false, (dataUrl) => { setClientPhotoCache('${ev.id}', 'heroUrl', dataUrl); document.getElementById('sa-hero-prev-${ev.id}').src = dataUrl; })">
                   <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('sa-hero-file-${ev.id}').click()">Unggah Foto Beranda</button>
                   <div class="upload-hint">Foto pasangan/acara yang tampil di halaman depan photobooth client.</div>
                 </div>
@@ -1462,7 +1514,7 @@
         await db.collection("events").doc(eventId).set(payload, { merge: true });
         showCmsModal("Visual Client Tersimpan", `Perubahan visual & unggahan foto untuk client "${updatedName}" (ID: ${eventId}) berhasil disimpan.`);
       } catch (err) {
-        showCmsModal("Gagal Menyimpan", err.message);
+        showCmsModal("Gagal Menyimpan", "Pastikan ukuran total gambar dalam 1 client tidak melebihi batas dokumen: " + err.message);
       }
     }
 
@@ -1517,7 +1569,7 @@
           updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         });
 
-        localStorage.setItem(CACHE_KEY, JSON.stringify(payload));
+        try { localStorage.setItem(CACHE_KEY, JSON.stringify(payload)); } catch (e) {}
         status.textContent = "Web Utama tersimpan";
         showCmsModal("Berhasil Disimpan", "Seluruh perubahan konten halaman utama Votura Studio telah diperbarui.");
       } catch (err) {
