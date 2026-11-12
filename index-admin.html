@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CMS Admin — Votura Studio</title>
+  <link rel="icon" type="image/png" href="assets/votura-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-base: #EFECE6;
+      --surface: #F8F6F2;
+      --card: #FFFFFF;
+      --ink: #23211E;
+      --ink-muted: #68635C;
+      --accent: #8C7355;
+      --dark: #262421;
+      --danger: #B91C1C;
+      --border: rgba(35, 33, 30, 0.12);
+      --radius-lg: 20px;
+      --radius-pill: 999px;
+      --transition: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg-base);
+      color: var(--ink);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      line-height: 1.5;
+      padding: 24px 16px 80px 16px;
+    }
+
+    .container { max-width: 920px; margin: 0 auto; }
+
+    header {
+      background: var(--surface);
+      border: 1px solid #FFFFFF;
+      border-radius: 26px;
+      padding: 24px 28px;
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+      box-shadow: 0 12px 32px rgba(35, 33, 30, 0.05);
+    }
+
+    header h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      line-height: 1.1;
+    }
+
+    header p { font-size: 13px; color: var(--ink-muted); margin-top: 4px; }
+
+    .header-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 11px 20px;
+      border-radius: var(--radius-pill);
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      border: none;
+      transition: all 0.25s var(--transition);
+    }
+
+    .btn-dark { background: var(--dark); color: #FFFFFF; }
+    .btn-dark:hover { transform: translateY(-1px); box-shadow: 0 8px 20px rgba(38, 36, 33, 0.2); }
+    .btn-outline { background: #FFFFFF; color: var(--ink); border: 1px solid var(--border); }
+    .btn-outline:hover { background: var(--bg-base); }
+    .btn-danger { background: #FEE2E2; color: var(--danger); padding: 7px 14px; font-size: 12px; }
+    .btn-danger:hover { background: #FECACA; }
+    .btn-sm { padding: 8px 14px; font-size: 12px; }
+
+    .section-card {
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      padding: 26px;
+      margin-bottom: 20px;
+      border: 1px solid rgba(35, 33, 30, 0.06);
+      box-shadow: 0 8px 24px rgba(35, 33, 30, 0.03);
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .section-sub { font-size: 12.5px; color: var(--ink-muted); margin-bottom: 20px; }
+
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-group { margin-bottom: 14px; }
+    label { display: block; font-size: 12px; font-weight: 600; color: var(--ink-muted); margin-bottom: 6px; }
+
+    input[type="text"], input[type="url"], textarea {
+      width: 100%;
+      padding: 11px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      font-family: inherit;
+      font-size: 13.5px;
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.2s ease;
+    }
+
+    input:focus, textarea:focus { border-color: var(--accent); background: #FFFFFF; }
+
+    .dynamic-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 16px;
+      position: relative;
+    }
+
+    .item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .item-header strong { font-size: 13.5px; }
+
+    .img-upload-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      flex-wrap: wrap;
+      background: #FFFFFF;
+      padding: 12px;
+      border-radius: 12px;
+      border: 1px dashed var(--border);
+    }
+
+    .img-preview {
+      width: 64px;
+      height: 64px;
+      border-radius: 10px;
+      object-fit: cover;
+      background: var(--bg-base);
+      border: 1px solid var(--border);
+    }
+
+    /* FLOATING SAVE BAR */
+    .save-bar {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(38, 36, 33, 0.94);
+      backdrop-filter: blur(12px);
+      color: #FFFFFF;
+      padding: 12px 24px;
+      border-radius: var(--radius-pill);
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.22);
+      z-index: 100;
+    }
+
+    .save-bar span { font-size: 13px; color: rgba(255, 255, 255, 0.85); }
+
+    /* MATCHING GLASS MODAL */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(35, 33, 30, 0.45);
+      backdrop-filter: blur(8px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 300;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal-panel {
+      background: var(--surface);
+      border: 1px solid #FFFFFF;
+      border-radius: 24px;
+      max-width: 380px;
+      width: 100%;
+      padding: 28px;
+      text-align: center;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.18);
+    }
+
+    @media (max-width: 700px) {
+      .grid-2 { grid-template-columns: 1fr; }
+      .save-bar { width: 92%; justify-content: space-between; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <header>
+      <div>
+        <h1>Pengelola Konten Halaman Utama</h1>
+        <p>Ubah teks, gambar, katalog produk, dan ulasan klien untuk <strong>index.html</strong> secara real-time.</p>
+      </div>
+      <div class="header-actions">
+        <a href="index.html" target="_blank" class="btn btn-outline">Lihat Halaman Utama</a>
+        <a href="super-admin.html" class="btn btn-outline">Super Admin</a>
+      </div>
+    </header>
+
+    <!-- 1. KONTAK & SOSIAL MEDIA -->
+    <div class="section-card">
+      <div class="section-title">1. Kontak WhatsApp &amp; Sosial Media</div>
+      <div class="section-sub">Nomor WhatsApp digunakan di seluruh tombol konsultasi dan pemesanan paket.</div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label>Nomor WhatsApp Bisnis (Awali 62)</label>
+          <input type="text" id="cfg-wa" placeholder="6282298966860">
+        </div>
+        <div class="form-group">
+          <label>Label Tombol Utama Header</label>
+          <input type="text" id="cfg-nav-cta" placeholder="Ngobrol Dulu">
+        </div>
+        <div class="form-group">
+          <label>URL Instagram</label>
+          <input type="url" id="cfg-ig" placeholder="https://instagram.com/voturastudio">
+        </div>
+        <div class="form-group">
+          <label>URL TikTok</label>
+          <input type="url" id="cfg-tiktok" placeholder="https://tiktok.com/@voturastudio">
+        </div>
+      </div>
+    </div>
+
+    <!-- 2. HERO SECTION & GAMBAR UTAMA -->
+    <div class="section-card">
+      <div class="section-title">2. Bagian Pembuka (Hero Section) &amp; Visual</div>
+      <div class="section-sub">Atur judul besar, deskripsi utama, tautan demo cepat, dan gambar ilustrasi kartu utama.</div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label>Teks Kecil Atas (Eyebrow)</label>
+          <input type="text" id="hero-eyebrow">
+        </div>
+        <div class="form-group">
+          <label>Judul Utama (Gunakan *kata* untuk warna aksen)</label>
+          <input type="text" id="hero-title" placeholder="Moments That *Connect*">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Deskripsi Utama Hero</label>
+        <textarea id="hero-subtitle" rows="3"></textarea>
+      </div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label>Teks Tombol Demo Hero</label>
+          <input type="text" id="hero-demo-label">
+        </div>
+        <div class="form-group">
+          <label>URL Tombol Demo Hero</label>
+          <input type="url" id="hero-demo-url">
+        </div>
+      </div>
+
+      <div class="grid-2" style="margin-top: 10px;">
+        <div class="form-group">
+          <label>Judul Kartu Showcase Kanan</label>
+          <input type="text" id="showcase-title">
+        </div>
+        <div class="form-group">
+          <label>Deskripsi Kartu Showcase Kanan</label>
+          <input type="text" id="showcase-desc">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>Gambar Latar Kartu Showcase (Opsional — Unggah atau kosongkan untuk gradasi gelap)</label>
+        <div class="img-upload-row">
+          <img src="assets/votura-icon.png" id="hero-img-preview" class="img-preview" alt="Preview">
+          <div style="flex: 1;">
+            <input type="file" id="hero-img-file" accept="image/*" style="font-size: 12px; margin-bottom: 6px;">
+            <input type="text" id="hero-img-url" placeholder="URL Gambar (otomatis terisi saat unggah file)">
+          </div>
+          <button type="button" class="btn btn-danger" onclick="clearHeroImage()">Hapus Gambar</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. BENTO METRICS & AJAKAN DISKUSI -->
+    <div class="section-card">
+      <div class="section-title">3. Kartu Keunggulan (3 Kolom) &amp; Ajakan Diskusi</div>
+      <div class="section-sub">Sorotan keunggulan layanan di bagian bawah Hero.</div>
+      <div class="grid-2">
+        <div class="form-group">
+          <label>Keunggulan 1 — Angka/Judul</label>
+          <input type="text" id="stat1-val">
+        </div>
+        <div class="form-group">
+          <label>Keunggulan 1 — Keterangan</label>
+          <input type="text" id="stat1-lbl">
+        </div>
+        <div class="form-group">
+          <label>Keunggulan 2 — Angka/Judul</label>
+          <input type="text" id="stat2-val">
+        </div>
+        <div class="form-group">
+          <label>Keunggulan 2 — Keterangan</label>
+          <input type="text" id="stat2-lbl">
+        </div>
+        <div class="form-group">
+          <label>Keunggulan 3 — Angka/Judul</label>
+          <input type="text" id="stat3-val">
+        </div>
+        <div class="form-group">
+          <label>Keunggulan 3 — Keterangan</label>
+          <input type="text" id="stat3-lbl">
+        </div>
+        <div class="form-group">
+          <label>Judul Kartu Gelap (CTA Kanan)</label>
+          <input type="text" id="cta-box-title">
+        </div>
+        <div class="form-group">
+          <label>Subjudul Kartu Gelap (CTA Kanan)</label>
+          <input type="text" id="cta-box-sub">
+        </div>
+      </div>
+    </div>
+
+    <!-- 4. KATALOG PRODUK (DINAMIS: TAMBAH / EDIT / HAPUS) -->
+    <div class="section-card">
+      <div class="section-title">
+        <span>4. Katalog Produk &amp; Layanan</span>
+        <button type="button" class="btn btn-dark btn-sm" onclick="addProductItem()">+ Tambah Produk</button>
+      </div>
+      <div class="section-sub">Kamu bisa menambah produk baru, mengubah harga, mengganti tautan demo, atau menghapus produk lama.</div>
+      <div id="products-editor-list"></div>
+    </div>
+
+    <!-- 5. ULASAN KLIEN / TESTIMONI (DINAMIS: TAMBAH / EDIT / HAPUS) -->
+    <div class="section-card">
+      <div class="section-title">
+        <span>5. Ulasan &amp; Testimoni Klien</span>
+        <button type="button" class="btn btn-dark btn-sm" onclick="addTestiItem()">+ Tambah Ulasan</button>
+      </div>
+      <div class="section-sub">Kelola cerita pengalaman klien yang tampil di halaman utama.</div>
+      <div id="testi-editor-list"></div>
+    </div>
+
+    <!-- 6. FOOTER -->
+    <div class="section-card">
+      <div class="section-title">6. Teks Penutup (Footer)</div>
+      <div class="section-sub">Deskripsi singkat studio di bagian paling bawah halaman.</div>
+      <div class="form-group">
+        <label>Deskripsi Footer Votura Studio</label>
+        <textarea id="footer-desc" rows="2"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- FLOATING SAVE BAR -->
+  <div class="save-bar">
+    <span id="status-text">Perubahan siap disimpan</span>
+    <button type="button" class="btn btn-outline" id="save-all-btn" onclick="saveLandingData()">Simpan Perubahan</button>
+  </div>
+
+  <!-- MATCHING GLASS MODAL -->
+  <div class="modal-backdrop" id="cms-modal" onclick="if(event.target.id==='cms-modal') closeCmsModal()">
+    <div class="modal-panel">
+      <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 26px; margin-bottom: 8px;" id="modal-title">Berhasil</h3>
+      <p style="font-size: 13.5px; color: var(--ink-muted); margin-bottom: 20px;" id="modal-msg">Perubahan berhasil diperbarui.</p>
+      <button type="button" class="btn btn-dark" style="width: 100%;" onclick="closeCmsModal()">Tutup</button>
+    </div>
+  </div>
+
+  <!-- FIREBASE SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAvCF0gKmZ9n28JltwoOS5QqcnlHhGz4Ww",
+      authDomain: "votura-studio.firebaseapp.com",
+      projectId: "votura-studio",
+      storageBucket: "votura-studio.firebasestorage.app"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    const storage = firebase.storage();
+
+    // DEFAULT DATA (SAMA PERSIS DENGAN VERSI INDEX TERBARU)
+    const defaultContent = {
+      waNumber: "6282298966860",
+      navCta: "Ngobrol Dulu",
+      igUrl: "https://instagram.com/voturastudio",
+      tiktokUrl: "https://tiktok.com/@voturastudio",
+      heroEyebrow: "Digital Invitation — Virtual Photobooth — Creative Studio",
+      heroTitle: "Moments That *Connect*",
+      heroSubtitle: "Buat momen spesialmu terasa lebih berkesan. Votura Studio menghadirkan undangan pernikahan digital yang elegan dan virtual photobooth interaktif—praktis dibuka tamu langsung dari ponsel tanpa ribet instal aplikasi.",
+      heroDemoLabel: "Intip Demo Undangan",
+      heroDemoUrl: "https://voturastudio.site/",
+      showcaseTitle: "Satu Tautan untuk Momen Berhargamu",
+      showcaseDesc: "Mulai dari menyebar undangan, mencatat konfirmasi kehadiran tamu secara otomatis, hingga seru-seruan foto bersama dengan bingkai khusus acaramu.",
+      heroImageUrl: "",
+      stat1Val: "Tanpa Ribet",
+      stat1Lbl: "Langsung Dibuka di Ponsel Tamu",
+      stat2Val: "Real-Time",
+      stat2Lbl: "Pantau RSVP & Ucapan Kapan Saja",
+      stat3Val: "< 24 Jam",
+      stat3Lbl: "Tautan Acara Siap Dibagikan",
+      ctaBoxTitle: "Punya Konsep Acara Sendiri?",
+      ctaBoxSub: "Yuk diskusi santai lewat WhatsApp, gratis konsultasi.",
+      footerDesc: "Siap bantu wujudkan undangan digital dan pengalaman photobooth interaktif untuk momen spesialmu.",
+      products: [
+        {
+          tag: "Votura Wedding",
+          title: "Digital Wedding Invitation",
+          desc: "Sebar kabar bahagia dengan cara yang lebih berkelas. Tamu cukup klik satu tautan untuk melihat detail acara, arah lokasi, hingga kirim doa terbaik.",
+          price: "Rp 99.000",
+          unit: "/ acara",
+          features: [
+            "Tautan khusus acara di domain voturastudio.site",
+            "Konfirmasi kehadiran (RSVP) dan ucapan tamu real-time",
+            "Navigasi lokasi sekali klik menuju Google Maps",
+            "Halaman kelola mandiri untuk update info & rekap tamu"
+          ],
+          demoLabel: "Lihat Demo",
+          demoUrl: "https://voturastudio.site/",
+          ctaLabel: "Tanya Paket Ini"
+        },
+        {
+          tag: "Votura Photobooth",
+          title: "Virtual Event Photobooth",
+          desc: "Bikin suasana acara makin hidup tanpa perlu sewa mesin besar. Tamu bisa langsung berfoto lewat kamera ponsel dengan bingkai eksklusif acaramu.",
+          price: "Rp 149.000",
+          unit: "/ acara",
+          features: [
+            "Langsung jalan di browser ponsel tanpa instal aplikasi",
+            "Bingkai foto custom (PNG) sesuai tema acaramu",
+            "Panel pengaturan mandiri untuk ganti desain bingkai",
+            "Cocok untuk pernikahan, ulang tahun, maupun acara kampus"
+          ],
+          demoLabel: "Coba Photobooth",
+          demoUrl: "https://voturastudio.site/fotome/v2",
+          ctaLabel: "Tanya Paket Ini"
+        }
+      ],
+      testimonials: [
+        {
+          text: "Tampilan undangannya sangat bersih dan mudah dibuka oleh keluarga maupun tamu. Fitur rekap RSVP-nya membantu kami memperkirakan jumlah tamu yang hadir.",
+          author: "Nadia & Dimas",
+          role: "Votura Wedding Invitation"
+        },
+        {
+          text: "Tamu acara sangat antusias mencoba virtual photobooth-nya. Cukup buka tautan dari ponsel, langsung bisa berfoto dengan bingkai khusus acara kami.",
+          author: "Raka Pratama",
+          role: "Votura Virtual Photobooth"
+        },
+        {
+          text: "Proses penyiapan tautan sangat cepat dan responsif. Tampilannya terasa modern dan rapi saat dibagikan kepada seluruh peserta kegiatan.",
+          author: "Panitia Dies Natalis",
+          role: "Event Kampus & Komunitas"
+        }
+      ]
+    };
+
+    let currentData = JSON.parse(JSON.stringify(defaultContent));
+
+    function showCmsModal(title, msg) {
+      document.getElementById('modal-title').textContent = title;
+      document.getElementById('modal-msg').textContent = msg;
+      document.getElementById('cms-modal').classList.add('open');
+    }
+
+    function closeCmsModal() {
+      document.getElementById('cms-modal').classList.remove('open');
+    }
+
+    // LOAD DATA FROM FIRESTORE
+    async function initCms() {
+      try {
+        const doc = await db.collection("settings").doc("landing_page").get();
+        if (doc.exists) {
+          currentData = { ...defaultContent, ...doc.data() };
+        }
+      } catch (err) {
+        console.warn("Menggunakan data default:", err);
+      }
+      populateForm();
+    }
+
+    function populateForm() {
+      document.getElementById('cfg-wa').value = currentData.waNumber || "";
+      document.getElementById('cfg-nav-cta').value = currentData.navCta || "";
+      document.getElementById('cfg-ig').value = currentData.igUrl || "";
+      document.getElementById('cfg-tiktok').value = currentData.tiktokUrl || "";
+
+      document.getElementById('hero-eyebrow').value = currentData.heroEyebrow || "";
+      document.getElementById('hero-title').value = currentData.heroTitle || "";
+      document.getElementById('hero-subtitle').value = currentData.heroSubtitle || "";
+      document.getElementById('hero-demo-label').value = currentData.heroDemoLabel || "";
+      document.getElementById('hero-demo-url').value = currentData.heroDemoUrl || "";
+      document.getElementById('showcase-title').value = currentData.showcaseTitle || "";
+      document.getElementById('showcase-desc').value = currentData.showcaseDesc || "";
+      document.getElementById('hero-img-url').value = currentData.heroImageUrl || "";
+      document.getElementById('hero-img-preview').src = currentData.heroImageUrl || "assets/votura-icon.png";
+
+      document.getElementById('stat1-val').value = currentData.stat1Val || "";
+      document.getElementById('stat1-lbl').value = currentData.stat1Lbl || "";
+      document.getElementById('stat2-val').value = currentData.stat2Val || "";
+      document.getElementById('stat2-lbl').value = currentData.stat2Lbl || "";
+      document.getElementById('stat3-val').value = currentData.stat3Val || "";
+      document.getElementById('stat3-lbl').value = currentData.stat3Lbl || "";
+      document.getElementById('cta-box-title').value = currentData.ctaBoxTitle || "";
+      document.getElementById('cta-box-sub').value = currentData.ctaBoxSub || "";
+      document.getElementById('footer-desc').value = currentData.footerDesc || "";
+
+      renderProductsEditor();
+      renderTestiEditor();
+    }
+
+    function clearHeroImage() {
+      document.getElementById('hero-img-url').value = "";
+      document.getElementById('hero-img-file').value = "";
+      document.getElementById('hero-img-preview').src = "assets/votura-icon.png";
+    }
+
+    // RENDER DYNAMIC PRODUCTS EDITOR
+    function renderProductsEditor() {
+      const container = document.getElementById('products-editor-list');
+      container.innerHTML = "";
+      (currentData.products || []).forEach((prod, idx) => {
+        const div = document.createElement('div');
+        div.className = 'dynamic-item';
+        div.innerHTML = `
+          <div class="item-header">
+            <strong>Produk #${idx + 1} — ${prod.title || 'Produk Baru'}</strong>
+            <button type="button" class="btn btn-danger" onclick="removeProduct(${idx})">Hapus Produk</button>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label>Label Kategori (Tag)</label>
+              <input type="text" value="${escapeHtml(prod.tag)}" onchange="updateProd(${idx}, 'tag', this.value)">
+            </div>
+            <div class="form-group">
+              <label>Nama Produk</label>
+              <input type="text" value="${escapeHtml(prod.title)}" onchange="updateProd(${idx}, 'title', this.value)">
+            </div>
+            <div class="form-group">
+              <label>Harga</label>
+              <input type="text" value="${escapeHtml(prod.price)}" onchange="updateProd(${idx}, 'price', this.value)">
+            </div>
+            <div class="form-group">
+              <label>Satuan Harga</label>
+              <input type="text" value="${escapeHtml(prod.unit)}" onchange="updateProd(${idx}, 'unit', this.value)">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Deskripsi Singkat Produk</label>
+            <textarea rows="2" onchange="updateProd(${idx}, 'desc', this.value)">${escapeHtml(prod.desc)}</textarea>
+          </div>
+          <div class="form-group">
+            <label>Daftar Fitur (Pisahkan per baris / Enter)</label>
+            <textarea rows="4" onchange="updateProdFeatures(${idx}, this.value)">${escapeHtml((prod.features || []).join('\n'))}</textarea>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label>Teks Tombol Demo</label>
+              <input type="text" value="${escapeHtml(prod.demoLabel)}" onchange="updateProd(${idx}, 'demoLabel', this.value)">
+            </div>
+            <div class="form-group">
+              <label>URL Link Demo</label>
+              <input type="url" value="${escapeHtml(prod.demoUrl)}" onchange="updateProd(${idx}, 'demoUrl', this.value)">
+            </div>
+            <div class="form-group">
+              <label>Teks Tombol WhatsApp</label>
+              <input type="text" value="${escapeHtml(prod.ctaLabel)}" onchange="updateProd(${idx}, 'ctaLabel', this.value)">
+            </div>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function updateProd(idx, key, val) {
+      currentData.products[idx][key] = val;
+    }
+
+    function updateProdFeatures(idx, val) {
+      currentData.products[idx].features = val.split('\n').map(s => s.trim()).filter(Boolean);
+    }
+
+    function addProductItem() {
+      currentData.products.push({
+        tag: "Layanan Baru",
+        title: "Nama Paket Baru",
+        desc: "Deskripsi singkat keunggulan paket ini untuk acara klien.",
+        price: "Rp 129.000",
+        unit: "/ acara",
+        features: ["Akses langsung via browser", "Desain dapat disesuaikan"],
+        demoLabel: "Lihat Demo",
+        demoUrl: "https://voturastudio.site/",
+        ctaLabel: "Tanya Paket Ini"
+      });
+      renderProductsEditor();
+    }
+
+    function removeProduct(idx) {
+      currentData.products.splice(idx, 1);
+      renderProductsEditor();
+    }
+
+    // RENDER DYNAMIC TESTIMONIALS EDITOR
+    function renderTestiEditor() {
+      const container = document.getElementById('testi-editor-list');
+      container.innerHTML = "";
+      (currentData.testimonials || []).forEach((item, idx) => {
+        const div = document.createElement('div');
+        div.className = 'dynamic-item';
+        div.innerHTML = `
+          <div class="item-header">
+            <strong>Ulasan #${idx + 1} — ${item.author || 'Klien'}</strong>
+            <button type="button" class="btn btn-danger" onclick="removeTesti(${idx})">Hapus Ulasan</button>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label>Nama Klien / Pasangan</label>
+              <input type="text" value="${escapeHtml(item.author)}" onchange="updateTesti(${idx}, 'author', this.value)">
+            </div>
+            <div class="form-group">
+              <label>Jenis Layanan / Acara</label>
+              <input type="text" value="${escapeHtml(item.role)}" onchange="updateTesti(${idx}, 'role', this.value)">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Isi Ulasan</label>
+            <textarea rows="2" onchange="updateTesti(${idx}, 'text', this.value)">${escapeHtml(item.text)}</textarea>
+          </div>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    function updateTesti(idx, key, val) {
+      currentData.testimonials[idx][key] = val;
+    }
+
+    function addTestiItem() {
+      currentData.testimonials.push({
+        text: "Pelayanan ramah dan hasil tautan acaranya sangat memuaskan!",
+        author: "Nama Klien",
+        role: "Votura Studio Client"
+      });
+      renderTestiEditor();
+    }
+
+    function removeTesti(idx) {
+      currentData.testimonials.splice(idx, 1);
+      renderTestiEditor();
+    }
+
+    function escapeHtml(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
+    // SAVE ALL CHANGES TO FIRESTORE & STORAGE
+    async function saveLandingData() {
+      const btn = document.getElementById('save-all-btn');
+      const status = document.getElementById('status-text');
+      btn.disabled = true;
+      status.textContent = "Menyimpan perubahan...";
+
+      try {
+        let heroImgUrl = document.getElementById('hero-img-url').value.trim();
+        const fileInput = document.getElementById('hero-img-file');
+        if (fileInput.files && fileInput.files[0]) {
+          status.textContent = "Mengunggah gambar...";
+          const file = fileInput.files[0];
+          const ref = storage.ref(`landing/hero_${Date.now()}_${file.name}`);
+          await ref.put(file);
+          heroImgUrl = await ref.getDownloadURL();
+          document.getElementById('hero-img-url').value = heroImgUrl;
+          document.getElementById('hero-img-preview').src = heroImgUrl;
+          fileInput.value = "";
+        }
+
+        const payload = {
+          waNumber: document.getElementById('cfg-wa').value.trim(),
+          navCta: document.getElementById('cfg-nav-cta').value.trim(),
+          igUrl: document.getElementById('cfg-ig').value.trim(),
+          tiktokUrl: document.getElementById('cfg-tiktok').value.trim(),
+          heroEyebrow: document.getElementById('hero-eyebrow').value.trim(),
+          heroTitle: document.getElementById('hero-title').value.trim(),
+          heroSubtitle: document.getElementById('hero-subtitle').value.trim(),
+          heroDemoLabel: document.getElementById('hero-demo-label').value.trim(),
+          heroDemoUrl: document.getElementById('hero-demo-url').value.trim(),
+          showcaseTitle: document.getElementById('showcase-title').value.trim(),
+          showcaseDesc: document.getElementById('showcase-desc').value.trim(),
+          heroImageUrl: heroImgUrl,
+          stat1Val: document.getElementById('stat1-val').value.trim(),
+          stat1Lbl: document.getElementById('stat1-lbl').value.trim(),
+          stat2Val: document.getElementById('stat2-val').value.trim(),
+          stat2Lbl: document.getElementById('stat2-lbl').value.trim(),
+          stat3Val: document.getElementById('stat3-val').value.trim(),
+          stat3Lbl: document.getElementById('stat3-lbl').value.trim(),
+          ctaBoxTitle: document.getElementById('cta-box-title').value.trim(),
+          ctaBoxSub: document.getElementById('cta-box-sub').value.trim(),
+          footerDesc: document.getElementById('footer-desc').value.trim(),
+          products: currentData.products,
+          testimonials: currentData.testimonials,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        };
+
+        await db.collection("settings").doc("landing_page").set(payload);
+        status.textContent = "Tersimpan otomatis";
+        showCmsModal("Berhasil Disimpan", "Seluruh perubahan konten halaman utama Votura Studio telah diperbarui.");
+      } catch (err) {
+        status.textContent = "Gagal menyimpan";
+        showCmsModal("Terjadi Kendala", "Gagal menyimpan data: " + err.message);
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    initCms();
+  </script>
+</body>
+</html>
