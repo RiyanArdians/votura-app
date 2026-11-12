@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Votura Studio — Digital Wedding & Virtual Photobooth</title>
+  <style>
+    :root {
+      --bg: #f4f4f0;
+      --card: #ffffff;
+      --text: #18181b;
+      --muted: #52525b;
+      --yellow: #facc15;
+      --blue: #2563eb;
+      --rose: #e11d48;
+      --green: #16a34a;
+      --border: 2px solid #18181b;
+      --shadow: 4px 4px 0px #18181b;
+      --shadow-lg: 6px 6px 0px #18181b;
+    }
+
+    * { box-sizing: border-box; font-family: 'Segoe UI', system-ui, -apple-system, sans-serif; scroll-behavior: smooth; }
+    body { background-color: var(--bg); color: var(--text); margin: 0; padding: 0; line-height: 1.6; }
+    .container { max-width: 1000px; margin: 0 auto; padding: 0 20px; }
+
+    /* NAVBAR */
+    nav {
+      background: var(--card);
+      border-bottom: var(--border);
+      padding: 15px 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .nav-wrap { display: flex; justify-content: space-between; align-items: center; }
+    .brand { font-weight: 900; font-size: 20px; text-transform: uppercase; letter-spacing: 1px; display: flex; align-items: center; gap: 8px; }
+    .brand span { background: var(--yellow); border: var(--border); padding: 2px 8px; }
+    .nav-links { display: flex; gap: 16px; align-items: center; }
+    .nav-links a { text-decoration: none; color: var(--text); font-weight: 700; font-size: 14px; }
+    .nav-links a:hover { text-decoration: underline; }
+
+    /* BUTTONS */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      font-weight: 800; text-transform: uppercase; text-decoration: none;
+      border: var(--border); box-shadow: var(--shadow);
+      padding: 12px 20px; font-size: 14px; cursor: pointer; transition: 0.1s;
+    }
+    .btn:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px #18181b; }
+    .btn-yellow { background: var(--yellow); color: var(--text); }
+    .btn-blue { background: var(--blue); color: #fff; }
+    .btn-rose { background: var(--rose); color: #fff; }
+    .btn-green { background: var(--green); color: #fff; }
+    .btn-white { background: #fff; color: var(--text); }
+
+    /* HERO SECTION */
+    .hero {
+      padding: 60px 0 40px 0;
+    }
+    .hero-box {
+      background: var(--yellow);
+      border: var(--border);
+      box-shadow: var(--shadow-lg);
+      padding: 40px 30px;
+    }
+    .tag {
+      display: inline-block; background: #fff; border: var(--border);
+      padding: 4px 12px; font-size: 12px; font-weight: 800; text-transform: uppercase;
+      margin-bottom: 16px;
+    }
+    .hero h1 { font-size: 36px; line-height: 1.2; margin: 0 0 16px 0; font-weight: 900; text-transform: uppercase; }
+    .hero p { font-size: 16px; max-width: 650px; margin: 0 0 24px 0; font-weight: 500; }
+    .hero-cta { display: flex; flex-wrap: wrap; gap: 12px; }
+
+    /* SECTION TITLE */
+    .section { padding: 40px 0; }
+    .section-header { margin-bottom: 24px; }
+    .section-header h2 { font-size: 26px; text-transform: uppercase; margin: 0; font-weight: 900; }
+    .section-header p { margin: 4px 0 0 0; color: var(--muted); font-size: 15px; }
+
+    /* GRID & CARDS */
+    .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 24px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+
+    .card {
+      background: var(--card);
+      border: var(--border);
+      box-shadow: var(--shadow);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .card h3 { margin: 0 0 8px 0; font-size: 20px; text-transform: uppercase; }
+    .price { font-size: 26px; font-weight: 900; margin: 12px 0; }
+    .price small { font-size: 13px; font-weight: 600; color: var(--muted); }
+    .feature-list { list-style: none; padding: 0; margin: 0 0 20px 0; font-size: 14px; }
+    .feature-list li { margin-bottom: 8px; padding-left: 20px; position: relative; }
+    .feature-list li::before { content: "✓"; position: absolute; left: 0; font-weight: 900; color: var(--green); }
+    .card-actions { display: flex; flex-direction: column; gap: 10px; }
+
+    /* PAYMENT / REKENING BOX */
+    .payment-card {
+      background: #e0f2fe;
+      border: var(--border);
+      box-shadow: var(--shadow);
+      padding: 24px;
+    }
+    .rek-box {
+      background: #fff;
+      border: var(--border);
+      padding: 14px 18px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .rek-info strong { display: block; font-size: 13px; color: var(--muted); text-transform: uppercase; }
+    .rek-number { font-size: 20px; font-weight: 900; letter-spacing: 1px; font-family: monospace; }
+    .rek-owner { font-size: 13px; font-weight: 600; }
+
+    /* TESTIMONIALS */
+    .testi-quote { font-style: italic; font-size: 14px; margin: 0 0 14px 0; color: #27272a; }
+    .testi-author { font-weight: 800; font-size: 14px; }
+    .testi-event { font-size: 12px; color: var(--muted); }
+
+    /* FOOTER & SOSMED */
+    footer {
+      background: #18181b;
+      color: #fff;
+      padding: 40px 0;
+      margin-top: 40px;
+      border-top: var(--border);
+    }
+    .footer-wrap { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
+    .sosmed-links { display: flex; gap: 12px; flex-wrap: wrap; }
+    .sosmed-btn {
+      background: #fff; color: #18181b; border: 2px solid #fff;
+      padding: 8px 16px; text-decoration: none; font-weight: 800; font-size: 13px;
+      text-transform: uppercase;
+    }
+    .sosmed-btn:hover { background: var(--yellow); border-color: var(--yellow); }
+
+    /* TOAST NOTIFICATION */
+    .toast {
+      position: fixed; bottom: 24px; right: 24px;
+      background: #18181b; color: #facc15;
+      border: 2px solid #facc15; box-shadow: 4px 4px 0px #000;
+      padding: 12px 20px; font-weight: 800; font-size: 14px;
+      display: none; z-index: 999;
+    }
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 26px; }
+      .nav-links { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav>
+    <div class="container nav-wrap">
+      <div class="brand"><span>VOTURA</span> STUDIO</div>
+      <div class="nav-links">
+        <a href="#produk">Produk</a>
+        <a href="#pembayaran">Pembayaran</a>
+        <a href="#testimoni">Testimoni</a>
+        <a href="#kontak">Kontak</a>
+      </div>
+      <a href="#produk" class="btn btn-yellow" style="padding: 8px 14px; font-size: 12px;">Pesan Sekarang</a>
+    </div>
+  </nav>
+
+  <!-- HERO / PROFILE -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-box">
+        <span class="tag">Digital Event & Creative Studio</span>
+        <h1>Bikin Momen Spesialmu Lebih Modern & Interaktif</h1>
+        <p><strong>Votura Studio</strong> menyediakan layanan Undangan Digital berbasis web dan Virtual Photobooth interaktif yang bisa diakses langsung dari smartphone tamu tanpa perlu instal aplikasi.</p>
+        <div class="hero-cta">
+          <a href="#produk" class="btn btn-blue">Lihat Katalog Produk 👇</a>
+          <a href="https://wa.me/6281234567890?text=Halo%20Votura%20Studio,%20saya%20mau%20tanya-tanya%20produk%20digitalnya." target="_blank" class="btn btn-green">Chat WhatsApp 💬</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- KATALOG PRODUK & DEMO -->
+  <section class="section" id="produk">
+    <div class="container">
+      <div class="section-header">
+        <h2>Produk & Layanan Votura</h2>
+        <p>Pilih layanan yang sesuai dengan kebutuhan acaramu. Bisa coba demo langsung!</p>
+      </div>
+
+      <div class="grid-2">
+        <!-- PRODUK 1: WEDDING -->
+        <div class="card">
+          <div>
+            <span class="tag" style="background: #ffe4e6;">Best Seller</span>
+            <h3>Votura Wedding Invitation</h3>
+            <p style="font-size: 14px; color: var(--muted);">Undangan pernikahan digital praktis dengan fitur RSVP real-time dan navigasi lokasi akurat.</p>
+            <div class="price">Rp 99.000 <small>/ event</small></div>
+            <ul class="feature-list">
+              <li>Link khusus acara dengan domain profesional</li>
+              <li>Konfirmasi kehadiran (RSVP) & ucapan tamu live</li>
+              <li>Integrasi tombol navigasi Google Maps</li>
+              <li>Dashboard Admin khusus pengantin untuk edit data</li>
+            </ul>
+          </div>
+          <div class="card-actions">
+            <a href="wedding.html?event=nikah-amel-riyan" target="_blank" class="btn btn-white">Lihat Live Demo 🔍</a>
+            <a href="https://wa.me/6281234567890?text=Halo%20Votura%20Studio,%20saya%20mau%20order%20*Votura%20Wedding%20Invitation*." target="_blank" class="btn btn-rose">Order Wedding via WA 💌</a>
+          </div>
+        </div>
+
+        <!-- PRODUK 2: PHOTOBOOTH -->
+        <div class="card">
+          <div>
+            <span class="tag" style="background: #dbeafe;">Interactive Event</span>
+            <h3>Votura Virtual Photobooth</h3>
+            <p style="font-size: 14px; color: var(--muted);">Photobooth digital langsung dari kamera HP tamu dengan frame custom sesuai tema acaramu.</p>
+            <div class="price">Rp 149.000 <small>/ event</small></div>
+            <ul class="feature-list">
+              <li>Akses langsung via browser HP tanpa instal aplikasi</li>
+              <li>Custom Frame Overlay PNG sesuai tema acara</li>
+              <li>Panel Admin Client untuk ganti frame mandiri</li>
+              <li>Cocok untuk Wedding, Ulang Tahun, & Gathering</li>
+            </ul>
+          </div>
+          <div class="card-actions">
+            <a href="photobooth.html?event=001" target="_blank" class="btn btn-white">Coba Live Demo 📸</a>
+            <a href="https://wa.me/6281234567890?text=Halo%20Votura%20Studio,%20saya%20mau%20order%20*Votura%20Virtual%20Photobooth*." target="_blank" class="btn btn-blue">Order Photobooth via WA 🚀</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRANSAKSI & NOMOR REKENING -->
+  <section class="section" id="pembayaran">
+    <div class="container">
+      <div class="section-header">
+        <h2>Metode Pembayaran & Transaksi</h2>
+        <p>Klik tombol salin untuk menyalin nomor rekening secara otomatis, lalu kirim bukti transfer ke WhatsApp.</p>
+      </div>
+
+      <div class="payment-card">
+        <div class="grid-2">
+          <!-- REKENING 1 -->
+          <div class="rek-box">
+            <div class="rek-info">
+              <strong>Bank BCA</strong>
+              <span class="rek-number" id="rek-bca">1234567890</span>
+              <span class="rek-owner">a.n. Riyan Ardiansyah</span>
+            </div>
+            <button class="btn btn-yellow" style="padding: 8px 14px; font-size: 12px;" onclick="copyText('rek-bca', 'Nomor Rekening BCA')">Salin 📋</button>
+          </div>
+
+          <!-- REKENING 2 / E-WALLET -->
+          <div class="rek-box">
+            <div class="rek-info">
+              <strong>SeaBank / DANA / GoPay</strong>
+              <span class="rek-number" id="rek-ewallet">081234567890</span>
+              <span class="rek-owner">a.n. Riyan Ardiansyah</span>
+            </div>
+            <button class="btn btn-yellow" style="padding: 8px 14px; font-size: 12px;" onclick="copyText('rek-ewallet', 'Nomor E-Wallet')">Salin 📋</button>
+          </div>
+        </div>
+
+        <div style="margin-top: 20px; text-align: center;">
+          <a href="https://wa.me/6281234567890?text=Halo%20Votura%20Studio,%20saya%20sudah%20melakukan%20pembayaran.%20Berikut%20bukti%20transfernya:" target="_blank" class="btn btn-green">Konfirmasi Pembayaran via WhatsApp ✅</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONI KLIEN -->
+  <section class="section" id="testimoni">
+    <div class="container">
+      <div class="section-header">
+        <h2>Kata Mereka Tentang Votura</h2>
+        <p>Pengalaman klien yang sudah menggunakan layanan digital Votura Studio.</p>
+      </div>
+
+      <div class="grid-3">
+        <div class="card">
+          <p class="testi-quote">"Undangan digitalnya simpel banget dan gampang dibuka tamu. Fitur RSVP-nya ngebantu banget buat rekap tamu yang bakal hadir."</p>
+          <div>
+            <div class="testi-author">Nadia & Dimas</div>
+            <div class="testi-event">Klien Wedding Invitation</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <p class="testi-quote">"Virtual photobooth-nya seru parah! Tamu acara ulang tahun tinggal scan link langsung bisa foto pakai frame acara kita."</p>
+          <div>
+            <div class="testi-author">Raka Pratama</div>
+            <div class="testi-event">Klien Virtual Photobooth</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <p class="testi-quote">"Adminnya fast respon, dibantu setting dari awal sampai beres. Harganya juga sangat terjangkau buat acara kampus."</p>
+          <div>
+            <div class="testi-author">Panitia Dies Natalis</div>
+            <div class="testi-event">Klien Event Kampus</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER & SOSIAL MEDIA -->
+  <footer id="kontak">
+    <div class="container footer-wrap">
+      <div>
+        <div class="brand" style="color: #fff; margin-bottom: 6px;"><span style="color: #18181b;">VOTURA</span> STUDIO</div>
+        <p style="margin: 0; font-size: 13px; color: #a1a1aa;">Solusi Undangan Digital & Virtual Photobooth Modern.</p>
+      </div>
+
+      <div class="sosmed-links">
+        <a href="https://instagram.com/voturastudio" target="_blank" class="sosmed-btn">Instagram ↗</a>
+        <a href="https://tiktok.com/@voturastudio" target="_blank" class="sosmed-btn">TikTok ↗</a>
+        <a href="https://wa.me/6281234567890" target="_blank" class="sosmed-btn">WhatsApp ↗</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- NOTIFIKASI COPY TOAST -->
+  <div class="toast" id="toast-notif">Berhasil disalin!</div>
+
+  <script>
+    function copyText(elementId, label) {
+      const text = document.getElementById(elementId).innerText;
+      navigator.clipboard.writeText(text).then(() => {
+        const toast = document.getElementById('toast-notif');
+        toast.textContent = `✓ ${label} (${text}) berhasil disalin!`;
+        toast.style.display = 'block';
+        setTimeout(() => {
+          toast.style.display = 'none';
+        }, 3000);
+      });
+    }
+  </script>
+</body>
+</html>
