@@ -315,7 +315,7 @@
     <!-- FORM BUAT EVENT / KLIEN BARU -->
     <div class="section-card">
       <div class="section-title">1. Tambah Pesanan Klien Baru</div>
-      <div class="section-sub">Daftarkan ID unik dan pilih tema besar produk. Pengaturan warna, font, dan galeri foto dapat diubah di <strong>Pusat Visual (CMS)</strong>.</div>
+      <div class="section-sub">Daftarkan ID unik dan pilih tema besar produk di folder <code>templates/</code>. Pengaturan warna, font, dan galeri foto dapat diubah di <strong>Pusat Visual (CMS)</strong>.</div>
 
       <form id="create-event-form">
         <div class="grid-2">
@@ -388,20 +388,19 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    /* KATALOG TEMA BESAR (1 TEMA BESAR = 1 FILE HTML)
-       Nanti jika menambah file tema baru (misal wedding-2.html), cukup daftarkan di sini */
+    /* KATALOG TEMA BESAR (SINKRON DENGAN FOLDER /templates/) */
     const TEMPLATE_CATALOG = {
       wedding: [
-        { file: "wedding-1.html", label: "Wedding 1 — Editorial Warm Arch (Default)" },
-        { file: "wedding-2.html", label: "Wedding 2 — Royal Heritage / Adat" },
-        { file: "wedding-3.html", label: "Wedding 3 — Sage Botanical Garden" },
-        { file: "wedding-4.html", label: "Wedding 4 — Modern Clean Monochrome" },
-        { file: "wedding-5.html", label: "Wedding 5 — Midnight Velvet Luxe" }
+        { file: "templates/wedding-1.html", label: "Wedding 1 — Editorial Warm Arch (Default)" },
+        { file: "templates/wedding-2.html", label: "Wedding 2 — Royal Heritage / Adat" },
+        { file: "templates/wedding-3.html", label: "Wedding 3 — Sage Botanical Garden" },
+        { file: "templates/wedding-4.html", label: "Wedding 4 — Modern Clean Monochrome" },
+        { file: "templates/wedding-5.html", label: "Wedding 5 — Midnight Velvet Luxe" }
       ],
       photobooth: [
-        { file: "photobooth-1.html", label: "Photobooth 1 — Classic Editorial Booth (Default)" },
-        { file: "photobooth-2.html", label: "Photobooth 2 — Modern Party Studio" },
-        { file: "photobooth-3.html", label: "Photobooth 3 — Midnight Glam Booth" }
+        { file: "templates/pb-1.html", label: "Photobooth 1 — Classic Editorial Booth (Default)" },
+        { file: "templates/pb-2.html", label: "Photobooth 2 — Modern Party Studio" },
+        { file: "templates/pb-3.html", label: "Photobooth 3 — Midnight Glam Booth" }
       ]
     };
 
@@ -499,7 +498,7 @@
       list.forEach((data) => {
         const docId = data.id;
         const isWedding = data.type === 'wedding';
-        const defaultFile = isWedding ? 'wedding-1.html' : 'photobooth-1.html';
+        const defaultFile = isWedding ? 'templates/wedding-1.html' : 'templates/pb-1.html';
         const pageFile = data.templateFile || defaultFile;
         const templateLabel = data.templateLabel || pageFile;
         const adminFile = isWedding ? 'wedding-admin.html' : 'photobooth-admin.html';
@@ -518,7 +517,7 @@
           </div>
           <div class="event-actions">
             <button type="button" class="btn btn-outline btn-sm" onclick="copyClientLink('${escapeHtml(pageFile)}', '${escapeHtml(docId)}')">Salin Link</button>
-            <a href="${encodeURIComponent(pageFile)}?event=${encodeURIComponent(docId)}" target="_blank" class="btn btn-outline btn-sm">Lihat Event</a>
+            <a href="${pageFile}?event=${encodeURIComponent(docId)}" target="_blank" class="btn btn-outline btn-sm">Lihat Event</a>
             <a href="${adminFile}?event=${encodeURIComponent(docId)}" target="_blank" class="btn btn-outline btn-sm">Admin Client</a>
             <button type="button" class="btn btn-warning btn-sm" onclick="toggleStatus('${escapeHtml(docId)}', '${escapeHtml(data.status)}')">
               ${data.status === 'active' ? 'Kunci' : 'Aktifkan'}
