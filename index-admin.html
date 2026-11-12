@@ -202,7 +202,7 @@
       flex-wrap: wrap;
     }
 
-    .item-header strong { font-size: 13.5px; }
+    .item-header strong { font-size: 14px; }
 
     .img-upload-row {
       display: flex;
@@ -244,12 +244,37 @@
       font-weight: 700;
       background: #EFECE6;
       color: var(--ink);
+      text-transform: uppercase;
     }
 
     .badge-active {
       background: #DCFCE7;
       color: var(--success);
     }
+
+    .badge-locked {
+      background: #FEE2E2;
+      color: var(--danger);
+    }
+
+    .client-frame-sublist {
+      background: #FFFFFF;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 14px;
+      margin-top: 10px;
+    }
+
+    .client-frame-row {
+      display: grid;
+      grid-template-columns: 50px 1.2fr 0.8fr 1.6fr auto;
+      gap: 10px;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px dashed var(--border);
+    }
+
+    .client-frame-row:last-child { border-bottom: none; padding-bottom: 0; }
 
     /* FLOATING SAVE BAR */
     .save-bar {
@@ -298,6 +323,7 @@
     @media (max-width: 760px) {
       .mode-switcher { grid-template-columns: 1fr 1fr; }
       .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      .client-frame-row { grid-template-columns: 1fr; }
       .save-bar { width: 92%; justify-content: space-between; }
     }
   </style>
@@ -308,13 +334,13 @@
     <header>
       <div>
         <h1>Votura Studio — Pusat Kendali Visual</h1>
-        <p>Kelola tampilan web utama, dua web demo interaktif, serta visual pesanan klien dalam satu panel.</p>
+        <p>Kelola tampilan web utama, dua web demo interaktif, serta visual pesanan klien dari Super Admin.</p>
       </div>
       <div class="header-actions">
         <a href="index.html" target="_blank" class="btn btn-outline btn-sm">Web Utama</a>
         <a href="demo-wedding.html" target="_blank" class="btn btn-outline btn-sm">Demo Undangan</a>
         <a href="demo-photobooth.html" target="_blank" class="btn btn-outline btn-sm">Demo Photobooth</a>
-        <a href="super-admin.html" class="btn btn-outline btn-sm">Super Admin</a>
+        <a href="super-admin.html" target="_blank" class="btn btn-dark btn-sm">Buka Super Admin</a>
       </div>
     </header>
 
@@ -333,8 +359,8 @@
         <span class="mode-tab-title">Demo Photobooth &amp; Frame</span>
       </button>
       <button type="button" class="mode-tab" data-tab="tab-clients" onclick="switchAdminTab('tab-clients', this)">
-        <span class="mode-tab-badge">Pesanan Aktif</span>
-        <span class="mode-tab-title">Web Visual Klien</span>
+        <span class="mode-tab-badge">Sinkron Super Admin</span>
+        <span class="mode-tab-title">Web Visual Klien (<span id="client-count-badge">0</span>)</span>
       </button>
     </div>
 
@@ -467,7 +493,7 @@
           <span>1. Identitas &amp; Acara Demo Undangan Digital</span>
           <a href="demo-wedding.html" target="_blank" class="btn btn-outline btn-sm">Buka Demo Undangan</a>
         </div>
-        <div class="section-sub">Atur nama pasangan, tanggal, tempat acara, dan nomor WhatsApp CTA pada halaman <strong>demo-wedding.html</strong>.</div>
+        <div class="section-sub">Atur nama pasangan, tanggal, tempat acara, dan kutipan pada halaman <strong>demo-wedding.html</strong>.</div>
         <div class="grid-2">
           <div class="form-group">
             <label>Nama Pasangan (Judul Undangan)</label>
@@ -588,61 +614,26 @@
     </div>
 
     <!-- =========================================================
-         PANEL 4: WEB VISUAL PESANAN KLIEN
+         PANEL 4: WEB VISUAL PESANAN KLIEN (SINKRON DENGAN SUPER-ADMIN)
          ========================================================= -->
     <div id="tab-clients" class="tab-panel">
       <div class="section-card">
         <div class="section-title">
-          <span>1. Buat Pesanan Visual Klien Baru</span>
-        </div>
-        <div class="section-sub">Tambahkan proyek klien baru (Undangan Digital atau Virtual Photobooth) agar langsung tersimpan di database klien aktif.</div>
-        <div class="grid-3">
-          <div class="form-group">
-            <label>Slug / Kode Link Klien</label>
-            <input type="text" id="new-client-slug" placeholder="misal: budi-sarah">
-          </div>
-          <div class="form-group">
-            <label>Nama Pasangan / Judul Acara</label>
-            <input type="text" id="new-client-title" placeholder="Budi &amp; Sarah">
-          </div>
-          <div class="form-group">
-            <label>Jenis Layanan</label>
-            <select id="new-client-type">
-              <option value="Wedding Invitation">Wedding Invitation (Rp 99.000)</option>
-              <option value="Virtual Photobooth">Virtual Photobooth (Rp 149.000)</option>
-              <option value="Bundling Wedding + Photobooth">Bundling Lengkap</option>
+          <span>Daftar Pesanan Client dari Super Admin (Real-Time)</span>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <select id="client-filter-type" style="width:auto; padding:8px 14px; font-size:12px;" onchange="renderSuperAdminClients()">
+              <option value="all">Semua Tipe Layanan</option>
+              <option value="wedding">Wedding Invitation</option>
+              <option value="photobooth">Virtual Photobooth</option>
             </select>
+            <a href="super-admin.html" target="_blank" class="btn btn-dark btn-sm">+ Tambah Client di Super Admin</a>
           </div>
         </div>
-        <div class="grid-3">
-          <div class="form-group">
-            <label>Tanggal Acara</label>
-            <input type="text" id="new-client-date" placeholder="20 Desember 2026">
-          </div>
-          <div class="form-group">
-            <label>URL Frame Custom Utama (Opsional)</label>
-            <input type="url" id="new-client-frame" placeholder="https://raw.githubusercontent.com/...">
-          </div>
-          <div class="form-group">
-            <label>Status Pesanan</label>
-            <select id="new-client-status">
-              <option value="Aktif">Aktif (Tayang)</option>
-              <option value="Draft">Draft / Revisi</option>
-              <option value="Selesai">Selesai Acara</option>
-            </select>
-          </div>
+        <div class="section-sub">
+          Data di bawah ini ditarik otomatis secara real-time dari koleksi Firestore <code>events</code> milik <strong>Super Admin</strong>. Setiap client baru yang dibuat di Super Admin akan langsung muncul di sini untuk diedit tampilan visual &amp; frame-nya.
         </div>
-        <button type="button" class="btn btn-dark" onclick="createClientOrder()">+ Simpan Pesanan Klien</button>
-      </div>
-
-      <div class="section-card">
-        <div class="section-title">
-          <span>2. Daftar Web Visual Pesanan Klien</span>
-          <button type="button" class="btn btn-outline btn-sm" onclick="loadClientOrders()">Muat Ulang Daftar</button>
-        </div>
-        <div class="section-sub">Edit detail visual, ganti URL frame khusus klien, atau hapus pesanan klien yang sudah selesai.</div>
         <div id="clients-editor-list">
-          <p style="font-size: 13px; color: var(--ink-muted);">Memuat daftar pesanan klien...</p>
+          <p style="font-size: 13px; color: var(--ink-muted);">Menghubungkan ke database Super Admin...</p>
         </div>
       </div>
     </div>
@@ -805,7 +796,7 @@
     let currentData = JSON.parse(JSON.stringify(defaultContent));
     let demoWeddingData = JSON.parse(JSON.stringify(defaultDemoWedding));
     let demoPhotoboothData = JSON.parse(JSON.stringify(defaultDemoPhotobooth));
-    let clientOrdersList = [];
+    let superAdminEvents = [];
 
     /* ============================================================
        NAVIGASI TAB PILIHAN MODE
@@ -833,7 +824,6 @@
         statusText.textContent = "Mode: Demo Photobooth & Frame";
       } else if (tabId === 'tab-clients') {
         saveBar.style.display = 'none';
-        loadClientOrders();
       }
     }
 
@@ -856,7 +846,7 @@
     }
 
     /* ============================================================
-       INISIALISASI & MUAT DATA DARI FIRESTORE
+       INISIALISASI & MUAT DATA DARI FIRESTORE + LISTENER SUPER ADMIN
        ============================================================ */
     async function initCms() {
       try {
@@ -876,6 +866,9 @@
       populateLandingForm();
       populateDemoWeddingForm();
       populateDemoPhotoboothForm();
+
+      // LISTENER REAL-TIME KE KOLEKSI "events" DARI SUPER ADMIN
+      listenSuperAdminEvents();
     }
 
     /* ============================================================
@@ -1244,135 +1237,197 @@
     }
 
     /* ============================================================
-       4. WEB VISUAL PESANAN KLIEN (Koleksi Firestore: clients)
+       4. WEB VISUAL PESANAN KLIEN (REAL-TIME DARI KOLEKSI "events" SUPER ADMIN)
        ============================================================ */
-    async function loadClientOrders() {
+    function listenSuperAdminEvents() {
       const container = document.getElementById('clients-editor-list');
-      container.innerHTML = '<p style="font-size: 13px; color: var(--ink-muted);">Memuat daftar pesanan klien...</p>';
-
-      try {
-        const snap = await db.collection("clients").get();
-        clientOrdersList = [];
-        snap.forEach(doc => {
-          clientOrdersList.push({ id: doc.id, ...doc.data() });
+      db.collection("events").onSnapshot((snapshot) => {
+        superAdminEvents = [];
+        snapshot.forEach(doc => {
+          superAdminEvents.push({ id: doc.id, ...doc.data() });
         });
 
-        if (clientOrdersList.length === 0) {
-          container.innerHTML = '<p style="font-size: 13px; color: var(--ink-muted);">Belum ada pesanan klien tersimpan di database. Gunakan formulir di atas untuk menambahkan klien baru.</p>';
-          return;
-        }
+        const countBadge = document.getElementById('client-count-badge');
+        if (countBadge) countBadge.textContent = superAdminEvents.length;
 
-        container.innerHTML = "";
-        clientOrdersList.forEach((client, idx) => {
-          const div = document.createElement('div');
-          div.className = 'dynamic-item';
+        renderSuperAdminClients();
+      }, (err) => {
+        if (container) {
+          container.innerHTML = `<p style="font-size: 13px; color: var(--danger);">Gagal menyinkronkan data dari Super Admin: ${escapeHtml(err.message)}</p>`;
+        }
+      });
+    }
+
+    function renderSuperAdminClients() {
+      const container = document.getElementById('clients-editor-list');
+      if (!container) return;
+
+      const filterType = document.getElementById('client-filter-type')?.value || 'all';
+      const filtered = superAdminEvents.filter(ev => filterType === 'all' || ev.type === filterType);
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<p style="font-size: 13px; color: var(--ink-muted);">Belum ada client pada kategori ini. Silakan buat event/client baru melalui <strong>Super Admin</strong>.</p>`;
+        return;
+      }
+
+      container.innerHTML = "";
+      filtered.forEach((ev, idx) => {
+        const isWedding = ev.type === 'wedding';
+        const pageFile = isWedding ? 'wedding.html' : 'photobooth.html';
+        const adminFile = isWedding ? 'wedding-admin.html' : 'photobooth-admin.html';
+        const frames = Array.isArray(ev.frames) ? ev.frames : [];
+
+        const div = document.createElement('div');
+        div.className = 'dynamic-item';
+
+        if (isWedding) {
           div.innerHTML = `
             <div class="item-header">
               <div>
-                <strong>${escapeHtml(client.title || client.id)}</strong>
-                <span class="badge-pill badge-active" style="margin-left:8px;">${escapeHtml(client.status || 'Aktif')}</span>
-                <span class="badge-pill" style="margin-left:4px;">/${escapeHtml(client.id)}</span>
+                <strong>ID: ${escapeHtml(ev.id)} — ${escapeHtml(ev.name || 'Tanpa Nama')}</strong>
+                <span class="badge-pill" style="margin-left:8px;">WEDDING</span>
+                <span class="badge-pill ${ev.status === 'active' ? 'badge-active' : 'badge-locked'}" style="margin-left:4px;">${escapeHtml(ev.status || 'active')}</span>
               </div>
-              <div style="display:flex; gap:8px;">
-                <button type="button" class="btn btn-accent btn-sm" onclick="updateClientOrder('${escapeHtml(client.id)}', ${idx})">Simpan Klien</button>
-                <button type="button" class="btn btn-danger" onclick="deleteClientOrder('${escapeHtml(client.id)}')">Hapus</button>
+              <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <a href="${pageFile}?event=${encodeURIComponent(ev.id)}" target="_blank" class="btn btn-outline btn-sm">Lihat Event</a>
+                <a href="${adminFile}?event=${encodeURIComponent(ev.id)}" target="_blank" class="btn btn-outline btn-sm">Admin Client</a>
+                <button type="button" class="btn btn-dark btn-sm" onclick="saveSuperAdminClientVisual('${escapeHtml(ev.id)}', 'wedding')">Simpan Visual</button>
               </div>
             </div>
             <div class="grid-3">
               <div class="form-group">
-                <label>Nama Pasangan / Judul Acara</label>
-                <input type="text" id="cl-title-${idx}" value="${escapeHtml(client.title || '')}">
-              </div>
-              <div class="form-group">
-                <label>Jenis Layanan</label>
-                <input type="text" id="cl-type-${idx}" value="${escapeHtml(client.serviceType || '')}">
+                <label>Nama Event / Pasangan (Dari Super Admin)</label>
+                <input type="text" id="sa-name-${ev.id}" value="${escapeHtml(ev.name || '')}">
               </div>
               <div class="form-group">
                 <label>Tanggal Acara</label>
-                <input type="text" id="cl-date-${idx}" value="${escapeHtml(client.eventDate || '')}">
+                <input type="text" id="sa-date-${ev.id}" value="${escapeHtml(ev.eventDate || '')}" placeholder="Contoh: 20 Desember 2026">
+              </div>
+              <div class="form-group">
+                <label>Lokasi / Venue Acara</label>
+                <input type="text" id="sa-venue-${ev.id}" value="${escapeHtml(ev.venue || '')}" placeholder="Contoh: Gedung Serbaguna">
               </div>
             </div>
             <div class="grid-2">
               <div class="form-group">
-                <label>URL Frame Custom / Visual Utama Klien</label>
-                <input type="text" id="cl-frame-${idx}" value="${escapeHtml(client.customFrameUrl || '')}">
+                <label>Link Google Maps</label>
+                <input type="text" id="sa-maps-${ev.id}" value="${escapeHtml(ev.mapsUrl || '')}" placeholder="https://maps.google.com/...">
               </div>
               <div class="form-group">
-                <label>Status Pesanan</label>
-                <select id="cl-status-${idx}">
-                  <option value="Aktif" ${(client.status || 'Aktif') === 'Aktif' ? 'selected' : ''}>Aktif (Tayang)</option>
-                  <option value="Draft" ${client.status === 'Draft' ? 'selected' : ''}>Draft / Revisi</option>
-                  <option value="Selesai" ${client.status === 'Selesai' ? 'selected' : ''}>Selesai Acara</option>
-                </select>
+                <label>URL Foto Sampul Utama Client</label>
+                <input type="text" id="sa-cover-${ev.id}" value="${escapeHtml(ev.coverUrl || '')}" placeholder="https://...">
               </div>
             </div>
           `;
-          container.appendChild(div);
-        });
-      } catch (err) {
-        container.innerHTML = `<p style="font-size: 13px; color: var(--danger);">Gagal memuat data klien: ${escapeHtml(err.message)}</p>`;
-      }
+        } else {
+          const framesRowsHtml = frames.map((fr, fIdx) => `
+            <div class="client-frame-row">
+              <img src="${escapeHtml(fr.path || '')}" class="img-preview-frame" style="width:42px; height:62px;" alt="Frame">
+              <input type="text" value="${escapeHtml(fr.name || '')}" placeholder="Nama Frame" onchange="updateClientFrameField('${escapeHtml(ev.id)}', ${fIdx}, 'name', this.value)">
+              <select onchange="updateClientFrameField('${escapeHtml(ev.id)}', ${fIdx}, 'count', parseInt(this.value, 10))">
+                <option value="1" ${Number(fr.count) === 1 ? 'selected' : ''}>1 Foto</option>
+                <option value="2" ${Number(fr.count) === 2 ? 'selected' : ''}>2 Foto</option>
+                <option value="3" ${Number(fr.count) === 3 ? 'selected' : ''}>3 Foto</option>
+              </select>
+              <input type="text" value="${escapeHtml(fr.path || '')}" placeholder="URL PNG Frame (GitHub / Storage)" onchange="updateClientFrameField('${escapeHtml(ev.id)}', ${fIdx}, 'path', this.value)">
+              <button type="button" class="btn btn-danger" onclick="removeClientFrame('${escapeHtml(ev.id)}', ${fIdx})">Hapus</button>
+            </div>
+          `).join('');
+
+          div.innerHTML = `
+            <div class="item-header">
+              <div>
+                <strong>ID: ${escapeHtml(ev.id)} — ${escapeHtml(ev.name || 'Tanpa Nama')}</strong>
+                <span class="badge-pill" style="margin-left:8px;">PHOTOBOOTH</span>
+                <span class="badge-pill ${ev.status === 'active' ? 'badge-active' : 'badge-locked'}" style="margin-left:4px;">${escapeHtml(ev.status || 'active')}</span>
+              </div>
+              <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <a href="${pageFile}?event=${encodeURIComponent(ev.id)}" target="_blank" class="btn btn-outline btn-sm">Lihat Event</a>
+                <a href="${adminFile}?event=${encodeURIComponent(ev.id)}" target="_blank" class="btn btn-outline btn-sm">Admin Client</a>
+                <button type="button" class="btn btn-dark btn-sm" onclick="saveSuperAdminClientVisual('${escapeHtml(ev.id)}', 'photobooth')">Simpan Visual</button>
+              </div>
+            </div>
+            <div class="grid-3">
+              <div class="form-group">
+                <label>Nama Event / Pasangan (Dari Super Admin)</label>
+                <input type="text" id="sa-name-${ev.id}" value="${escapeHtml(ev.name || '')}">
+              </div>
+              <div class="form-group">
+                <label>Tanggal Acara</label>
+                <input type="text" id="sa-date-${ev.id}" value="${escapeHtml(ev.eventDate || '')}" placeholder="Contoh: 20 DESEMBER 2026">
+              </div>
+              <div class="form-group">
+                <label>URL Foto Hero Beranda Photobooth</label>
+                <input type="text" id="sa-hero-${ev.id}" value="${escapeHtml(ev.heroUrl || '')}" placeholder="https://...">
+              </div>
+            </div>
+            <div class="client-frame-sublist">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <strong style="font-size:12.5px;">Daftar Frame Khusus Client (${frames.length} Frame)</strong>
+                <button type="button" class="btn btn-accent btn-sm" onclick="addClientFrame('${escapeHtml(ev.id)}')">+ Tambah Frame Client</button>
+              </div>
+              ${frames.length > 0 ? framesRowsHtml : '<p style="font-size:12px; color:var(--ink-muted);">Belum ada frame khusus. Klik "+ Tambah Frame Client" untuk menambahkan.</p>'}
+            </div>
+          `;
+        }
+
+        container.appendChild(div);
+      });
     }
 
-    async function createClientOrder() {
-      const rawSlug = document.getElementById('new-client-slug').value.trim().toLowerCase().replace(/[^a-z0-9-]/g, '-');
-      const title = document.getElementById('new-client-title').value.trim();
-      const serviceType = document.getElementById('new-client-type').value;
-      const eventDate = document.getElementById('new-client-date').value.trim();
-      const customFrameUrl = document.getElementById('new-client-frame').value.trim();
-      const status = document.getElementById('new-client-status').value;
+    function addClientFrame(eventId) {
+      const target = superAdminEvents.find(e => e.id === eventId);
+      if (!target) return;
+      if (!Array.isArray(target.frames)) target.frames = [];
+      target.frames.push({
+        name: "Frame Custom (3 Foto)",
+        tag: "CUSTOM EDITION",
+        count: 3,
+        path: `${GITHUB_RAW_BASE}/frame/dsg3.png`
+      });
+      renderSuperAdminClients();
+    }
 
-      if (!rawSlug || !title) {
-        showCmsModal("Data Belum Lengkap", "Isi Slug Link Klien dan Nama Pasangan / Judul Acara terlebih dahulu.");
-        return;
+    function updateClientFrameField(eventId, frameIdx, key, val) {
+      const target = superAdminEvents.find(e => e.id === eventId);
+      if (!target || !Array.isArray(target.frames) || !target.frames[frameIdx]) return;
+      target.frames[frameIdx][key] = val;
+    }
+
+    function removeClientFrame(eventId, frameIdx) {
+      const target = superAdminEvents.find(e => e.id === eventId);
+      if (!target || !Array.isArray(target.frames)) return;
+      target.frames.splice(frameIdx, 1);
+      renderSuperAdminClients();
+    }
+
+    async function saveSuperAdminClientVisual(eventId, type) {
+      const target = superAdminEvents.find(e => e.id === eventId);
+      if (!target) return;
+
+      const updatedName = document.getElementById(`sa-name-${eventId}`)?.value.trim() || target.name;
+      const updatedDate = document.getElementById(`sa-date-${eventId}`)?.value.trim() || "";
+
+      let payload = {
+        name: updatedName,
+        eventDate: updatedDate,
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      };
+
+      if (type === 'wedding') {
+        payload.venue = document.getElementById(`sa-venue-${eventId}`)?.value.trim() || "";
+        payload.mapsUrl = document.getElementById(`sa-maps-${eventId}`)?.value.trim() || "";
+        payload.coverUrl = document.getElementById(`sa-cover-${eventId}`)?.value.trim() || "";
+      } else {
+        payload.heroUrl = document.getElementById(`sa-hero-${eventId}`)?.value.trim() || "";
+        payload.frames = Array.isArray(target.frames) ? target.frames : [];
       }
 
       try {
-        await db.collection("clients").doc(rawSlug).set({
-          title,
-          serviceType,
-          eventDate,
-          customFrameUrl,
-          status,
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-        }, { merge: true });
-
-        document.getElementById('new-client-slug').value = "";
-        document.getElementById('new-client-title').value = "";
-        document.getElementById('new-client-date').value = "";
-        document.getElementById('new-client-frame').value = "";
-
-        showCmsModal("Pesanan Klien Dibuat", `Data visual untuk "${title}" berhasil disimpan ke database.`);
-        loadClientOrders();
+        await db.collection("events").doc(eventId).set(payload, { merge: true });
+        showCmsModal("Visual Client Tersimpan", `Perubahan visual untuk client "${updatedName}" (ID: ${eventId}) berhasil disinkronkan ke Firestore.`);
       } catch (err) {
         showCmsModal("Gagal Menyimpan", err.message);
-      }
-    }
-
-    async function updateClientOrder(docId, idx) {
-      try {
-        const payload = {
-          title: document.getElementById(`cl-title-${idx}`).value.trim(),
-          serviceType: document.getElementById(`cl-type-${idx}`).value.trim(),
-          eventDate: document.getElementById(`cl-date-${idx}`).value.trim(),
-          customFrameUrl: document.getElementById(`cl-frame-${idx}`).value.trim(),
-          status: document.getElementById(`cl-status-${idx}`).value,
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-        };
-        await db.collection("clients").doc(docId).set(payload, { merge: true });
-        showCmsModal("Klien Diperbarui", `Pengaturan visual untuk "${payload.title}" berhasil disimpan.`);
-      } catch (err) {
-        showCmsModal("Gagal Memperbarui", err.message);
-      }
-    }
-
-    async function deleteClientOrder(docId) {
-      try {
-        await db.collection("clients").doc(docId).delete();
-        showCmsModal("Pesanan Dihapus", `Data klien "${docId}" telah dihapus dari daftar.`);
-        loadClientOrders();
-      } catch (err) {
-        showCmsModal("Gagal Menghapus", err.message);
       }
     }
 
