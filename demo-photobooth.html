@@ -2,1945 +2,807 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Votura Virtual Photobooth — Portfolio Demo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="theme-color" content="#6A383E">
 
-  <!-- Favicon Votura Studio -->
-  <link rel="icon" type="image/png" href="./assets/v2/votura-app-icon.png?v=1">
-  <link rel="apple-touch-icon" href="./assets/v2/votura-app-icon.png?v=1">
-  <meta name="theme-color" content="#5C2B32">
+  <title>Virtual Photobooth Demo — Pria &amp; Wanita | Votura Studio</title>
+  <meta name="description" content="Demo Virtual Photobooth Digital Interaktif oleh Votura Studio.">
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Alex+Brush&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Favicon dari GitHub Repository RiyanArdians/votura-app/assets -->
+  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/RiyanArdians/votura-app/main/assets/votura-icon.png">
+  <link rel="shortcut icon" type="image/png" href="https://raw.githubusercontent.com/RiyanArdians/votura-app/main/assets/votura-icon.png">
+  <link rel="apple-touch-icon" href="https://raw.githubusercontent.com/RiyanArdians/votura-app/main/assets/votura-icon.png">
+
+  <!-- Google Fonts & Font Awesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
     :root {
-      --primary-crimson: #7A3D44;
-      --deep-crimson: #5C2B32;
-      --gold-accent: #D4AF37;
-      --gold-light: #F8F1E5;
-      --bg-cream: #FDFBF7;
-      --text-dark: #2C2223;
-      --card-glass: rgba(255, 255, 255, 0.12);
-      --card-border: rgba(212, 175, 55, 0.35);
+      --burgundy-bg: #6A383E;
+      --burgundy-dark: #4E272B;
+      --burgundy-card: #582D32;
+      --gold-main: #D4AF37;
+      --gold-soft: #E5C158;
+      --gold-btn: #C89D3C;
+      --text-light: #FFFFFF;
+      --text-cream: #F5E6E8;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     html, body {
-      width: 100vw;
-      height: 100%;
-      overflow-x: hidden;
       font-family: 'Plus Jakarta Sans', sans-serif;
-      background: linear-gradient(180deg, #7A3D44 0%, #5C2B32 100%);
-      color: #FFFFFF;
+      background-color: var(--burgundy-bg);
+      color: var(--text-light);
+      min-height: 100vh;
+      overflow-x: hidden;
+      width: 100%;
     }
 
+    .font-script { font-family: 'Great Vibes', cursive; }
     .font-serif { font-family: 'Cormorant Garamond', serif; }
-    .font-script { font-family: 'Alex Brush', cursive; }
-    .hidden { display: none !important; }
 
-    /* ANIMASI SPINNER LOADING & REFRESH */
-    @keyframes spinAnim {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    .spin-icon {
-      display: inline-flex !important;
-      animation: spinAnim 0.75s linear infinite;
-    }
-
-    .page-fullscreen {
-      width: 100vw;
-      height: 100dvh;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: center;
-      padding: 16px;
-      position: relative;
-      background: linear-gradient(180deg, #7A3D44 0%, #5C2B32 100%);
-      color: #FFFFFF;
-      overflow: hidden;
-    }
-
-    .page-fullscreen-scrollable {
-      width: 100vw;
-      height: 100dvh;
-      display: block;
-      padding: 16px 16px 80px;
-      position: relative;
-      background: linear-gradient(180deg, #7A3D44 0%, #5C2B32 100%);
-      color: #FFFFFF;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .btn-gold-v2 {
-      background: linear-gradient(135deg, #E2C275 0%, #C39B38 100%);
-      color: #2A1A1C;
-      border: 1px solid #FFF;
-      padding: 13px 20px;
-      font-size: 0.78rem;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      border-radius: 35px;
-      cursor: pointer;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
-      width: 100%;
-      max-width: 320px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
-
-    .btn-gold-v2:active { transform: scale(0.96); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2); }
-
-    .btn-secondary-v2 {
-      background: rgba(255, 255, 255, 0.08);
-      color: #FFFFFF;
-      border: 1px solid rgba(255, 255, 255, 0.4);
-      padding: 11px 18px;
-      font-size: 0.75rem;
-      font-weight: 700;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      border-radius: 35px;
-      cursor: pointer;
-      margin: 6px auto 0;
-      width: 100%;
-      max-width: 320px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      transition: transform 0.15s ease, background 0.2s ease;
-    }
-
-    .btn-secondary-v2:active { transform: scale(0.96); background: rgba(255, 255, 255, 0.18); }
-
-    .btn-outline-v2 {
-      background: transparent;
-      color: rgba(255, 255, 255, 0.8);
-      border: none;
-      padding: 6px 12px;
-      font-size: 0.72rem;
-      font-weight: 600;
-      letter-spacing: 1px;
-      text-transform: uppercase;
-      cursor: pointer;
-      width: 100%;
-      max-width: 320px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.15s ease, opacity 0.2s ease;
-    }
-
-    .btn-outline-v2:active { transform: scale(0.94); opacity: 0.7; }
-
-    .btn-back-styled {
-      background: rgba(255, 255, 255, 0.12);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      color: #FFFFFF;
-      border: 1px solid rgba(255, 255, 255, 0.3);
-      padding: 10px 28px;
-      font-size: 0.75rem;
-      font-weight: 600;
-      border-radius: 30px;
-      cursor: pointer;
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      margin: 0 auto;
-      transition: transform 0.15s ease, background 0.2s ease;
-    }
-
-    .btn-back-styled:active { transform: scale(0.94); background: rgba(255, 255, 255, 0.22); }
-
-    /* TOMBOL REFRESH KHUSUS GALERI */
-    .btn-refresh-feed-custom {
-      background: rgba(255, 255, 255, 0.12);
-      border: 1px solid var(--gold-accent);
-      color: #FFF;
-      font-size: 0.68rem;
-      font-weight: 700;
-      padding: 5px 12px;
-      border-radius: 20px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      backdrop-filter: blur(6px);
-      transition: transform 0.15s ease, background 0.2s ease;
-    }
-
-    .btn-refresh-feed-custom:active { transform: scale(0.92); background: rgba(212, 175, 55, 0.25); }
-
-    .envelope-screen {
+    /* TOMBOL MARKETING CTA WHATSAPP DI ATAS (1 BARIS RAPI & RESPONSIF) */
+    .demo-cta-banner {
       position: fixed;
-      top: 0; left: 0; width: 100vw; height: 100dvh;
-      background: linear-gradient(180deg, #7A3D44 0%, #5C2B32 100%);
-      z-index: 99999;
+      top: 12px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: calc(100% - 24px);
+      max-width: 430px;
+      z-index: 100000;
+      display: flex;
+      justify-content: center;
+      pointer-events: auto;
+    }
+
+    .btn-wa-marketing {
+      background: linear-gradient(135deg, #3D1D21 0%, #582D32 100%);
+      color: #FFFFFF !important;
+      text-decoration: none;
+      padding: 9px 18px;
+      border-radius: 50px;
+      border: 1px solid rgba(212, 175, 55, 0.85);
+      box-shadow: 0 8px 24px rgba(25, 10, 12, 0.45);
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      white-space: nowrap;
+      font-size: clamp(0.68rem, 3.1vw, 0.78rem);
+      font-weight: 500;
+      letter-spacing: 0.2px;
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.2s ease;
+    }
+
+    .btn-wa-marketing:active {
+      transform: scale(0.97);
+    }
+
+    .btn-wa-marketing .cta-highlight {
+      color: #FFE082;
+      font-weight: 700;
+      margin-left: 4px;
+    }
+
+    .btn-wa-marketing::after {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -60%;
+      width: 25%;
+      height: 200%;
+      background: rgba(255, 255, 255, 0.25);
+      transform: rotate(30deg);
+      animation: shineSweep 3.8s infinite;
+    }
+
+    @keyframes shineSweep {
+      0% { left: -60%; }
+      20% { left: 130%; }
+      100% { left: 130%; }
+    }
+
+    /* ==================== SAMPUL AMPLOP OVERLAY ==================== */
+    .envelope-overlay {
+      position: fixed;
+      inset: 0;
+      background-color: var(--burgundy-bg);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 20px;
-      cursor: pointer;
-      overflow: hidden;
-      transition: opacity 0.8s ease;
+      z-index: 9999;
+      padding: 64px 20px 24px;
+      transition: opacity 0.7s ease, visibility 0.7s ease;
+    }
+
+    .envelope-overlay.hidden-cover {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .cover-label {
+      color: var(--gold-soft);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 4px;
+      text-align: center;
+    }
+
+    .cover-couple {
+      font-size: clamp(2.4rem, 9vw, 3.3rem);
+      color: #FFFFFF;
+      font-weight: 400;
+      line-height: 1.15;
+      margin-bottom: 24px;
+      text-align: center;
+      text-shadow: 0 3px 12px rgba(0, 0, 0, 0.25);
     }
 
     .envelope-wrapper {
       position: relative;
-      width: 300px;
-      height: 195px;
-      background: #4F242A;
-      border-radius: 8px;
-      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.45);
-      border: 1px solid rgba(212, 175, 55, 0.3);
-      margin: 20px 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      width: min(310px, 84vw);
+      height: min(195px, 52vw);
+      background-color: #4B2327;
+      border-radius: 10px;
+      box-shadow: 0 20px 45px rgba(20, 8, 10, 0.55);
+      border: 1px solid rgba(212, 175, 55, 0.45);
+      cursor: pointer;
       perspective: 1000px;
+      overflow: hidden;
+      transition: transform 0.3s ease;
     }
 
-    .envelope-wrapper::before {
-      content: "";
+    .envelope-wrapper:hover {
+      transform: translateY(-3px);
+    }
+
+    .envelope-card-preview {
       position: absolute;
-      top: 0; left: 0;
-      width: 0; height: 0;
-      border-top: 97px solid transparent;
-      border-bottom: 98px solid transparent;
-      border-left: 150px solid #5A2A30;
+      top: 8%;
+      left: 6%;
+      width: 88%;
+      height: 84%;
+      background: #FFFDF9;
+      color: #4E272B;
+      border-radius: 8px;
+      border: 1px solid var(--gold-main);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      text-align: center;
+      z-index: 1;
+      opacity: 0;
+      transition: transform 0.75s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s ease;
+    }
+
+    .env-left {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, #592C31 0%, #482226 100%);
+      clip-path: polygon(0 0, 50% 52%, 0 100%);
+      z-index: 2;
+    }
+
+    .env-right {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(225deg, #54292E 0%, #482226 100%);
+      clip-path: polygon(100% 0, 50% 52%, 100% 100%);
+      z-index: 2;
+    }
+
+    .env-bottom {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, #472125 0%, #3C1B1E 100%);
+      clip-path: polygon(0 100%, 50% 48%, 100% 100%);
       z-index: 3;
+      filter: drop-shadow(0 -2px 5px rgba(0, 0, 0, 0.35));
     }
 
-    .envelope-wrapper::after {
-      content: "";
+    .env-flap {
       position: absolute;
-      top: 0; right: 0;
-      width: 0; height: 0;
-      border-top: 97px solid transparent;
-      border-bottom: 98px solid transparent;
-      border-right: 150px solid #52252B;
-      z-index: 3;
-    }
-
-    .envelope-flap-top {
-      position: absolute;
-      top: 0; left: 0;
-      width: 0; height: 0;
-      border-left: 150px solid transparent;
-      border-right: 150px solid transparent;
-      border-top: 110px solid #6A333A;
-      transform-origin: top;
-      transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+      inset: 0;
+      background: linear-gradient(180deg, #633137 0%, #4B2327 100%);
+      clip-path: polygon(0 0, 100% 0, 50% 54%);
+      transform-origin: top center;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
       z-index: 5;
-      filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3));
+      filter: drop-shadow(0 5px 10px rgba(0, 0, 0, 0.4));
     }
 
-    .envelope-gold-seal {
+    .env-seal {
       position: absolute;
-      top: 50%; left: 50%;
+      top: 52%;
+      left: 50%;
       transform: translate(-50%, -50%);
-      width: 46px; height: 46px;
-      background: radial-gradient(circle, #E2C275 0%, #C39B38 70%, #906F1E 100%);
+      width: 44px;
+      height: 44px;
       border-radius: 50%;
-      box-shadow: inset 0 2px 4px rgba(255,255,255,0.6), 0 6px 16px rgba(0, 0, 0, 0.4);
-      border: 1px solid #FFF;
-      z-index: 10;
-      transition: transform 0.3s ease, opacity 0.3s ease;
+      background: radial-gradient(circle at 30% 30%, #F7DF8B 0%, #D4AF37 65%, #9E7B1C 100%);
+      border: 1.5px solid #FFF7D6;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
       display: flex;
       align-items: center;
       justify-content: center;
-    }
-
-    .envelope-gold-seal::after {
-      content: "V";
+      color: #3D1D21;
       font-family: 'Cormorant Garamond', serif;
       font-weight: 700;
-      font-size: 1.2rem;
-      color: #3D2605;
-      text-shadow: 0 1px 1px rgba(255,255,255,0.4);
+      font-size: 1rem;
+      z-index: 6;
+      transition: opacity 0.3s ease, transform 0.3s ease;
     }
 
-    .envelope-card-inside {
-      position: absolute;
-      width: 268px;
-      height: 168px;
-      background: #FDFBF7;
-      border-radius: 6px;
-      border: 1px solid var(--gold-accent);
-      padding: 16px 12px;
-      text-align: center;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-      z-index: 2;
-      transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
+    .envelope-wrapper.opened {
+      overflow: visible;
+    }
+
+    .envelope-wrapper.opened .env-flap {
+      transform: rotateX(180deg);
+      z-index: 1;
+    }
+
+    .envelope-wrapper.opened .env-seal {
       opacity: 0;
-      transform: translateY(0) scale(0.95);
+      transform: translate(-50%, -50%) scale(0.4);
     }
 
-    .envelope-wrapper.step-open-flap .envelope-flap-top { transform: rotateX(180deg); z-index: 1; }
-    .envelope-wrapper.step-open-flap .envelope-gold-seal { opacity: 0; transform: translate(-50%, -50%) scale(0.4); }
-    .envelope-wrapper.step-lift-up .envelope-card-inside { opacity: 1; transform: translateY(-115px) scale(1); z-index: 8; }
-    .envelope-wrapper.step-zoom-center .envelope-card-inside { transform: translateY(0) scale(1.28); z-index: 99; box-shadow: 0 25px 60px rgba(0,0,0,0.4); }
+    .envelope-wrapper.opened .envelope-card-preview {
+      opacity: 1;
+      transform: translateY(-55%);
+      z-index: 10;
+    }
 
-    .hero-pill-frame-pure {
+    .cover-hint {
+      margin-top: 18px;
+      font-size: 0.78rem;
+      font-style: italic;
+      color: var(--text-cream);
+      opacity: 0.9;
+    }
+
+    /* ==================== HALAMAN UTAMA PHOTOBOOTH ==================== */
+    .main-container {
       width: 100%;
-      max-width: 230px;
-      height: 48dvh;
-      max-height: 350px;
-      border-radius: 120px;
-      overflow: hidden;
-      border: 2px solid var(--gold-accent);
-      padding: 5px;
-      margin: 8px auto;
-      background: rgba(255, 255, 255, 0.1);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
-
-    .hero-pill-frame-pure img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center top;
-      border-radius: 115px;
-      display: block;
-    }
-
-    .ask-page-center-wrapper {
-      flex: 1;
+      max-width: 480px;
+      margin: 0 auto;
+      padding: 74px 20px 48px;
       display: flex;
       flex-direction: column;
-      justify-content: center;
       align-items: center;
-      width: 100%;
-      margin: auto 0;
-    }
-
-    .glass-card-ask {
-      background: var(--card-glass);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border: 1px solid var(--card-border);
-      border-radius: 22px;
-      padding: 26px 20px 22px;
-      width: 100%;
-      max-width: 320px;
-      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
       text-align: center;
     }
 
-    .stylish-underline-input {
-      width: 100%;
-      background: rgba(0, 0, 0, 0.2);
-      border: 1px solid rgba(212, 175, 55, 0.5);
-      border-radius: 30px;
-      color: #FFFFFF;
-      font-size: 0.95rem;
-      text-align: center;
-      padding: 12px 16px;
-      outline: none;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      transition: all 0.3s ease;
-      margin: 16px 0 4px;
-    }
-
-    .stylish-underline-input::placeholder { color: rgba(255, 255, 255, 0.55); font-style: italic; font-size: 0.85rem; }
-    .stylish-underline-input:focus { border-color: var(--gold-accent); box-shadow: 0 0 12px rgba(212, 175, 55, 0.3); background: rgba(0, 0, 0, 0.3); }
-
-    .slider-header-box { text-align: center; z-index: 10; width: 100%; max-width: 360px; margin-top: 2px; }
-    .section-label-fullscreen { font-size: 0.68rem; font-weight: 700; color: var(--gold-accent); text-transform: uppercase; letter-spacing: 2.5px; margin-bottom: 2px; }
-    .slider-main-title { font-family: 'Cormorant Garamond', serif; font-size: 1.35rem; font-weight: 700; color: #FFFFFF; line-height: 1.2; margin-bottom: 2px; }
-
-    .slider-cards-viewport {
-      position: relative; width: 100%; max-width: 340px; height: 46dvh; min-height: 270px;
-      display: flex; align-items: center; justify-content: center; margin: 4px 0;
-    }
-
-    .figma-card-item {
-      position: absolute; width: 170px; height: 100%; max-height: 340px;
-      border-radius: 18px; background: rgba(255, 255, 255, 0.12); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.25); display: flex; align-items: center; justify-content: center;
-      padding: 8px; box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25); transition: all 0.45s cubic-bezier(0.25, 1, 0.5, 1); cursor: pointer; user-select: none;
-    }
-
-    .figma-card-item img { width: 100%; height: 100%; max-height: 320px; object-fit: contain; }
-
-    .figma-card-item.active { transform: translateX(0) scale(1) rotate(0deg); opacity: 1; z-index: 10; }
-    .figma-card-item.next { transform: translateX(62%) scale(0.82) rotate(6deg); opacity: 0.55; z-index: 5; }
-    .figma-card-item.prev { transform: translateX(-62%) scale(0.82) rotate(-6deg); opacity: 0.55; z-index: 5; }
-    .figma-card-item.hidden-left { transform: translateX(-115%) scale(0.65) rotate(-12deg); opacity: 0; z-index: 1; }
-    .figma-card-item.hidden-right { transform: translateX(115%) scale(0.65) rotate(12deg); opacity: 0; z-index: 1; }
-    .figma-card-item.card-pressed { transform: scale(0.92) !important; }
-
-    .camera-stage-container {
-      width: 100%;
-      max-width: 380px;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 4px 15px;
-    }
-
-    .camera-top-status {
-      width: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: rgba(255, 255, 255, 0.12);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      padding: 8px 16px;
-      border-radius: 25px;
-      color: #FFF;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-    }
-
-    .camera-viewfinder-box {
-      position: relative;
-      width: 100%;
-      max-width: 330px;
-      max-height: 48dvh;
-      border-radius: 20px;
-      overflow: hidden;
-      background: #000;
-      border: 2px solid var(--gold-accent);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.35);
-      margin: 8px auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: aspect-ratio 0.3s ease;
-    }
-
-    .camera-video-element {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      background: #000;
-      transition: transform 0.2s ease-out;
-    }
-
-    .cam-photos-preview-strip {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      align-items: center;
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      padding: 8px 16px;
-      border-radius: 20px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      width: 100%;
-      max-width: 340px;
-      margin-bottom: 8px;
-    }
-
-    .photo-thumb-box {
-      position: relative;
-      width: 52px;
-      aspect-ratio: 1 / 1;
-      border-radius: 12px;
-      overflow: hidden;
-      border: 1.5px solid rgba(255, 255, 255, 0.4);
-      background: rgba(255, 255, 255, 0.1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.3s ease;
-    }
-
-    .photo-thumb-box img { width: 100%; height: 100%; object-fit: cover; object-position: center; }
-    .photo-thumb-box.empty-slot { border: 1.5px dashed rgba(255, 255, 255, 0.35); color: rgba(255, 255, 255, 0.6); font-size: 0.8rem; font-weight: 600; }
-
-    .cam-floating-tools {
-      display: flex;
-      gap: 6px;
-      background: rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-      -webkit-backdrop-filter: blur(10px);
-      padding: 6px 12px;
-      border-radius: 25px;
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      margin-bottom: 8px;
-      width: 100%;
-      max-width: 340px;
-      justify-content: space-around;
-      align-items: center;
-    }
-
-    .cam-tool-btn {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: #FFF;
+    .header-subtitle {
+      color: var(--gold-soft);
       font-size: 0.72rem;
-      font-weight: 600;
-      padding: 6px 12px;
-      border-radius: 16px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      white-space: nowrap;
-      flex: 1;
-      justify-content: center;
-      transition: transform 0.15s ease, background 0.2s ease;
+      font-weight: 700;
+      letter-spacing: 3.2px;
+      text-transform: uppercase;
+      margin-bottom: 2px;
     }
 
-    .cam-tool-btn:active { transform: scale(0.92); }
-
-    .cam-bottom-action-row {
-      width: 100%;
-      max-width: 340px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
+    .header-title {
+      font-size: clamp(2.5rem, 9.5vw, 3.4rem);
+      color: #FFFFFF;
+      font-weight: 400;
+      line-height: 1.15;
       margin-bottom: 4px;
     }
 
-    .cam-snap-trigger {
-      width: 64px;
-      height: 64px;
+    .header-date {
+      font-size: 0.85rem;
+      letter-spacing: 2px;
+      color: var(--text-cream);
+      margin-bottom: 22px;
+      text-transform: uppercase;
+    }
+
+    /* BINGKAI FOTO OVAL EMAS (PROPORSIONAL & WAJAH TIDAK TERPOTONG) */
+    .oval-photo-frame {
+      width: min(240px, 64vw);
+      height: min(310px, 82vw);
       border-radius: 50%;
-      background: #FFF;
-      border: 4px solid var(--gold-accent);
-      box-shadow: 0 0 18px rgba(0, 0, 0, 0.35);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.15s ease;
-    }
-
-    .cam-snap-trigger-inner {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: var(--primary-crimson);
-    }
-
-    .cam-snap-trigger:active { transform: scale(0.88); }
-
-    .countdown-overlay {
-      position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.45); color: #FFF; font-size: 3.5rem; font-weight: 700; display: flex; align-items: center; justify-content: center; z-index: 20;
-    }
-
-    .flash-overlay { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: #FFF; opacity: 0; pointer-events: none; transition: opacity 0.1s; z-index: 30; }
-    .flash-overlay.active { opacity: 1; }
-
-    .review-grid-box {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      justify-content: center;
-      align-items: center;
-      width: 100%;
-      max-width: 720px;
-      margin: auto;
-      padding: 10px;
-    }
-
-    .review-photo-card {
-      position: relative;
-      width: clamp(200px, 35vw, 320px);
-      border-radius: 16px;
+      border: 3px solid var(--gold-main);
+      padding: 4px;
+      background: rgba(212, 175, 55, 0.15);
+      box-shadow: 0 14px 35px rgba(25, 10, 12, 0.45);
+      margin-bottom: 22px;
       overflow: hidden;
-      border: 2px solid var(--gold-accent);
-      box-shadow: 0 10px 22px rgba(0,0,0,0.3);
-      background: #000;
     }
 
-    .review-photo-card img {
+    .oval-photo-inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      overflow: hidden;
+      background-color: #4E272B;
+    }
+
+    .oval-photo-inner img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-      object-position: center;
+      object-position: center 20%;
       display: block;
     }
 
-    .review-delete-btn {
-      position: absolute; top: 6px; right: 6px; background: rgba(122, 61, 68, 0.95); color: #FFF; border: 1px solid var(--gold-accent); width: 24px; height: 24px; border-radius: 50%; font-weight: 700; font-size: 0.75rem; cursor: pointer; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 6px rgba(0,0,0,0.4); z-index: 10;
+    .quote-text {
+      font-size: 0.82rem;
+      font-style: italic;
+      color: var(--text-cream);
+      max-width: 340px;
+      line-height: 1.55;
+      margin-bottom: 24px;
     }
 
-    .printer-lottie-stage {
-      width: 100vw; min-height: 100dvh; background: linear-gradient(180deg, #7A3D44 0%, #5C2B32 100%); color: #FFF; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 16px 14px 20px; position: relative; overflow-y: auto;
-    }
-
-    .vector-printer-wrapper {
-      position: relative; width: 240px; margin-top: 2px; display: flex; flex-direction: column; align-items: center; transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-    }
-
-    .vector-printer-wrapper.fade-out-printer { opacity: 0; transform: translateY(-30px) scale(0.85); pointer-events: none; height: 0; margin: 0; overflow: hidden; }
-
-    .paper-tray-input {
-      width: 110px; height: 50px; background: #FDFBF7; border: 2px solid var(--gold-accent); border-bottom: none; border-radius: 8px 8px 0 0; margin-bottom: -12px; box-shadow: 0 -3px 8px rgba(0,0,0,0.2); transition: transform 2s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1;
-    }
-
-    .paper-tray-input.pulled-in { transform: translateY(45px); }
-
-    .flat-printer-body {
-      width: 220px; height: 80px; background: #3D1C21; border: 1px solid var(--gold-accent); border-radius: 14px; position: relative; z-index: 10; box-shadow: 0 10px 25px rgba(0,0,0,0.35); display: flex; flex-direction: column; justify-content: space-between; padding: 8px 12px;
-    }
-
-    .printer-panel-top { display: flex; align-items: center; gap: 6px; }
-    .led-dot { width: 8px; height: 8px; border-radius: 50%; transition: all 0.2s ease; }
-    .led-red { background: #E74C3C; }
-    .led-green { background: #2ECC71; }
-    .led-red.blinking { animation: ledBlinkRed 0.3s infinite alternate; }
-    .led-green.blinking { animation: ledBlinkGreen 0.3s infinite alternate; }
-
-    @keyframes ledBlinkRed { 0% { background: #FF7675; } 100% { background: #7F1D1D; } }
-    @keyframes ledBlinkGreen { 0% { background: #55E6C1; } 100% { background: #145A32; } }
-
-    .printer-brand-tag { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.58rem; font-weight: 700; color: var(--gold-accent); letter-spacing: 1.5px; text-transform: uppercase; }
-
-    .printer-door-tray { width: 100%; height: 26px; background: #281115; border-radius: 6px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; }
-    .printer-slot-gap { width: 88%; height: 5px; background: #000; border-radius: 3px; }
-
-    .printer-output-paper-container { position: relative; width: 130px; margin-top: -8px; overflow: hidden; z-index: 5; display: flex; justify-content: center; padding-top: 4px; }
-
-    .ejected-photo-sheet { width: 100%; transform: translateY(-100%); transition: transform 5s cubic-bezier(0.22, 1, 0.36, 1); filter: drop-shadow(0 6px 15px rgba(0,0,0,0.3)); }
-    .ejected-photo-sheet.fully-printed { transform: translateY(0); }
-    .ejected-photo-sheet img { width: 100%; border-radius: 6px; display: block; margin: 0 auto; }
-
-    .popup-photo-container {
-      width: 100%; max-width: 175px; margin: 2px auto; opacity: 0; transform: scale(0.6); transition: all 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    }
-    .popup-photo-container.show-popup { opacity: 1; transform: scale(1); }
-    .popup-photo-container img { width: 100%; max-height: 38vh; object-fit: contain; border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.35); border: 1px solid var(--gold-accent); }
-
-    .printer-status-text-box { margin-top: 4px; text-align: center; z-index: 20; }
-    .status-main-label { font-size: 0.85rem; font-weight: 700; color: var(--gold-accent); letter-spacing: 1px; display: flex; align-items: center; justify-content: center; gap: 5px; }
-    .status-sub-label { font-size: 0.7rem; color: rgba(255,255,255,0.75); margin-top: 2px; font-style: italic; }
-
-    .printer-bottom-actions {
-      width: 100%; max-width: 320px; margin-top: 6px; display: flex; flex-direction: column; gap: 6px; z-index: 20; opacity: 0; transform: translateY(10px); transition: all 0.5s ease;
-    }
-    .printer-bottom-actions.visible { opacity: 1; transform: translateY(0); }
-
-    .feed-container { width: 100%; max-width: 420px; margin: 0 auto; }
-    .gallery-intro-box { background: rgba(255, 255, 255, 0.1); border: 1px solid var(--card-border); backdrop-filter: blur(10px); border-radius: 16px; padding: 16px 12px; margin-bottom: 16px; text-align: center; }
-    .ig-grid-container { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-
-    .ig-grid-item {
-      background: rgba(255, 255, 255, 0.08); border-radius: 12px; overflow: hidden; border: 1px solid var(--card-border); cursor: pointer; display: flex; flex-direction: column; box-shadow: 0 4px 12px rgba(0,0,0,0.15); transition: transform 0.15s ease;
-    }
-    .ig-grid-item:active { transform: scale(0.96); }
-
-    .ig-item-header { display: flex; flex-direction: column; align-items: center; padding: 6px 4px; background: rgba(0, 0, 0, 0.2); border-bottom: 1px solid rgba(212,175,55,0.2); }
-    .ig-item-name { font-size: 0.65rem; font-weight: 700; color: var(--gold-accent); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; text-align: center; }
-    .ig-item-date { font-size: 0.52rem; color: rgba(255,255,255,0.6); margin-top: 1px; }
-
-    .ig-item-img-box { width: 100%; aspect-ratio: 1/1; overflow: hidden; background: #1A0D0F; }
-    .ig-item-img-box img { width: 100%; height: 100%; object-fit: cover; }
-    .ig-item-msg { font-size: 0.6rem; color: rgba(255,255,255,0.85); padding: 6px 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: center; font-style: italic; background: rgba(0, 0, 0, 0.15); }
-
-    .floating-scroll-nav {
-      position: fixed;
-      bottom: 25px;
-      right: 15px;
+    /* TOMBOL AKSI UTAMA */
+    .action-stack {
+      width: 100%;
+      max-width: 340px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
-      z-index: 9999;
+      gap: 12px;
+      margin-bottom: 34px;
     }
 
-    .btn-scroll-nav {
-      width: 46px;
-      height: 46px;
-      border-radius: 50%;
-      background: rgba(122, 61, 68, 0.95);
-      border: 1.5px solid var(--gold-accent);
-      color: var(--gold-accent);
-      font-size: 1.1rem;
-      font-weight: bold;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.5);
+    .btn-gold-solid {
+      width: 100%;
+      padding: 14px 20px;
+      border-radius: 50px;
+      background: linear-gradient(135deg, #D8AE48 0%, #B98C2B 100%);
+      color: #2C1417;
+      font-weight: 700;
+      font-size: 0.82rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border: 1.5px solid #F7E199;
       cursor: pointer;
-      display: flex;
+      box-shadow: 0 8px 20px rgba(25, 10, 12, 0.35);
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+
+    .btn-gold-solid:active {
+      transform: scale(0.98);
+    }
+
+    .btn-burgundy-outline {
+      width: 100%;
+      padding: 13px 20px;
+      border-radius: 50px;
+      background: rgba(255, 255, 255, 0.08);
+      color: #FFFFFF;
+      font-weight: 700;
+      font-size: 0.8rem;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      border: 1px solid rgba(255, 255, 255, 0.55);
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    .btn-burgundy-outline:hover {
+      background: rgba(255, 255, 255, 0.15);
+    }
+
+    /* GALERI KENANGAN TAMU */
+    .memories-section {
+      width: 100%;
+      border-top: 1px solid rgba(212, 175, 55, 0.3);
+      padding-top: 26px;
+    }
+
+    .memories-title {
+      font-size: 1.55rem;
+      color: var(--gold-soft);
+      margin-bottom: 4px;
+    }
+
+    .memories-sub {
+      font-size: 0.78rem;
+      color: var(--text-cream);
+      opacity: 0.85;
+      margin-bottom: 18px;
+    }
+
+    .memories-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+
+    .polaroid-card {
+      background: #FFFDF9;
+      color: #3D1D21;
+      border-radius: 10px;
+      padding: 8px 8px 12px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+      text-align: center;
+    }
+
+    .polaroid-card img {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      object-fit: cover;
+      object-position: center 20%;
+      border-radius: 6px;
+      display: block;
+      margin-bottom: 8px;
+      background: #EFE4E5;
+    }
+
+    .polaroid-caption {
+      font-family: 'Great Vibes', cursive;
+      font-size: 1.1rem;
+      color: #6A383E;
+      line-height: 1.1;
+    }
+
+    .polaroid-guest {
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: #7A5458;
+      margin-top: 2px;
+    }
+
+    /* MODAL PHOTOBOOTH KAMERA / UPLOAD */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(25, 10, 12, 0.85);
+      backdrop-filter: blur(5px);
+      z-index: 100002;
+      display: none;
       align-items: center;
       justify-content: center;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      transition: transform 0.15s ease, opacity 0.25s ease;
+      padding: 16px;
     }
 
-    .btn-scroll-nav:active { transform: scale(0.88); background: rgba(212, 175, 55, 0.3); }
+    .modal-backdrop.active {
+      display: flex;
+    }
 
-    .app-official-footer { text-align: center; padding: 8px 10px 2px; font-size: 0.65rem; color: rgba(255, 255, 255, 0.65); border-top: 1px dashed rgba(255, 255, 255, 0.2); margin-top: 8px; width: 100%; letter-spacing: 0.5px; }
+    .booth-modal {
+      width: 100%;
+      max-width: 400px;
+      background: var(--burgundy-card);
+      border: 1.5px solid var(--gold-main);
+      border-radius: 20px;
+      padding: 20px;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+      max-height: 92vh;
+      overflow-y: auto;
+    }
 
-    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 99999; padding: 15px; }
-    .modal-card { background: linear-gradient(180deg, #7A3D44 0%, #5C2B32 100%); color: #FFF; border-radius: 20px; padding: 20px 16px 16px; max-width: 330px; width: 100%; text-align: center; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.5); border: 1px solid var(--gold-accent); max-height: 90vh; display: flex; flex-direction: column; overflow-y: auto; }
-    .modal-close-btn { position: absolute; top: 10px; right: 12px; background: rgba(0,0,0,0.3); color: var(--gold-accent); border: 1px solid var(--gold-accent); width: 28px; height: 28px; border-radius: 50%; font-weight: 700; font-size: 0.8rem; cursor: pointer; z-index: 100; }
-    .modal-user-name { font-size: 0.95rem; font-weight: 700; color: var(--gold-accent); margin-bottom: 1px; padding-right: 25px; letter-spacing: 1px; }
-    .modal-user-date { font-size: 0.65rem; color: rgba(255,255,255,0.65); margin-bottom: 6px; }
-    .modal-img { width: 100%; max-height: 52vh; object-fit: contain; border-radius: 10px; margin: 6px 0; background: rgba(0,0,0,0.2); border: 1px solid rgba(212,175,55,0.3); }
-    .modal-msg { font-size: 0.78rem; color: #FFF; font-style: italic; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 10px; line-height: 1.4; word-break: break-word; border: 1px solid rgba(255,255,255,0.1); }
+    .booth-preview-box {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      background: #2C1417;
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+      margin: 12px 0;
+      border: 1px solid rgba(212, 175, 55, 0.5);
+    }
 
-    canvas { display: none; }
+    .booth-preview-box video,
+    .booth-preview-box canvas {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .booth-input {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 25px;
+      border: 1px solid rgba(212, 175, 55, 0.6);
+      background: rgba(255, 255, 255, 0.95);
+      color: #3D1D21;
+      font-size: 0.82rem;
+      margin-bottom: 10px;
+      outline: none;
+    }
+
+    .booth-btn-row {
+      display: flex;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .booth-btn-row button,
+    .booth-btn-row label {
+      flex: 1;
+      padding: 11px 12px;
+      border-radius: 30px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      cursor: pointer;
+      text-align: center;
+      border: none;
+    }
+
+    .footer-brand {
+      margin-top: 34px;
+      font-size: 0.72rem;
+      color: var(--text-cream);
+      opacity: 0.8;
+    }
   </style>
 </head>
 <body>
 
-<div id="envelope-screen" class="envelope-screen" onclick="openEnvelopeAnimation()">
-  <div style="text-align:center; color:#FFF; margin-bottom:10px;">
-    <div style="font-size:0.7rem; letter-spacing:3px; color:var(--gold-accent); font-weight:700; margin-bottom:4px; text-transform:uppercase;">Virtual Photobooth Demo</div>
-    <div class="font-script" style="font-size:2.8rem; color:#FFF; line-height:1;" id="envelope-names">Arka & Nadira</div>
+  <!-- TOMBOL MARKETING CTA WHATSAPP DI ATAS (1 BARIS RAPI) -->
+  <div class="demo-cta-banner">
+    <a id="wa-order-link" href="https://wa.me/6282298966860" target="_blank" rel="noopener noreferrer" class="btn-wa-marketing">
+      <span>Wujudkan photobooth impianmu &bull;<span class="cta-highlight">Pesan Sekarang</span></span>
+    </a>
   </div>
 
-  <div class="envelope-wrapper" id="envelope-wrapper">
-    <div class="envelope-flap-top"></div>
-    <div class="envelope-gold-seal"></div>
+  <!-- SAMPUL AMPLOP VIRTUAL PHOTOBOOTH -->
+  <div id="envelope-overlay" class="envelope-overlay">
+    <div class="cover-label">VIRTUAL PHOTOBOOTH DEMO</div>
+    <h1 class="font-script cover-couple">Pria &amp; Wanita</h1>
 
-    <div class="envelope-card-inside">
-      <div style="font-size:0.62rem; color:var(--gold-accent); font-weight:700; letter-spacing:2px; text-transform:uppercase;">Pernikahan Kami</div>
-      <div class="font-script" style="font-size:2.2rem; color:var(--primary-crimson); line-height:1.1; margin:4px 0;" id="inside-card-names">Arka & Nadira</div>
-      <div style="font-size:0.7rem; color:#666; font-style:italic;">Virtual Photobooth & Guestbook</div>
-    </div>
-  </div>
+    <div id="envelope-wrapper" class="envelope-wrapper" onclick="openEnvelope()">
+      <div class="env-flap"></div>
+      <div class="env-seal">V</div>
 
-  <div style="font-size:0.75rem; color:rgba(255,255,255,0.85); font-style:italic; letter-spacing:1px; margin-top:12px;">
-    Ketuk amplop untuk membuka
-  </div>
-</div>
+      <div class="envelope-card-preview">
+        <span style="font-size: 0.6rem; letter-spacing: 2px; color: #9E7B1C; font-weight: 700;">VIRTUAL PHOTOBOOTH</span>
+        <strong class="font-script" style="font-size: 1.65rem; color: #6A383E; margin: 2px 0;">Pria &amp; Wanita</strong>
+        <span style="font-size: 0.7rem; color: #6E474B;">Abadikan momen terbaikmu</span>
+      </div>
 
-<div id="step-welcome" class="page-fullscreen">
-  <div style="width:100%; text-align:center; display:flex; flex-direction:column; align-items:center;">
-    <p style="font-size:0.7rem; color:var(--gold-accent); letter-spacing:2.5px; font-weight:700; margin-bottom:1px;">VIRTUAL PHOTOBOOTH</p>
-    <h1 class="font-script" style="font-size:2.6rem; color:#FFF; line-height:1.05;" id="display-event-title">Arka & Nadira</h1>
-    <p style="font-size:0.72rem; color:rgba(255,255,255,0.8); letter-spacing:1px; margin-bottom:4px;">18 OKTOBER 2027</p>
-
-    <div class="hero-pill-frame-pure">
-      <img src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=600&q=80" alt="Hero Pengantin" id="welcome-couple-img">
+      <div class="env-left"></div>
+      <div class="env-right"></div>
+      <div class="env-bottom"></div>
     </div>
 
-    <p style="font-size:0.75rem; color:rgba(255,255,255,0.85); font-style:italic; line-height:1.35; max-width:310px; margin:4px 0 10px;">
+    <p class="cover-hint">Ketuk amplop untuk membuka</p>
+  </div>
+
+  <!-- HALAMAN UTAMA VIRTUAL PHOTOBOOTH -->
+  <main class="main-container">
+    <div class="header-subtitle">VIRTUAL PHOTOBOOTH</div>
+    <h1 class="font-script header-title">Pria &amp; Wanita</h1>
+    <div id="dynamic-wedding-date" class="header-date">12 DESEMBER 2026</div>
+
+    <!-- FOTO MEMPELAI PROPORSIONAL (TIDAK TERPOTONG) -->
+    <div class="oval-photo-frame">
+      <div class="oval-photo-inner">
+        <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=700&q=85" alt="Mempelai Pria & Wanita">
+      </div>
+    </div>
+
+    <p class="quote-text">
       "Satu foto menyimpan sejuta kenangan. Terima kasih telah menjadi bagian dari hari bahagia kami!"
     </p>
 
-    <button class="btn-gold-v2" onclick="goToStep('step-ask-name')">
-      TAMBAHKAN MOMEN
-    </button>
-
-    <button class="btn-secondary-v2" onclick="goToStep('step-gallery-page')">
-      JELAJAHI KENANGAN
-    </button>
-  </div>
-
-  <div class="app-official-footer">
-    © 2026 Votura Studio. All rights reserved.
-  </div>
-</div>
-
-<div id="step-ask-name" class="page-fullscreen hidden">
-  <div style="width:100%; text-align:center; padding-top:4px;">
-    <p style="font-size:0.68rem; color:var(--gold-accent); letter-spacing:2.5px; font-weight:700; margin-bottom:2px;">VIRTUAL PHOTOBOOTH</p>
-    <h2 class="font-script" style="font-size:2.4rem; color:#FFF;" id="ask-event-title">Arka & Nadira</h2>
-    <p style="font-size:0.72rem; color:rgba(255,255,255,0.75); letter-spacing:1px;">18 OKTOBER 2027</p>
-  </div>
-
-  <div class="ask-page-center-wrapper">
-    <div class="glass-card-ask">
-      <h3 class="font-serif" style="font-size:1.45rem; letter-spacing:1.5px; font-weight:600; color:#FFF; line-height:1.2;">
-        DARI SIAPA<br>KENANGAN INI?
-      </h3>
-      <p style="font-size:0.72rem; color:rgba(255,255,255,0.8); margin-top:6px;">Tuliskan nama/panggilanmu untuk dicantumkan pada foto kenangan</p>
-
-      <input type="text" id="guest-initial-name" class="stylish-underline-input" placeholder="Misal: Budi & Sarah" autocomplete="off">
-    </div>
-  </div>
-
-  <div style="width:100%; display:flex; flex-direction:column; align-items:center; justify-content:center;">
-    <button class="btn-gold-v2" onclick="submitGuestNameAndNext()">
-      LANJUTKAN
-    </button>
-
-    <button class="btn-outline-v2" style="margin-top:6px;" onclick="goToStep('step-welcome')">
-      Kembali
-    </button>
-
-    <div class="app-official-footer">
-      © 2026 Votura Studio. All rights reserved.
-    </div>
-  </div>
-</div>
-
-<div id="step-template" class="page-fullscreen hidden">
-  <div class="slider-header-box">
-    <div class="section-label-fullscreen" id="card-theme-tag">ROYAL EDITION</div>
-    <div class="slider-main-title" id="card-theme-name">Classic Royal (3 Foto)</div>
-    <div style="font-size:0.72rem; color:rgba(255,255,255,0.85); font-style:italic;">Ketuk bingkai untuk memilih &amp; memulai</div>
-  </div>
-
-  <div class="slider-cards-viewport" id="slider-stack-box">
-    <div class="figma-card-item" data-path="./assets/v2/dsg3.png" data-count="3" data-name="Classic Royal (3 Foto)" data-tag="ROYAL EDITION">
-      <img src="./assets/v2/dsg3.png" alt="Desain 3">
-    </div>
-    <div class="figma-card-item" data-path="./assets/v2/dsg2.png" data-count="2" data-name="Classic Royal (2 Foto)" data-tag="ROYAL EDITION">
-      <img src="./assets/v2/dsg2.png" alt="Desain 2">
-    </div>
-    <div class="figma-card-item" data-path="./assets/v2/dsg1.png" data-count="1" data-name="Classic Royal (1 Foto)" data-tag="ROYAL EDITION">
-      <img src="./assets/v2/dsg1.png" alt="Desain 1">
-    </div>
-    <div class="figma-card-item" data-path="./assets/v2/flower3.png" data-count="3" data-name="Floral Romance (3 Foto)" data-tag="FLORAL COLLECTION">
-      <img src="./assets/v2/flower3.png" alt="Flower 3">
-    </div>
-    <div class="figma-card-item" data-path="./assets/v2/flower2.png" data-count="2" data-name="Floral Romance (2 Foto)" data-tag="FLORAL COLLECTION">
-      <img src="./assets/v2/flower2.png" alt="Flower 2">
-    </div>
-    <div class="figma-card-item" data-path="./assets/v2/flower1.png" data-count="1" data-name="Floral Romance (1 Foto)" data-tag="FLORAL COLLECTION">
-      <img src="./assets/v2/flower1.png" alt="Flower 1">
-    </div>
-    <div class="figma-card-item" data-path="./assets/v2/line 3.png" data-count="3" data-name="Minimalist Modern (3 Foto)" data-tag="MINIMALIST STYLE">
-      <img src="./assets/v2/line 3.png" alt="Line 3">
-    </div>
-    <div class="figma-card-item" data-path="./assets/v2/line 2.png" data-count="2" data-name="Minimalist Modern (2 Foto)" data-tag="MINIMALIST STYLE">
-      <img src="./assets/v2/line 2.png" alt="Line 2">
-    </div>
-    <div class="figma-card-item" data-path="./assets/v2/line 1.png" data-count="1" data-name="Minimalist Modern (1 Foto)" data-tag="MINIMALIST STYLE">
-      <img src="./assets/v2/line 1.png" alt="Line 1">
-    </div>
-  </div>
-
-  <div style="width:100%; display:flex; flex-direction:column; align-items:center;">
-    <button class="btn-back-styled" onclick="goToStep('step-ask-name')">
-      Kembali
-    </button>
-    <div class="app-official-footer">
-      © 2026 Votura Studio. All rights reserved.
-    </div>
-  </div>
-</div>
-
-<div id="step-camera" class="page-fullscreen hidden">
-  <div class="camera-stage-container">
-    <div class="camera-top-status">
-      <span style="font-size:0.75rem; font-weight:700;" id="cam-progress-text">Foto 1 dari 3</span>
-      <button class="btn-outline-v2" style="width:auto; margin:0; padding:4px 12px; border:1px solid rgba(212,175,55,0.6); border-radius:15px; background:rgba(0,0,0,0.3); color:var(--gold-accent);" onclick="stopCameraAndGoBack()">
-        PILIH FRAME
+    <div class="action-stack">
+      <button type="button" class="btn-gold-solid" onclick="openPhotoboothModal()">
+        <i class="fa-solid fa-camera"></i> TAMBAHKAN MOMEN
+      </button>
+      <button type="button" class="btn-burgundy-outline" onclick="scrollToMemories()">
+        JELAJAHI KENANGAN
       </button>
     </div>
 
-    <div class="camera-viewfinder-box" id="cam-viewfinder-box">
-      <video id="video" class="camera-video-element" autoplay playsinline webkit-playsinline muted></video>
-      <div id="countdown-overlay" class="countdown-overlay hidden">3</div>
-      <div id="flash-overlay" class="flash-overlay"></div>
-    </div>
+    <!-- GALERI HASIL PHOTOBOOTH -->
+    <section id="memories-section" class="memories-section">
+      <h2 class="font-serif memories-title">Galeri Kenangan Tamu</h2>
+      <p class="memories-sub">Setiap jepretan langsung tersimpan dengan bingkai eksklusif Pria &amp; Wanita</p>
 
-    <div class="cam-photos-preview-strip" id="cam-photos-strip"></div>
+      <div id="memories-grid" class="memories-grid">
+        <div class="polaroid-card">
+          <img src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=600&q=80" alt="Momen Tamu 1">
+          <div class="polaroid-caption">Pria &amp; Wanita</div>
+          <div class="polaroid-guest">Sahabat Mempelai</div>
+        </div>
+        <div class="polaroid-card">
+          <img src="https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=600&q=80" alt="Momen Tamu 2">
+          <div class="polaroid-caption">Pria &amp; Wanita</div>
+          <div class="polaroid-guest">Keluarga Besar</div>
+        </div>
+      </div>
+    </section>
 
-    <div class="cam-floating-tools" id="cam-tools-box">
-      <button class="cam-tool-btn" id="btn-timer" onclick="toggleTimerSetting()">
-        Timer: <span id="label-timer">3s</span>
-      </button>
-      <button class="cam-tool-btn" id="btn-zoom" onclick="toggleZoomSetting()">
-        Zoom: <span id="label-zoom">1x</span>
-      </button>
-      <button class="cam-tool-btn" id="btn-mirror" onclick="toggleMirror()">
-        Mirror: <span id="label-mirror">OFF</span>
-      </button>
-    </div>
+    <footer class="footer-brand">
+      &copy; 2026 Votura Studio &bull; Virtual Photobooth
+    </footer>
+  </main>
 
-    <div class="cam-bottom-action-row">
-      <div style="width: 100%; max-width: 280px; position: relative;">
-        <select id="camera-select-dropdown" onchange="onCameraSelectChange(this.value)" style="width: 100%; background: rgba(0,0,0,0.4); color: #FFF; border: 1px solid var(--gold-accent); padding: 8px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; text-align: center; outline: none; backdrop-filter: blur(8px); cursor: pointer;">
-          <option value="">Memindai Kamera...</option>
-        </select>
+  <!-- MODAL KAMERA / UNGGAH FOTO PHOTOBOOTH -->
+  <div id="booth-modal" class="modal-backdrop">
+    <div class="booth-modal">
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <strong class="font-serif" style="font-size:1.25rem; color:var(--gold-soft);">Ambil Foto Momen</strong>
+        <button type="button" onclick="closePhotoboothModal()" style="background:none; border:none; color:#FFF; font-size:1.4rem; cursor:pointer;">&times;</button>
       </div>
 
-      <div class="cam-snap-trigger" id="btn-snap" onclick="takePhotoSnap()">
-        <div class="cam-snap-trigger-inner"></div>
+      <div class="booth-preview-box">
+        <video id="camera-stream" autoplay playsinline muted></video>
+        <canvas id="photo-canvas" style="display:none;"></canvas>
       </div>
-    </div>
-  </div>
-</div>
 
-<div id="step-review-photos" class="page-fullscreen hidden">
-  <div style="width:100%; text-align:center; padding-top:10px;">
-    <p style="font-size:0.68rem; color:var(--gold-accent); letter-spacing:2.5px; font-weight:700; margin-bottom:2px;">REVIEW HASIL FOTO</p>
-    <h2 class="font-serif" style="font-size:1.4rem; color:#FFF;">Apakah foto kamu sudah pas?</h2>
-    <p style="font-size:0.72rem; color:rgba(255,255,255,0.75); margin-top:2px;">Tekan tombol ✕ pada foto jika ingin mengambil foto ulang</p>
-  </div>
+      <input type="text" id="guest-caption-input" class="booth-input" placeholder="Tulis nama Anda...">
 
-  <div class="review-grid-box" id="review-grid-box"></div>
-
-  <div style="width:100%; display:flex; flex-direction:column; align-items:center; justify-content:center; margin-bottom:10px;">
-    <button class="btn-gold-v2" onclick="proceedToRenderStrip()">
-      LANJUTKAN KE CETAK
-    </button>
-
-    <button class="btn-outline-v2" style="margin-top:8px;" onclick="goToCameraToRetakeAll()">
-      Foto Ulang Semua
-    </button>
-
-    <div class="app-official-footer">
-      © 2026 Votura Studio. All rights reserved.
-    </div>
-  </div>
-</div>
-
-<div id="step-result" class="printer-lottie-stage hidden">
-  <div class="vector-printer-wrapper" id="main-printer-unit">
-    <div class="paper-tray-input" id="paper-input-sheet"></div>
-    <div class="flat-printer-body">
-      <div class="printer-panel-top">
-        <div class="led-dot led-red" id="led-red"></div>
-        <div class="led-dot led-green" id="led-green"></div>
-        <div class="printer-brand-tag">Votura Studio</div>
-      </div>
-      <div class="printer-door-tray">
-        <div class="printer-slot-gap"></div>
-      </div>
-    </div>
-    <div class="printer-output-paper-container">
-      <div id="ejected-photo-sheet" class="ejected-photo-sheet">
-        <img class="result-img-target" alt="Hasil Photobooth">
-      </div>
-    </div>
-  </div>
-
-  <div class="popup-photo-container" id="popup-photo-box">
-    <img class="result-img-target" alt="Hasil Photobooth Pop Up">
-  </div>
-
-  <div class="printer-status-text-box">
-    <div class="status-main-label" id="printer-status-main">
-      <span id="printer-status-text">Memproses foto kamu...</span>
-    </div>
-    <div class="status-sub-label" id="printer-status-sub">Harap tunggu sebentar</div>
-  </div>
-
-  <div class="printer-bottom-actions" id="printer-bottom-actions">
-    <div style="background: rgba(255, 255, 255, 0.1); border: 1px solid var(--gold-accent); border-radius: 14px; padding: 12px; text-align: left; box-shadow: 0 8px 20px rgba(0,0,0,0.2); backdrop-filter: blur(8px);">
-      <label style="display:block; font-size:0.68rem; font-weight:700; color:var(--gold-accent); margin-bottom:3px; letter-spacing:1px; text-transform:uppercase;">Dari (Pengirim)</label>
-      <input type="text" id="input-sender-name" style="width:100%; padding:8px 10px; border:1px solid rgba(212,175,55,0.4); border-radius:8px; font-size:0.8rem; outline:none; margin-bottom:8px; background:rgba(0,0,0,0.25); font-family:'Plus Jakarta Sans', sans-serif; font-weight:600; color:#FFF;" readonly>
-
-      <label style="display:block; font-size:0.68rem; font-weight:700; color:var(--gold-accent); margin-bottom:3px; letter-spacing:1px; text-transform:uppercase;">Pesan / Ucapan Doa Kamu</label>
-      <textarea id="input-sender-message" rows="2" style="width:100%; padding:8px 10px; border:1px solid rgba(212,175,55,0.4); border-radius:8px; font-size:0.8rem; outline:none; background:rgba(0,0,0,0.25); color:#FFF; font-family:'Plus Jakarta Sans', sans-serif;" placeholder="Tuliskan ucapan manismu di sini..."></textarea>
-    </div>
-
-    <button class="btn-gold-v2" style="max-width:100%; margin-top:4px;" onclick="saveAndShareToFeed()">
-      UNDUH &amp; POSTING KE GALERI
-    </button>
-
-    <button class="btn-secondary-v2" style="max-width:100%;" onclick="savePrivateOnly()">
-      SIMPAN PRIVAT KE HP
-    </button>
-
-    <button class="btn-outline-v2" style="color:rgba(255,255,255,0.7); max-width:100%; padding:4px;" onclick="goToStep('step-template')">
-      Foto Ulang Semua
-    </button>
-
-    <div class="app-official-footer" style="max-width: 100%;">
-      © 2026 Votura Studio. All rights reserved.
-    </div>
-  </div>
-</div>
-
-<!-- GALERI KENANGAN -->
-<div id="step-gallery-page" class="page-fullscreen-scrollable hidden">
-  <div class="feed-container">
-    <div style="text-align:center; margin-bottom:12px;">
-      <p style="font-size:0.68rem; color:var(--gold-accent); letter-spacing:2.5px; font-weight:700; margin-bottom:2px;">GALERI KENANGAN</p>
-      <h2 class="font-script" style="font-size:2.6rem; color:#FFF; line-height:1;">Jejak Kebahagiaan</h2>
-    </div>
-
-    <div class="gallery-intro-box">
-      <p class="font-serif" style="font-size:0.92rem; color:#FFF; line-height:1.5; font-style:italic;">
-        "Terima kasih telah melangkah bersama kami dan mengukir kehangatan dalam setiap senyuman. Setiap foto dan doa yang tertulis di sini adalah hadiah terindah yang akan selalu kami kenang sepanjang masa."
-      </p>
-      <div style="font-size:0.7rem; font-weight:700; color:var(--gold-accent); margin-top:8px; letter-spacing:1.5px;" id="gallery-couple-sub">
-        — ARKA &amp; NADIRA
-      </div>
-    </div>
-
-    <div style="font-size:0.85rem; font-weight:700; color:var(--gold-accent); margin-bottom:10px; display:flex; justify-content:space-between; align-items:center; letter-spacing:1px;">
-      <span>KIRIMAN TAMU (DEMO)</span>
-      <div style="display:flex; align-items:center; gap:8px;">
-        <button class="btn-refresh-feed-custom" onclick="manualRefreshFeed()" title="Segarkan Foto">
-          <span id="refresh-icon-elm" style="display:inline-flex; align-items:center; justify-content:center;">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M23 4v6h-6"></path>
-              <path d="M1 20v-6h6"></path>
-              <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path>
-            </svg>
-          </span> Refresh
+      <div class="booth-btn-row">
+        <button type="button" id="btn-snap" onclick="capturePhoto()" style="background:var(--gold-main); color:#2C1417;">
+          <i class="fa-solid fa-camera"></i> Jepret
         </button>
-        <span style="font-size:0.7rem; color:rgba(255,255,255,0.7);" id="total-posts-count">0 Kiriman</span>
+        <label style="background:rgba(255,255,255,0.16); color:#FFF; border:1px solid rgba(255,255,255,0.4);">
+          <i class="fa-solid fa-image"></i> Galeri
+          <input type="file" accept="image/*" style="display:none;" onchange="handleUploadPhoto(event)">
+        </label>
+      </div>
+
+      <div id="post-capture-actions" class="booth-btn-row" style="display:none; margin-top:10px;">
+        <button type="button" onclick="resetCameraView()" style="background:rgba(255,255,255,0.15); color:#FFF;">Ulangi</button>
+        <button type="button" onclick="saveFramedPhoto()" style="background:#2E7D32; color:#FFF;">
+          <i class="fa-solid fa-check"></i> Pasang ke Galeri
+        </button>
       </div>
     </div>
-
-    <div id="ig-grid-box" class="ig-grid-container"></div>
-
-    <div style="margin-top:20px;">
-      <button class="btn-gold-v2" style="max-width:100%;" onclick="goToStep('step-welcome')">
-        KEMBALI KE BERANDA
-      </button>
-    </div>
   </div>
 
-  <div class="app-official-footer">
-    © 2026 Votura Studio. All rights reserved.
-  </div>
-</div>
+  <script>
+    const WHATSAPP_NUMBER = "6282298966860";
+    const WHATSAPP_MESSAGE = "Halo Votura Studio! Saya tertarik memesan Virtual Photobooth untuk acara pernikahan seperti di halaman demo. Boleh info paket & pricelist-nya?";
 
-<div id="gallery-scroll-nav" class="floating-scroll-nav">
-  <button id="btn-scroll-top" onclick="scrollToTop()" title="Ke Atas" class="btn-scroll-nav hidden">▲</button>
-  <button id="btn-scroll-bottom" onclick="scrollToBottom()" title="Ke Bawah" class="btn-scroll-nav hidden">▼</button>
-</div>
+    document.getElementById('wa-order-link').href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(WHATSAPP_MESSAGE)}`;
 
-<div id="photo-modal" class="modal-overlay hidden">
-  <div class="modal-card">
-    <button class="modal-close-btn" onclick="closeModal()">✕</button>
-    <div class="modal-user-name" id="modal-name">Nama Tamu</div>
-    <div class="modal-user-date" id="modal-date">18 Okt 2027 • 12:00</div>
-    <img id="modal-img" class="modal-img" src="" alt="Foto Perbesar">
-    <div class="modal-msg" id="modal-msg">"Ucapan doa tamu..."</div>
-  </div>
-</div>
+    // Tanggal otomatis H+30 hari dari hari akses
+    const targetDate = new Date();
+    targetDate.setDate(targetDate.getDate() + 30);
+    const bulanList = ['JANUARI', 'FEBRUARI', 'MARET', 'APRIL', 'MEI', 'JUNI', 'JULI', 'AGUSTUS', 'SEPTEMBER', 'OKTOBER', 'NOVEMBER', 'DESEMBER'];
+    document.getElementById('dynamic-wedding-date').innerText =
+      `${String(targetDate.getDate()).padStart(2, '0')} ${bulanList[targetDate.getMonth()]} ${targetDate.getFullYear()}`;
 
-<div id="alert-modal" class="modal-overlay hidden">
-  <div class="modal-card">
-    <div style="font-size: 0.95rem; font-weight: 700; color: var(--gold-accent); margin-bottom: 8px; letter-spacing: 1px;" id="alert-title">PEMBERITAHUAN</div>
-    <div style="font-size: 0.82rem; color: rgba(255,255,255,0.9); line-height: 1.4; margin-bottom: 18px;" id="alert-text">Pesan...</div>
-    <button class="btn-gold-v2" style="margin-top:0;" onclick="closeAlertModal()">OK</button>
-  </div>
-</div>
-
-<canvas id="canvas"></canvas>
-
-<script>
-  let eventTitle = "Arka & Nadira";
-  let currentGuestName = "";
-  let selectedFramePath = './assets/v2/dsg3.png';
-  let requiredPhotoCount = 3;
-  let capturedPhotos = [];
-  let videoStream = null;
-
-  // DUA URL DATA UNTUK MEMISAHKAN UNDUHAN DAN GALERI
-  let generatedHighResUrl = "";
-  let generatedLowResUrl = "";
-
-  let activeDeviceId = null;
-  let isSwitchingCamera = false;
-  let isMirror = false;
-  let timerDuration = 3;
-  let zoomLevel = 1;
-  let onAlertCloseCallback = null;
-  let isTakingPhoto = false;
-
-  let cardItems = [];
-  let currentCardIndex = 0;
-
-  // PENYIMPANAN GALERI SEMENTARA (EPHEMERAL IN-MEMORY STATE UNTUK DEMO)
-  let demoPosts = [];
-  let globalPostsMap = {};
-  let isPosting = false;
-
-  const EMPTY_FEED_HTML = '<p class="feed-empty" style="font-size: 0.8rem; color: rgba(255,255,255,0.6); grid-column: span 3; text-align: center; padding: 18px 8px;">Belum ada foto di galeri demo. Klik "Tambahkan Momen" di beranda untuk mencoba mengambil foto &amp; mempostingnya di sini!</p>';
-
-  document.addEventListener("DOMContentLoaded", () => {
-    initFigmaSlider();
-    renderDemoFeed();
-
-    const galleryPage = document.getElementById('step-gallery-page');
-    if (galleryPage) {
-      galleryPage.addEventListener('scroll', handleGalleryScroll, { passive: true });
-    }
-  });
-
-  function openEnvelopeAnimation() {
-    const envelopeWrapper = document.getElementById('envelope-wrapper');
-    const envelopeScreen = document.getElementById('envelope-screen');
-
-    envelopeWrapper.classList.add('step-open-flap');
-    setTimeout(() => envelopeWrapper.classList.add('step-lift-up'), 600);
-    setTimeout(() => envelopeWrapper.classList.add('step-zoom-center'), 1300);
-    setTimeout(() => {
-      envelopeScreen.style.opacity = '0';
-      setTimeout(() => envelopeScreen.style.display = 'none', 750);
-    }, 2200);
-  }
-
-  function resetGuestInfo() {
-    currentGuestName = "";
-    const nameInput = document.getElementById('guest-initial-name');
-    if (nameInput) nameInput.value = "";
-    const senderInput = document.getElementById('input-sender-name');
-    if (senderInput) senderInput.value = "";
-  }
-
-  function goToStep(targetId) {
-    if (targetId === 'step-welcome') {
-      resetGuestInfo();
-    }
-
-    const steps = ['step-welcome', 'step-ask-name', 'step-template', 'step-camera', 'step-review-photos', 'step-result', 'step-gallery-page'];
-    steps.forEach(id => {
-      const el = document.getElementById(id);
-      if (el) el.classList.add('hidden');
-    });
-
-    const targetEl = document.getElementById(targetId);
-    if (targetEl) targetEl.classList.remove('hidden');
-
-    if (targetId === 'step-gallery-page') {
-      if (targetEl) targetEl.scrollTop = 0;
-      renderDemoFeed();
-      setTimeout(handleGalleryScroll, 200);
-    } else {
-      const btnTop = document.getElementById('btn-scroll-top');
-      const btnBottom = document.getElementById('btn-scroll-bottom');
-      if (btnTop) btnTop.classList.add('hidden');
-      if (btnBottom) btnBottom.classList.add('hidden');
-    }
-
-    if (targetId === 'step-template') {
-      updateFigmaSliderPositions();
-    }
-
-    if (targetId === 'step-review-photos') {
-      renderReviewPhotosUI();
-    }
-
-    if (targetId === 'step-result') {
-      const printerUnit = document.getElementById('main-printer-unit');
-      const popupBox = document.getElementById('popup-photo-box');
-      const inputPaper = document.getElementById('paper-input-sheet');
-      const ejectedPhoto = document.getElementById('ejected-photo-sheet');
-      const ledRed = document.getElementById('led-red');
-      const ledGreen = document.getElementById('led-green');
-      const statusText = document.getElementById('printer-status-text');
-      const statusSub = document.getElementById('printer-status-sub');
-      const actionsBox = document.getElementById('printer-bottom-actions');
-
-      printerUnit.classList.remove('fade-out-printer');
-      popupBox.classList.remove('show-popup');
-      inputPaper.classList.remove('pulled-in');
-      ejectedPhoto.classList.remove('fully-printed');
-      actionsBox.classList.remove('visible');
-      ledRed.classList.add('blinking');
-      ledGreen.classList.add('blinking');
-      statusText.innerText = "Memproses foto kamu...";
-      statusSub.innerText = "Kertas ditarik masuk ke mesin...";
-
+    // Buka amplop
+    let envelopeOpened = false;
+    function openEnvelope() {
+      if (envelopeOpened) return;
+      envelopeOpened = true;
+      const wrapper = document.getElementById('envelope-wrapper');
+      const overlay = document.getElementById('envelope-overlay');
+      wrapper.classList.add('opened');
       setTimeout(() => {
-        inputPaper.classList.add('pulled-in');
-        statusText.innerText = "Mencetak foto kenangan...";
-        statusSub.innerText = "Sedang dicetak...";
-      }, 500);
-
-      setTimeout(() => {
-        ejectedPhoto.classList.add('fully-printed');
-      }, 2000);
-
-      setTimeout(() => {
-        ledRed.classList.remove('blinking');
-        ledGreen.classList.remove('blinking');
-        printerUnit.classList.add('fade-out-printer');
-
-        setTimeout(() => {
-          popupBox.classList.add('show-popup');
-          statusText.innerHTML = 'Cetak Selesai!';
-          statusSub.innerText = "Foto kamu sudah siap disimpan!";
-          actionsBox.classList.add('visible');
-
-          const stepResultPage = document.getElementById('step-result');
-          if (stepResultPage) {
-            stepResultPage.scrollTo({ top: 160, behavior: 'smooth' });
-          }
-        }, 400);
-      }, 6800);
-    }
-  }
-
-  function handleGalleryScroll() {
-    const galleryPage = document.getElementById('step-gallery-page');
-    const btnTop = document.getElementById('btn-scroll-top');
-    const btnBottom = document.getElementById('btn-scroll-bottom');
-
-    if (!galleryPage || galleryPage.classList.contains('hidden') || !btnTop || !btnBottom) return;
-
-    const scrollTop = galleryPage.scrollTop;
-    const scrollHeight = galleryPage.scrollHeight;
-    const clientHeight = galleryPage.clientHeight;
-
-    if (scrollHeight <= clientHeight + 50) {
-      btnTop.classList.add('hidden');
-      btnBottom.classList.add('hidden');
-      return;
+        overlay.classList.add('hidden-cover');
+      }, 1150);
     }
 
-    const isAtTop = scrollTop < 80;
-    const isAtBottom = (scrollTop + clientHeight) >= (scrollHeight - 80);
-
-    if (isAtTop) {
-      btnTop.classList.add('hidden');
-      btnBottom.classList.remove('hidden');
-    } else if (isAtBottom) {
-      btnTop.classList.remove('hidden');
-      btnBottom.classList.add('hidden');
-    } else {
-      btnTop.classList.remove('hidden');
-      btnBottom.classList.remove('hidden');
+    function scrollToMemories() {
+      document.getElementById('memories-section').scrollIntoView({ behavior: 'smooth' });
     }
-  }
 
-  function scrollToTop() {
-    const galleryPage = document.getElementById('step-gallery-page');
-    if (galleryPage) galleryPage.scrollTo({ top: 0, behavior: 'smooth' });
-  }
+    // Kamera & Bingkai Photobooth
+    let mediaStream = null;
+    const videoEl = document.getElementById('camera-stream');
+    const canvasEl = document.getElementById('photo-canvas');
+    const postActions = document.getElementById('post-capture-actions');
 
-  function scrollToBottom() {
-    const galleryPage = document.getElementById('step-gallery-page');
-    if (galleryPage) galleryPage.scrollTo({ top: galleryPage.scrollHeight, behavior: 'smooth' });
-  }
-
-  function submitGuestNameAndNext() {
-    const inputName = document.getElementById('guest-initial-name').value.trim();
-    if (!inputName) {
-      showAlert("Harap isi nama kamu terlebih dahulu!", "NAMA MASIH KOSONG");
-      return;
-    }
-    currentGuestName = inputName;
-    document.getElementById('input-sender-name').value = inputName;
-    goToStep('step-template');
-  }
-
-  function initFigmaSlider() {
-    cardItems = Array.from(document.querySelectorAll('.figma-card-item'));
-
-    cardItems.forEach((card, index) => {
-      let isDragging = false;
-      let startX = 0;
-
-      card.addEventListener('mousedown', (e) => {
-        isDragging = false;
-        startX = e.clientX;
-      });
-
-      card.addEventListener('mousemove', (e) => {
-        if (Math.abs(e.clientX - startX) > 5) isDragging = true;
-      });
-
-      card.addEventListener('touchstart', (e) => {
-        isDragging = false;
-        startX = e.touches[0].clientX;
-      }, { passive: true });
-
-      card.addEventListener('touchmove', (e) => {
-        if (Math.abs(e.touches[0].clientX - startX) > 5) isDragging = true;
-      }, { passive: true });
-
-      card.addEventListener('click', () => {
-        if (isDragging) return;
-
-        if (index === currentCardIndex) {
-          card.classList.add('card-pressed');
-          const countAttr = card.getAttribute('data-count');
-          requiredPhotoCount = parseInt(countAttr, 10) || 3;
-          selectedFramePath = card.getAttribute('data-path');
-
-          capturedPhotos = [];
-          initCameraStream();
-
-          setTimeout(() => {
-            card.classList.remove('card-pressed');
-            startCameraProcess();
-          }, 200);
-        } else {
-          currentCardIndex = index;
-          updateFigmaSliderPositions();
-        }
-      });
-    });
-
-    updateFigmaSliderPositions();
-
-    const container = document.getElementById('slider-stack-box');
-    let touchStartX = 0;
-    container.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; }, { passive: true });
-    container.addEventListener('touchend', e => {
-      let touchEndX = e.changedTouches[0].clientX;
-      if (touchStartX - touchEndX > 35) moveFigmaSlider(1);
-      else if (touchEndX - touchStartX > 35) moveFigmaSlider(-1);
-    }, { passive: true });
-  }
-
-  function moveFigmaSlider(dir) {
-    currentCardIndex += dir;
-    if (currentCardIndex < 0) currentCardIndex = cardItems.length - 1;
-    if (currentCardIndex >= cardItems.length) currentCardIndex = 0;
-    updateFigmaSliderPositions();
-  }
-
-  function updateFigmaSliderPositions() {
-    cardItems.forEach((card, i) => {
-      card.className = 'figma-card-item';
-
-      if (i === currentCardIndex) {
-        card.classList.add('active');
-        selectedFramePath = card.getAttribute('data-path');
-        requiredPhotoCount = parseInt(card.getAttribute('data-count'), 10) || 3;
-
-        document.getElementById('card-theme-tag').innerText = card.getAttribute('data-tag');
-        document.getElementById('card-theme-name').innerText = card.getAttribute('data-name');
-      } else if (i === (currentCardIndex + 1) % cardItems.length) {
-        card.classList.add('next');
-      } else if (i === (currentCardIndex - 1 + cardItems.length) % cardItems.length) {
-        card.classList.add('prev');
-      } else if (i < currentCardIndex) {
-        card.classList.add('hidden-left');
-      } else {
-        card.classList.add('hidden-right');
-      }
-    });
-  }
-
-  function showAlert(message, title = "PEMBERITAHUAN", callback = null) {
-    document.getElementById('alert-title').innerText = title;
-    document.getElementById('alert-text').innerText = message;
-    onAlertCloseCallback = callback;
-    document.getElementById('alert-modal').classList.remove('hidden');
-  }
-
-  function closeAlertModal() {
-    document.getElementById('alert-modal').classList.add('hidden');
-    if (onAlertCloseCallback) {
-      onAlertCloseCallback();
-      onAlertCloseCallback = null;
-    }
-  }
-
-  function getFrameTargetAspect() {
-    return 456 / 360;
-  }
-
-  function updateViewfinderAspectRatio() {
-    const viewfinderBox = document.getElementById('cam-viewfinder-box');
-    if (!viewfinderBox) return;
-
-    const targetAspect = getFrameTargetAspect();
-    viewfinderBox.style.aspectRatio = `${targetAspect}`;
-  }
-
-  async function populateCameraDevices() {
-    const selectEl = document.getElementById('camera-select-dropdown');
-    if (!selectEl) return;
-
-    try {
-      const devices = await navigator.mediaDevices.enumerateDevices();
-      const videoDevices = devices.filter(d => d.kind === 'videoinput');
-
-      let filteredCameras = [];
-      let backCameras = [];
-      let frontCameras = [];
-      let externalCameras = [];
-
-      videoDevices.forEach((dev, idx) => {
-        const label = (dev.label || `Kamera ${idx + 1}`).toLowerCase();
-
-        if (label.includes('external') || label.includes('usb') || label.includes('webcam')) {
-          externalCameras.push({ deviceId: dev.deviceId, label: dev.label || `Kamera Eksternal ${externalCameras.length + 1}` });
-        } else if (label.includes('front') || label.includes('user') || label.includes('facing front')) {
-          frontCameras.push({ deviceId: dev.deviceId, label: 'Kamera Depan' });
-        } else if (label.includes('back') || label.includes('rear') || label.includes('environment')) {
-          backCameras.push({ deviceId: dev.deviceId, label: dev.label });
-        } else {
-          backCameras.push({ deviceId: dev.deviceId, label: dev.label || `Kamera ${idx + 1}` });
-        }
-      });
-
-      if (frontCameras.length > 0) {
-        filteredCameras.push(frontCameras[0]);
-      } else {
-        filteredCameras.push({ deviceId: 'user_default', label: 'Kamera Depan' });
-      }
-
-      if (backCameras.length > 0) {
-        const mainBack = backCameras.find(c => c.label.toLowerCase().includes('0') || c.label.toLowerCase().includes('main')) || backCameras[0];
-        filteredCameras.push({ deviceId: mainBack.deviceId, label: 'Kamera Belakang' });
-      } else {
-        filteredCameras.push({ deviceId: 'environment_default', label: 'Kamera Belakang' });
-      }
-
-      externalCameras.forEach(ext => filteredCameras.push(ext));
-
-      selectEl.innerHTML = '';
-      filteredCameras.forEach(cam => {
-        const opt = document.createElement('option');
-        opt.value = cam.deviceId;
-        opt.innerText = cam.label;
-        selectEl.appendChild(opt);
-      });
-
-      if (!activeDeviceId && filteredCameras.length > 0) {
-        activeDeviceId = filteredCameras[0].deviceId;
-      }
-      selectEl.value = activeDeviceId;
-
-    } catch (err) {
-      selectEl.innerHTML = `
-        <option value="user_default">Kamera Depan</option>
-        <option value="environment_default">Kamera Belakang</option>
-      `;
-    }
-  }
-
-  async function stopCurrentStream() {
-    if (videoStream) {
+    async function openPhotoboothModal() {
+      document.getElementById('booth-modal').classList.add('active');
+      resetCameraView();
       try {
-        videoStream.getTracks().forEach(track => track.stop());
-      } catch (e) {}
-      videoStream = null;
-    }
-    const video = document.getElementById('video');
-    if (video) {
-      video.pause();
-      video.srcObject = null;
-    }
-    await new Promise(resolve => setTimeout(resolve, 300));
-  }
-
-  async function initCameraStream() {
-    const video = document.getElementById('video');
-    if (!video) return;
-
-    await stopCurrentStream();
-
-    let videoConstraints = {};
-
-    if (activeDeviceId === 'user_default') {
-      videoConstraints = { facingMode: "user" };
-    } else if (activeDeviceId === 'environment_default') {
-      videoConstraints = { facingMode: { ideal: "environment" } };
-    } else if (activeDeviceId) {
-      videoConstraints = { deviceId: { exact: activeDeviceId } };
-    } else {
-      videoConstraints = { facingMode: "user" };
-    }
-
-    try {
-      const stream = await navigator.mediaDevices.getUserMedia({
-        audio: false,
-        video: videoConstraints
-      });
-      videoStream = stream;
-      video.srcObject = stream;
-      await video.play().catch(() => {});
-      applyZoomTransform();
-      await populateCameraDevices();
-    } catch (err) {
-      try {
-        const fallbackStream = await navigator.mediaDevices.getUserMedia({
-          audio: false,
-          video: true
-        });
-        videoStream = fallbackStream;
-        video.srcObject = fallbackStream;
-        await video.play().catch(() => {});
-        applyZoomTransform();
-        await populateCameraDevices();
-      } catch (finalErr) {
-        showAlert("Gagal membuka kamera. Pastikan izin akses kamera sudah diberikan.", "KAMERA ERROR");
+        mediaStream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
+        videoEl.srcObject = mediaStream;
+      } catch (err) {
+        console.warn("Kamera tidak tersedia, gunakan unggah galeri:", err);
       }
     }
-  }
 
-  async function onCameraSelectChange(deviceId) {
-    if (!deviceId || isSwitchingCamera) return;
-    isSwitchingCamera = true;
-    activeDeviceId = deviceId;
-
-    await initCameraStream();
-    isSwitchingCamera = false;
-  }
-
-  function startCameraProcess() {
-    goToStep('step-camera');
-    isTakingPhoto = false;
-
-    const btnSnap = document.getElementById('btn-snap');
-    if (btnSnap) btnSnap.style.opacity = '1';
-
-    const activeCard = cardItems[currentCardIndex];
-    if (activeCard) {
-      requiredPhotoCount = parseInt(activeCard.getAttribute('data-count'), 10) || 3;
-      selectedFramePath = activeCard.getAttribute('data-path');
+    function closePhotoboothModal() {
+      document.getElementById('booth-modal').classList.remove('active');
+      if (mediaStream) {
+        mediaStream.getTracks().forEach(track => track.stop());
+        mediaStream = null;
+      }
     }
 
-    updateViewfinderAspectRatio();
-    updatePhotosStripUI();
-
-    if (!videoStream || !videoStream.active) {
-      initCameraStream();
+    function resetCameraView() {
+      videoEl.style.display = 'block';
+      canvasEl.style.display = 'none';
+      postActions.style.display = 'none';
     }
-  }
 
-  function updatePhotosStripUI() {
-    const stripBox = document.getElementById('cam-photos-strip');
-    const progressText = document.getElementById('cam-progress-text');
+    function drawWithWeddingFrame(sourceImg, width, height) {
+      canvasEl.width = 600;
+      canvasEl.height = 800;
+      const ctx = canvasEl.getContext('2d');
 
-    const totalNeeded = parseInt(requiredPhotoCount, 10) || 3;
-    const currentCapturedCount = capturedPhotos.length;
+      // Latar frame burgundy & emas
+      ctx.fillStyle = '#FFFDF9';
+      ctx.fillRect(0, 0, 600, 800);
 
-    stripBox.innerHTML = '';
-
-    for (let i = 0; i < totalNeeded; i++) {
-      const thumbBox = document.createElement('div');
-
-      if (capturedPhotos[i]) {
-        thumbBox.className = 'photo-thumb-box';
-        thumbBox.innerHTML = `<img src="${capturedPhotos[i]}" alt="Foto ${i+1}">`;
+      // Crop proporsional center
+      const targetRatio = 540 / 620;
+      const srcRatio = width / height;
+      let sx = 0, sy = 0, sw = width, sh = height;
+      if (srcRatio > targetRatio) {
+        sw = height * targetRatio;
+        sx = (width - sw) / 2;
       } else {
-        thumbBox.className = 'photo-thumb-box empty-slot';
-        thumbBox.innerText = `#${i + 1}`;
+        sh = width / targetRatio;
+        sy = (height - sh) / 2;
       }
-      stripBox.appendChild(thumbBox);
+
+      ctx.drawImage(sourceImg, sx, sy, sw, sh, 30, 30, 540, 620);
+
+      // Garis bingkai emas
+      ctx.strokeStyle = '#D4AF37';
+      ctx.lineWidth = 4;
+      ctx.strokeRect(30, 30, 540, 620);
+
+      // Teks watermark mempelai
+      ctx.fillStyle = '#6A383E';
+      ctx.font = 'italic 38px Georgia, serif';
+      ctx.textAlign = 'center';
+      ctx.fillText('Pria & Wanita', 300, 712);
+
+      ctx.fillStyle = '#9E7B1C';
+      ctx.font = 'bold 16px sans-serif';
+      ctx.fillText('VIRTUAL PHOTOBOOTH • VOTURA STUDIO', 300, 748);
+
+      videoEl.style.display = 'none';
+      canvasEl.style.display = 'block';
+      postActions.style.display = 'flex';
     }
 
-    const currentDisplayNum = Math.min(currentCapturedCount + 1, totalNeeded);
-    progressText.innerText = `Foto ${currentDisplayNum} dari ${totalNeeded}`;
-  }
-
-  function toggleMirror() {
-    isMirror = !isMirror;
-    applyZoomTransform();
-    document.getElementById('label-mirror').innerText = isMirror ? 'ON' : 'OFF';
-  }
-
-  function toggleTimerSetting() {
-    if (timerDuration === 3) timerDuration = 5;
-    else if (timerDuration === 5) timerDuration = 0;
-    else timerDuration = 3;
-
-    document.getElementById('label-timer').innerText = timerDuration === 0 ? 'OFF' : timerDuration + 's';
-  }
-
-  function toggleZoomSetting() {
-    if (zoomLevel === 1) zoomLevel = 1.5;
-    else if (zoomLevel === 1.5) zoomLevel = 2;
-    else if (zoomLevel === 2) zoomLevel = 0.5;
-    else zoomLevel = 1;
-
-    applyZoomTransform();
-    document.getElementById('label-zoom').innerText = `${zoomLevel}x`;
-  }
-
-  function applyZoomTransform() {
-    const video = document.getElementById('video');
-    if (!video) return;
-    let transformStr = `scale(${zoomLevel})`;
-    if (isMirror) transformStr += ` scaleX(-1)`;
-    video.style.transform = transformStr;
-  }
-
-  async function stopCameraAndGoBack() {
-    capturedPhotos = [];
-    isTakingPhoto = false;
-    await stopCurrentStream();
-    goToStep('step-template');
-  }
-
-  function takePhotoSnap() {
-    if (isTakingPhoto) return;
-
-    const totalNeeded = parseInt(requiredPhotoCount, 10) || 3;
-    if (capturedPhotos.length >= totalNeeded) return;
-
-    isTakingPhoto = true;
-
-    const btnSnap = document.getElementById('btn-snap');
-    if (btnSnap) btnSnap.style.opacity = '0.5';
-
-    if (timerDuration === 0) {
-      executeSnapCapture();
-      return;
-    }
-
-    let count = timerDuration;
-    const overlay = document.getElementById('countdown-overlay');
-    overlay.innerText = count;
-    overlay.classList.remove('hidden');
-
-    const timer = setInterval(() => {
-      count--;
-      if (count > 0) {
-        overlay.innerText = count;
-      } else {
-        clearInterval(timer);
-        overlay.classList.add('hidden');
-        executeSnapCapture();
+    function capturePhoto() {
+      if (videoEl.videoWidth > 0) {
+        drawWithWeddingFrame(videoEl, videoEl.videoWidth, videoEl.videoHeight);
       }
-    }, 1000);
-  }
-
-  function executeSnapCapture() {
-    const flash = document.getElementById('flash-overlay');
-    flash.classList.add('active');
-    setTimeout(() => flash.classList.remove('active'), 200);
-
-    const video = document.getElementById('video');
-
-    const vWidth = video.videoWidth || 640;
-    const vHeight = video.videoHeight || 480;
-
-    const targetAspect = getFrameTargetAspect();
-
-    // 1. Hitung area crop berdasarkan aspect ratio bingkai
-    let cropW = vWidth;
-    let cropH = vWidth / targetAspect;
-
-    if (cropH > vHeight) {
-      cropH = vHeight;
-      cropW = vHeight * targetAspect;
     }
 
-    // 2. Potong area gambar sesuai tingkat zoom
-    const currentZoom = zoomLevel || 1;
-    cropW = cropW / currentZoom;
-    cropH = cropH / currentZoom;
-
-    // 3. Tentukan koordinat tengah pemotongan
-    const cropX = (vWidth - cropW) / 2;
-    const cropY = (vHeight - cropH) / 2;
-
-    const tempCanvas = document.createElement('canvas');
-    tempCanvas.width = 600;
-    tempCanvas.height = Math.round(600 / targetAspect);
-    const ctx = tempCanvas.getContext('2d');
-
-    ctx.save();
-    if (isMirror) {
-      ctx.translate(tempCanvas.width, 0);
-      ctx.scale(-1, 1);
-    }
-
-    // 4. Gambar area terpotong/terzoom ke canvas
-    ctx.drawImage(video, cropX, cropY, cropW, cropH, 0, 0, tempCanvas.width, tempCanvas.height);
-    ctx.restore();
-
-    capturedPhotos.push(tempCanvas.toDataURL('image/jpeg', 0.85));
-
-    const totalNeeded = parseInt(requiredPhotoCount, 10) || 3;
-
-    isTakingPhoto = false;
-
-    const btnSnap = document.getElementById('btn-snap');
-    if (btnSnap) btnSnap.style.opacity = '1';
-
-    updatePhotosStripUI();
-
-    if (capturedPhotos.length >= totalNeeded) {
-      stopCurrentStream();
-      setTimeout(() => {
-        goToStep('step-review-photos');
-      }, 200);
-    }
-  }
-
-  function renderReviewPhotosUI() {
-    const gridBox = document.getElementById('review-grid-box');
-    gridBox.innerHTML = '';
-
-    const targetAspect = getFrameTargetAspect();
-    const total = capturedPhotos.length || 1;
-    const gap = 12;
-
-    gridBox.style.flexDirection = 'column';
-    gridBox.style.flexWrap = 'nowrap';
-    gridBox.style.gap = gap + 'px';
-
-    const availH = Math.max(window.innerHeight - 330, 240);
-    const availW = Math.min(window.innerWidth - 48, 360);
-    let cardW = ((availH - gap * (total - 1)) / total) * targetAspect;
-    cardW = Math.max(120, Math.min(cardW, availW));
-
-    capturedPhotos.forEach((src, idx) => {
-      const card = document.createElement('div');
-      card.className = 'review-photo-card';
-
-      card.style.width = cardW + 'px';
-      card.style.maxWidth = cardW + 'px';
-      card.style.aspectRatio = `${targetAspect}`;
-      card.innerHTML = `
-        <img src="${src}" alt="Foto ${idx + 1}">
-        <button class="review-delete-btn" onclick="deletePhotoInReview(${idx})">✕</button>
-      `;
-      gridBox.appendChild(card);
-    });
-  }
-
-  function deletePhotoInReview(index) {
-    capturedPhotos.splice(index, 1);
-    startCameraProcess();
-  }
-
-  function goToCameraToRetakeAll() {
-    capturedPhotos = [];
-    startCameraProcess();
-  }
-
-  function proceedToRenderStrip() {
-    renderPhotostripWithFigmaFrame();
-  }
-
-  function renderPhotostripWithFigmaFrame() {
-    const canvas = document.getElementById('canvas');
-    const ctx = canvas.getContext('2d');
-
-    const btn = document.querySelector('#step-review-photos .btn-gold-v2');
-    if (btn) { btn.disabled = true; btn.innerText = 'MEMPROSES...'; }
-    const resetBtn = () => {
-      if (btn) { btn.disabled = false; btn.innerText = 'LANJUTKAN KE CETAK'; }
-    };
-
-    const loadImageSafe = (src, timeoutMs = 10000) => {
-      return new Promise((resolve) => {
+    function handleUploadPhoto(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e) {
         const img = new Image();
-        const timer = setTimeout(() => resolve(null), timeoutMs);
-        img.onload = () => { clearTimeout(timer); resolve(img); };
-        img.onerror = () => { clearTimeout(timer); resolve(null); };
-        img.src = src;
-      });
-    };
-
-    const loadFramePromise = loadImageSafe(encodeURI(selectedFramePath));
-    const loadPhotosPromises = Promise.all(capturedPhotos.map(src => loadImageSafe(src)));
-
-    Promise.all([loadFramePromise, loadPhotosPromises]).then(([frameImg, userImagesRaw]) => {
-      const userImages = userImagesRaw.filter(Boolean);
-      if (userImages.length === 0) throw new Error("Foto gagal dimuat");
-
-      let origW = frameImg ? (frameImg.naturalWidth || frameImg.width) : 600;
-      let origH = frameImg ? (frameImg.naturalHeight || frameImg.height) : 1800;
-
-      const MAX_SIDE = 4096;
-      const cap = Math.min(1, MAX_SIDE / Math.max(origW, origH));
-      const W = Math.round(origW * cap);
-      const H = Math.round(origH * cap);
-
-      // 1. RENDER FULL HIGH-RES (Untuk Download Langsung di Perangkat Tamu)
-      canvas.width = W;
-      canvas.height = H;
-
-      ctx.clearRect(0, 0, W, H);
-      ctx.imageSmoothingEnabled = true;
-      ctx.imageSmoothingQuality = 'high';
-
-      if (frameImg) {
-        ctx.drawImage(frameImg, 0, 0, W, H);
-      } else {
-        ctx.fillStyle = '#FDFBF7';
-        ctx.fillRect(0, 0, W, H);
-      }
-
-      const totalPhotos = userImages.length;
-      const targetAspect = getFrameTargetAspect();
-
-      const slotW = Math.round(W * 0.76);
-      const slotH = Math.round(slotW / targetAspect);
-      const startX = Math.round((W - slotW) / 2);
-
-      const gapY = Math.round(H * 0.022);
-      const totalBlockHeight = (totalPhotos * slotH) + ((totalPhotos - 1) * gapY);
-      const startY = Math.round((H - totalBlockHeight) / 2);
-
-      userImages.forEach((photo, i) => {
-        const currentY = startY + (i * (slotH + gapY));
-
-        ctx.save();
-        ctx.shadowColor = "rgba(0, 0, 0, 0.15)";
-        ctx.shadowBlur = 10;
-        ctx.shadowOffsetX = 0;
-        ctx.shadowOffsetY = 4;
-
-        ctx.drawImage(photo, 0, 0, photo.width, photo.height, startX, currentY, slotW, slotH);
-        ctx.restore();
-      });
-
-      generatedHighResUrl = canvas.toDataURL('image/jpeg', 0.95);
-
-      // 2. RENDER MID-HIGH (Lebar 900px, Kualitas 0.78 untuk Galeri Demo)
-      const TARGET_W = 900;
-      const scaleRatio = W > TARGET_W ? (TARGET_W / W) : 1;
-      const midW = Math.round(W * scaleRatio);
-      const midH = Math.round(H * scaleRatio);
-
-      const tempCanvas = document.createElement('canvas');
-      tempCanvas.width = midW;
-      tempCanvas.height = midH;
-      const tempCtx = tempCanvas.getContext('2d');
-      tempCtx.imageSmoothingEnabled = true;
-      tempCtx.imageSmoothingQuality = 'high';
-      tempCtx.drawImage(canvas, 0, 0, midW, midH);
-
-      generatedLowResUrl = tempCanvas.toDataURL('image/jpeg', 0.78);
-
-      document.querySelectorAll('.result-img-target').forEach(img => {
-        img.src = generatedHighResUrl;
-      });
-
-      resetBtn();
-      goToStep('step-result');
-    }).catch(() => {
-      resetBtn();
-      showAlert("Gagal memproses foto. Silakan coba lagi.", "TERJADI KESALAHAN");
-    });
-  }
-
-  function downloadImageToPhone(senderName) {
-    const nameGuest = senderName ? senderName.replace(/[^\w\s-]/gi, '').trim() : "Tamu";
-    const nameClient = eventTitle ? eventTitle.replace(/[^\w\s-]/gi, '').trim() : "FOTOME";
-    const fileName = `${nameGuest} - ${nameClient}.jpg`;
-
-    const a = document.createElement('a');
-    a.href = generatedHighResUrl;
-    a.download = fileName;
-    a.click();
-  }
-
-  // SIMPAN FOTO SEMENTARA DI MEMORI LOKAL (EPHEMERAL IN-MEMORY STATE)
-  function saveAndShareToFeed() {
-    if (isPosting) return;
-
-    const senderName = document.getElementById('input-sender-name').value.trim() || currentGuestName || "Tamu Undangan";
-    const senderMessage = document.getElementById('input-sender-message').value.trim() || "Selamat untuk kebahagiaan kalian!";
-
-    // Unduh file High-Res ke perangkat tamu
-    downloadImageToPhone(senderName);
-
-    const btn = document.querySelector('#printer-bottom-actions .btn-gold-v2');
-    isPosting = true;
-    if (btn) { btn.disabled = true; btn.innerText = 'MENAMBAHKAN...'; }
-
-    setTimeout(() => {
-      const postId = 'demo_' + Date.now();
-      const newPost = {
-        id: postId,
-        name: senderName,
-        message: senderMessage,
-        photoData: generatedLowResUrl,
-        createdAt: new Date()
+        img.onload = function() {
+          drawWithWeddingFrame(img, img.width, img.height);
+        };
+        img.src = e.target.result;
       };
-
-      demoPosts.unshift(newPost);
-      globalPostsMap[postId] = newPost;
-
-      isPosting = false;
-      if (btn) { btn.disabled = false; btn.innerText = 'UNDUH & POSTING KE GALERI'; }
-
-      showAlert("Foto berhasil diunduh dan ditambahkan ke Galeri Demo!", "BERHASIL DITAMBAHKAN", () => {
-        document.getElementById('input-sender-message').value = '';
-        resetGuestInfo();
-        goToStep('step-gallery-page');
-      });
-    }, 350);
-  }
-
-  function savePrivateOnly() {
-    const senderName = document.getElementById('input-sender-name').value.trim() || currentGuestName || "Tamu";
-    downloadImageToPhone(senderName);
-    showAlert("Foto berhasil disimpan secara privat ke HP kamu!", "TERSIMPAN PRIVAT", () => {
-      resetGuestInfo();
-      goToStep('step-welcome');
-    });
-  }
-
-  function formatTimestamp(dateObj) {
-    if (!(dateObj instanceof Date)) dateObj = new Date();
-    const day = String(dateObj.getDate()).padStart(2, '0');
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agt', 'Sep', 'Okt', 'Nov', 'Des'];
-    const month = months[dateObj.getMonth()];
-    const year = dateObj.getFullYear();
-    const hours = String(dateObj.getHours()).padStart(2, '0');
-    const minutes = String(dateObj.getMinutes()).padStart(2, '0');
-
-    return `${day} ${month} ${year} • ${hours}:${minutes}`;
-  }
-
-  function escapeHtml(str) {
-    return String(str == null ? '' : str).replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
-  }
-
-  function renderPostCardHTML(data) {
-    const timeFormatted = formatTimestamp(data.createdAt);
-    return `
-      <div class="ig-grid-item" onclick="openModal('${data.id}')">
-        <div class="ig-item-header">
-          <div class="ig-item-name">${escapeHtml(data.name || 'Tamu')}</div>
-          <div class="ig-item-date">${timeFormatted}</div>
-        </div>
-        <div class="ig-item-img-box">
-          <img src="${data.photoData}" alt="Foto Strip" loading="lazy" decoding="async">
-        </div>
-        <div class="ig-item-msg">"${escapeHtml(data.message || '')}"</div>
-      </div>
-    `;
-  }
-
-  function renderDemoFeed() {
-    const gridBox = document.getElementById('ig-grid-box');
-    const countEl = document.getElementById('total-posts-count');
-    if (countEl) countEl.innerText = `${demoPosts.length} Kiriman`;
-
-    if (!gridBox) return;
-    if (demoPosts.length === 0) {
-      gridBox.innerHTML = EMPTY_FEED_HTML;
-      return;
+      reader.readAsDataURL(file);
     }
 
-    gridBox.innerHTML = demoPosts.map(post => renderPostCardHTML(post)).join('');
-    setTimeout(handleGalleryScroll, 100);
-  }
+    function saveFramedPhoto() {
+      const dataUrl = canvasEl.toDataURL('image/jpeg', 0.9);
+      const guestName = document.getElementById('guest-caption-input').value.trim() || 'Tamu Undangan';
 
-  function manualRefreshFeed() {
-    const iconElm = document.getElementById('refresh-icon-elm');
-    if (iconElm) iconElm.classList.add('spin-icon');
-    setTimeout(() => {
-      renderDemoFeed();
-      if (iconElm) iconElm.classList.remove('spin-icon');
-    }, 450);
-  }
-
-  function openModal(postId) {
-    const data = globalPostsMap[postId];
-    if (!data) return;
-
-    const timeFormatted = formatTimestamp(data.createdAt);
-
-    document.getElementById('modal-name').innerText = data.name || 'Tamu Undangan';
-    document.getElementById('modal-date').innerText = timeFormatted;
-    document.getElementById('modal-msg').innerText = `"${data.message || ''}"`;
-    document.getElementById('modal-img').src = data.photoData;
-
-    document.getElementById('photo-modal').classList.remove('hidden');
-  }
-
-  function closeModal() {
-    document.getElementById('photo-modal').classList.add('hidden');
-  }
-</script>
+      const grid = document.getElementById('memories-grid');
+      const card = document.createElement('div');
+      card.className = 'polaroid-card';
+      card.innerHTML = `
+        <img src="${dataUrl}" alt="Foto Tamu">
+        <div class="polaroid-caption">Pria &amp; Wanita</div>
+        <div class="polaroid-guest">${guestName}</div>
+      `;
+      grid.prepend(card);
+      closePhotoboothModal();
+      scrollToMemories();
+    }
+  </script>
 
 </body>
 </html>
