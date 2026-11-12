@@ -3,7 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Client - Votura Wedding</title>
+  <title>Admin Client — Votura Wedding</title>
+  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/RiyanArdians/votura-app/main/assets/votura-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg: #fafaf9;
@@ -14,8 +18,8 @@
       --shadow: 4px 4px 0px #1a1a1a;
     }
 
-    * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body { background-color: var(--bg); color: var(--text); padding: 20px; margin: 0; }
+    * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+    body { background-color: var(--bg); color: var(--text); padding: 20px; margin: 0; line-height: 1.5; }
     .container { max-width: 700px; margin: 0 auto; }
     
     header {
@@ -25,7 +29,7 @@
       padding: 20px;
       margin-bottom: 24px;
     }
-    header h1 { margin: 0; font-size: 20px; text-transform: uppercase; }
+    header h1 { font-family: 'Cormorant Garamond', serif; margin: 0; font-size: 24px; text-transform: uppercase; }
     header p { margin: 5px 0 0 0; font-size: 13px; font-weight: bold; }
 
     .card {
@@ -36,8 +40,10 @@
       margin-bottom: 24px;
     }
 
+    .card h3 { font-family: 'Cormorant Garamond', serif; font-size: 20px; margin-top: 0; margin-bottom: 16px; }
+
     .form-group { margin-bottom: 15px; text-align: left; }
-    label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px; }
+    label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 13px; color: #4b5563; }
     input, textarea {
       width: 100%;
       padding: 10px;
@@ -45,7 +51,10 @@
       font-size: 14px;
       outline: none;
       background: #fafafa;
+      border-radius: 8px;
     }
+
+    input:focus, textarea:focus { background: #fff; border-color: var(--accent); }
 
     button {
       background: var(--accent);
@@ -57,6 +66,8 @@
       cursor: pointer;
       text-transform: uppercase;
       width: 100%;
+      border-radius: 8px;
+      transition: transform 0.1s, box-shadow 0.1s;
     }
     button:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px #1a1a1a; }
 
@@ -73,6 +84,7 @@
     .modal-box {
       background: white; border: 3px solid #1a1a1a; box-shadow: 6px 6px 0px #1a1a1a;
       width: 90%; max-width: 350px; padding: 20px; text-align: center;
+      border-radius: 12px;
     }
   </style>
 </head>
@@ -135,9 +147,9 @@
   <!-- CUSTOM MODAL -->
   <div class="modal-overlay" id="custom-modal">
     <div class="modal-box">
-      <h3 id="modal-title">Notifikasi</h3>
-      <p id="modal-message">Pesan...</p>
-      <button onclick="closeModal()" style="padding: 8px 16px; font-size: 12px;">Tutup</button>
+      <h3 id="modal-title" style="font-family: 'Cormorant Garamond', serif; margin-top:0;">Notifikasi</h3>
+      <p id="modal-message" style="font-size: 13.5px; color: #4b5563;">Pesan...</p>
+      <button onclick="closeModal()" style="padding: 8px 16px; font-size: 12px; width: auto;">Tutup</button>
     </div>
   </div>
 
@@ -174,6 +186,14 @@
     }
     function closeModal() { document.getElementById('custom-modal').style.display = 'none'; }
 
+    function escapeHtml(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
+    }
+
     // 1. Load Data Event dari Firestore
     function loadEventData() {
       if (!eventId) {
@@ -186,12 +206,14 @@
         if (doc.exists) {
           const data = doc.data();
           coupleInput.value = data.coupleName || data.name || "";
-          dateInput.value = data.weddingDate || "";
-          locationInput.value = data.weddingLocation || "";
+          dateInput.value = data.weddingDate || data.eventDate || "";
+          locationInput.value = data.weddingLocation || data.venue || "";
           mapsInput.value = data.mapsUrl || "";
         } else {
-          showModal("Error", "Event tidak ditemukan!");
+          showModal("Error", "Event tidak ditemukan di database!");
         }
+      }).catch((err) => {
+        showModal("Gagal Memuat", err.message);
       });
 
       loadRSVPData();
@@ -206,9 +228,13 @@
       try {
         await db.collection("events").doc(eventId).update({
           coupleName: coupleInput.value,
+          name: coupleInput.value,
           weddingDate: dateInput.value,
+          eventDate: dateInput.value,
           weddingLocation: locationInput.value,
-          mapsUrl: mapsInput.value
+          venue: locationInput.value,
+          mapsUrl: mapsInput.value,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
         });
 
         showModal("Sukses", "Informasi pernikahan berhasil diperbarui!");
@@ -236,12 +262,14 @@
             const data = doc.data();
             const tr = document.createElement('tr');
             tr.innerHTML = `
-              <td><strong>${data.name}</strong></td>
-              <td>${data.status}</td>
-              <td>${data.message}</td>
+              <td><strong>${escapeHtml(data.name || 'Tamu')}</strong></td>
+              <td>${escapeHtml(data.status || data.attendance || '-')}</td>
+              <td>${escapeHtml(data.message || data.ucapan || '-')}</td>
             `;
             rsvpTableBody.appendChild(tr);
           });
+        }, (error) => {
+          rsvpTableBody.innerHTML = `<tr><td colspan="3" style="text-align: center; color: #b91c1c;">Gagal memuat RSVP: ${escapeHtml(error.message)}</td></tr>`;
         });
     }
 
