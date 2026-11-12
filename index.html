@@ -3,7 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Votura Studio — Digital Wedding & Virtual Photobooth</title>
+  <title>Votura Studio — Undangan Digital &amp; Virtual Photobooth</title>
+  <link rel="icon" type="image/png" href="assets/votura-icon.png">
+  <link rel="apple-touch-icon" href="assets/votura-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -12,8 +14,8 @@
       --bg-base: #EFECE6;
       --surface: #F8F6F2;
       --glass: rgba(255, 255, 255, 0.58);
-      --glass-strong: rgba(255, 255, 255, 0.82);
-      --glass-border: rgba(255, 255, 255, 0.75);
+      --glass-strong: rgba(255, 255, 255, 0.84);
+      --glass-border: rgba(255, 255, 255, 0.78);
       --ink: #23211E;
       --ink-muted: #68635C;
       --accent-warm: #8C7355;
@@ -121,33 +123,6 @@
       color: #FFFFFF;
     }
 
-    .nav-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .circle-icon-btn {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      background: var(--glass);
-      backdrop-filter: blur(12px);
-      border: 1px solid var(--glass-border);
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--ink);
-      text-decoration: none;
-      cursor: pointer;
-      transition: transform 0.3s var(--transition), background 0.3s var(--transition);
-    }
-
-    .circle-icon-btn:hover {
-      transform: translateY(-2px);
-      background: #FFFFFF;
-    }
-
     .cta-pill {
       display: inline-flex;
       align-items: center;
@@ -215,7 +190,6 @@
       color: var(--ink-muted);
       text-decoration: none;
       transition: all 0.3s var(--transition);
-      position: relative;
     }
 
     .dock-item:hover, .dock-item.active {
@@ -233,7 +207,7 @@
     .hero-section {
       position: relative;
       padding: 28px 36px 36px 96px;
-      min-height: 640px;
+      min-height: 620px;
       display: flex;
       flex-direction: column;
       justify-content: space-between;
@@ -243,9 +217,6 @@
     }
 
     .hero-top-meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
       margin-bottom: 18px;
     }
 
@@ -254,16 +225,6 @@
       letter-spacing: 0.22em;
       text-transform: uppercase;
       color: var(--ink-muted);
-      font-weight: 600;
-    }
-
-    .pillars-list {
-      text-align: right;
-      font-size: 10.5px;
-      letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--ink-muted);
-      line-height: 1.85;
       font-weight: 600;
     }
 
@@ -285,7 +246,7 @@
     .hero-subtitle {
       font-size: 15px;
       color: var(--ink-muted);
-      max-width: 460px;
+      max-width: 470px;
       margin-bottom: 28px;
       line-height: 1.7;
     }
@@ -308,6 +269,8 @@
       text-decoration: none;
       font-size: 13.5px;
       font-weight: 500;
+      border: none;
+      cursor: pointer;
       transition: all 0.35s var(--transition);
     }
 
@@ -330,7 +293,7 @@
     }
 
     .btn-ghost-demo:hover {
-      opacity: 0.75;
+      opacity: 0.72;
     }
 
     .play-ring {
@@ -358,7 +321,7 @@
     .mockup-preview {
       background: linear-gradient(145deg, #2B2825 0%, #1B1917 100%);
       border-radius: 20px;
-      padding: 24px;
+      padding: 26px;
       color: #F8F6F2;
       position: relative;
       overflow: hidden;
@@ -377,13 +340,14 @@
 
     .mockup-preview h3 {
       font-size: 26px;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
 
     .mockup-preview p {
-      font-size: 12.5px;
-      color: rgba(248, 246, 242, 0.72);
-      margin-bottom: 18px;
+      font-size: 13px;
+      color: rgba(248, 246, 242, 0.75);
+      margin-bottom: 20px;
+      line-height: 1.65;
     }
 
     .mockup-meta-row {
@@ -393,9 +357,10 @@
       padding-top: 14px;
       border-top: 1px solid rgba(255, 255, 255, 0.12);
       font-size: 12px;
+      color: rgba(248, 246, 242, 0.85);
     }
 
-    /* HERO BOTTOM BENTO ROW (MATCHING REFERENCE) */
+    /* HERO BOTTOM BENTO ROW */
     .hero-bento-grid {
       display: grid;
       grid-template-columns: 1.2fr 1fr 0.72fr;
@@ -425,6 +390,7 @@
       flex-direction: column;
       justify-content: space-between;
       color: var(--ink);
+      transition: background 0.4s ease;
     }
 
     .featured-thumb span {
@@ -475,6 +441,10 @@
       gap: 6px;
     }
 
+    .link-subtle:hover {
+      text-decoration: underline;
+    }
+
     .slider-btns {
       display: flex;
       gap: 6px;
@@ -523,7 +493,7 @@
 
     .stat-item strong {
       display: block;
-      font-size: 22px;
+      font-size: 21px;
       font-weight: 700;
       line-height: 1.1;
       margin-bottom: 4px;
@@ -545,6 +515,9 @@
       flex-direction: column;
       justify-content: space-between;
       text-decoration: none;
+      cursor: pointer;
+      border: none;
+      text-align: left;
       transition: transform 0.35s var(--transition);
     }
 
@@ -556,6 +529,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      width: 100%;
     }
 
     .mini-orb {
@@ -586,7 +560,7 @@
 
     .bento-dark-cta p {
       font-size: 11.5px;
-      color: rgba(255, 255, 255, 0.65);
+      color: rgba(255, 255, 255, 0.68);
     }
 
     /* CONTENT SECTIONS */
@@ -596,24 +570,13 @@
     }
 
     .section-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
       margin-bottom: 36px;
-      flex-wrap: wrap;
-      gap: 16px;
     }
 
     .section-head h2 {
       font-size: clamp(30px, 3.6vw, 42px);
       line-height: 1.12;
       margin-top: 6px;
-    }
-
-    .section-head p {
-      max-width: 420px;
-      font-size: 14px;
-      color: var(--ink-muted);
     }
 
     /* SERVICES / PRODUCTS CARDS */
@@ -661,6 +624,7 @@
       font-size: 14px;
       color: var(--ink-muted);
       margin-bottom: 20px;
+      line-height: 1.65;
     }
 
     .product-price {
@@ -698,7 +662,7 @@
 
     .product-actions {
       display: grid;
-      grid-template-columns: 1fr 1.2fr;
+      grid-template-columns: 1fr 1.25fr;
       gap: 12px;
     }
 
@@ -710,93 +674,17 @@
       padding: 12px 18px;
       border-radius: var(--radius-pill);
       border: 1px solid rgba(35, 33, 30, 0.22);
+      background: transparent;
       color: var(--ink);
       text-decoration: none;
       font-size: 13px;
       font-weight: 600;
+      cursor: pointer;
       transition: all 0.3s ease;
     }
 
     .btn-outline-pill:hover {
       background: var(--bg-base);
-    }
-
-    /* PAYMENT & TRANSACTION SECTION */
-    .payment-wrapper {
-      background: #EFECE6;
-      border-radius: var(--radius-xl);
-      padding: 32px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-    }
-
-    .bank-card {
-      background: #FFFFFF;
-      border-radius: var(--radius-lg);
-      padding: 22px 24px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-      border: 1px solid rgba(35, 33, 30, 0.06);
-    }
-
-    .bank-label {
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: 0.14em;
-      color: var(--ink-muted);
-      font-weight: 600;
-      margin-bottom: 4px;
-    }
-
-    .bank-number {
-      font-size: 20px;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-      color: var(--ink);
-      margin-bottom: 2px;
-    }
-
-    .bank-holder {
-      font-size: 13px;
-      color: var(--ink-muted);
-    }
-
-    .copy-pill-btn {
-      background: var(--surface);
-      border: 1px solid rgba(35, 33, 30, 0.16);
-      color: var(--ink);
-      padding: 10px 16px;
-      border-radius: var(--radius-pill);
-      font-size: 12.5px;
-      font-weight: 600;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.25s ease;
-    }
-
-    .copy-pill-btn:hover {
-      background: var(--pill-dark);
-      color: #FFFFFF;
-    }
-
-    .payment-footer-bar {
-      grid-column: 1 / -1;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 16px;
-      padding-top: 12px;
-    }
-
-    .payment-note {
-      font-size: 13px;
-      color: var(--ink-muted);
     }
 
     /* TESTIMONIALS */
@@ -848,9 +736,9 @@
 
     .footer-brand p {
       font-size: 13px;
-      color: rgba(248, 246, 242, 0.65);
+      color: rgba(248, 246, 242, 0.68);
       margin-top: 8px;
-      max-width: 340px;
+      max-width: 360px;
     }
 
     .social-pills {
@@ -879,38 +767,13 @@
       color: var(--pill-dark);
     }
 
-    /* CUSTOM GLASS TOAST & MODAL (MATCHING THEME) */
-    .glass-toast {
-      position: fixed;
-      bottom: 28px;
-      right: 28px;
-      background: var(--pill-dark);
-      color: #FFFFFF;
-      padding: 14px 22px;
-      border-radius: var(--radius-pill);
-      font-size: 13px;
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.22);
-      opacity: 0;
-      transform: translateY(16px);
-      pointer-events: none;
-      transition: all 0.4s var(--transition);
-      z-index: 200;
-    }
-
-    .glass-toast.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
+    /* MATCHING GLASS MODAL */
     .modal-backdrop {
       position: fixed;
       inset: 0;
       background: rgba(35, 33, 30, 0.45);
       backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
       display: none;
       align-items: center;
       justify-content: center;
@@ -942,8 +805,7 @@
     @media (max-width: 1024px) {
       .hero-main-grid,
       .hero-bento-grid,
-      .products-grid,
-      .payment-wrapper {
+      .products-grid {
         grid-template-columns: 1fr;
       }
 
@@ -974,8 +836,8 @@
         bottom: 16px;
         transform: translateX(-50%);
         flex-direction: row;
-        padding: 6px 12px;
-        gap: 8px;
+        padding: 6px 14px;
+        gap: 10px;
       }
 
       .dock-divider {
@@ -991,7 +853,7 @@
       }
 
       .studio-footer {
-        padding-bottom: 88px;
+        padding-bottom: 92px;
       }
 
       .testi-grid {
@@ -1009,13 +871,6 @@
       .featured-thumb {
         height: 110px;
       }
-
-      .glass-toast {
-        bottom: 76px;
-        right: 16px;
-        left: 16px;
-        justify-content: center;
-      }
     }
   </style>
 </head>
@@ -1026,17 +881,14 @@
     <a href="#beranda" class="dock-item active" title="Beranda">
       <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
     </a>
-    <a href="#produk" class="dock-item" title="Layanan & Produk">
+    <a href="#produk" class="dock-item" title="Katalog Layanan">
       <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
     </a>
-    <a href="#transaksi" class="dock-item" title="Transaksi & Rekening">
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
-    </a>
-    <a href="#testimoni" class="dock-item" title="Testimoni Klien">
+    <a href="#testimoni" class="dock-item" title="Ulasan Klien">
       <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
     </a>
     <div class="dock-divider"></div>
-    <a href="#kontak" class="dock-item" title="Kontak & Sosial Media">
+    <a href="#kontak" class="dock-item" title="Hubungi Kami">
       <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
     </a>
   </aside>
@@ -1051,17 +903,13 @@
       <nav class="nav-pill-group">
         <a href="#beranda" class="active">Beranda</a>
         <a href="#produk">Produk</a>
-        <a href="#transaksi">Transaksi</a>
-        <a href="#testimoni">Testimoni</a>
+        <a href="#testimoni">Ulasan</a>
         <a href="#kontak">Kontak</a>
       </nav>
 
-      <div class="nav-actions">
-        <a href="https://instagram.com/voturastudio" target="_blank" class="circle-icon-btn" aria-label="Instagram Votura Studio">
-          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-        </a>
-        <button type="button" class="cta-pill" onclick="openOrderModal('Konsultasi Layanan Votura Studio')">
-          <span>Mulai Pesan</span>
+      <div>
+        <button type="button" class="cta-pill" onclick="openChatModal('Konsultasi Rencana Acara')">
+          <span>Ngobrol Dulu</span>
           <span class="arrow-badge">
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
           </span>
@@ -1073,12 +921,6 @@
     <section class="hero-section">
       <div class="hero-top-meta">
         <span class="eyebrow">Digital Invitation &mdash; Virtual Photobooth &mdash; Creative Studio</span>
-        <div class="pillars-list">
-          Modern<br>
-          Seamless<br>
-          Interactive<br>
-          Timeless
-        </div>
       </div>
 
       <div class="hero-main-grid">
@@ -1088,29 +930,29 @@
             That <span class="serif-accent">Connect</span>
           </h1>
           <p class="hero-subtitle">
-            Votura Studio menghadirkan undangan pernikahan digital dan virtual photobooth berbasis web yang dirancang elegan, ringan, serta langsung dapat diakses tamu tanpa perlu mengunduh aplikasi.
+            Buat momen spesialmu terasa lebih berkesan. Votura Studio menghadirkan undangan pernikahan digital yang elegan dan virtual photobooth interaktif—praktis dibuka tamu langsung dari ponsel tanpa ribet instal aplikasi.
           </p>
           <div class="hero-cta-row">
             <a href="#produk" class="btn-dark-pill">
-              <span>Jelajahi Layanan</span>
+              <span>Lihat Pilihan Paket</span>
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
             </a>
-            <a href="wedding.html?event=nikah-amel-riyan" target="_blank" class="btn-ghost-demo">
+            <a href="https://voturastudio.site/" target="_blank" class="btn-ghost-demo">
               <span class="play-ring">
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
               </span>
-              <span>Lihat Demo Undangan</span>
+              <span>Intip Demo Undangan</span>
             </a>
           </div>
         </div>
 
         <div class="hero-visual-card">
           <div class="mockup-preview">
-            <span class="mockup-badge">Live Web Experience</span>
-            <h3 class="serif">Votura Studio Suite</h3>
-            <p>Satu ekosistem digital untuk mengelola daftar kehadiran tamu, ucapan real-time, hingga sesi foto interaktif dengan bingkai khusus acaramu.</p>
+            <span class="mockup-badge">Semua Serba Praktis</span>
+            <h3 class="serif">Satu Tautan untuk Momen Berhargamu</h3>
+            <p>Mulai dari menyebar undangan, mencatat konfirmasi kehadiran tamu secara otomatis, hingga seru-seruan foto bersama dengan bingkai khusus acaramu.</p>
             <div class="mockup-meta-row">
-              <span>Akses Instan via Browser</span>
+              <span>Langsung Aktif di Browser</span>
               <span>voturastudio.site</span>
             </div>
           </div>
@@ -1122,7 +964,7 @@
         <!-- FEATURED SLIDER CARD -->
         <div class="bento-featured">
           <div class="featured-thumb" id="featured-thumb">
-            <span id="featured-tag">Featured Product</span>
+            <span id="featured-tag">01 — Wedding Suite</span>
             <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
           </div>
           <div>
@@ -1134,8 +976,8 @@
               Undangan pernikahan digital berdesain bersih dengan fitur konfirmasi kehadiran (RSVP) dan navigasi peta.
             </p>
             <div class="featured-controls">
-              <a href="wedding.html?event=nikah-amel-riyan" target="_blank" id="featured-link" class="link-subtle">
-                <span>Buka Pratinjau</span>
+              <a href="https://voturastudio.site/" target="_blank" id="featured-link" class="link-subtle">
+                <span>Coba Demo</span>
                 <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
               </a>
               <div class="slider-btns">
@@ -1154,23 +996,23 @@
         <div class="bento-stats">
           <div class="stat-item">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-            <strong>100%</strong>
-            <span>Berbasis Web Tanpa Instalasi</span>
+            <strong>Tanpa Ribet</strong>
+            <span>Langsung Dibuka di Ponsel Tamu</span>
           </div>
           <div class="stat-item">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
             <strong>Real-Time</strong>
-            <span>Rekap RSVP & Ucapan Tamu</span>
+            <span>Pantau RSVP &amp; Ucapan Kapan Saja</span>
           </div>
           <div class="stat-item">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
             <strong>&lt; 24 Jam</strong>
-            <span>Proses Aktivasi Link Acara</span>
+            <span>Tautan Acara Siap Dibagikan</span>
           </div>
         </div>
 
         <!-- DARK CTA CARD -->
-        <a href="#transaksi" class="bento-dark-cta">
+        <button type="button" class="bento-dark-cta" onclick="openChatModal('Tanya-Tanya Konsep Acara')">
           <div class="dark-cta-top">
             <span class="mini-orb"></span>
             <span class="arrow-up-right">
@@ -1178,21 +1020,18 @@
             </span>
           </div>
           <div>
-            <h4>Wujudkan Acara Digitalmu</h4>
-            <p>Lihat detail paket dan metode pembayaran resmi.</p>
+            <h4>Punya Konsep Acara Sendiri?</h4>
+            <p>Yuk diskusi santai lewat WhatsApp, gratis konsultasi.</p>
           </div>
-        </a>
+        </button>
       </div>
     </section>
 
     <!-- PRODUK & LAYANAN -->
     <section class="content-section" id="produk">
       <div class="section-head">
-        <div>
-          <span class="eyebrow">Katalog Layanan</span>
-          <h2 class="serif">Pilihan Produk <span class="serif-accent">Votura</span></h2>
-        </div>
-        <p>Setiap paket dilengkapi halaman pengaturan khusus sehingga informasi acara dapat diperbarui kapan saja dengan mudah.</p>
+        <span class="eyebrow">Katalog Layanan</span>
+        <h2 class="serif">Pilihan Produk <span class="serif-accent">Votura</span></h2>
       </div>
 
       <div class="products-grid">
@@ -1201,7 +1040,7 @@
           <div>
             <span class="product-tag">Votura Wedding</span>
             <h3 class="serif">Digital Wedding Invitation</h3>
-            <p class="product-desc">Undangan pernikahan berbasis web dengan tampilan bersih, navigasi lokasi akurat, serta buku tamu digital yang tersimpan rapi.</p>
+            <p class="product-desc">Sebar kabar bahagia dengan cara yang lebih berkelas. Tamu cukup klik satu tautan untuk melihat detail acara, arah lokasi, hingga kirim doa terbaik.</p>
             <div class="product-price">Rp 99.000 <span>/ acara</span></div>
             <ul class="clean-list">
               <li>
@@ -1210,22 +1049,22 @@
               </li>
               <li>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                <span>Konfirmasi kehadiran (RSVP) dan doa tamu real-time</span>
+                <span>Konfirmasi kehadiran (RSVP) dan ucapan tamu real-time</span>
               </li>
               <li>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                <span>Integrasi langsung dengan titik lokasi Google Maps</span>
+                <span>Navigasi lokasi sekali klik menuju Google Maps</span>
               </li>
               <li>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                <span>Panel Admin Klien untuk kelola detail acara & rekap tamu</span>
+                <span>Halaman kelola mandiri untuk update info &amp; rekap tamu</span>
               </li>
             </ul>
           </div>
 
           <div class="product-actions">
-            <a href="wedding.html?event=nikah-amel-riyan" target="_blank" class="btn-outline-pill">Lihat Demo</a>
-            <button type="button" class="btn-dark-pill" style="justify-content: center;" onclick="openOrderModal('Votura Wedding Invitation (Rp 99.000)')">Pesan Paket Ini</button>
+            <a href="https://voturastudio.site/" target="_blank" class="btn-outline-pill">Lihat Demo</a>
+            <button type="button" class="btn-dark-pill" style="justify-content: center;" onclick="openChatModal('Votura Wedding Invitation (Rp 99.000)')">Tanya Paket Ini</button>
           </div>
         </article>
 
@@ -1234,89 +1073,41 @@
           <div>
             <span class="product-tag">Votura Photobooth</span>
             <h3 class="serif">Virtual Event Photobooth</h3>
-            <p class="product-desc">Pengalaman berfoto interaktif langsung dari kamera ponsel tamu menggunakan bingkai acara yang dapat disesuaikan sepenuhnya.</p>
+            <p class="product-desc">Bikin suasana acara makin hidup tanpa perlu sewa mesin besar. Tamu bisa langsung berfoto lewat kamera ponsel dengan bingkai eksklusif acaramu.</p>
             <div class="product-price">Rp 149.000 <span>/ acara</span></div>
             <ul class="clean-list">
               <li>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                <span>Akses langsung melalui peramban ponsel tanpa aplikasi</span>
+                <span>Langsung jalan di browser ponsel tanpa instal aplikasi</span>
               </li>
               <li>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                <span>Dukungan bingkai transparan (PNG) sesuai tema acara</span>
+                <span>Bingkai foto custom (PNG) sesuai tema acaramu</span>
               </li>
               <li>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                <span>Dashboard Admin untuk mengganti bingkai secara mandiri</span>
+                <span>Panel pengaturan mandiri untuk ganti desain bingkai</span>
               </li>
               <li>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                <span>Ideal untuk pernikahan, ulang tahun, hingga acara kampus</span>
+                <span>Cocok untuk pernikahan, ulang tahun, maupun acara kampus</span>
               </li>
             </ul>
           </div>
 
           <div class="product-actions">
-            <a href="photobooth.html?event=001" target="_blank" class="btn-outline-pill">Coba Kamera</a>
-            <button type="button" class="btn-dark-pill" style="justify-content: center;" onclick="openOrderModal('Votura Virtual Photobooth (Rp 149.000)')">Pesan Paket Ini</button>
+            <a href="https://voturastudio.site/fotome/v2" target="_blank" class="btn-outline-pill">Coba Photobooth</a>
+            <button type="button" class="btn-dark-pill" style="justify-content: center;" onclick="openChatModal('Votura Virtual Photobooth (Rp 149.000)')">Tanya Paket Ini</button>
           </div>
         </article>
-      </div>
-    </section>
-
-    <!-- METODE PEMBAYARAN -->
-    <section class="content-section" id="transaksi">
-      <div class="section-head">
-        <div>
-          <span class="eyebrow">Transaksi Resmi</span>
-          <h2 class="serif">Metode <span class="serif-accent">Pembayaran</span></h2>
-        </div>
-        <p>Salin nomor rekening tujuan di bawah ini, lalu kirimkan bukti transfer melalui WhatsApp untuk aktivasi layanan.</p>
-      </div>
-
-      <div class="payment-wrapper">
-        <div class="bank-card">
-          <div>
-            <div class="bank-label">Transfer Bank &mdash; BCA</div>
-            <div class="bank-number" id="rek-bca">1234567890</div>
-            <div class="bank-holder">a.n. Riyan Ardiansyah</div>
-          </div>
-          <button type="button" class="copy-pill-btn" onclick="copyAccount('rek-bca', 'Rekening BCA')">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-            <span>Salin</span>
-          </button>
-        </div>
-
-        <div class="bank-card">
-          <div>
-            <div class="bank-label">SeaBank / DANA / GoPay</div>
-            <div class="bank-number" id="rek-ewallet">081234567890</div>
-            <div class="bank-holder">a.n. Riyan Ardiansyah</div>
-          </div>
-          <button type="button" class="copy-pill-btn" onclick="copyAccount('rek-ewallet', 'Nomor E-Wallet')">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
-            <span>Salin</span>
-          </button>
-        </div>
-
-        <div class="payment-footer-bar">
-          <span class="payment-note">Pastikan nama penerima sesuai sebelum menyelesaikan transaksi.</span>
-          <a href="https://wa.me/6281234567890?text=Halo%20Votura%20Studio,%20saya%20ingin%20mengirimkan%20bukti%20pembayaran%20untuk%20aktivasi%20layanan." target="_blank" class="btn-dark-pill">
-            <span>Konfirmasi via WhatsApp</span>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
-          </a>
-        </div>
       </div>
     </section>
 
     <!-- TESTIMONI KLIEN -->
     <section class="content-section" id="testimoni">
       <div class="section-head">
-        <div>
-          <span class="eyebrow">Ulasan Klien</span>
-          <h2 class="serif">Cerita di Balik <span class="serif-accent">Setiap Acara</span></h2>
-        </div>
-        <p>Kepercayaan dari berbagai pasangan dan penyelenggara acara yang telah menggunakan layanan Votura Studio.</p>
+        <span class="eyebrow">Ulasan Klien</span>
+        <h2 class="serif">Cerita di Balik <span class="serif-accent">Setiap Acara</span></h2>
       </div>
 
       <div class="testi-grid">
@@ -1350,11 +1141,11 @@
     <footer class="studio-footer" id="kontak">
       <div class="footer-brand">
         <strong style="font-size: 18px; letter-spacing: 0.06em; text-transform: uppercase;">Votura Studio</strong>
-        <p>Studio produk digital untuk kebutuhan undangan pernikahan modern dan pengalaman photobooth interaktif berbasis web.</p>
+        <p>Siap bantu wujudkan undangan digital dan pengalaman photobooth interaktif untuk momen spesialmu.</p>
       </div>
 
       <div class="social-pills">
-        <a href="https://wa.me/6281234567890" target="_blank" class="social-pill">
+        <a href="https://wa.me/6282298966860?text=Halo%20Votura%20Studio,%20boleh%20tanya-tanya%20soal%20layanannya?" target="_blank" class="social-pill">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
           <span>WhatsApp</span>
         </a>
@@ -1370,26 +1161,20 @@
     </footer>
   </div>
 
-  <!-- MATCHING GLASS TOAST NOTIFICATION -->
-  <div class="glass-toast" id="glass-toast" role="status" aria-live="polite">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-    <span id="toast-text">Nomor berhasil disalin</span>
-  </div>
-
-  <!-- MATCHING ORDER MODAL -->
-  <div class="modal-backdrop" id="order-modal" onclick="closeModalOnOutside(event)">
+  <!-- MATCHING CHAT MODAL -->
+  <div class="modal-backdrop" id="chat-modal" onclick="closeModalOnOutside(event)">
     <div class="modal-panel">
-      <span class="eyebrow" style="display: block; margin-bottom: 6px;">Konfirmasi Pesanan</span>
-      <h3 class="serif" style="font-size: 28px; margin-bottom: 10px;" id="modal-package-title">Paket Votura</h3>
-      <p style="font-size: 13.5px; color: var(--ink-muted); margin-bottom: 22px;">
-        Lanjutkan pemesanan melalui WhatsApp resmi Votura Studio untuk penentuan ID tautan acara dan aktivasi.
+      <span class="eyebrow" style="display: block; margin-bottom: 6px;">Mulai Obrolan</span>
+      <h3 class="serif" style="font-size: 28px; margin-bottom: 10px;" id="modal-topic-title">Tanya Votura Studio</h3>
+      <p style="font-size: 13.5px; color: var(--ink-muted); margin-bottom: 22px; line-height: 1.65;">
+        Ceritakan tanggal dan konsep acaramu lewat WhatsApp. Kami siap bantu kasih rekomendasi terbaik sebelum kamu memutuskan.
       </p>
       <div style="display: flex; flex-direction: column; gap: 10px;">
         <a href="#" id="modal-wa-link" target="_blank" class="btn-dark-pill" style="justify-content: center;">
-          <span>Lanjut ke WhatsApp</span>
+          <span>Lanjut Obrolan di WhatsApp</span>
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
         </a>
-        <button type="button" class="btn-outline-pill" onclick="closeOrderModal()">Tutup</button>
+        <button type="button" class="btn-outline-pill" onclick="closeChatModal()">Nanti Dulu</button>
       </div>
     </div>
   </div>
@@ -1402,15 +1187,15 @@
         title: "Wedding Invitation",
         count: "01 / 02",
         desc: "Undangan pernikahan digital berdesain bersih dengan fitur konfirmasi kehadiran (RSVP) dan navigasi peta.",
-        link: "wedding.html?event=nikah-amel-riyan",
+        link: "https://voturastudio.site/",
         bg: "linear-gradient(135deg, #D8CFC2 0%, #B8A996 100%)"
       },
       {
         tag: "02 — Interactive Booth",
         title: "Virtual Photobooth",
         count: "02 / 02",
-        desc: "Sesi foto interaktif langsung melalui browser HP tamu dengan dukungan frame custom transparan.",
-        link: "photobooth.html?event=001",
+        desc: "Sesi foto interaktif langsung melalui browser HP tamu dengan dukungan bingkai custom transparan.",
+        link: "https://voturastudio.site/fotome/v2",
         bg: "linear-gradient(135deg, #C7CED6 0%, #99A4B0 100%)"
       }
     ];
@@ -1437,42 +1222,27 @@
       renderSlide();
     }
 
-    // 2. COPY BANK ACCOUNT WITH TOAST FEEDBACK
-    let toastTimer;
-    function copyAccount(elementId, label) {
-      const value = document.getElementById(elementId).innerText.trim();
-      navigator.clipboard.writeText(value).then(() => {
-        const toast = document.getElementById('glass-toast');
-        document.getElementById('toast-text').textContent = `${label} (${value}) berhasil disalin`;
-        toast.classList.add('show');
-        clearTimeout(toastTimer);
-        toastTimer = setTimeout(() => {
-          toast.classList.remove('show');
-        }, 3000);
-      });
-    }
+    // 2. WHATSAPP CHAT MODAL CONTROLLER
+    const waNumber = "6282298966860";
 
-    // 3. ORDER MODAL CONTROLLER
-    const waNumber = "6281234567890"; // Ganti dengan nomor WhatsApp bisnis kamu
-
-    function openOrderModal(packageName) {
-      document.getElementById('modal-package-title').textContent = packageName;
-      const text = encodeURIComponent(`Halo Votura Studio, saya tertarik memesan layanan: ${packageName}. Mohon info langkah selanjutnya.`);
+    function openChatModal(topicName) {
+      document.getElementById('modal-topic-title').textContent = topicName;
+      const text = encodeURIComponent(`Halo Votura Studio, saya mau tanya-tanya dulu seputar ${topicName}. Boleh dibantu infonya?`);
       document.getElementById('modal-wa-link').href = `https://wa.me/${waNumber}?text=${text}`;
-      document.getElementById('order-modal').classList.add('open');
+      document.getElementById('chat-modal').classList.add('open');
     }
 
-    function closeOrderModal() {
-      document.getElementById('order-modal').classList.remove('open');
+    function closeChatModal() {
+      document.getElementById('chat-modal').classList.remove('open');
     }
 
     function closeModalOnOutside(e) {
-      if (e.target.id === 'order-modal') {
-        closeOrderModal();
+      if (e.target.id === 'chat-modal') {
+        closeChatModal();
       }
     }
 
-    // 4. ACTIVE NAVIGATION HIGHLIGHT ON SCROLL
+    // 3. ACTIVE NAVIGATION HIGHLIGHT ON SCROLL
     const sections = document.querySelectorAll('section[id], footer[id], div[id="beranda"]');
     const navLinks = document.querySelectorAll('.nav-pill-group a, .side-dock a');
 
