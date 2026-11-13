@@ -26,7 +26,6 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    html, body { max-width: 100%; overflow-x: hidden; }
     body {
       background-color: var(--bg-base);
       color: var(--ink);
@@ -35,7 +34,7 @@
       padding: 24px 16px 96px 16px;
     }
 
-    .container { max-width: 960px; margin: 0 auto; width: 100%; }
+    .container { max-width: 960px; margin: 0 auto; }
 
     header {
       background: var(--surface);
@@ -81,7 +80,6 @@
       cursor: pointer;
       transition: all 0.25s var(--transition);
       color: var(--ink-muted);
-      min-width: 0;
     }
 
     .mode-tab:hover { background: rgba(255, 255, 255, 0.65); color: var(--ink); }
@@ -102,61 +100,6 @@
     }
 
     .mode-tab-title { display: block; font-size: 13.5px; font-weight: 700; line-height: 1.25; }
-
-    /* NAVIGASI KARTU SUB-SECTION KLIEN (SEPERTI NAVIGASI ATAS) */
-    .client-subnav-grid {
-      display: grid;
-      grid-template-columns: repeat(5, 1fr);
-      gap: 8px;
-      background: #FFFFFF;
-      padding: 8px;
-      border-radius: 18px;
-      border: 1px solid var(--border);
-      margin-bottom: 16px;
-    }
-
-    .client-subtab {
-      background: var(--surface);
-      border: 1px solid transparent;
-      border-radius: 12px;
-      padding: 9px 10px;
-      text-align: left;
-      cursor: pointer;
-      transition: all 0.2s var(--transition);
-      color: var(--ink-muted);
-      min-width: 0;
-    }
-
-    .client-subtab:hover { background: #ECE8E0; color: var(--ink); }
-    .client-subtab.active {
-      background: var(--dark);
-      color: #FFFFFF;
-      box-shadow: 0 4px 12px rgba(38, 36, 33, 0.16);
-    }
-
-    .client-subtab-num {
-      display: block;
-      font-size: 9.5px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.6px;
-      opacity: 0.72;
-      margin-bottom: 1px;
-    }
-
-    .client-subtab-label {
-      display: block;
-      font-size: 12px;
-      font-weight: 700;
-      line-height: 1.25;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .client-subpanel { display: none; }
-    .client-subpanel.active { display: block; animation: subFade 0.2s ease; }
-    @keyframes subFade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: translateY(0); } }
 
     .tab-panel { display: none; }
     .tab-panel.active { display: block; }
@@ -193,7 +136,6 @@
       margin-bottom: 20px;
       border: 1px solid rgba(35, 33, 30, 0.06);
       box-shadow: 0 8px 24px rgba(35, 33, 30, 0.03);
-      width: 100%;
     }
 
     .section-title {
@@ -211,13 +153,11 @@
 
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
-    .form-group { margin-bottom: 14px; min-width: 0; }
+    .form-group { margin-bottom: 14px; }
     label { display: block; font-size: 12px; font-weight: 600; color: var(--ink-muted); margin-bottom: 6px; }
 
     input[type="text"], input[type="url"], input[type="number"], input[type="datetime-local"], select, textarea {
       width: 100%;
-      max-width: 100%;
-      min-width: 0;
       padding: 11px 14px;
       border-radius: 12px;
       border: 1px solid var(--border);
@@ -248,7 +188,6 @@
       padding: 20px;
       margin-bottom: 16px;
       position: relative;
-      width: 100%;
     }
 
     .item-header {
@@ -262,7 +201,7 @@
       flex-wrap: wrap;
     }
 
-    .item-header strong { font-size: 14px; word-break: break-word; }
+    .item-header strong { font-size: 14px; }
 
     /* MODE TERKUNCI UNTUK DATA CLIENT YANG SUDAH TERSIMPAN */
     .client-body-wrap.is-locked input:not([type="file"]),
@@ -279,7 +218,6 @@
       border-radius: 14px;
       padding: 16px;
       margin-bottom: 16px;
-      width: 100%;
     }
 
     .theme-config-header {
@@ -291,30 +229,9 @@
       flex-wrap: wrap;
     }
 
-    .music-custom-box {
-      background: #F8F6F2;
-      padding: 12px;
-      border-radius: 12px;
-      border: 1px dashed rgba(140, 115, 85, 0.4);
-      width: 100%;
-    }
-
-    .music-input-bar {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-      flex-wrap: wrap;
-      width: 100%;
-    }
-
-    .music-input-bar input[type="url"] {
-      flex: 1 1 200px;
-      min-width: 0;
-    }
-
     .section-toggle-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(165px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
       gap: 8px;
       margin-top: 8px;
     }
@@ -339,24 +256,22 @@
       height: 16px;
       accent-color: var(--dark);
       cursor: pointer;
-      flex-shrink: 0;
     }
 
     .img-upload-row {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 16px;
       flex-wrap: wrap;
       background: #FFFFFF;
       padding: 14px 16px;
       border-radius: 14px;
       border: 1.5px dashed rgba(140, 115, 85, 0.35);
-      width: 100%;
     }
 
     .img-preview {
-      width: 68px;
-      height: 68px;
+      width: 74px;
+      height: 74px;
       border-radius: 12px;
       object-fit: cover;
       background: var(--bg-base);
@@ -365,8 +280,8 @@
     }
 
     .img-preview-ornament {
-      width: 68px;
-      height: 68px;
+      width: 74px;
+      height: 74px;
       border-radius: 12px;
       object-fit: contain;
       background: repeating-conic-gradient(#e5e2dc 0% 25%, #f8f6f2 0% 50%) 50% / 14px 14px;
@@ -386,8 +301,8 @@
       flex-shrink: 0;
     }
 
-    .upload-controls { flex: 1 1 160px; min-width: 0; }
-    .upload-hint { font-size: 11.5px; color: var(--ink-muted); margin-top: 5px; word-break: break-word; }
+    .upload-controls { flex: 1; min-width: 180px; }
+    .upload-hint { font-size: 11.5px; color: var(--ink-muted); margin-top: 5px; }
 
     .badge-pill {
       display: inline-block;
@@ -408,14 +323,13 @@
       border: 1px solid var(--border);
       border-radius: 14px;
       padding: 16px;
-      margin-bottom: 16px;
-      width: 100%;
+      margin-top: 12px;
     }
 
     .client-frame-row {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
       flex-wrap: wrap;
       padding: 12px 0;
       border-bottom: 1px dashed var(--border);
@@ -466,31 +380,9 @@
     }
 
     @media (max-width: 760px) {
-      body { padding: 14px 10px 92px 10px; }
-      header { padding: 18px 16px; border-radius: 20px; }
-      header h1 { font-size: 24px; }
-      .mode-switcher { grid-template-columns: 1fr 1fr; gap: 6px; padding: 6px; border-radius: 18px; }
-      .mode-tab { padding: 10px 10px; border-radius: 12px; }
-      .mode-tab-title { font-size: 12.5px; }
-
-      .client-subnav-grid { grid-template-columns: 1fr 1fr; gap: 6px; padding: 6px; border-radius: 14px; }
-      .client-subtab { padding: 8px 9px; border-radius: 10px; }
-      .client-subtab-label { font-size: 11.5px; }
-
-      .section-card { padding: 14px 12px; border-radius: 16px; }
-      .dynamic-item { padding: 14px 10px; border-radius: 14px; }
-      .theme-config-box, .client-frame-sublist { padding: 12px 10px; border-radius: 12px; }
-      .img-upload-row { padding: 10px; gap: 10px; }
-
-      .grid-2, .grid-3 { grid-template-columns: 1fr; gap: 10px; }
-      .section-toggle-grid { grid-template-columns: 1fr 1fr; gap: 6px; }
-      .toggle-chip { padding: 7px 8px; font-size: 11px; }
-
-      .music-input-bar { flex-direction: column; align-items: stretch; }
-      .music-input-bar .btn { width: 100%; }
-
-      .save-bar { width: 92%; justify-content: space-between; padding: 10px 16px; }
-      .save-bar span { font-size: 11.5px; overflow: hidden; text-overflow: ellipsis; }
+      .mode-switcher { grid-template-columns: 1fr 1fr; }
+      .grid-2, .grid-3 { grid-template-columns: 1fr; }
+      .save-bar { width: 92%; justify-content: space-between; }
     }
   </style>
 </head>
@@ -701,7 +593,7 @@
           </div>
         </div>
         <div class="section-sub">
-          Pilih kartu section di bawah setiap nama client untuk membuka bagian yang ingin diubah saja. Klik <strong>Edit Data</strong> bila formulir terkunci.
+          Seluruh isian yang sudah tersimpan akan tetap muncul di sini. Klik <strong>Edit Data</strong> untuk mengubah data atau mengganti ornamen grafis (Joglo, Gunungan, Bunga Sudut, Background) dan foto mempelai.
         </div>
         <div id="clients-editor-list">
           <p style="font-size: 13px; color: var(--ink-muted);">Memuat data client...</p>
@@ -745,7 +637,6 @@
 
     let activeTabId = "tab-landing";
     let clientEditModes = {};
-    let clientActiveSection = {};
     let activePreviewEventId = null;
 
     const TEMPLATE_CATALOG = {
@@ -763,37 +654,12 @@
       ]
     };
 
-    const WEDDING_SUB_SECTIONS = [
-      { key: "sec-1", num: "Bagian 1", label: "Tema & Musik" },
-      { key: "sec-2", num: "Bagian 2", label: "Menu Section" },
-      { key: "sec-3", num: "Bagian 3", label: "Cover & Ayat" },
-      { key: "sec-4", num: "Bagian 4", label: "Profil Mempelai" },
-      { key: "sec-5", num: "Bagian 5", label: "Jadwal Acara" },
-      { key: "sec-6", num: "Bagian 6", label: "Dresscode & Live" },
-      { key: "sec-7", num: "Bagian 7", label: "Kisah Cinta" },
-      { key: "sec-8", num: "Bagian 8", label: "Galeri & Video" },
-      { key: "sec-9", num: "Bagian 9", label: "Rekening & Turut" },
-      { key: "sec-10", num: "Bagian 10", label: "Ornamen & BG" }
+    const MUSIC_PRESETS = [
+      { label: "Romantis Piano & Strings (Default)", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
+      { label: "Gamelan Jawa Lembut & Akustik", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
+      { label: "Acoustic Guitar Wedding", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
+      { label: "Upload File MP3 / Link Custom Sendiri", url: "custom" }
     ];
-
-    const PB_SUB_SECTIONS = [
-      { key: "sec-1", num: "Bagian 1", label: "Tema & Musik" },
-      { key: "sec-2", num: "Bagian 2", label: "Identitas & Hero" },
-      { key: "sec-3", num: "Bagian 3", label: "Frame PNG" }
-    ];
-
-    function switchClientSubSection(eventId, sectionKey, btnEl) {
-      clientActiveSection[eventId] = sectionKey;
-      const card = btnEl.closest('.dynamic-item');
-      if (!card) return;
-      card.querySelectorAll('.client-subtab').forEach(b => b.classList.remove('active'));
-      btnEl.classList.add('active');
-      card.querySelectorAll('.client-subpanel').forEach(p => p.classList.remove('active'));
-      const target = document.getElementById(`subpanel-${eventId}-${sectionKey}`);
-      if (target) target.classList.add('active');
-    }
-
-    let musicLibrary = [];
 
     function normalizeMusicUrl(rawUrl) {
       let url = (rawUrl || "").trim();
@@ -806,89 +672,8 @@
       return url;
     }
 
-    function extractMusicTitleFromSource(source, fallbackFilename) {
-      let rawName = "";
-      if (fallbackFilename) {
-        rawName = fallbackFilename;
-      } else if (source && !source.startsWith("data:")) {
-        try {
-          const cleanPath = source.split("?")[0].split("#")[0];
-          const segments = cleanPath.split("/");
-          rawName = decodeURIComponent(segments[segments.length - 1] || "");
-        } catch (e) {
-          rawName = "";
-        }
-      }
-
-      if (!rawName) return "Lagu Custom";
-      const withoutExt = rawName.replace(/\.(mp3|mpeg|wav|ogg|m4a)$/i, "").trim();
-      const readable = withoutExt.replace(/[-_]+/g, " ").trim();
-      if (!readable) return "Lagu Custom";
-
-      return readable
-        .split(" ")
-        .map(w => w.charAt(0).toUpperCase() + w.slice(1))
-        .join(" ");
-    }
-
-    function renderAllClientMusicDropdowns(selectedUrlOverride, targetEventId) {
-      superAdminEvents.forEach(ev => {
-        const selectEl = document.getElementById(`sa-music-preset-${ev.id}`);
-        if (!selectEl) return;
-
-        const currentUrl = (ev.id === targetEventId && selectedUrlOverride)
-          ? selectedUrlOverride
-          : (document.getElementById(`sa-music-url-${ev.id}`)?.value || ev.musicUrl || "");
-
-        selectEl.innerHTML = buildMusicLibraryOptionsHtml(currentUrl);
-      });
-    }
-
-    function buildMusicLibraryOptionsHtml(currentUrl) {
-      const normalizedCurrent = normalizeMusicUrl(currentUrl);
-      const isInLibrary = musicLibrary.some(item => normalizeMusicUrl(item.url) === normalizedCurrent);
-
-      let html = `<option value="custom" ${!normalizedCurrent || !isInLibrary ? 'selected' : ''}>-- Tambah Link / Upload MP3 Baru --</option>`;
-
-      if (normalizedCurrent && !isInLibrary) {
-        const tempTitle = extractMusicTitleFromSource(normalizedCurrent);
-        html += `<option value="${escapeHtml(normalizedCurrent)}" selected>${escapeHtml(tempTitle)}</option>`;
-      }
-
-      musicLibrary.forEach(item => {
-        const isSel = normalizeMusicUrl(item.url) === normalizedCurrent;
-        html += `<option value="${escapeHtml(item.url)}" ${isSel ? 'selected' : ''}>${escapeHtml(item.title)}</option>`;
-      });
-
-      return html;
-    }
-
-    async function addTrackToMusicLibrary(url, title, targetEventId) {
-      const cleanUrl = normalizeMusicUrl(url);
-      if (!cleanUrl) return;
-
-      const cleanTitle = (title || extractMusicTitleFromSource(cleanUrl)).trim();
-      const existingIdx = musicLibrary.findIndex(item => normalizeMusicUrl(item.url) === cleanUrl);
-
-      if (existingIdx >= 0) {
-        musicLibrary[existingIdx].title = cleanTitle;
-      } else {
-        musicLibrary.unshift({ title: cleanTitle, url: cleanUrl });
-      }
-
-      renderAllClientMusicDropdowns(cleanUrl, targetEventId);
-
-      try {
-        await db.collection("settings").doc("music_library").set({
-          tracks: musicLibrary,
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-        }, { merge: true });
-      } catch (err) {
-        console.warn("Gagal menyinkronkan library musik:", err);
-      }
-    }
-
-    async function applyClientMusicLink(eventId) {
+    function applyClientMusicLink(eventId) {
+      const presetSelect = document.getElementById(`sa-music-preset-${eventId}`);
       const urlInput = document.getElementById(`sa-music-url-${eventId}`);
       const infoEl = document.getElementById(`sa-music-file-info-${eventId}`);
 
@@ -900,13 +685,10 @@
         return;
       }
 
-      const songTitle = extractMusicTitleFromSource(normalized);
       urlInput.value = normalized;
-
-      await addTrackToMusicLibrary(normalized, songTitle, eventId);
-
+      if (presetSelect) presetSelect.value = "custom";
       if (infoEl) {
-        infoEl.innerHTML = `<span style="color:var(--success); font-weight:600;">✓ "${escapeHtml(songTitle)}" ditambahkan ke Pilihan Musik Latar</span> — Klik <strong>Putar</strong> untuk tes atau <strong>Simpan Semua Detail</strong>.`;
+        infoEl.innerHTML = `<span style="color:var(--success); font-weight:600;">✓ Link MP3 diterapkan:</span> ${escapeHtml(normalized)} — Klik <strong>Putar</strong> untuk tes atau <strong>Simpan Semua Detail</strong>.`;
       }
     }
 
@@ -924,20 +706,20 @@
         return;
       }
 
-      const songTitle = extractMusicTitleFromSource("", file.name);
       const reader = new FileReader();
-      reader.onload = async function(e) {
+      reader.onload = function(e) {
         const dataUrl = e.target.result;
+        const presetSelect = document.getElementById(`sa-music-preset-${eventId}`);
+        const customWrap = document.getElementById(`sa-music-custom-wrap-${eventId}`);
         const urlInput = document.getElementById(`sa-music-url-${eventId}`);
         const infoEl = document.getElementById(`sa-music-file-info-${eventId}`);
 
+        if (presetSelect) presetSelect.value = "custom";
+        if (customWrap) customWrap.style.display = "block";
         if (urlInput) urlInput.value = dataUrl;
-
-        await addTrackToMusicLibrary(dataUrl, songTitle, eventId);
-
         if (infoEl) {
           const kb = Math.round((dataUrl.length * 3) / 4 / 1024);
-          infoEl.innerHTML = `<span style="color:var(--success); font-weight:600;">✓ "${escapeHtml(songTitle)}" (${kb} KB) ditambahkan ke Pilihan Musik Latar.</span>`;
+          infoEl.textContent = `File terunggah: ${file.name} (${kb} KB)`;
         }
         inputEl.value = "";
       };
@@ -952,7 +734,7 @@
       const btn = document.getElementById(`sa-music-play-btn-${eventId}`);
 
       if (!targetSrc) {
-        showCmsModal("Musik Belum Dipilih", "Pilih lagu dari riwayat library, unggah file MP3, atau tempel URL file .mp3 terlebih dahulu.");
+        showCmsModal("Musik Belum Dipilih", "Pilih lagu bawaan, unggah file MP3, atau tempel URL file .mp3 terlebih dahulu.");
         return;
       }
 
@@ -1154,19 +936,15 @@
 
     async function initCms() {
       try {
-        const [landingDoc, weddingDoc, photoboothDoc, musicLibDoc] = await Promise.all([
+        const [landingDoc, weddingDoc, photoboothDoc] = await Promise.all([
           db.collection("settings").doc("landing_page").get(),
           db.collection("settings").doc("demo_wedding").get(),
-          db.collection("settings").doc("demo_photobooth").get(),
-          db.collection("settings").doc("music_library").get()
+          db.collection("settings").doc("demo_photobooth").get()
         ]);
 
         if (landingDoc.exists) currentData = { ...defaultContent, ...landingDoc.data() };
         if (weddingDoc.exists) demoWeddingData = { ...defaultDemoWedding, ...weddingDoc.data() };
         if (photoboothDoc.exists) demoPhotoboothData = { ...defaultDemoPhotobooth, ...photoboothDoc.data() };
-        if (musicLibDoc.exists && Array.isArray(musicLibDoc.data().tracks)) {
-          musicLibrary = musicLibDoc.data().tracks;
-        }
       } catch (err) {
         console.warn("Menggunakan konfigurasi bawaan:", err);
       }
@@ -1218,7 +996,7 @@
         div.className = 'dynamic-item';
         div.innerHTML = `
           <div class="item-header">
-            <strong>Produk #${idx + 1} —${escapeHtml(prod.title || 'Produk Baru')}</strong>
+            <strong>Produk #${idx + 1} — ${escapeHtml(prod.title || 'Produk Baru')}</strong>
             <button type="button" class="btn btn-danger" onclick="removeProduct(${idx})">Hapus Produk</button>
           </div>
           <div class="grid-2">
@@ -1256,7 +1034,7 @@
         const div = document.createElement('div');
         div.className = 'dynamic-item';
         div.innerHTML = `
-          <div class="item-header"><strong>Ulasan #${idx + 1} —${escapeHtml(item.author || 'Klien')}</strong><button type="button" class="btn btn-danger" onclick="removeTesti(${idx})">Hapus Ulasan</button></div>
+          <div class="item-header"><strong>Ulasan #${idx + 1} — ${escapeHtml(item.author || 'Klien')}</strong><button type="button" class="btn btn-danger" onclick="removeTesti(${idx})">Hapus Ulasan</button></div>
           <div class="grid-2">
             <div class="form-group"><label>Nama Klien</label><input type="text" value="${escapeHtml(item.author)}" onchange="updateTesti(${idx}, 'author', this.value)"></div>
             <div class="form-group"><label>Jenis Layanan</label><input type="text" value="${escapeHtml(item.role)}" onchange="updateTesti(${idx}, 'role', this.value)"></div>
@@ -1347,7 +1125,7 @@
         div.className = 'dynamic-item';
         div.innerHTML = `
           <div class="item-header">
-            <div><strong>Frame #${idx + 1} —${escapeHtml(frame.name || 'Frame Baru')}</strong><span class="badge-pill" style="margin-left:8px;">${frame.count || 3} Slot Foto</span></div>
+            <div><strong>Frame #${idx + 1} — ${escapeHtml(frame.name || 'Frame Baru')}</strong><span class="badge-pill" style="margin-left:8px;">${frame.count || 3} Slot Foto</span></div>
             <button type="button" class="btn btn-danger" onclick="removeDpFrame(${idx})">Hapus Frame</button>
           </div>
           <div class="grid-3">
@@ -1376,20 +1154,12 @@
     function removeDpFrame(idx) { demoPhotoboothData.frames.splice(idx, 1); renderDpFramesEditor(); }
 
     /* ============================================================
-       4. WEB VISUAL PESANAN KLIEN (NAVIGASI KARTU SUB-SECTION + RESPONSIVE)
+       4. WEB VISUAL PESANAN KLIEN (ISIAN PERSISTEN + TOMBOL EDIT + ORNAMEN)
        ============================================================ */
     async function refreshClientsFromServer() {
       const container = document.getElementById('clients-editor-list');
       try {
-        const [snapshot, musicLibDoc] = await Promise.all([
-          db.collection("events").get(),
-          db.collection("settings").doc("music_library").get()
-        ]);
-
-        if (musicLibDoc.exists && Array.isArray(musicLibDoc.data().tracks)) {
-          musicLibrary = musicLibDoc.data().tracks;
-        }
-
+        const snapshot = await db.collection("events").get();
         superAdminEvents = [];
         snapshot.forEach(doc => {
           const evData = doc.data();
@@ -1397,9 +1167,6 @@
           if (clientEditModes[doc.id] === undefined) {
             const hasSavedDetail = Boolean(evData.groomFullName || evData.brideFullName || evData.groomPhoto || evData.bridePhoto);
             clientEditModes[doc.id] = !hasSavedDetail;
-          }
-          if (!clientActiveSection[doc.id]) {
-            clientActiveSection[doc.id] = "sec-1";
           }
           if (evData.type === 'wedding') listenClientSubPhotos(doc.id);
         });
@@ -1413,7 +1180,8 @@
 
     function toggleClientEditMode(eventId) {
       clientEditModes[eventId] = !clientEditModes[eventId];
-      const wrap = document.getElementById(`client-body-${eventId}`); const btn = document.getElementById(`btn-toggle-edit-${eventId}`);
+      const wrap = document.getElementById(`client-body-${eventId}`);
+      const btn = document.getElementById(`btn-toggle-edit-${eventId}`);
       if (wrap && btn) {
         if (clientEditModes[eventId]) {
           wrap.classList.remove('is-locked');
@@ -1434,7 +1202,14 @@
         const items = [];
         snap.forEach(d => items.push({ photoId: d.id, ...d.data() }));
         clientSubPhotosCache[eventId] = items;
-        const box = document.getElementById(`sa-gal-list-${eventId}`); if (box) box.innerHTML = buildClientGalleryRowsHtml(eventId, items); }); }  function copyClientUrl(fileName, eventId) { const baseUrl = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1); const fullUrl = `${baseUrl}${fileName}?event=${encodeURIComponent(eventId)}`;
+        const box = document.getElementById(`sa-gal-list-${eventId}`);
+        if (box) box.innerHTML = buildClientGalleryRowsHtml(eventId, items);
+      });
+    }
+
+    function copyClientUrl(fileName, eventId) {
+      const baseUrl = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
+      const fullUrl = `${baseUrl}${fileName}?event=${encodeURIComponent(eventId)}`;
       navigator.clipboard.writeText(fullUrl).then(() => {
         showCmsModal("Tautan Klien Disalin", `Link acara berhasil disalin:\n${fullUrl}`);
       });
@@ -1456,20 +1231,24 @@
       const animStyle = style.animationStyle || "fade-up";
       const motionOrnament = style.motionOrnament || "birds-butterflies";
 
-      const currentMusic = ev.musicUrl || (musicLibrary[0]?.url || "");
+      const currentMusic = ev.musicUrl || MUSIC_PRESETS[0].url;
+      const isPresetMusic = MUSIC_PRESETS.some(m => m.url !== 'custom' && m.url === currentMusic);
       const isDataAudio = currentMusic.startsWith('data:audio/');
 
       const templateOptionsHtml = catalogList.map(t =>
         `<option value="${t.file}" ${currentFile === t.file ? 'selected' : ''}>${escapeHtml(t.label)}</option>`
       ).join('');
 
-      const musicOptionsHtml = buildMusicLibraryOptionsHtml(currentMusic);
+      const musicOptionsHtml = MUSIC_PRESETS.map(m => {
+        const selected = m.url === 'custom' ? !isPresetMusic : m.url === currentMusic;
+        return `<option value="${m.url}" ${selected ? 'selected' : ''}>${escapeHtml(m.label)}</option>`;
+      }).join('');
 
       return `
         <div class="theme-config-box">
           <div class="theme-config-header">
             <strong style="font-size:13px;">1. Tema Besar, Animasi, Warna &amp; Musik Latar</strong>
-            <button type="button" class="btn btn-outline btn-sm" onclick="applyPresetDefaultsToClientInputs('${escapeHtml(ev.id)}', '${ev.type}', document.getElementById('sa-tpl-${escapeHtml(ev.id)}').value)">Reset Warna</button>
+            <button type="button" class="btn btn-outline btn-sm" onclick="applyPresetDefaultsToClientInputs('${escapeHtml(ev.id)}', '${ev.type}', document.getElementById('sa-tpl-${escapeHtml(ev.id)}').value)">Reset Warna Bawaan</button>
           </div>
           <div class="grid-3">
             <div class="form-group">
@@ -1518,25 +1297,786 @@
               </select>
             </div>
             <div class="form-group">
-              <label>Pilihan Musik Latar (Riwayat Library)</label>
+              <label>Pilihan Musik Latar</label>
               <div style="display:flex; gap:6px; align-items:center;">
-                <select id="sa-music-preset-${escapeHtml(ev.id)}" style="flex:1; min-width:0;" onchange="handleClientMusicPresetChange('${escapeHtml(ev.id)}', this.value)">
+                <select id="sa-music-preset-${escapeHtml(ev.id)}" onchange="handleClientMusicPresetChange('${escapeHtml(ev.id)}', this.value)">
                   ${musicOptionsHtml}
                 </select>
-                <button type="button" id="sa-music-play-btn-${escapeHtml(ev.id)}" class="btn btn-outline btn-sm" style="white-space:nowrap; flex-shrink:0;" onclick="toggleClientMusicPreview('${escapeHtml(ev.id)}')">Putar</button>
+                <button type="button" id="sa-music-play-btn-${escapeHtml(ev.id)}" class="btn btn-outline btn-sm" style="white-space:nowrap;" onclick="toggleClientMusicPreview('${escapeHtml(ev.id)}')">Putar</button>
               </div>
             </div>
           </div>
-          <div class="form-group music-custom-box" id="sa-music-custom-wrap-${escapeHtml(ev.id)}">
-            <label>Upload File MP3 (&lt; 650 KB) atau Tempel Link MP3 GitHub / Eksternal</label>
-            <div class="music-input-bar">
+          <div class="form-group" id="sa-music-custom-wrap-${escapeHtml(ev.id)}" style="display:block; background:#F8F6F2; padding:12px; border-radius:12px; border:1px dashed rgba(140,115,85,0.4);">
+            <label>Upload File MP3 (&lt; 650 KB) atau Tempel Link MP3 GitHub / Eksternal (Bebas Ukuran MB)</label>
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
               <input type="file" id="sa-music-file-${escapeHtml(ev.id)}" accept="audio/mp3,audio/mpeg,audio/*" style="display:none;" onchange="handleAudioUpload('${escapeHtml(ev.id)}', this)">
               <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('sa-music-file-${escapeHtml(ev.id)}').click()">Upload File MP3</button>
-              <input type="url" id="sa-music-url-${escapeHtml(ev.id)}" value="${escapeHtml(currentMusic)}" placeholder="https://github.com/RiyanArdians/votura-app/raw/refs/heads/main/assets/kekal.mp3" onchange="this.value = normalizeMusicUrl(this.value)">
+              <input type="url" id="sa-music-url-${escapeHtml(ev.id)}" value="${escapeHtml(currentMusic)}" placeholder="https://github.com/RiyanArdians/votura-app/raw/refs/heads/main/assets/kekal.mp3" style="flex:1; min-width:220px;" onchange="this.value = normalizeMusicUrl(this.value)">
               <button type="button" class="btn btn-accent btn-sm" onclick="applyClientMusicLink('${escapeHtml(ev.id)}')">Pakai Link</button>
             </div>
-            <div class="upload-hint" id="sa-music-file-info-${escapeHtml(ev.id)}">${isDataAudio ? 'Audio MP3 lokal terpilih.' : 'Tempel link .mp3 lalu klik "Pakai Link" agar otomatis masuk ke daftar Pilihan Musik Latar di atas.'}</div>
+            <div class="upload-hint" id="sa-music-file-info-${escapeHtml(ev.id)}">${isDataAudio ? 'Audio MP3 lokal terunggah siap disimpan.' : 'Bisa langsung tempel link GitHub biasa (/blob/...) atau link Raw (/raw/...), otomatis disesuaikan.'}</div>
           </div>
           <div class="grid-3">
             <div class="form-group" style="margin-bottom:0;"><label>Warna Latar Utama</label><input type="color" id="sa-bg-${escapeHtml(ev.id)}" value="${escapeHtml(bgMain)}"></div>
-            <div class="form-group" style="margin-bottom:0;"><label>Warna Aksen &amp; Emas</label><input type="color" id="sa-acc-${escapeHtml(ev.id)}" value
+            <div class="form-group" style="margin-bottom:0;"><label>Warna Aksen &amp; Emas</label><input type="color" id="sa-acc-${escapeHtml(ev.id)}" value="${escapeHtml(accent)}"></div>
+            <div class="form-group" style="margin-bottom:0;"><label>Warna Teks Utama</label><input type="color" id="sa-ink-${escapeHtml(ev.id)}" value="${escapeHtml(ink)}"></div>
+          </div>
+        </div>
+      `;
+    }
+
+    function handleClientMusicPresetChange(eventId, val) {
+      const urlInput = document.getElementById(`sa-music-url-${eventId}`);
+      const infoEl = document.getElementById(`sa-music-file-info-${eventId}`);
+      if (val === 'custom') {
+        if (urlInput && urlInput.value.startsWith('https://www.soundhelix.com')) {
+          urlInput.value = '';
+        }
+        if (urlInput) urlInput.focus();
+      } else {
+        if (urlInput) urlInput.value = val;
+        if (infoEl) infoEl.textContent = 'Menggunakan lagu preset bawaan. Klik "Putar" untuk mendengarkan.';
+      }
+    }
+
+    function applyPresetDefaultsToClientInputs(eventId, type, templateFile) {
+      const list = type === 'wedding' ? TEMPLATE_CATALOG.wedding : TEMPLATE_CATALOG.photobooth;
+      const p = list.find(t => t.file === templateFile);
+      if (!p) return;
+      document.getElementById(`sa-bg-${eventId}`).value = p.bgMain;
+      document.getElementById(`sa-acc-${eventId}`).value = p.accent;
+      document.getElementById(`sa-ink-${eventId}`).value = p.ink;
+      document.getElementById(`sa-font-h-${eventId}`).value = p.fontH;
+      document.getElementById(`sa-font-b-${eventId}`).value = p.fontB;
+    }
+
+    function buildClientSectionTogglesHtml(ev) {
+      const sec = ev.sections || {};
+      const items = [
+        { key: 'verse', label: 'Ayat & Inisial', def: true },
+        { key: 'couple', label: 'Profil Mempelai', def: true },
+        { key: 'countdown', label: 'Save the Date & Countdown', def: true },
+        { key: 'events', label: 'Rangkaian Acara', def: true },
+        { key: 'dresscode', label: 'Kartu Dresscode', def: true },
+        { key: 'stream', label: 'Live Streaming', def: true },
+        { key: 'story', label: 'Kisah Cinta (Timeline)', def: true },
+        { key: 'gallery', label: 'Galeri Foto', def: true },
+        { key: 'video', label: 'Video Kami', def: true },
+        { key: 'gift', label: 'Tanda Kasih (Rekening)', def: true },
+        { key: 'rsvp', label: 'Doa & Ucapan (RSVP)', def: true },
+        { key: 'turut', label: 'Turut Mengundang', def: true }
+      ];
+
+      return `
+        <div class="theme-config-box">
+          <div class="theme-config-header" style="margin-bottom:6px;">
+            <strong style="font-size:13px;">2. Aktifkan / Matikan Section Undangan Sesuai Kebutuhan Client</strong>
+          </div>
+          <div class="section-toggle-grid">
+            ${items.map(it => {
+              const checked = sec[it.key] !== undefined ? Boolean(sec[it.key]) : it.def;
+              return `
+                <label class="toggle-chip">
+                  <input type="checkbox" id="sa-sec-${it.key}-${escapeHtml(ev.id)}" ${checked ? 'checked' : ''}>
+                  <span>${it.label}</span>
+                </label>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function buildClientCustomAssetsHtml(ev) {
+      const assets = ev.customAssets || {};
+      const placeholderPng = `${GITHUB_RAW_BASE}/votura-icon.png`;
+      const slots = [
+        { key: 'heroBgUrl', label: '1. Background Cover & Hero Utama (Foto / Ilustrasi Pendopo)', hint: 'Menggantikan background gelap awal pada Cover & Hero atas.', isPng: false },
+        { key: 'jogloOrnamentUrl', label: '2. Ornamen Rumah Joglo / Pendopo (PNG Transparan)', hint: 'Tampil di atas nama mempelai pada Cover & Hero.', isPng: true },
+        { key: 'gununganOrnamentUrl', label: '3. Ornamen Gunungan / Wayang Kiri & Kanan (PNG Transparan)', hint: 'Tampil mengapit di sisi kiri & kanan Hero serta bagian bawah.', isPng: true },
+        { key: 'cornerOrnamentUrl', label: '4. Ornamen Bunga / Batik Sudut Kartu (PNG Transparan)', hint: 'Menggantikan segitiga emas polos di sudut atas & bawah setiap section.', isPng: true },
+        { key: 'closingBgUrl', label: '5. Background Section Penutup / Closing (Foto / Tekstur)', hint: 'Menggantikan latar gelap di bagian akhir undangan.', isPng: false }
+      ];
+
+      return `
+        <div class="theme-config-box">
+          <div class="theme-config-header">
+            <strong style="font-size:13px;">10. Kustomisasi Ornamen Grafis (Joglo, Gunungan, Bunga Sudut) &amp; Background</strong>
+            <span style="font-size:11.5px; color:var(--ink-muted);">Gunakan file PNG transparan agar menyatu mulus</span>
+          </div>
+          <div class="grid-2">
+            ${slots.map(s => {
+              const currentUrl = assets[s.key] || "";
+              return `
+                <div class="form-group" style="margin-bottom:6px;">
+                  <label>${s.label}</label>
+                  <div class="img-upload-row" style="padding:10px 12px;">
+                    <img src="${escapeHtml(currentUrl || placeholderPng)}" id="sa-asset-prev-${ev.id}-${s.key}" class="${s.isPng ? 'img-preview-ornament' : 'img-preview'}" style="width:60px; height:60px;" alt="${s.key}">
+                    <div class="upload-controls">
+                      <input type="file" id="sa-asset-file-${ev.id}-${s.key}" accept="image/*" style="display:none;" onchange="handleCompressedImage(this, ${s.isPng}, (dataUrl) => { setClientNestedCache('${ev.id}', 'customAssets', '${s.key}', dataUrl); document.getElementById('sa-asset-prev-${ev.id}-${s.key}').src = dataUrl; }, 680)">
+                      <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                        <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('sa-asset-file-${ev.id}-${s.key}').click()">Unggah ${s.isPng ? 'PNG' : 'Gambar'}</button>
+                        ${currentUrl ? `<button type="button" class="btn btn-danger" style="padding:5px 10px;" onclick="setClientNestedCache('${ev.id}', 'customAssets', '${s.key}', ''); document.getElementById('sa-asset-prev-${ev.id}-${s.key}').src='${placeholderPng}';">Reset</button>` : ''}
+                      </div>
+                      <div class="upload-hint">${s.hint}</div>
+                    </div>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `;
+    }
+
+    function buildClientScheduleRowsHtml(eventId, schedules) {
+      if (!Array.isArray(schedules) || schedules.length === 0) {
+        return `<p style="font-size:12px; color:var(--ink-muted);">Belum ada sesi acara. Klik "+ Tambah Sesi".</p>`;
+      }
+      const defaultPhoto = "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=400&q=80";
+      return schedules.map((sch, idx) => `
+        <div class="dynamic-item" style="margin-bottom:10px; padding:14px;">
+          <div class="item-header">
+            <strong>Sesi #${idx + 1} — ${escapeHtml(sch.title || 'Acara')}</strong>
+            <button type="button" class="btn btn-danger" onclick="removeClientSchedule('${escapeHtml(eventId)}', ${idx})">Hapus</button>
+          </div>
+          <div class="grid-3">
+            <div class="form-group"><label>Nama Sesi</label><input type="text" value="${escapeHtml(sch.title || '')}" onchange="updateClientScheduleField('${escapeHtml(eventId)}', ${idx}, 'title', this.value)"></div>
+            <div class="form-group"><label>Hari</label><input type="text" value="${escapeHtml(sch.day || 'Sabtu')}" onchange="updateClientScheduleField('${escapeHtml(eventId)}', ${idx}, 'day', this.value)"></div>
+            <div class="form-group"><label>Tanggal Angka</label><input type="text" value="${escapeHtml(sch.dateNum || '14')}" onchange="updateClientScheduleField('${escapeHtml(eventId)}', ${idx}, 'dateNum', this.value)"></div>
+            <div class="form-group"><label>Bulan &amp; Tahun</label><input type="text" value="${escapeHtml(sch.monthYear || 'Agustus 2027')}" onchange="updateClientScheduleField('${escapeHtml(eventId)}', ${idx}, 'monthYear', this.value)"></div>
+            <div class="form-group"><label>Jam Acara</label><input type="text" value="${escapeHtml(sch.time || '')}" onchange="updateClientScheduleField('${escapeHtml(eventId)}', ${idx}, 'time', this.value)"></div>
+            <div class="form-group"><label>Nama Gedung / Tempat</label><input type="text" value="${escapeHtml(sch.place || '')}" onchange="updateClientScheduleField('${escapeHtml(eventId)}', ${idx}, 'place', this.value)"></div>
+          </div>
+          <div class="grid-2">
+            <div class="form-group"><label>Alamat Lokasi</label><input type="text" value="${escapeHtml(sch.address || '')}" onchange="updateClientScheduleField('${escapeHtml(eventId)}', ${idx}, 'address', this.value)"></div>
+            <div class="form-group"><label>Link Google Maps Sesi</label><input type="url" value="${escapeHtml(sch.maps || '')}" onchange="updateClientScheduleField('${escapeHtml(eventId)}', ${idx}, 'maps', this.value)"></div>
+          </div>
+          <div class="img-upload-row">
+            <img src="${escapeHtml(sch.photo || defaultPhoto)}" id="sa-sch-prev-${eventId}-${idx}" class="img-preview" alt="Foto Sesi">
+            <div class="upload-controls">
+              <input type="file" id="sa-sch-photo-${eventId}-${idx}" accept="image/*" style="display:none;" onchange="handleCompressedImage(this, false, (dataUrl) => { updateClientScheduleField('${escapeHtml(eventId)}', ${idx}, 'photo', dataUrl); document.getElementById('sa-sch-prev-${eventId}-${idx}').src = dataUrl; })">
+              <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('sa-sch-photo-${eventId}-${idx}').click()">Unggah Foto Kartu Sesi</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function buildClientStoriesRowsHtml(eventId, stories) {
+      if (!Array.isArray(stories) || stories.length === 0) {
+        return `<p style="font-size:12px; color:var(--ink-muted);">Belum ada tahapan kisah cinta. Klik "+ Tambah Cerita".</p>`;
+      }
+      const defaultPhoto = "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=400&q=80";
+      return stories.map((st, idx) => `
+        <div class="dynamic-item" style="margin-bottom:10px; padding:14px;">
+          <div class="item-header">
+            <strong>Kisah #${idx + 1} — ${escapeHtml(st.title || 'Momen')}</strong>
+            <button type="button" class="btn btn-danger" onclick="removeClientStory('${escapeHtml(eventId)}', ${idx})">Hapus</button>
+          </div>
+          <div class="grid-2">
+            <div class="form-group"><label>Tahun / Periode</label><input type="text" value="${escapeHtml(st.year || '')}" onchange="updateClientStoryField('${escapeHtml(eventId)}', ${idx}, 'year', this.value)"></div>
+            <div class="form-group"><label>Judul Momen</label><input type="text" value="${escapeHtml(st.title || '')}" onchange="updateClientStoryField('${escapeHtml(eventId)}', ${idx}, 'title', this.value)"></div>
+          </div>
+          <div class="form-group"><label>Cerita Singkat</label><textarea rows="2" onchange="updateClientStoryField('${escapeHtml(eventId)}', ${idx}, 'desc', this.value)">${escapeHtml(st.desc || '')}</textarea></div>
+          <div class="img-upload-row">
+            <img src="${escapeHtml(st.photo || defaultPhoto)}" id="sa-story-prev-${eventId}-${idx}" class="img-preview" alt="Foto Kisah">
+            <div class="upload-controls">
+              <input type="file" id="sa-story-photo-${eventId}-${idx}" accept="image/*" style="display:none;" onchange="handleCompressedImage(this, false, (dataUrl) => { updateClientStoryField('${escapeHtml(eventId)}', ${idx}, 'photo', dataUrl); document.getElementById('sa-story-prev-${eventId}-${idx}').src = dataUrl; })">
+              <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('sa-story-photo-${eventId}-${idx}').click()">Unggah Foto Momen</button>
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function buildClientBanksRowsHtml(eventId, banks) {
+      if (!Array.isArray(banks) || banks.length === 0) {
+        return `<p style="font-size:12px; color:var(--ink-muted);">Belum ada nomor rekening. Klik "+ Tambah Rekening".</p>`;
+      }
+      return banks.map((bk, idx) => `
+        <div class="client-frame-row">
+          <div style="width:120px;"><label style="margin-bottom:4px;">Nama Bank</label><input type="text" value="${escapeHtml(bk.bank || '')}" onchange="updateClientBankField('${escapeHtml(eventId)}', ${idx}, 'bank', this.value)"></div>
+          <div style="flex:1; min-width:140px;"><label style="margin-bottom:4px;">Nomor Rekening</label><input type="text" value="${escapeHtml(bk.number || '')}" onchange="updateClientBankField('${escapeHtml(eventId)}', ${idx}, 'number', this.value)"></div>
+          <div style="flex:1; min-width:140px;"><label style="margin-bottom:4px;">Atas Nama (A.N.)</label><input type="text" value="${escapeHtml(bk.holder || '')}" onchange="updateClientBankField('${escapeHtml(eventId)}', ${idx}, 'holder', this.value)"></div>
+          <button type="button" class="btn btn-danger" style="align-self:flex-end;" onclick="removeClientBank('${escapeHtml(eventId)}', ${idx})">Hapus</button>
+        </div>
+      `).join('');
+    }
+
+    function buildClientGalleryRowsHtml(eventId, photos) {
+      if (!Array.isArray(photos) || photos.length === 0) {
+        return `<p style="font-size:12px; color:var(--ink-muted);">Belum ada foto galeri tambahan. Klik "+ Unggah Foto Galeri".</p>`;
+      }
+      return photos.map((p, idx) => `
+        <div class="client-frame-row">
+          <img src="${escapeHtml(p.url)}" class="img-preview" alt="Galeri #${idx + 1}">
+          <div style="flex:1; min-width:180px;">
+            <label style="margin-bottom:4px;">Keterangan Foto #${idx + 1}</label>
+            <input type="text" value="${escapeHtml(p.caption || '')}" onchange="updateClientSubPhotoCaption('${escapeHtml(eventId)}', '${escapeHtml(p.photoId)}', this.value)">
+          </div>
+          <button type="button" class="btn btn-danger" onclick="deleteClientSubPhoto('${escapeHtml(eventId)}', '${escapeHtml(p.photoId)}')">Hapus Foto</button>
+        </div>
+      `).join('');
+    }
+
+    function renderSuperAdminClients() {
+      const container = document.getElementById('clients-editor-list');
+      if (!container) return;
+
+      const filterType = document.getElementById('client-filter-type')?.value || 'all';
+      const filtered = superAdminEvents.filter(ev => filterType === 'all' || ev.type === filterType);
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<p style="font-size: 13px; color: var(--ink-muted);">Belum ada client pada kategori ini.</p>`;
+        return;
+      }
+
+      container.innerHTML = "";
+      filtered.forEach((ev) => {
+        const isWedding = ev.type === 'wedding';
+        const defaultFile = isWedding ? 'templates/wedding-1.html' : 'templates/pb-1.html';
+        const pageFile = ev.templateFile || defaultFile;
+        const adminFile = isWedding ? 'wedding-admin.html' : 'photobooth-admin.html';
+        const frames = Array.isArray(ev.frames) ? ev.frames : [];
+        const schedules = Array.isArray(ev.schedules) ? ev.schedules : [];
+        const stories = Array.isArray(ev.stories) ? ev.stories : [];
+        const banks = Array.isArray(ev.banks) ? ev.banks : [];
+        const subPhotos = clientSubPhotosCache[ev.id] || [];
+        const isEditable = clientEditModes[ev.id] !== false;
+
+        const defaultPhoto = "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=400&q=80";
+        const defaultGroom = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80";
+        const defaultBride = "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80";
+        const themeBoxHtml = buildClientThemeEditorHtml(ev);
+
+        const div = document.createElement('div');
+        div.className = 'dynamic-item';
+
+        if (isWedding) {
+          const dcColors = Array.isArray(ev.dresscodeColors) && ev.dresscodeColors.length === 3 ? ev.dresscodeColors : ['#991B1B', '#EAB308', '#1E4E4A'];
+          div.innerHTML = `
+            <div class="item-header">
+              <div>
+                <strong>ID: ${escapeHtml(ev.id)} — ${escapeHtml(ev.name || 'Tanpa Nama')}</strong>
+                <span class="badge-pill" style="margin-left:8px;">WEDDING</span>
+                <span class="badge-pill ${ev.status === 'active' ? 'badge-active' : 'badge-locked'}" style="margin-left:4px;">${escapeHtml(ev.status || 'active')}</span>
+              </div>
+              <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <button type="button" id="btn-toggle-edit-${escapeHtml(ev.id)}" class="btn ${isEditable ? 'btn-outline' : 'btn-accent'} btn-sm" onclick="toggleClientEditMode('${escapeHtml(ev.id)}')">${isEditable ? 'Kunci Form' : 'Edit Data'}</button>
+                <button type="button" class="btn btn-outline btn-sm" onclick="copyClientUrl('${escapeHtml(pageFile)}', '${escapeHtml(ev.id)}')">Salin Link</button>
+                <a href="${pageFile}?event=${encodeURIComponent(ev.id)}" target="_blank" class="btn btn-outline btn-sm">Lihat Event</a>
+                <a href="${adminFile}?event=${encodeURIComponent(ev.id)}" target="_blank" class="btn btn-outline btn-sm">Admin Client</a>
+                <button type="button" class="btn btn-dark btn-sm" onclick="saveSuperAdminClientVisual('${escapeHtml(ev.id)}', 'wedding')">Simpan Semua Detail</button>
+              </div>
+            </div>
+
+            <div id="client-body-${escapeHtml(ev.id)}" class="client-body-wrap ${isEditable ? '' : 'is-locked'}">
+              ${themeBoxHtml}
+              ${buildClientSectionTogglesHtml(ev)}
+
+              <!-- 3. IDENTITAS COVER & AYAT -->
+              <div class="theme-config-box">
+                <strong style="display:block; font-size:13px; margin-bottom:12px;">3. Identitas Cover, Countdown &amp; Ayat Pembuka</strong>
+                <div class="grid-3">
+                  <div class="form-group"><label>Nama Pasangan (Pria &amp; Wanita)</label><input type="text" id="sa-name-${ev.id}" value="${escapeHtml(ev.name || '')}"></div>
+                  <div class="form-group"><label>Teks Tanggal Cover</label><input type="text" id="sa-date-${ev.id}" value="${escapeHtml(ev.eventDate || '')}"></div>
+                  <div class="form-group"><label>Target Waktu Countdown</label><input type="datetime-local" id="sa-countdown-${ev.id}" value="${escapeHtml(ev.countdownIso || '2027-08-14T09:00')}"></div>
+                </div>
+                <div class="form-group"><label>Kutipan / Ayat Pembuka Undangan</label><textarea rows="2" id="sa-quote-${ev.id}">${escapeHtml(ev.quote || '')}</textarea></div>
+                <div class="img-upload-row">
+                  <img src="${escapeHtml(ev.coverUrl || defaultPhoto)}" id="sa-cover-prev-${ev.id}" class="img-preview" alt="Sampul Client">
+                  <div class="upload-controls">
+                    <input type="file" id="sa-cover-file-${ev.id}" accept="image/*" style="display:none;" onchange="handleCompressedImage(this, false, (dataUrl) => { setClientPhotoCache('${ev.id}', 'coverUrl', dataUrl); document.getElementById('sa-cover-prev-${ev.id}').src = dataUrl; })">
+                    <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('sa-cover-file-${ev.id}').click()">Unggah Foto Pasangan (Ayat, Countdown &amp; Closing)</button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 4. PROFIL MEMPELAI PRIA & WANITA -->
+              <div class="theme-config-box">
+                <strong style="display:block; font-size:13px; margin-bottom:12px;">4. Profil Mempelai Pria &amp; Wanita</strong>
+                <div class="grid-2">
+                  <div>
+                    <div class="form-group"><label>Nama Panggilan Pria</label><input type="text" id="sa-groom-nick-${ev.id}" value="${escapeHtml(ev.groomNick || '')}"></div>
+                    <div class="form-group"><label>Nama Lengkap &amp; Gelar Pria</label><input type="text" id="sa-groom-full-${ev.id}" value="${escapeHtml(ev.groomFullName || '')}"></div>
+                    <div class="form-group"><label>Nama Orang Tua Pria</label><input type="text" id="sa-groom-${ev.id}" value="${escapeHtml(ev.groomName || '')}"></div>
+                    <div class="form-group"><label>Username Instagram Pria</label><input type="text" id="sa-groom-ig-${ev.id}" value="${escapeHtml(ev.groomIg || '')}"></div>
+                    <div class="img-upload-row">
+                      <img src="${escapeHtml(ev.groomPhoto || defaultGroom)}" id="sa-groom-prev-${ev.id}" class="img-preview" alt="Foto Pria">
+                      <div class="upload-controls">
+                        <input type="file" id="sa-groom-file-${ev.id}" accept="image/*" style="display:none;" onchange="handleCompressedImage(this, false, (dataUrl) => { setClientPhotoCache('${ev.id}', 'groomPhoto', dataUrl); document.getElementById('sa-groom-prev-${ev.id}').src = dataUrl; })">
+                        <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('sa-groom-file-${ev.id}').click()">Unggah Foto Pria</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="form-group"><label>Nama Panggilan Wanita</label><input type="text" id="sa-bride-nick-${ev.id}" value="${escapeHtml(ev.brideNick || '')}"></div>
+                    <div class="form-group"><label>Nama Lengkap &amp; Gelar Wanita</label><input type="text" id="sa-bride-full-${ev.id}" value="${escapeHtml(ev.brideFullName || '')}"></div>
+                    <div class="form-group"><label>Nama Orang Tua Wanita</label><input type="text" id="sa-bride-${ev.id}" value="${escapeHtml(ev.brideName || '')}"></div>
+                    <div class="form-group"><label>Username Instagram Wanita</label><input type="text" id="sa-bride-ig-${ev.id}" value="${escapeHtml(ev.brideIg || '')}"></div>
+                    <div class="img-upload-row">
+                      <img src="${escapeHtml(ev.bridePhoto || defaultBride)}" id="sa-bride-prev-${ev.id}" class="img-preview" alt="Foto Wanita">
+                      <div class="upload-controls">
+                        <input type="file" id="sa-bride-file-${ev.id}" accept="image/*" style="display:none;" onchange="handleCompressedImage(this, false, (dataUrl) => { setClientPhotoCache('${ev.id}', 'bridePhoto', dataUrl); document.getElementById('sa-bride-prev-${ev.id}').src = dataUrl; })">
+                        <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('sa-bride-file-${ev.id}').click()">Unggah Foto Wanita</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 5. RANGKAIAN ACARA -->
+              <div class="client-frame-sublist">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                  <strong style="font-size:13px;">5. Rangkaian Acara (${schedules.length} Sesi)</strong>
+                  <button type="button" class="btn btn-accent btn-sm" onclick="addClientSchedule('${escapeHtml(ev.id)}')">+ Tambah Sesi</button>
+                </div>
+                <div id="sa-sch-container-${ev.id}">${buildClientScheduleRowsHtml(ev.id, schedules)}</div>
+              </div>
+
+              <!-- 6. DRESSCODE & LIVE STREAMING -->
+              <div class="theme-config-box" style="margin-top:12px;">
+                <strong style="display:block; font-size:13px; margin-bottom:12px;">6. Dresscode &amp; Live Streaming</strong>
+                <div class="grid-2">
+                  <div class="form-group"><label>Keterangan Dresscode</label><input type="text" id="sa-dc-text-${ev.id}" value="${escapeHtml(ev.dresscodeText || 'Busana adat atau batik sopan. Hindari warna putih polos dan hitam polos.')}"></div>
+                  <div class="form-group">
+                    <label>3 Warna Palet Dresscode</label>
+                    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;">
+                      <input type="color" id="sa-dc-c1-${ev.id}" value="${escapeHtml(dcColors[0])}">
+                      <input type="color" id="sa-dc-c2-${ev.id}" value="${escapeHtml(dcColors[1])}">
+                      <input type="color" id="sa-dc-c3-${ev.id}" value="${escapeHtml(dcColors[2])}">
+                    </div>
+                  </div>
+                  <div class="form-group"><label>Judul Live Streaming</label><input type="text" id="sa-stream-title-${ev.id}" value="${escapeHtml(ev.streamTitle || 'Siaran Langsung Pernikahan')}"></div>
+                  <div class="form-group"><label>Link YouTube Live Streaming</label><input type="url" id="sa-stream-url-${ev.id}" value="${escapeHtml(ev.streamUrl || 'https://youtube.com')}"></div>
+                </div>
+              </div>
+
+              <!-- 7. KISAH CINTA -->
+              <div class="client-frame-sublist">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                  <strong style="font-size:13px;">7. Kisah Cinta (${stories.length} Momen)</strong>
+                  <button type="button" class="btn btn-accent btn-sm" onclick="addClientStory('${escapeHtml(ev.id)}')">+ Tambah Cerita</button>
+                </div>
+                <div id="sa-story-container-${ev.id}">${buildClientStoriesRowsHtml(ev.id, stories)}</div>
+              </div>
+
+              <!-- 8. GALERI & VIDEO -->
+              <div class="client-frame-sublist">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                  <strong style="font-size:13px;">8. Galeri Multi-Foto (${subPhotos.length} Foto) &amp; Video Kami</strong>
+                  <div>
+                    <input type="file" id="sa-add-gal-${ev.id}" accept="image/*" style="display:none;" onchange="uploadClientSubPhoto('${escapeHtml(ev.id)}', this)">
+                    <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('sa-add-gal-${ev.id}').click()">+ Unggah Foto Galeri</button>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Link Embed / URL Video YouTube Prewedding</label>
+                  <input type="url" id="sa-video-url-${ev.id}" value="${escapeHtml(ev.videoUrl || '')}" placeholder="https://www.youtube.com/embed/...">
+                </div>
+                <div id="sa-gal-list-${ev.id}">${buildClientGalleryRowsHtml(ev.id, subPhotos)}</div>
+              </div>
+
+              <!-- 9. TANDA KASIH & TURUT MENGUNDANG -->
+              <div class="theme-config-box" style="margin-top:12px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                  <strong style="font-size:13px;">9. Tanda Kasih (Rekening &amp; Kado) &amp; Turut Mengundang</strong>
+                  <button type="button" class="btn btn-accent btn-sm" onclick="addClientBank('${escapeHtml(ev.id)}')">+ Tambah Rekening</button>
+                </div>
+                <div id="sa-bank-container-${ev.id}">${buildClientBanksRowsHtml(ev.id, banks)}</div>
+                <div class="grid-2" style="margin-top:12px;">
+                  <div class="form-group"><label>Nama Penerima Kado Fisik</label><input type="text" id="sa-gift-name-${ev.id}" value="${escapeHtml(ev.giftRecipient || '')}"></div>
+                  <div class="form-group"><label>Alamat Pengiriman Kado Fisik</label><input type="text" id="sa-gift-addr-${ev.id}" value="${escapeHtml(ev.giftAddress || '')}"></div>
+                </div>
+                <div class="grid-3">
+                  <div class="form-group" style="margin-bottom:0;"><label>Turut Mengundang (Kel. Pria)</label><textarea rows="3" id="sa-turut-pria-${ev.id}">${escapeHtml(ev.turutPria || '')}</textarea></div>
+                  <div class="form-group" style="margin-bottom:0;"><label>Turut Mengundang (Kel. Wanita)</label><textarea rows="3" id="sa-turut-wanita-${ev.id}">${escapeHtml(ev.turutWanita || '')}</textarea></div>
+                  <div class="form-group" style="margin-bottom:0;"><label>Turut Mengundang (Sahabat/Rekan)</label><textarea rows="3" id="sa-turut-rekan-${ev.id}">${escapeHtml(ev.turutRekan || '')}</textarea></div>
+                </div>
+              </div>
+
+              <!-- 10. ORNAMEN GRAFIS & BACKGROUND CUSTOM -->
+              ${buildClientCustomAssetsHtml(ev)}
+            </div>
+
+            <div style="margin-top:14px; text-align:right;">
+              <button type="button" class="btn btn-dark" onclick="saveSuperAdminClientVisual('${escapeHtml(ev.id)}', 'wedding')">Simpan Semua Detail Undangan Client</button>
+            </div>
+          `;
+        } else {
+          const framesRowsHtml = frames.map((fr, fIdx) => `
+            <div class="client-frame-row">
+              <img src="${escapeHtml(fr.path || `${GITHUB_RAW_BASE}/frame/dsg3.png`)}" class="img-preview-frame" alt="Frame">
+              <div style="flex:1; min-width:160px;"><label style="margin-bottom:4px;">Nama Frame</label><input type="text" value="${escapeHtml(fr.name || '')}" onchange="updateClientFrameField('${escapeHtml(ev.id)}', ${fIdx}, 'name', this.value)"></div>
+              <div style="width:120px;"><label style="margin-bottom:4px;">Jumlah Slot</label>
+                <select onchange="updateClientFrameField('${escapeHtml(ev.id)}', ${fIdx}, 'count', parseInt(this.value, 10))">
+                  <option value="1" ${Number(fr.count) === 1 ? 'selected' : ''}>1 Foto</option>
+                  <option value="2" ${Number(fr.count) === 2 ? 'selected' : ''}>2 Foto</option>
+                  <option value="3" ${Number(fr.count) === 3 ? 'selected' : ''}>3 Foto</option>
+                </select>
+              </div>
+              <div>
+                <label style="margin-bottom:4px;">Desain Bingkai PNG</label>
+                <input type="file" id="cl-fr-file-${ev.id}-${fIdx}" accept="image/png,image/webp" style="display:none;" onchange="handleCompressedImage(this, true, (dataUrl) => { updateClientFrameField('${escapeHtml(ev.id)}', ${fIdx}, 'path', dataUrl); renderSuperAdminClients(); })">
+                <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('cl-fr-file-${ev.id}-${fIdx}').click()">Unggah PNG</button>
+              </div>
+              <button type="button" class="btn btn-danger" style="align-self:flex-end;" onclick="removeClientFrame('${escapeHtml(ev.id)}', ${fIdx})">Hapus</button>
+            </div>
+          `).join('');
+
+          div.innerHTML = `
+            <div class="item-header">
+              <div>
+                <strong>ID: ${escapeHtml(ev.id)} — ${escapeHtml(ev.name || 'Tanpa Nama')}</strong>
+                <span class="badge-pill" style="margin-left:8px;">PHOTOBOOTH</span>
+              </div>
+              <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <button type="button" class="btn btn-outline btn-sm" onclick="copyClientUrl('${escapeHtml(pageFile)}', '${escapeHtml(ev.id)}')">Salin Link</button>
+                <a href="${pageFile}?event=${encodeURIComponent(ev.id)}" target="_blank" class="btn btn-outline btn-sm">Lihat Event</a>
+                <a href="${adminFile}?event=${encodeURIComponent(ev.id)}" target="_blank" class="btn btn-outline btn-sm">Admin Client</a>
+                <button type="button" class="btn btn-dark btn-sm" onclick="saveSuperAdminClientVisual('${escapeHtml(ev.id)}', 'photobooth')">Simpan Visual</button>
+              </div>
+            </div>
+            ${themeBoxHtml}
+            <div class="grid-2">
+              <div class="form-group"><label>Nama Event / Pasangan</label><input type="text" id="sa-name-${ev.id}" value="${escapeHtml(ev.name || '')}"></div>
+              <div class="form-group"><label>Tanggal Acara</label><input type="text" id="sa-date-${ev.id}" value="${escapeHtml(ev.eventDate || '')}"></div>
+            </div>
+            <div class="form-group">
+              <label>Foto Hero Beranda Photobooth Client</label>
+              <div class="img-upload-row">
+                <img src="${escapeHtml(ev.heroUrl || defaultPhoto)}" id="sa-hero-prev-${ev.id}" class="img-preview" alt="Hero Client">
+                <div class="upload-controls">
+                  <input type="file" id="sa-hero-file-${ev.id}" accept="image/*" style="display:none;" onchange="handleCompressedImage(this, false, (dataUrl) => { setClientPhotoCache('${ev.id}', 'heroUrl', dataUrl); document.getElementById('sa-hero-prev-${ev.id}').src = dataUrl; })">
+                  <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('sa-hero-file-${ev.id}').click()">Unggah Foto Beranda</button>
+                </div>
+              </div>
+            </div>
+            <div class="client-frame-sublist">
+              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+                <strong style="font-size:12.5px;">Daftar Frame Khusus Client (${frames.length} Frame)</strong>
+                <button type="button" class="btn btn-accent btn-sm" onclick="addClientFrame('${escapeHtml(ev.id)}')">+ Tambah Frame Client</button>
+              </div>
+              ${frames.length > 0 ? framesRowsHtml : '<p style="font-size:12px; color:var(--ink-muted);">Belum ada frame khusus.</p>'}
+            </div>
+          `;
+        }
+
+        container.appendChild(div);
+      });
+    }
+
+    function setClientPhotoCache(eventId, fieldKey, url) {
+      const target = superAdminEvents.find(e => e.id === eventId);
+      if (target) target[fieldKey] = url;
+    }
+
+    function setClientNestedCache(eventId, parentKey, subKey, val) {
+      const target = superAdminEvents.find(e => e.id === eventId);
+      if (!target) return;
+      if (!target[parentKey] || typeof target[parentKey] !== 'object') target[parentKey] = {};
+      target[parentKey][subKey] = val;
+    }
+
+    function addClientSchedule(eventId) {
+      const target = superAdminEvents.find(e => e.id === eventId);
+      if (!target) return;
+      if (!Array.isArray(target.schedules)) target.schedules = [];
+      target.schedules.push({ title: "Akad Nikah", day: "Sabtu", dateNum: "14", monthYear: "Agustus 2027", time: "09:00 - 10:00 WIB", place: "Masjid Raya", address: "Jl. Merdeka No. 12", maps: "https://maps.google.com", photo: "" });
+      const box = document.getElementById(`sa-sch-container-${eventId}`);
+      if (box) box.innerHTML = buildClientScheduleRowsHtml(eventId, target.schedules);
+    }
+    function updateClientScheduleField(eventId, idx, key, val) {
+      const target = superAdminEvents.find(e => e.id === eventId);
+      if (target && target.schedules && target.schedules[idx]) target.schedules[idx][key] = val;
+    }
+    function removeClientSchedule(eventId, idx) {
+      const target = superAdminEvents.find(e => e.id === eventId);
+      if (target && target.schedules) {
+        target.schedules.splice(idx, 1);
+        const box = document.getElementById(`sa-sch-container-${eventId}`);
+        if (box) box.innerHTML = buildClientScheduleRowsHtml(eventId, target.schedules);
+      }
+    }
+
+    function addClientStory(eventId) {
+      const target = superAdminEvents.find(e => e.id === eventId);
+      if (!target) return;
+      if (!Array.isArray(target.stories)) target.stories = [];
+      target.stories.push({ year: "2024", title: "Momen Spesial", desc: "Cerita singkat perjalanan cinta kami.", photo: "" });
+      const box = document.getElementById(`sa-story-container-${eventId}`);
+      if (box) box.innerHTML = buildClientStoriesRowsHtml(eventId, target.stories);
+    }
+    function updateClientStoryField(eventId, idx, key, val) {
+      const target = superAdminEvents.find(e => e.id === eventId);
+      if (target && target.stories && target.stories[idx]) target.stories[idx][key] = val;
+    }
+    function removeClientStory(eventId, idx) {
+      const target = superAdminEvents.find(e => e.id === eventId);
+      if (target && target.stories) {
+        target.stories.splice(idx, 1);
+        const box = document.getElementById(`sa-story-container-${eventId}`);
+        if (box) box.innerHTML = buildClientStoriesRowsHtml(eventId, target.stories);
+      }
+    }
+
+    function addClientBank(eventId) {
+      const target = superAdminEvents.find(e => e.id === eventId);
+      if (!target) return;
+      if (!Array.isArray(target.banks)) target.banks = [];
+      target.banks.push({ bank: "BCA", number: "1234567890", holder: "NAMA PENERIMA" });
+      const box = document.getElementById(`sa-bank-container-${eventId}`);
+      if (box) box.innerHTML = buildClientBanksRowsHtml(eventId, target.banks);
+    }
+    function updateClientBankField(eventId, idx, key, val) {
+      const target = superAdminEvents.find(e => e.id === eventId);
+      if (target && target.banks && target.banks[idx]) target.banks[idx][key] = val;
+    }
+    function removeClientBank(eventId, idx) {
+      const target = superAdminEvents.find(e => e.id === eventId);
+      if (target && target.banks) {
+        target.banks.splice(idx, 1);
+        const box = document.getElementById(`sa-bank-container-${eventId}`);
+        if (box) box.innerHTML = buildClientBanksRowsHtml(eventId, target.banks);
+      }
+    }
+
+    function uploadClientSubPhoto(eventId, inputEl) {
+      handleCompressedImage(inputEl, false, async (dataUrl) => {
+        try {
+          await db.collection("events").doc(eventId).collection("photos").add({
+            url: dataUrl,
+            caption: "Momen Spesial",
+            createdAt: firebase.firestore.FieldValue.serverTimestamp()
+          });
+        } catch (err) {
+          showCmsModal("Gagal Unggah Foto", err.message);
+        }
+      });
+    }
+
+    async function updateClientSubPhotoCaption(eventId, photoId, caption) {
+      try { await db.collection("events").doc(eventId).collection("photos").doc(photoId).update({ caption }); } catch (e) {}
+    }
+    async function deleteClientSubPhoto(eventId, photoId) {
+      try { await db.collection("events").doc(eventId).collection("photos").doc(photoId).delete(); } catch (err) { showCmsModal("Gagal Menghapus", err.message); }
+    }
+
+    function addClientFrame(eventId) {
+      const target = superAdminEvents.find(e => e.id === eventId);
+      if (!target) return;
+      if (!Array.isArray(target.frames)) target.frames = [];
+      target.frames.push({ name: "Frame Custom (3 Foto)", tag: "CUSTOM EDITION", count: 3, path: `${GITHUB_RAW_BASE}/frame/dsg3.png` });
+      renderSuperAdminClients();
+    }
+    function updateClientFrameField(eventId, frameIdx, key, val) {
+      const target = superAdminEvents.find(e => e.id === eventId);
+      if (target && target.frames && target.frames[frameIdx]) target.frames[frameIdx][key] = val;
+    }
+    function removeClientFrame(eventId, frameIdx) {
+      const target = superAdminEvents.find(e => e.id === eventId);
+      if (target && target.frames) { target.frames.splice(frameIdx, 1); renderSuperAdminClients(); }
+    }
+
+    async function saveSuperAdminClientVisual(eventId, type) {
+      const target = superAdminEvents.find(e => e.id === eventId);
+      if (!target) return;
+
+      const updatedName = document.getElementById(`sa-name-${eventId}`)?.value.trim() || target.name;
+      const updatedDate = document.getElementById(`sa-date-${eventId}`)?.value.trim() || "";
+      const tplSelect = document.getElementById(`sa-tpl-${eventId}`);
+      const selectedFile = tplSelect?.value || (type === 'wedding' ? 'templates/wedding-1.html' : 'templates/pb-1.html');
+      const selectedLabel = tplSelect?.options[tplSelect.selectedIndex]?.text || selectedFile;
+
+      const inputMusicUrl = normalizeMusicUrl(document.getElementById(`sa-music-url-${eventId}`)?.value || "");
+      const presetMusic = document.getElementById(`sa-music-preset-${eventId}`)?.value || MUSIC_PRESETS[0].url;
+      const finalMusicUrl = inputMusicUrl || (presetMusic !== 'custom' ? presetMusic : MUSIC_PRESETS[0].url);
+
+      let payload = {
+        name: updatedName,
+        coupleName: updatedName,
+        eventDate: updatedDate,
+        templateFile: selectedFile,
+        templateLabel: selectedLabel,
+        musicUrl: finalMusicUrl,
+        customStyle: {
+          bgMain: document.getElementById(`sa-bg-${eventId}`)?.value || "#F5EFE6",
+          accent: document.getElementById(`sa-acc-${eventId}`)?.value || "#C8A063",
+          ink: document.getElementById(`sa-ink-${eventId}`)?.value || "#3B2A1E",
+          fontHeading: document.getElementById(`sa-font-h-${eventId}`)?.value || "'Cormorant Garamond', serif",
+          fontBody: document.getElementById(`sa-font-b-${eventId}`)?.value || "'Plus Jakarta Sans', sans-serif",
+          animationStyle: document.getElementById(`sa-anim-${eventId}`)?.value || "fade-up",
+          motionOrnament: document.getElementById(`sa-motion-${eventId}`)?.value || "birds-butterflies"
+        },
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      };
+
+      if (type === 'wedding') {
+        const secKeys = ['verse', 'couple', 'countdown', 'events', 'dresscode', 'stream', 'story', 'gallery', 'video', 'gift', 'rsvp', 'turut'];
+        const sectionsObj = {};
+        secKeys.forEach(k => {
+          const el = document.getElementById(`sa-sec-${k}-${eventId}`);
+          sectionsObj[k] = el ? el.checked : true;
+        });
+
+        payload.sections = sectionsObj;
+        payload.countdownIso = document.getElementById(`sa-countdown-${eventId}`)?.value || "";
+        payload.quote = document.getElementById(`sa-quote-${eventId}`)?.value.trim() || "";
+        payload.coverUrl = target.coverUrl || "";
+
+        payload.groomNick = document.getElementById(`sa-groom-nick-${eventId}`)?.value.trim() || "";
+        payload.groomFullName = document.getElementById(`sa-groom-full-${eventId}`)?.value.trim() || "";
+        payload.groomName = document.getElementById(`sa-groom-${eventId}`)?.value.trim() || "";
+        payload.groomIg = document.getElementById(`sa-groom-ig-${eventId}`)?.value.trim() || "";
+        payload.groomPhoto = target.groomPhoto || "";
+
+        payload.brideNick = document.getElementById(`sa-bride-nick-${eventId}`)?.value.trim() || "";
+        payload.brideFullName = document.getElementById(`sa-bride-full-${eventId}`)?.value.trim() || "";
+        payload.brideName = document.getElementById(`sa-bride-${eventId}`)?.value.trim() || "";
+        payload.brideIg = document.getElementById(`sa-bride-ig-${eventId}`)?.value.trim() || "";
+        payload.bridePhoto = target.bridePhoto || "";
+
+        payload.schedules = Array.isArray(target.schedules) ? target.schedules : [];
+        payload.dresscodeText = document.getElementById(`sa-dc-text-${eventId}`)?.value.trim() || "";
+        payload.dresscodeColors = [
+          document.getElementById(`sa-dc-c1-${eventId}`)?.value || "#991B1B",
+          document.getElementById(`sa-dc-c2-${eventId}`)?.value || "#EAB308",
+          document.getElementById(`sa-dc-c3-${eventId}`)?.value || "#1E4E4A"
+        ];
+        payload.streamTitle = document.getElementById(`sa-stream-title-${eventId}`)?.value.trim() || "";
+        payload.streamUrl = document.getElementById(`sa-stream-url-${eventId}`)?.value.trim() || "";
+        payload.stories = Array.isArray(target.stories) ? target.stories : [];
+        payload.videoUrl = document.getElementById(`sa-video-url-${eventId}`)?.value.trim() || "";
+        payload.banks = Array.isArray(target.banks) ? target.banks : [];
+        payload.giftRecipient = document.getElementById(`sa-gift-name-${eventId}`)?.value.trim() || "";
+        payload.giftAddress = document.getElementById(`sa-gift-addr-${eventId}`)?.value.trim() || "";
+        payload.turutPria = document.getElementById(`sa-turut-pria-${eventId}`)?.value.trim() || "";
+        payload.turutWanita = document.getElementById(`sa-turut-wanita-${eventId}`)?.value.trim() || "";
+        payload.turutRekan = document.getElementById(`sa-turut-rekan-${eventId}`)?.value.trim() || "";
+        payload.customAssets = target.customAssets || {};
+      } else {
+        payload.heroUrl = target.heroUrl || "";
+        payload.frames = Array.isArray(target.frames) ? target.frames : [];
+      }
+
+      const payloadSizeKb = Math.round(new Blob([JSON.stringify(payload)]).size / 1024);
+      if (payloadSizeKb > 980) {
+        showCmsModal("Ukuran Total Terlalu Besar", `Total ukuran foto & musik dalam satu dokumen mencapai ${payloadSizeKb} KB (batas maksimal 980 KB). Silakan gunakan link URL MP3 eksternal atau unggah ulang beberapa foto agar terkompresi lebih ringan.`);
+        return;
+      }
+
+      try {
+        await db.collection("events").doc(eventId).set(payload, { merge: true });
+        Object.assign(target, payload);
+        clientEditModes[eventId] = false;
+        renderSuperAdminClients();
+        showCmsModal("Tersimpan Permanen (" + payloadSizeKb + " KB)", `Seluruh data, musik latar, foto mempelai, dan ornamen grafis untuk "${updatedName}" telah tersimpan.\n\nKlik tombol "Edit Data" kapan saja jika ingin mengubahnya lagi.`);
+      } catch (err) {
+        showCmsModal("Gagal Menyimpan", err.message);
+      }
+    }
+
+    async function saveCurrentActiveTab() {
+      if (activeTabId === 'tab-landing') await saveLandingData();
+      else if (activeTabId === 'tab-demo-wedding') await saveDemoWeddingData();
+      else if (activeTabId === 'tab-demo-photobooth') await saveDemoPhotoboothData();
+    }
+
+    async function saveLandingData() {
+      const btn = document.getElementById('save-all-btn');
+      const status = document.getElementById('status-text');
+      btn.disabled = true;
+      status.textContent = "Menyimpan Web Utama...";
+      try {
+        const payload = {
+          waNumber: document.getElementById('cfg-wa').value.trim(),
+          navCta: document.getElementById('cfg-nav-cta').value.trim(),
+          igUrl: document.getElementById('cfg-ig').value.trim(),
+          tiktokUrl: document.getElementById('cfg-tiktok').value.trim(),
+          heroEyebrow: document.getElementById('hero-eyebrow').value.trim(),
+          heroTitle: document.getElementById('hero-title').value.trim(),
+          heroSubtitle: document.getElementById('hero-subtitle').value.trim(),
+          heroDemoLabel: document.getElementById('hero-demo-label').value.trim(),
+          heroDemoUrl: document.getElementById('hero-demo-url').value,
+          showcaseTitle: document.getElementById('showcase-title').value.trim(),
+          showcaseDesc: document.getElementById('showcase-desc').value.trim(),
+          heroImageUrl: currentData.heroImageUrl || "",
+          stat1Val: document.getElementById('stat1-val').value.trim(),
+          stat1Lbl: document.getElementById('stat1-lbl').value.trim(),
+          stat2Val: document.getElementById('stat2-val').value.trim(),
+          stat2Lbl: document.getElementById('stat2-lbl').value.trim(),
+          stat3Val: document.getElementById('stat3-val').value.trim(),
+          stat3Lbl: document.getElementById('stat3-lbl').value.trim(),
+          ctaBoxTitle: document.getElementById('cta-box-title').value.trim(),
+          ctaBoxSub: document.getElementById('cta-box-sub').value.trim(),
+          footerDesc: document.getElementById('footer-desc').value.trim(),
+          products: currentData.products,
+          testimonials: currentData.testimonials
+        };
+        await db.collection("settings").doc("landing_page").set({ ...payload, updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
+        try { localStorage.setItem(CACHE_KEY, JSON.stringify(payload)); } catch (e) {}
+        status.textContent = "Web Utama tersimpan";
+        showCmsModal("Berhasil Disimpan", "Perubahan konten halaman utama Votura Studio telah diperbarui.");
+      } catch (err) {
+        status.textContent = "Gagal menyimpan";
+        showCmsModal("Terjadi Kendala", err.message);
+      } finally { btn.disabled = false; }
+    }
+
+    async function saveDemoWeddingData() {
+      const btn = document.getElementById('save-all-btn');
+      const status = document.getElementById('status-text');
+      btn.disabled = true;
+      status.textContent = "Menyimpan Demo Undangan...";
+      try {
+        const payload = {
+          coupleTitle: document.getElementById('dw-couple-title').value.trim(),
+          eventDate: document.getElementById('dw-event-date').value.trim(),
+          groomName: document.getElementById('dw-groom-name').value.trim(),
+          brideName: document.getElementById('dw-bride-name').value.trim(),
+          venueName: document.getElementById('dw-venue-name').value.trim(),
+          mapsUrl: document.getElementById('dw-maps-url').value.trim(),
+          venueAddress: document.getElementById('dw-venue-address').value.trim(),
+          quote: document.getElementById('dw-quote').value.trim(),
+          coverUrl: demoWeddingData.coverUrl || "",
+          schedules: demoWeddingData.schedules,
+          gallery: demoWeddingData.gallery
+        };
+        await db.collection("settings").doc("demo_wedding").set({ ...payload, updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
+        status.textContent = "Demo Undangan tersimpan";
+        showCmsModal("Berhasil Disimpan", "Konfigurasi visual Demo Wedding Invitation telah diperbarui.");
+      } catch (err) {
+        status.textContent = "Gagal menyimpan";
+        showCmsModal("Terjadi Kendala", err.message);
+      } finally { btn.disabled = false; }
+    }
+
+    async function saveDemoPhotoboothData() {
+      const btn = document.getElementById('save-all-btn');
+      const status = document.getElementById('status-text');
+      btn.disabled = true;
+      status.textContent = "Menyimpan Demo Photobooth...";
+      try {
+        const payload = {
+          eventTitle: document.getElementById('dp-event-title').value.trim(),
+          eventDate: document.getElementById('dp-event-date').value.trim(),
+          waNumber: document.getElementById('dp-wa-number').value.trim(),
+          ctaLabel: document.getElementById('dp-cta-label').value.trim(),
+          welcomeQuote: document.getElementById('dp-welcome-quote').value.trim(),
+          heroUrl: demoPhotoboothData.heroUrl || "",
+          frames: demoPhotoboothData.frames
+        };
+        await db.collection("settings").doc("demo_photobooth").set({ ...payload, updatedAt: firebase.firestore.FieldValue.serverTimestamp() });
+        status.textContent = "Demo Photobooth tersimpan";
+        showCmsModal("Berhasil Disimpan", "Pengaturan visual & daftar frame Demo Photobooth telah diperbarui.");
+      } catch (err) {
+        status.textContent = "Gagal menyimpan";
+        showCmsModal("Terjadi Kendala", err.message);
+      } finally { btn.disabled = false; }
+    }
+
+    initCms();
+  </script>
+</body>
+</html>
