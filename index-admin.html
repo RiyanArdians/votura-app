@@ -1276,7 +1276,7 @@
               </div>
             </div>
           </div>
-          <div class="form-group" id="sa-music-custom-wrap-${escapeHtml(ev.id)}" style="display:${isPresetMusic ? 'none' : 'block'};">
+          <div class="form-group" id="sa-music-custom-wrap-${escapeHtml(ev.id)}" style="display:block; background:#F8F6F2; padding:12px; border-radius:12px; border:1px dashed rgba(140,115,85,0.4);">
             <label>Upload File MP3 atau Tempel Link MP3 Custom</label>
             <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
               <input type="file" id="sa-music-file-${escapeHtml(ev.id)}" accept="audio/mp3,audio/mpeg,audio/*" style="display:none;" onchange="handleAudioUpload('${escapeHtml(ev.id)}', this)">
@@ -1294,17 +1294,17 @@
       `;
     }
 
-    function handleClientMusicPresetChange(eventId, val) {
-      const wrap = document.getElementById(`sa-music-custom-wrap-${eventId}`);
+      function handleClientMusicPresetChange(eventId, val) {
       const urlInput = document.getElementById(`sa-music-url-${eventId}`);
+      const infoEl = document.getElementById(`sa-music-file-info-${eventId}`);
       if (val === 'custom') {
-        if (wrap) wrap.style.display = 'block';
         if (urlInput && urlInput.value.startsWith('https://www.soundhelix.com')) {
           urlInput.value = '';
         }
+        if (urlInput) urlInput.focus();
       } else {
-        if (wrap) wrap.style.display = 'none';
         if (urlInput) urlInput.value = val;
+        if (infoEl) infoEl.textContent = 'Menggunakan lagu preset bawaan. Klik "Putar" untuk mendengarkan.';
       }
     }
 
@@ -1858,10 +1858,9 @@
       const selectedFile = tplSelect?.value || (type === 'wedding' ? 'templates/wedding-1.html' : 'templates/pb-1.html');
       const selectedLabel = tplSelect?.options[tplSelect.selectedIndex]?.text || selectedFile;
 
+      const inputMusicUrl = document.getElementById(`sa-music-url-${eventId}`)?.value.trim() || "";
       const presetMusic = document.getElementById(`sa-music-preset-${eventId}`)?.value || MUSIC_PRESETS[0].url;
-      const finalMusicUrl = presetMusic === 'custom'
-        ? (document.getElementById(`sa-music-url-${eventId}`)?.value.trim() || MUSIC_PRESETS[0].url)
-        : presetMusic;
+      const finalMusicUrl = inputMusicUrl || (presetMusic !== 'custom' ? presetMusic : MUSIC_PRESETS[0].url);
 
       let payload = {
         name: updatedName,
