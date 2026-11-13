@@ -2016,7 +2016,10 @@
 
       try {
         const doc = await db.collection("events").doc(eventId).get();
-        if (!doc.exists) return;
+        if (!doc.exists) {
+          console.warn("Dokumen event tidak ditemukan:", eventId);
+          return;
+        }
         const data = doc.data();
 
         // Terapkan Kustomisasi Warna & Font dari Pusat Visual (CMS) jika diatur
@@ -2050,13 +2053,78 @@
           document.getElementById('stream-date').textContent = data.eventDate || data.weddingDate;
         }
         if (data.quote) document.getElementById('verse-quote').textContent = data.quote;
+
+        // Terapkan Foto & Identitas Mempelai Pria & Wanita
+        const groomImgEl = document.getElementById('groom-photo');
+        const brideImgEl = document.getElementById('bride-photo');
+        if (groomImgEl && data.groomPhoto && data.groomPhoto.length > 20) groomImgEl.src = data.groomPhoto;
+        if (brideImgEl && data.bridePhoto && data.bridePhoto.length > 20) brideImgEl.src = data.bridePhoto;
+
+        if (data.groomNick) document.getElementById('groom-nick').textContent = data.groomNick;
+        if (data.groomFullName) document.getElementById('groom-fullname').textContent = data.groomFullName;
         if (data.groomName) document.getElementById('groom-parents').textContent = data.groomName;
+
+        if (data.brideNick) document.getElementById('bride-nick').textContent = data.brideNick;
+        if (data.brideFullName) document.getElementById('bride-fullname').textContent = data.brideFullName;
         if (data.brideName) document.getElementById('bride-parents').textContent = data.brideName;
 
         if (data.coverUrl) {
           document.getElementById('verse-couple-photo').src = data.coverUrl;
           document.getElementById('countdown-photo').src = data.coverUrl;
           document.getElementById('closing-photo').src = data.coverUrl;
+        }
+
+        // Terapkan Ornamen Grafis & Background Kustom dari Bagian 10 Admin
+        if (data.customAssets) {
+          const ca = data.customAssets;
+
+          // 1. Background Cover & Hero
+          if (ca.heroBgUrl) {
+            document.querySelectorAll('.cover-scenery, .hero-trees-bg').forEach(el => {
+              el.style.backgroundImage = `url('${ca.heroBgUrl}')`;
+              el.style.opacity = '0.45';
+            });
+          }
+
+          // 2. Ornamen Joglo (menggantikan SVG Joglo di Cover, Hero, & Closing)
+          if (ca.jogloOrnamentUrl) {
+            document.querySelectorAll('.cover-bottom-art').forEach(el => {
+              el.innerHTML = `<img src="${ca.jogloOrnamentUrl}" class="joglo-svg" style="max-height:210px; object-fit:contain;" alt="Ornamen Pendopo">`;
+            });
+          }
+
+          // 3. Ornamen Gunungan (menggantikan SVG Gunungan di Save The Date)
+          if (ca.gununganOrnamentUrl) {
+            const gununganEl = document.querySelector('.gunungan-icon');
+            if (gununganEl) {
+              gununganEl.outerHTML = `<img src="${ca.gununganOrnamentUrl}" class="gunungan-icon" style="width:72px; height:auto;" alt="Ornamen Gunungan">`;
+            }
+          }
+
+          // 4. Ornamen Sudut (menggantikan SVG sudut bawaan & menambahkan ke section lain)
+          if (ca.cornerOrnamentUrl) {
+            document.querySelectorAll('.corner-ornament-left, .corner-ornament-right').forEach(el => {
+              el.style.display = 'none';
+            });
+            document.querySelectorAll('.sec-verse, .sec-couple, .sec-story, .sec-gift, .sec-rsvp').forEach(sec => {
+              sec.style.position = 'relative';
+              sec.insertAdjacentHTML('afterbegin', `
+                <img src="${ca.cornerOrnamentUrl}" class="custom-corner-img custom-corner-tl" alt="">
+                <img src="${ca.cornerOrnamentUrl}" class="custom-corner-img custom-corner-tr" alt="">
+                <img src="${ca.cornerOrnamentUrl}" class="custom-corner-img custom-corner-bl" alt="">
+                <img src="${ca.cornerOrnamentUrl}" class="custom-corner-img custom-corner-br" alt="">
+              `);
+            });
+          }
+
+          // 5. Background Closing Footer
+          if (ca.closingBgUrl) {
+            document.querySelectorAll('.closing-visual').forEach(el => {
+              el.style.backgroundImage = `linear-gradient(180deg, rgba(18,12,8,0.35), rgba(18,12,8,0.75)), url('${ca.closingBgUrl}')`;
+              el.style.backgroundSize = 'cover';
+              el.style.backgroundPosition = 'center';
+            });
+          }
         }
 
         if (Array.isArray(data.schedules) && data.schedules.length > 0) {
@@ -2084,65 +2152,6 @@
         });
       } catch (err) {
         console.warn("Memuat mode preview default:", err);
-      }
-    }
-    
-    // Terapkan Foto & Identitas Mempelai Pria & Wanita
-    const groomImgEl = document.getElementById('groom-photo');
-    const brideImgEl = document.getElementById('bride-photo');
-    if (groomImgEl && data.groomPhoto && data.groomPhoto.length > 20) groomImgEl.src = data.groomPhoto;
-    if (brideImgEl && data.bridePhoto && data.bridePhoto.length > 20) brideImgEl.src = data.bridePhoto;
-    
-    if (data.groomNick) document.getElementById('groom-nick').textContent = data.groomNick;
-    if (data.groomFullName) document.getElementById('groom-fullname').textContent = data.groomFullName;
-    if (data.groomName) document.getElementById('groom-parents').textContent = data.groomName;
-    
-    if (data.brideNick) document.getElementById('bride-nick').textContent = data.brideNick;
-    if (data.brideFullName) document.getElementById('bride-fullname').textContent = data.brideFullName;
-    if (data.brideName) document.getElementById('bride-parents').textContent = data.brideName;
-    
-    // Terapkan Ornamen Grafis & Background Kustom dari Bagian 10 Admin
-    if (data.customAssets) {
-      const ca = data.customAssets;
-    
-      if (ca.heroBgUrl) {
-        document.querySelectorAll('.cover-bg, .hero-bg').forEach(el => {
-          el.style.backgroundImage = `url('${ca.heroBgUrl}')`;
-        });
-      }
-    
-      if (ca.jogloOrnamentUrl) {
-        document.querySelectorAll('.joglo-crest').forEach(el => {
-          el.innerHTML = `<img src="${ca.jogloOrnamentUrl}" class="custom-ornament-img" alt="Ornamen Pendopo">`;
-        });
-      }
-    
-      if (ca.gununganOrnamentUrl) {
-        document.querySelectorAll('.hero-wayang-left, .hero-wayang-right, .hero-bottom-ornament').forEach(el => {
-          el.innerHTML = `<img src="${ca.gununganOrnamentUrl}" class="custom-ornament-img" alt="Ornamen Gunungan">`;
-        });
-      }
-    
-      if (ca.cornerOrnamentUrl) {
-        document.querySelectorAll('.corner-tri-tl, .corner-tri-tr, .corner-tri-bl, .corner-tri-br').forEach(el => {
-          el.style.display = 'none';
-        });
-        document.querySelectorAll('.sec-verse, .sec-couple, .sec-story, .sec-gift, .sec-rsvp').forEach(sec => {
-          sec.insertAdjacentHTML('afterbegin', `
-            <img src="${ca.cornerOrnamentUrl}" class="custom-corner-img custom-corner-tl" alt="">
-            <img src="${ca.cornerOrnamentUrl}" class="custom-corner-img custom-corner-tr" alt="">
-            <img src="${ca.cornerOrnamentUrl}" class="custom-corner-img custom-corner-bl" alt="">
-            <img src="${ca.cornerOrnamentUrl}" class="custom-corner-img custom-corner-br" alt="">
-          `);
-        });
-      }
-    
-      if (ca.closingBgUrl) {
-        document.querySelectorAll('.sec-closing').forEach(el => {
-          el.style.backgroundImage = `linear-gradient(180deg, rgba(18,12,8,0.45), rgba(18,12,8,0.75)), url('${ca.closingBgUrl}')`;
-          el.style.backgroundSize = 'cover';
-          el.style.backgroundPosition = 'center';
-        });
       }
     }
     // 6. RSVP & DOA UCAPAN REAL-TIME
