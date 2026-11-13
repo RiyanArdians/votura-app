@@ -617,6 +617,8 @@
     </div>
   </div>
 
+  <audio id="cms-music-preview-player" preload="none"></audio>
+
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
@@ -635,6 +637,7 @@
 
     let activeTabId = "tab-landing";
     let clientEditModes = {};
+    let activePreviewEventId = null;
 
     const TEMPLATE_CATALOG = {
       wedding: [
@@ -655,8 +658,75 @@
       { label: "Romantis Piano & Strings (Default)", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
       { label: "Gamelan Jawa Lembut & Akustik", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
       { label: "Acoustic Guitar Wedding", url: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
-      { label: "Custom URL MP3 Sendiri", url: "custom" }
+      { label: "Upload File MP3 / Link Custom Sendiri", url: "custom" }
     ];
+
+    function handleAudioUpload(eventId, inputEl) {
+      if (!inputEl.files || !inputEl.files[0]) return;
+      const file = inputEl.files[0];
+      const maxBytes = 650 * 1024;
+      if (file.size > maxBytes) {
+        const sizeKb = Math.round(file.size / 1024);
+        showCmsModal(
+          "Ukuran Audio Terlalu Besar (" + sizeKb + " KB)",
+          "Agar undangan cepat dibuka tamu dan muat di database, maksimal file MP3 unggahan langsung adalah 650 KB (durasi sekitar 30-45 detik, bitrate 64-96 kbps).\n\nUntuk lagu full berdurasi panjang (3-4 MB), unggah file .mp3 ke folder GitHub repository kamu lalu tempel link raw-nya di kolom URL Musik."
+        );
+        inputEl.value = "";
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const dataUrl = e.target.result;
+        const presetSelect = document.getElementById(`sa-music-preset-${eventId}`);
+        const customWrap = document.getElementById(`sa-music-custom-wrap-${eventId}`);
+        const urlInput = document.getElementById(`sa-music-url-${eventId}`);
+        const infoEl = document.getElementById(`sa-music-file-info-${eventId}`);
+
+        if (presetSelect) presetSelect.value = "custom";
+        if (customWrap) customWrap.style.display = "block";
+        if (urlInput) urlInput.value = dataUrl;
+        if (infoEl) {
+          const kb = Math.round((dataUrl.length * 3) / 4 / 1024);
+          infoEl.textContent = `File terunggah: ${file.name} (${kb} KB)`;
+        }
+        inputEl.value = "";
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function toggleClientMusicPreview(eventId) {
+      const player = document.getElementById('cms-music-preview-player');
+      const presetVal = document.getElementById(`sa-music-preset-${eventId}`)?.value || "";
+      const customVal = document.getElementById(`sa-music-url-${eventId}`)?.value.trim() || "";
+      const targetSrc = presetVal === 'custom' ? customVal : presetVal;
+      const btn = document.getElementById(`sa-music-play-btn-${eventId}`);
+
+      if (!targetSrc) {
+        showCmsModal("Musik Belum Dipilih", "Pilih lagu bawaan, unggah file MP3, atau tempel URL file .mp3 terlebih dahulu.");
+        return;
+      }
+
+      if (activePreviewEventId === eventId && !player.paused) {
+        player.pause();
+        activePreviewEventId = null;
+        if (btn) btn.textContent = "Putar";
+        return;
+      }
+
+      if (activePreviewEventId) {
+        const prevBtn = document.getElementById(`sa-music-play-btn-${activePreviewEventId}`);
+        if (prevBtn) prevBtn.textContent = "Putar";
+      }
+
+      player.src = targetSrc;
+      player.play().then(() => {
+        activePreviewEventId = eventId;
+        if (btn) btn.textContent = "Hentikan";
+      }).catch(() => {
+        showCmsModal("Gagal Memutar Audio", "Pastikan file MP3 valid atau URL dapat diakses secara publik.");
+      });
+    }
 
     function handleCompressedImage(inputEl, keepTransparency, onSuccess, customMaxDim) {
       if (!inputEl.files || !inputEl.files[0]) return;
@@ -1133,6 +1203,7 @@
 
       const currentMusic = ev.musicUrl || MUSIC_PRESETS[0].url;
       const isPresetMusic = MUSIC_PRESETS.some(m => m.url !== 'custom' && m.url === currentMusic);
+      const isDataAudio = currentMusic.startsWith('data:audio/');
 
       const templateOptionsHtml = catalogList.map(t =>
         `<option value="${t.file}" ${currentFile === t.file ? 'selected' : ''}>${escapeHtml(t.label)}</option>`
@@ -1197,14 +1268,22 @@
             </div>
             <div class="form-group">
               <label>Pilihan Musik Latar</label>
-              <select id="sa-music-preset-${escapeHtml(ev.id)}" onchange="handleClientMusicPresetChange('${escapeHtml(ev.id)}', this.value)">
-                ${musicOptionsHtml}
-              </select>
+              <div style="display:flex; gap:6px; align-items:center;">
+                <select id="sa-music-preset-${escapeHtml(ev.id)}" onchange="handleClientMusicPresetChange('${escapeHtml(ev.id)}', this.value)">
+                  ${musicOptionsHtml}
+                </select>
+                <button type="button" id="sa-music-play-btn-${escapeHtml(ev.id)}" class="btn btn-outline btn-sm" style="white-space:nowrap;" onclick="toggleClientMusicPreview('${escapeHtml(ev.id)}')">Putar</button>
+              </div>
             </div>
           </div>
           <div class="form-group" id="sa-music-custom-wrap-${escapeHtml(ev.id)}" style="display:${isPresetMusic ? 'none' : 'block'};">
-            <label>URL File Musik MP3 Custom</label>
-            <input type="url" id="sa-music-url-${escapeHtml(ev.id)}" value="${escapeHtml(currentMusic)}" placeholder="https://.../lagu-pernikahan.mp3">
+            <label>Upload File MP3 atau Tempel Link MP3 Custom</label>
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+              <input type="file" id="sa-music-file-${escapeHtml(ev.id)}" accept="audio/mp3,audio/mpeg,audio/*" style="display:none;" onchange="handleAudioUpload('${escapeHtml(ev.id)}', this)">
+              <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('sa-music-file-${escapeHtml(ev.id)}').click()">Upload File MP3</button>
+              <input type="url" id="sa-music-url-${escapeHtml(ev.id)}" value="${escapeHtml(currentMusic)}" placeholder="https://.../lagu-pernikahan.mp3" style="flex:1; min-width:200px;">
+            </div>
+            <div class="upload-hint" id="sa-music-file-info-${escapeHtml(ev.id)}">${isDataAudio ? 'Audio MP3 lokal terunggah siap disimpan.' : 'Unggah file .mp3 (maks. 650 KB) atau masukkan URL MP3 eksternal.'}</div>
           </div>
           <div class="grid-3">
             <div class="form-group" style="margin-bottom:0;"><label>Warna Latar Utama</label><input type="color" id="sa-bg-${escapeHtml(ev.id)}" value="${escapeHtml(bgMain)}"></div>
@@ -1220,6 +1299,9 @@
       const urlInput = document.getElementById(`sa-music-url-${eventId}`);
       if (val === 'custom') {
         if (wrap) wrap.style.display = 'block';
+        if (urlInput && urlInput.value.startsWith('https://www.soundhelix.com')) {
+          urlInput.value = '';
+        }
       } else {
         if (wrap) wrap.style.display = 'none';
         if (urlInput) urlInput.value = val;
@@ -1850,7 +1932,7 @@
 
       const payloadSizeKb = Math.round(new Blob([JSON.stringify(payload)]).size / 1024);
       if (payloadSizeKb > 980) {
-        showCmsModal("Ukuran Total Terlalu Besar", `Total ukuran foto dalam satu dokumen mencapai ${payloadSizeKb} KB (batas maksimal 980 KB). Silakan unggah ulang beberapa foto agar terkompresi lebih ringan.`);
+        showCmsModal("Ukuran Total Terlalu Besar", `Total ukuran foto & musik dalam satu dokumen mencapai ${payloadSizeKb} KB (batas maksimal 980 KB). Silakan gunakan link URL MP3 eksternal atau unggah ulang beberapa foto agar terkompresi lebih ringan.`);
         return;
       }
 
@@ -1859,7 +1941,7 @@
         Object.assign(target, payload);
         clientEditModes[eventId] = false;
         renderSuperAdminClients();
-        showCmsModal("Tersimpan Permanen (" + payloadSizeKb + " KB)", `Seluruh data, foto mempelai, dan ornamen grafis untuk "${updatedName}" telah tersimpan.\n\nKlik tombol "Edit Data" kapan saja jika ingin mengubahnya lagi.`);
+        showCmsModal("Tersimpan Permanen (" + payloadSizeKb + " KB)", `Seluruh data, musik latar, foto mempelai, dan ornamen grafis untuk "${updatedName}" telah tersimpan.\n\nKlik tombol "Edit Data" kapan saja jika ingin mengubahnya lagi.`);
       } catch (err) {
         showCmsModal("Gagal Menyimpan", err.message);
       }
