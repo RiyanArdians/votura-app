@@ -661,6 +661,37 @@
       { label: "Upload File MP3 / Link Custom Sendiri", url: "custom" }
     ];
 
+    function normalizeMusicUrl(rawUrl) {
+      let url = (rawUrl || "").trim();
+      if (!url) return "";
+      if (url.includes("github.com/") && url.includes("/blob/")) {
+        url = url
+          .replace("https://github.com/", "https://raw.githubusercontent.com/")
+          .replace("/blob/", "/");
+      }
+      return url;
+    }
+
+    function applyClientMusicLink(eventId) {
+      const presetSelect = document.getElementById(`sa-music-preset-${eventId}`);
+      const urlInput = document.getElementById(`sa-music-url-${eventId}`);
+      const infoEl = document.getElementById(`sa-music-file-info-${eventId}`);
+
+      if (!urlInput) return;
+      const normalized = normalizeMusicUrl(urlInput.value);
+
+      if (!normalized) {
+        showCmsModal("Link Kosong", "Tempel link MP3 dari GitHub atau sumber publik lainnya terlebih dahulu.");
+        return;
+      }
+
+      urlInput.value = normalized;
+      if (presetSelect) presetSelect.value = "custom";
+      if (infoEl) {
+        infoEl.innerHTML = `<span style="color:var(--success); font-weight:600;">✓ Link MP3 diterapkan:</span> ${escapeHtml(normalized)} — Klik <strong>Putar</strong> untuk tes atau <strong>Simpan Semua Detail</strong>.`;
+      }
+    }
+
     function handleAudioUpload(eventId, inputEl) {
       if (!inputEl.files || !inputEl.files[0]) return;
       const file = inputEl.files[0];
@@ -674,38 +705,6 @@
         inputEl.value = "";
         return;
       }
-      
-      function normalizeMusicUrl(rawUrl) {
-      let url = (rawUrl || "").trim();
-      if (!url) return "";
-      // Otomatis ubah link github.com/.../blob/... menjadi raw.githubusercontent.com/...
-      if (url.includes("github.com/") && url.includes("/blob/")) {
-        url = url
-          .replace("https://github.com/", "https://raw.githubusercontent.com/")
-          .replace("/blob/", "/");
-      }
-      return url;
-    }
-    
-    function applyClientMusicLink(eventId) {
-      const presetSelect = document.getElementById(`sa-music-preset-${eventId}`);
-      const urlInput = document.getElementById(`sa-music-url-${eventId}`);
-      const infoEl = document.getElementById(`sa-music-file-info-${eventId}`);
-    
-      if (!urlInput) return;
-      const normalized = normalizeMusicUrl(urlInput.value);
-    
-      if (!normalized) {
-        showCmsModal("Link Kosong", "Tempel link MP3 dari GitHub atau sumber publik lainnya terlebih dahulu.");
-        return;
-      }
-    
-      urlInput.value = normalized;
-      if (presetSelect) presetSelect.value = "custom";
-      if (infoEl) {
-        infoEl.innerHTML = `<span style="color:var(--success); font-weight:600;">✓ Link MP3 diterapkan:</span> ${escapeHtml(normalized)} — Klik <strong>Putar</strong> untuk tes atau <strong>Simpan Semua Detail</strong>.`;
-      }
-    }
 
       const reader = new FileReader();
       reader.onload = function(e) {
@@ -1165,7 +1164,6 @@
         snapshot.forEach(doc => {
           const evData = doc.data();
           superAdminEvents.push({ id: doc.id, ...evData });
-          // Jika client sudah pernah memiliki data tersimpan, tampilkan dalam mode terkunci dengan tombol "Edit Data"
           if (clientEditModes[doc.id] === undefined) {
             const hasSavedDetail = Boolean(evData.groomFullName || evData.brideFullName || evData.groomPhoto || evData.bridePhoto);
             clientEditModes[doc.id] = !hasSavedDetail;
@@ -1309,16 +1307,14 @@
             </div>
           </div>
           <div class="form-group" id="sa-music-custom-wrap-${escapeHtml(ev.id)}" style="display:block; background:#F8F6F2; padding:12px; border-radius:12px; border:1px dashed rgba(140,115,85,0.4);">
-          <label>Upload File MP3 (< 650 KB) atau Tempel Link MP3 GitHub / Eksternal (Bebas Ukuran MB)</label>
-          <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
-            <input type="file" id="sa-music-file-${escapeHtml(ev.id)}" accept="audio/mp3,audio/mpeg,audio/*" style="display:none;" onchange="handleAudioUpload('${escapeHtml(ev.id)}', this)">
-            <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('sa-music-file-${escapeHtml(ev.id)}').click()">Upload File MP3</button>
-            <input type="url" id="sa-music-url-${escapeHtml(ev.id)}" value="${escapeHtml(currentMusic)}" placeholder="https://github.com/RiyanArdians/votura-app/blob/main/assets/lagu.mp3" style="flex:1; min-width:220px;" onchange="this.value = normalizeMusicUrl(this.value)">
-            <button type="button" class="btn btn-accent btn-sm" onclick="applyClientMusicLink('${escapeHtml(ev.id)}')">Pakai Link</button>
-          </div>
-          <div class="upload-hint" id="sa-music-file-info-${escapeHtml(ev.id)}">${isDataAudio ? 'Audio MP3 lokal terunggah siap disimpan.' : 'Bisa langsung tempel link GitHub biasa (/blob/...), otomatis diubah ke format Raw MP3.'}</div>
-          </div>
-            <div class="upload-hint" id="sa-music-file-info-${escapeHtml(ev.id)}">${isDataAudio ? 'Audio MP3 lokal terunggah siap disimpan.' : 'Unggah file .mp3 (maks. 650 KB) atau masukkan URL MP3 eksternal.'}</div>
+            <label>Upload File MP3 (&lt; 650 KB) atau Tempel Link MP3 GitHub / Eksternal (Bebas Ukuran MB)</label>
+            <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+              <input type="file" id="sa-music-file-${escapeHtml(ev.id)}" accept="audio/mp3,audio/mpeg,audio/*" style="display:none;" onchange="handleAudioUpload('${escapeHtml(ev.id)}', this)">
+              <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('sa-music-file-${escapeHtml(ev.id)}').click()">Upload File MP3</button>
+              <input type="url" id="sa-music-url-${escapeHtml(ev.id)}" value="${escapeHtml(currentMusic)}" placeholder="https://github.com/RiyanArdians/votura-app/raw/refs/heads/main/assets/kekal.mp3" style="flex:1; min-width:220px;" onchange="this.value = normalizeMusicUrl(this.value)">
+              <button type="button" class="btn btn-accent btn-sm" onclick="applyClientMusicLink('${escapeHtml(ev.id)}')">Pakai Link</button>
+            </div>
+            <div class="upload-hint" id="sa-music-file-info-${escapeHtml(ev.id)}">${isDataAudio ? 'Audio MP3 lokal terunggah siap disimpan.' : 'Bisa langsung tempel link GitHub biasa (/blob/...) atau link Raw (/raw/...), otomatis disesuaikan.'}</div>
           </div>
           <div class="grid-3">
             <div class="form-group" style="margin-bottom:0;"><label>Warna Latar Utama</label><input type="color" id="sa-bg-${escapeHtml(ev.id)}" value="${escapeHtml(bgMain)}"></div>
@@ -1329,7 +1325,7 @@
       `;
     }
 
-      function handleClientMusicPresetChange(eventId, val) {
+    function handleClientMusicPresetChange(eventId, val) {
       const urlInput = document.getElementById(`sa-music-url-${eventId}`);
       const infoEl = document.getElementById(`sa-music-file-info-${eventId}`);
       if (val === 'custom') {
