@@ -57,10 +57,8 @@
     }
 
     header p { font-size: 13px; color: var(--ink-muted); margin-top: 4px; }
-
     .header-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 
-    /* NAVIGASI PILIHAN MODE ADMIN */
     .mode-switcher {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -84,11 +82,7 @@
       color: var(--ink-muted);
     }
 
-    .mode-tab:hover {
-      background: rgba(255, 255, 255, 0.65);
-      color: var(--ink);
-    }
-
+    .mode-tab:hover { background: rgba(255, 255, 255, 0.65); color: var(--ink); }
     .mode-tab.active {
       background: var(--dark);
       color: #FFFFFF;
@@ -105,12 +99,7 @@
       margin-bottom: 2px;
     }
 
-    .mode-tab-title {
-      display: block;
-      font-size: 13.5px;
-      font-weight: 700;
-      line-height: 1.25;
-    }
+    .mode-tab-title { display: block; font-size: 13.5px; font-weight: 700; line-height: 1.25; }
 
     .tab-panel { display: none; }
     .tab-panel.active { display: block; }
@@ -214,7 +203,15 @@
 
     .item-header strong { font-size: 14px; }
 
-    /* PANEL PENGATURAN TEMA, ANIMASI & SAKELAR SECTION CLIENT */
+    /* MODE TERKUNCI UNTUK DATA CLIENT YANG SUDAH TERSIMPAN */
+    .client-body-wrap.is-locked input:not([type="file"]),
+    .client-body-wrap.is-locked select,
+    .client-body-wrap.is-locked textarea {
+      background: #ECE8E0;
+      color: #44403C;
+      pointer-events: none;
+    }
+
     .theme-config-box {
       background: #FFFFFF;
       border: 1px solid rgba(140, 115, 85, 0.28);
@@ -261,7 +258,6 @@
       cursor: pointer;
     }
 
-    /* AREA UPLOAD GAMBAR LANGSUNG KE FIRESTORE */
     .img-upload-row {
       display: flex;
       align-items: center;
@@ -283,6 +279,17 @@
       flex-shrink: 0;
     }
 
+    .img-preview-ornament {
+      width: 74px;
+      height: 74px;
+      border-radius: 12px;
+      object-fit: contain;
+      background: repeating-conic-gradient(#e5e2dc 0% 25%, #f8f6f2 0% 50%) 50% / 14px 14px;
+      border: 1px solid var(--border);
+      padding: 4px;
+      flex-shrink: 0;
+    }
+
     .img-preview-frame {
       width: 62px;
       height: 92px;
@@ -294,16 +301,8 @@
       flex-shrink: 0;
     }
 
-    .upload-controls {
-      flex: 1;
-      min-width: 190px;
-    }
-
-    .upload-hint {
-      font-size: 12px;
-      color: var(--ink-muted);
-      margin-top: 6px;
-    }
+    .upload-controls { flex: 1; min-width: 180px; }
+    .upload-hint { font-size: 11.5px; color: var(--ink-muted); margin-top: 5px; }
 
     .badge-pill {
       display: inline-block;
@@ -316,15 +315,8 @@
       text-transform: uppercase;
     }
 
-    .badge-active {
-      background: #DCFCE7;
-      color: var(--success);
-    }
-
-    .badge-locked {
-      background: #FEE2E2;
-      color: var(--danger);
-    }
+    .badge-active { background: #DCFCE7; color: var(--success); }
+    .badge-locked { background: #FEE2E2; color: var(--danger); }
 
     .client-frame-sublist {
       background: #FFFFFF;
@@ -345,7 +337,6 @@
 
     .client-frame-row:last-child { border-bottom: none; padding-bottom: 0; }
 
-    /* FLOATING SAVE BAR */
     .save-bar {
       position: fixed;
       bottom: 20px;
@@ -365,7 +356,6 @@
 
     .save-bar span { font-size: 13px; color: rgba(255, 255, 255, 0.9); white-space: nowrap; }
 
-    /* MATCHING GLASS MODAL */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -382,7 +372,7 @@
       background: var(--surface);
       border: 1px solid #FFFFFF;
       border-radius: 24px;
-      max-width: 380px;
+      max-width: 400px;
       width: 100%;
       padding: 28px;
       text-align: center;
@@ -402,7 +392,7 @@
     <header>
       <div>
         <h1>Votura Studio — Pusat Kendali Visual</h1>
-        <p>Atur konten utama, demo, tema besar klien, animasi, sakelar section, musik, serta unggah foto &amp; frame langsung dari perangkat.</p>
+        <p>Atur konten utama, demo, tema besar klien, ornamen grafis (Joglo/Gunungan/Bunga), background, dan foto mempelai.</p>
       </div>
       <div class="header-actions">
         <a href="index.html" target="_blank" class="btn btn-outline btn-sm">Web Utama</a>
@@ -412,7 +402,7 @@
       </div>
     </header>
 
-    <!-- PILIHAN AREA PENGELOLAAN -->
+    <!-- NAVIGASI PILIHAN MODE ADMIN -->
     <div class="mode-switcher" role="tablist">
       <button type="button" class="mode-tab active" data-tab="tab-landing" onclick="switchAdminTab('tab-landing', this)">
         <span class="mode-tab-badge">Halaman Utama</span>
@@ -432,30 +422,16 @@
       </button>
     </div>
 
-    <!-- =========================================================
-         PANEL 1: WEB UTAMA / TAMPILAN PROMOSI (index.html)
-         ========================================================= -->
+    <!-- PANEL 1: WEB UTAMA -->
     <div id="tab-landing" class="tab-panel active">
       <div class="section-card">
         <div class="section-title">1. Kontak WhatsApp &amp; Sosial Media</div>
         <div class="section-sub">Nomor WhatsApp digunakan di seluruh tombol konsultasi dan pemesanan paket halaman utama.</div>
         <div class="grid-2">
-          <div class="form-group">
-            <label>Nomor WhatsApp Bisnis (Awali 62)</label>
-            <input type="text" id="cfg-wa" placeholder="6282298966860">
-          </div>
-          <div class="form-group">
-            <label>Label Tombol Utama Header</label>
-            <input type="text" id="cfg-nav-cta" placeholder="Ngobrol Dulu">
-          </div>
-          <div class="form-group">
-            <label>URL Instagram</label>
-            <input type="url" id="cfg-ig" placeholder="https://instagram.com/voturastudio">
-          </div>
-          <div class="form-group">
-            <label>URL TikTok</label>
-            <input type="url" id="cfg-tiktok" placeholder="https://tiktok.com/@voturastudio">
-          </div>
+          <div class="form-group"><label>Nomor WhatsApp Bisnis (Awali 62)</label><input type="text" id="cfg-wa" placeholder="6282298966860"></div>
+          <div class="form-group"><label>Label Tombol Utama Header</label><input type="text" id="cfg-nav-cta" placeholder="Ngobrol Dulu"></div>
+          <div class="form-group"><label>URL Instagram</label><input type="url" id="cfg-ig" placeholder="https://instagram.com/voturastudio"></div>
+          <div class="form-group"><label>URL TikTok</label><input type="url" id="cfg-tiktok" placeholder="https://tiktok.com/@voturastudio"></div>
         </div>
       </div>
 
@@ -463,24 +439,12 @@
         <div class="section-title">2. Bagian Pembuka (Hero Section) &amp; Visual</div>
         <div class="section-sub">Atur judul besar, deskripsi utama, tautan demo cepat, dan unggah gambar kartu showcase utama.</div>
         <div class="grid-2">
-          <div class="form-group">
-            <label>Teks Kecil Atas (Eyebrow)</label>
-            <input type="text" id="hero-eyebrow">
-          </div>
-          <div class="form-group">
-            <label>Judul Utama (Gunakan *kata* untuk warna aksen)</label>
-            <input type="text" id="hero-title" placeholder="Moments That *Connect*">
-          </div>
+          <div class="form-group"><label>Teks Kecil Atas (Eyebrow)</label><input type="text" id="hero-eyebrow"></div>
+          <div class="form-group"><label>Judul Utama (Gunakan *kata* untuk warna aksen)</label><input type="text" id="hero-title" placeholder="Moments That *Connect*"></div>
         </div>
-        <div class="form-group">
-          <label>Deskripsi Utama Hero</label>
-          <textarea id="hero-subtitle" rows="3"></textarea>
-        </div>
+        <div class="form-group"><label>Deskripsi Utama Hero</label><textarea id="hero-subtitle" rows="3"></textarea></div>
         <div class="grid-2">
-          <div class="form-group">
-            <label>Teks Tombol Demo Hero</label>
-            <input type="text" id="hero-demo-label">
-          </div>
+          <div class="form-group"><label>Teks Tombol Demo Hero</label><input type="text" id="hero-demo-label"></div>
           <div class="form-group">
             <label>Halaman Tujuan Tombol Demo</label>
             <select id="hero-demo-url">
@@ -490,23 +454,17 @@
           </div>
         </div>
         <div class="grid-2" style="margin-top: 10px;">
-          <div class="form-group">
-            <label>Judul Kartu Showcase Kanan</label>
-            <input type="text" id="showcase-title">
-          </div>
-          <div class="form-group">
-            <label>Deskripsi Kartu Showcase Kanan</label>
-            <input type="text" id="showcase-desc">
-          </div>
+          <div class="form-group"><label>Judul Kartu Showcase Kanan</label><input type="text" id="showcase-title"></div>
+          <div class="form-group"><label>Deskripsi Kartu Showcase Kanan</label><input type="text" id="showcase-desc"></div>
         </div>
         <div class="form-group">
-          <label>Gambar Latar Kartu Showcase (Unggah langsung dari perangkat)</label>
+          <label>Gambar Latar Kartu Showcase</label>
           <div class="img-upload-row">
             <img src="https://raw.githubusercontent.com/RiyanArdians/votura-app/main/assets/votura-icon.png" id="hero-img-preview" class="img-preview" alt="Preview">
             <div class="upload-controls">
               <input type="file" id="hero-img-file" accept="image/*" style="display:none;" onchange="handleCompressedImage(this, false, (dataUrl) => { currentData.heroImageUrl = dataUrl; document.getElementById('hero-img-preview').src = dataUrl; })">
               <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('hero-img-file').click()">Pilih &amp; Unggah Gambar</button>
-              <div class="upload-hint">Otomatis dikompresi ringan &amp; siap disimpan tanpa Firebase Storage.</div>
+              <div class="upload-hint">Otomatis dikompresi ringan &amp; tersimpan permanen.</div>
             </div>
             <button type="button" class="btn btn-danger" onclick="clearHeroImage()">Hapus Gambar</button>
           </div>
@@ -533,7 +491,6 @@
           <span>4. Katalog Produk &amp; Layanan</span>
           <button type="button" class="btn btn-dark btn-sm" onclick="addProductItem()">+ Tambah Produk</button>
         </div>
-        <div class="section-sub">Tambah produk baru, ubah harga, pilih halaman demo, atau hapus produk lama.</div>
         <div id="products-editor-list"></div>
       </div>
 
@@ -542,64 +499,32 @@
           <span>5. Ulasan &amp; Testimoni Klien</span>
           <button type="button" class="btn btn-dark btn-sm" onclick="addTestiItem()">+ Tambah Ulasan</button>
         </div>
-        <div class="section-sub">Kelola cerita pengalaman klien yang tampil di halaman utama.</div>
         <div id="testi-editor-list"></div>
       </div>
 
       <div class="section-card">
         <div class="section-title">6. Teks Penutup (Footer)</div>
-        <div class="section-sub">Deskripsi singkat studio di bagian paling bawah halaman.</div>
-        <div class="form-group">
-          <label>Deskripsi Footer Votura Studio</label>
-          <textarea id="footer-desc" rows="2"></textarea>
-        </div>
+        <div class="form-group"><label>Deskripsi Footer Votura Studio</label><textarea id="footer-desc" rows="2"></textarea></div>
       </div>
     </div>
 
-    <!-- =========================================================
-         PANEL 2: DEMO WEDDING INVITATION (demo-wedding.html)
-         ========================================================= -->
+    <!-- PANEL 2: DEMO WEDDING -->
     <div id="tab-demo-wedding" class="tab-panel">
       <div class="section-card">
         <div class="section-title">
           <span>1. Identitas &amp; Foto Sampul Demo Undangan</span>
           <a href="demo-wedding.html" target="_blank" class="btn btn-outline btn-sm">Buka Demo Undangan</a>
         </div>
-        <div class="section-sub">Atur nama pasangan, tanggal, tempat acara, dan unggah foto sampul halaman <strong>demo-wedding.html</strong>.</div>
         <div class="grid-2">
-          <div class="form-group">
-            <label>Nama Pasangan (Judul Undangan)</label>
-            <input type="text" id="dw-couple-title" placeholder="Pria &amp; Wanita">
-          </div>
-          <div class="form-group">
-            <label>Tanggal Acara</label>
-            <input type="text" id="dw-event-date" placeholder="Sabtu, 18 Oktober 2027">
-          </div>
-          <div class="form-group">
-            <label>Nama Lengkap Mempelai Pria</label>
-            <input type="text" id="dw-groom-name" placeholder="Putra Pertama dari Bpk. Ahmad &amp; Ibu Siti">
-          </div>
-          <div class="form-group">
-            <label>Nama Lengkap Mempelai Wanita</label>
-            <input type="text" id="dw-bride-name" placeholder="Putri Kedua dari Bpk. Hendra &amp; Ibu Rina">
-          </div>
-          <div class="form-group">
-            <label>Nama Gedung / Lokasi Resepsi</label>
-            <input type="text" id="dw-venue-name" placeholder="Grand Ballroom Hotel Mulia">
-          </div>
-          <div class="form-group">
-            <label>Link Google Maps Lokasi</label>
-            <input type="url" id="dw-maps-url" placeholder="https://maps.google.com/?q=...">
-          </div>
+          <div class="form-group"><label>Nama Pasangan (Judul Undangan)</label><input type="text" id="dw-couple-title"></div>
+          <div class="form-group"><label>Tanggal Acara</label><input type="text" id="dw-event-date"></div>
+          <div class="form-group"><label>Nama Lengkap Mempelai Pria</label><input type="text" id="dw-groom-name"></div>
+          <div class="form-group"><label>Nama Lengkap Mempelai Wanita</label><input type="text" id="dw-bride-name"></div>
+          <div class="form-group"><label>Nama Gedung / Lokasi Resepsi</label><input type="text" id="dw-venue-name"></div>
+          <div class="form-group"><label>Link Google Maps Lokasi</label><input type="url" id="dw-maps-url"></div>
         </div>
-        <div class="form-group">
-          <label>Alamat Lengkap Lokasi</label>
-          <textarea id="dw-venue-address" rows="2"></textarea>
-        </div>
-        <div class="form-group">
-          <label>Kutipan / Ayat Pembuka Undangan</label>
-          <textarea id="dw-quote" rows="2"></textarea>
-        </div>
+        <div class="form-group"><label>Alamat Lengkap Lokasi</label><textarea id="dw-venue-address" rows="2"></textarea></div>
+        <div class="form-group"><label>Kutipan / Ayat Pembuka Undangan</label><textarea id="dw-quote" rows="2"></textarea></div>
         <div class="form-group">
           <label>Foto Sampul Utama Demo Undangan</label>
           <div class="img-upload-row">
@@ -607,63 +532,33 @@
             <div class="upload-controls">
               <input type="file" id="dw-cover-file" accept="image/*" style="display:none;" onchange="handleCompressedImage(this, false, (dataUrl) => { demoWeddingData.coverUrl = dataUrl; document.getElementById('dw-cover-preview').src = dataUrl; })">
               <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('dw-cover-file').click()">Unggah Foto Sampul</button>
-              <div class="upload-hint">Pilih foto pasangan untuk sampul pembuka demo undangan.</div>
             </div>
           </div>
         </div>
       </div>
 
       <div class="section-card">
-        <div class="section-title">
-          <span>2. Susunan Acara / Love Story (Tambah / Kurangi)</span>
-          <button type="button" class="btn btn-dark btn-sm" onclick="addDwScheduleItem()">+ Tambah Sesi Acara</button>
-        </div>
-        <div class="section-sub">Kelola sesi Akad, Resepsi, atau tahapan cerita cinta di demo undangan.</div>
+        <div class="section-title"><span>2. Susunan Acara Demo</span><button type="button" class="btn btn-dark btn-sm" onclick="addDwScheduleItem()">+ Tambah Sesi Acara</button></div>
         <div id="dw-schedules-list"></div>
       </div>
 
       <div class="section-card">
-        <div class="section-title">
-          <span>3. Galeri Foto Prewedding Demo (Unggah / Hapus)</span>
-          <button type="button" class="btn btn-dark btn-sm" onclick="addDwGalleryItem()">+ Tambah Slot Foto</button>
-        </div>
-        <div class="section-sub">Unggah foto prewedding langsung dari galeri perangkat atau hapus foto lama.</div>
+        <div class="section-title"><span>3. Galeri Foto Prewedding Demo</span><button type="button" class="btn btn-dark btn-sm" onclick="addDwGalleryItem()">+ Tambah Slot Foto</button></div>
         <div id="dw-gallery-list"></div>
       </div>
     </div>
 
-    <!-- =========================================================
-         PANEL 3: DEMO VIRTUAL PHOTOBOOTH (demo-photobooth.html)
-         ========================================================= -->
+    <!-- PANEL 3: DEMO PHOTOBOOTH -->
     <div id="tab-demo-photobooth" class="tab-panel">
       <div class="section-card">
-        <div class="section-title">
-          <span>1. Tampilan Visual Demo Photobooth</span>
-          <a href="demo-photobooth.html" target="_blank" class="btn btn-outline btn-sm">Buka Demo Photobooth</a>
-        </div>
-        <div class="section-sub">Atur teks amplop, nama pasangan, tombol WhatsApp, dan unggah foto hero halaman <strong>demo-photobooth.html</strong>.</div>
+        <div class="section-title"><span>1. Tampilan Visual Demo Photobooth</span><a href="demo-photobooth.html" target="_blank" class="btn btn-outline btn-sm">Buka Demo Photobooth</a></div>
         <div class="grid-2">
-          <div class="form-group">
-            <label>Nama Pasangan di Amplop &amp; Beranda</label>
-            <input type="text" id="dp-event-title" placeholder="Pria &amp; Wanita">
-          </div>
-          <div class="form-group">
-            <label>Tanggal Acara</label>
-            <input type="text" id="dp-event-date" placeholder="18 OKTOBER 2027">
-          </div>
-          <div class="form-group">
-            <label>Nomor WhatsApp Tombol CTA Atas</label>
-            <input type="text" id="dp-wa-number" placeholder="6282298966860">
-          </div>
-          <div class="form-group">
-            <label>Teks Tombol CTA Atas</label>
-            <input type="text" id="dp-cta-label" placeholder="Wujudkan photobooth impianmu • Pesan Sekarang">
-          </div>
+          <div class="form-group"><label>Nama Pasangan di Amplop &amp; Beranda</label><input type="text" id="dp-event-title"></div>
+          <div class="form-group"><label>Tanggal Acara</label><input type="text" id="dp-event-date"></div>
+          <div class="form-group"><label>Nomor WhatsApp Tombol CTA Atas</label><input type="text" id="dp-wa-number"></div>
+          <div class="form-group"><label>Teks Tombol CTA Atas</label><input type="text" id="dp-cta-label"></div>
         </div>
-        <div class="form-group">
-          <label>Kutipan Beranda Photobooth</label>
-          <textarea id="dp-welcome-quote" rows="2"></textarea>
-        </div>
+        <div class="form-group"><label>Kutipan Beranda Photobooth</label><textarea id="dp-welcome-quote" rows="2"></textarea></div>
         <div class="form-group">
           <label>Foto Mempelai di Bingkai Kapsul Beranda</label>
           <div class="img-upload-row">
@@ -671,43 +566,37 @@
             <div class="upload-controls">
               <input type="file" id="dp-hero-file" accept="image/*" style="display:none;" onchange="handleCompressedImage(this, false, (dataUrl) => { demoPhotoboothData.heroUrl = dataUrl; document.getElementById('dp-hero-preview').src = dataUrl; })">
               <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('dp-hero-file').click()">Unggah Foto Beranda</button>
-              <div class="upload-hint">Foto pasangan yang muncul di halaman depan demo photobooth.</div>
             </div>
           </div>
         </div>
       </div>
 
       <div class="section-card">
-        <div class="section-title">
-          <span>2. Kelola Bingkai / Frame Photobooth (Unggah, Tambah &amp; Hapus)</span>
-          <button type="button" class="btn btn-dark btn-sm" onclick="addDpFrameItem()">+ Tambah Frame Baru</button>
-        </div>
-        <div class="section-sub">Unggah file frame PNG transparan langsung dari perangkat (transparansi tetap terjaga), pilih jumlah slot foto (1, 2, atau 3 slot), atau hapus frame.</div>
+        <div class="section-title"><span>2. Kelola Bingkai / Frame Photobooth</span><button type="button" class="btn btn-dark btn-sm" onclick="addDpFrameItem()">+ Tambah Frame Baru</button></div>
         <div id="dp-frames-list"></div>
       </div>
     </div>
 
-    <!-- =========================================================
-         PANEL 4: WEB VISUAL PESANAN KLIEN (SINKRON DENGAN SUPER-ADMIN)
-         ========================================================= -->
+    <!-- PANEL 4: WEB VISUAL PESANAN KLIEN -->
     <div id="tab-clients" class="tab-panel">
       <div class="section-card">
         <div class="section-title">
-          <span>Daftar Pesanan Client dari Super Admin (Real-Time)</span>
+          <span>Daftar Pesanan Client dari Super Admin</span>
           <div style="display:flex; gap:8px; flex-wrap:wrap;">
-            <select id="client-filter-type" style="width:auto; padding:8px 14px; font-size:12px;" onchange="renderSuperAdminClients()">
+            <select id="client-filter-type" style="width:auto; padding:8px 14px; font-size:12px;" onchange="renderSuperAdminClients(true)">
               <option value="all">Semua Tipe Layanan</option>
               <option value="wedding">Wedding Invitation</option>
               <option value="photobooth">Virtual Photobooth</option>
             </select>
-            <a href="super-admin.html" target="_blank" class="btn btn-dark btn-sm">+ Tambah Client di Super Admin</a>
+            <button type="button" class="btn btn-outline btn-sm" onclick="refreshClientsFromServer()">Segarkan Data</button>
+            <a href="super-admin.html" target="_blank" class="btn btn-dark btn-sm">+ Tambah Client</a>
           </div>
         </div>
         <div class="section-sub">
-          Tersinkronisasi otomatis dengan folder <code>templates/</code> dari <strong>Super Admin</strong>. Atur tema besar, animasi, sakelar on/off tiap section, musik, foto mempelai, susunan acara, kisah cinta, galeri, serta rekening tanda kasih.
+          Seluruh isian yang sudah tersimpan akan tetap muncul di sini. Klik <strong>Edit Data</strong> untuk mengubah data atau mengganti ornamen grafis (Joglo, Gunungan, Bunga Sudut, Background) dan foto mempelai.
         </div>
         <div id="clients-editor-list">
-          <p style="font-size: 13px; color: var(--ink-muted);">Menghubungkan ke database Super Admin...</p>
+          <p style="font-size: 13px; color: var(--ink-muted);">Memuat data client...</p>
         </div>
       </div>
     </div>
@@ -723,12 +612,11 @@
   <div class="modal-backdrop" id="cms-modal" onclick="if(event.target.id==='cms-modal') closeCmsModal()">
     <div class="modal-panel">
       <h3 style="font-family: 'Cormorant Garamond', serif; font-size: 26px; margin-bottom: 8px;" id="modal-title">Berhasil</h3>
-      <p style="font-size: 13.5px; color: var(--ink-muted); margin-bottom: 20px;" id="modal-msg">Perubahan berhasil diperbarui.</p>
+      <p style="font-size: 13.5px; color: var(--ink-muted); margin-bottom: 20px; white-space: pre-line;" id="modal-msg">Perubahan berhasil diperbarui.</p>
       <button type="button" class="btn btn-dark" style="width: 100%;" onclick="closeCmsModal()">Tutup</button>
     </div>
   </div>
 
-  <!-- FIREBASE SDK -->
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
@@ -746,83 +634,20 @@
     const GITHUB_RAW_BASE = "https://raw.githubusercontent.com/RiyanArdians/votura-app/main/assets";
 
     let activeTabId = "tab-landing";
+    let clientEditModes = {};
 
     const TEMPLATE_CATALOG = {
       wedding: [
-        {
-          file: "templates/wedding-1.html",
-          label: "Wedding 1 — Royal Javanese Joglo (Default)",
-          bgMain: "#F5EFE6",
-          accent: "#C8A063",
-          ink: "#3B2A1E",
-          fontH: "'Cormorant Garamond', serif",
-          fontB: "'Plus Jakarta Sans', sans-serif"
-        },
-        {
-          file: "templates/wedding-2.html",
-          label: "Wedding 2 — Royal Heritage / Adat",
-          bgMain: "#142923",
-          accent: "#D4AF37",
-          ink: "#F5EFE0",
-          fontH: "'Cinzel', serif",
-          fontB: "'Lora', serif"
-        },
-        {
-          file: "templates/wedding-3.html",
-          label: "Wedding 3 — Sage Botanical Garden",
-          bgMain: "#F4F7F3",
-          accent: "#5F7A61",
-          ink: "#263327",
-          fontH: "'Playfair Display', serif",
-          fontB: "'DM Sans', sans-serif"
-        },
-        {
-          file: "templates/wedding-4.html",
-          label: "Wedding 4 — Modern Clean Monochrome",
-          bgMain: "#FFFFFF",
-          accent: "#18181B",
-          ink: "#18181B",
-          fontH: "'Space Grotesk', sans-serif",
-          fontB: "'Inter', sans-serif"
-        },
-        {
-          file: "templates/wedding-5.html",
-          label: "Wedding 5 — Midnight Velvet Luxe",
-          bgMain: "#121214",
-          accent: "#E2B49A",
-          ink: "#F4F1EE",
-          fontH: "'Bodoni Moda', serif",
-          fontB: "'Montserrat', sans-serif"
-        }
+        { file: "templates/wedding-1.html", label: "Wedding 1 — Royal Javanese Joglo (Default)", bgMain: "#F5EFE6", accent: "#C8A063", ink: "#3B2A1E", fontH: "'Cormorant Garamond', serif", fontB: "'Plus Jakarta Sans', sans-serif" },
+        { file: "templates/wedding-2.html", label: "Wedding 2 — Royal Heritage / Adat", bgMain: "#142923", accent: "#D4AF37", ink: "#F5EFE0", fontH: "'Cinzel', serif", fontB: "'Lora', serif" },
+        { file: "templates/wedding-3.html", label: "Wedding 3 — Sage Botanical Garden", bgMain: "#F4F7F3", accent: "#5F7A61", ink: "#263327", fontH: "'Playfair Display', serif", fontB: "'DM Sans', sans-serif" },
+        { file: "templates/wedding-4.html", label: "Wedding 4 — Modern Clean Monochrome", bgMain: "#FFFFFF", accent: "#18181B", ink: "#18181B", fontH: "'Space Grotesk', sans-serif", fontB: "'Inter', sans-serif" },
+        { file: "templates/wedding-5.html", label: "Wedding 5 — Midnight Velvet Luxe", bgMain: "#121214", accent: "#E2B49A", ink: "#F4F1EE", fontH: "'Bodoni Moda', serif", fontB: "'Montserrat', sans-serif" }
       ],
       photobooth: [
-        {
-          file: "templates/pb-1.html",
-          label: "Photobooth 1 — Classic Editorial Booth (Default)",
-          bgMain: "#EFECE6",
-          accent: "#8C7355",
-          ink: "#23211E",
-          fontH: "'Cormorant Garamond', serif",
-          fontB: "'Plus Jakarta Sans', sans-serif"
-        },
-        {
-          file: "templates/pb-2.html",
-          label: "Photobooth 2 — Modern Party Studio",
-          bgMain: "#FFFFFF",
-          accent: "#18181B",
-          ink: "#18181B",
-          fontH: "'Space Grotesk', sans-serif",
-          fontB: "'Inter', sans-serif"
-        },
-        {
-          file: "templates/pb-3.html",
-          label: "Photobooth 3 — Midnight Glam Booth",
-          bgMain: "#121214",
-          accent: "#E2B49A",
-          ink: "#F4F1EE",
-          fontH: "'Bodoni Moda', serif",
-          fontB: "'Montserrat', sans-serif"
-        }
+        { file: "templates/pb-1.html", label: "Photobooth 1 — Classic Editorial Booth (Default)", bgMain: "#EFECE6", accent: "#8C7355", ink: "#23211E", fontH: "'Cormorant Garamond', serif", fontB: "'Plus Jakarta Sans', sans-serif" },
+        { file: "templates/pb-2.html", label: "Photobooth 2 — Modern Party Studio", bgMain: "#FFFFFF", accent: "#18181B", ink: "#18181B", fontH: "'Space Grotesk', sans-serif", fontB: "'Inter', sans-serif" },
+        { file: "templates/pb-3.html", label: "Photobooth 3 — Midnight Glam Booth", bgMain: "#121214", accent: "#E2B49A", ink: "#F4F1EE", fontH: "'Bodoni Moda', serif", fontB: "'Montserrat', sans-serif" }
       ]
     };
 
@@ -833,19 +658,19 @@
       { label: "Custom URL MP3 Sendiri", url: "custom" }
     ];
 
-    function handleCompressedImage(inputEl, keepTransparency, onSuccess) {
+    function handleCompressedImage(inputEl, keepTransparency, onSuccess, customMaxDim) {
       if (!inputEl.files || !inputEl.files[0]) return;
       const file = inputEl.files[0];
       const statusText = document.getElementById('status-text');
       const prevStatus = statusText.textContent;
-      statusText.textContent = `Memproses ${file.name}...`;
+      statusText.textContent = `Mengompresi ${file.name}...`;
 
       const reader = new FileReader();
       reader.onload = function(e) {
         const img = new Image();
         img.onload = function() {
           const canvas = document.createElement('canvas');
-          const maxDim = keepTransparency ? 900 : 1080;
+          const maxDim = customMaxDim || (keepTransparency ? 600 : 580);
           let width = img.width;
           let height = img.height;
 
@@ -867,27 +692,27 @@
 
           let dataUrl;
           if (keepTransparency) {
-            dataUrl = canvas.toDataURL('image/webp', 0.85);
+            dataUrl = canvas.toDataURL('image/webp', 0.78);
             if (!dataUrl.startsWith('data:image/webp')) dataUrl = canvas.toDataURL('image/png');
           } else {
-            dataUrl = canvas.toDataURL('image/webp', 0.80);
-            if (!dataUrl.startsWith('data:image/webp')) dataUrl = canvas.toDataURL('image/jpeg', 0.82);
+            dataUrl = canvas.toDataURL('image/webp', 0.72);
+            if (!dataUrl.startsWith('data:image/webp')) dataUrl = canvas.toDataURL('image/jpeg', 0.72);
           }
 
           const approxBytes = Math.round((dataUrl.length * 3) / 4);
-          if (approxBytes > 750 * 1024) {
-            const ratio = 640 / Math.max(width, height);
+          if (approxBytes > 90 * 1024) {
+            const ratio = 420 / Math.max(width, height);
             canvas.width = Math.round(width * ratio);
             canvas.height = Math.round(height * ratio);
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            dataUrl = keepTransparency ? canvas.toDataURL('image/webp', 0.78) : canvas.toDataURL('image/jpeg', 0.75);
+            dataUrl = keepTransparency ? canvas.toDataURL('image/webp', 0.70) : canvas.toDataURL('image/jpeg', 0.65);
           }
 
           if (onSuccess) onSuccess(dataUrl);
           const kbSize = Math.round((dataUrl.length * 3) / 4 / 1024);
-          statusText.textContent = `Siap disimpan (${kbSize} KB)`;
-          setTimeout(() => { statusText.textContent = prevStatus; }, 2500);
+          statusText.textContent = `Gambar siap (${kbSize} KB)`;
+          setTimeout(() => { statusText.textContent = prevStatus; }, 2200);
           inputEl.value = "";
         };
         img.onerror = function() {
@@ -922,43 +747,11 @@
       ctaBoxSub: "Yuk diskusi santai lewat WhatsApp, gratis konsultasi.",
       footerDesc: "Siap bantu wujudkan undangan digital dan pengalaman photobooth interaktif untuk momen spesialmu.",
       products: [
-        {
-          tag: "Votura Wedding",
-          title: "Digital Wedding Invitation",
-          desc: "Sebar kabar bahagia dengan cara yang lebih berkelas. Tamu cukup klik satu tautan untuk melihat detail acara, arah lokasi, hingga kirim doa terbaik.",
-          price: "Rp 99.000",
-          unit: "/ acara",
-          features: [
-            "Tautan khusus acara di domain voturastudio.site",
-            "Konfirmasi kehadiran (RSVP) dan ucapan tamu real-time",
-            "Navigasi lokasi sekali klik menuju Google Maps",
-            "Halaman kelola mandiri untuk update info & rekap tamu"
-          ],
-          demoLabel: "Lihat Demo",
-          demoUrl: "demo-wedding.html",
-          ctaLabel: "Tanya Paket Ini"
-        },
-        {
-          tag: "Votura Photobooth",
-          title: "Virtual Event Photobooth",
-          desc: "Bikin suasana acara makin hidup tanpa perlu sewa mesin besar. Tamu bisa langsung berfoto lewat kamera ponsel dengan bingkai eksklusif acaramu.",
-          price: "Rp 149.000",
-          unit: "/ acara",
-          features: [
-            "Langsung jalan di browser ponsel tanpa instal aplikasi",
-            "Bingkai foto custom (PNG) sesuai tema acaramu",
-            "Panel pengaturan mandiri untuk ganti desain bingkai",
-            "Cocok untuk pernikahan, ulang tahun, maupun acara kampus"
-          ],
-          demoLabel: "Coba Photobooth",
-          demoUrl: "demo-photobooth.html",
-          ctaLabel: "Tanya Paket Ini"
-        }
+        { tag: "Votura Wedding", title: "Digital Wedding Invitation", desc: "Sebar kabar bahagia dengan cara yang lebih berkelas.", price: "Rp 99.000", unit: "/ acara", features: ["Tautan khusus acara di domain voturastudio.site", "Konfirmasi kehadiran (RSVP) dan ucapan tamu real-time"], demoLabel: "Lihat Demo", demoUrl: "demo-wedding.html", ctaLabel: "Tanya Paket Ini" },
+        { tag: "Votura Photobooth", title: "Virtual Event Photobooth", desc: "Bikin suasana acara makin hidup tanpa perlu sewa mesin besar.", price: "Rp 149.000", unit: "/ acara", features: ["Langsung jalan di browser ponsel tanpa instal aplikasi", "Bingkai foto custom (PNG) sesuai tema acaramu"], demoLabel: "Coba Photobooth", demoUrl: "demo-photobooth.html", ctaLabel: "Tanya Paket Ini" }
       ],
       testimonials: [
-        { text: "Tampilan undangannya sangat bersih dan mudah dibuka oleh keluarga maupun tamu. Fitur rekap RSVP-nya membantu kami memperkirakan jumlah tamu yang hadir.", author: "Nadia & Dimas", role: "Votura Wedding Invitation" },
-        { text: "Tamu acara sangat antusias mencoba virtual photobooth-nya. Cukup buka tautan dari ponsel, langsung bisa berfoto dengan bingkai khusus acara kami.", author: "Raka Pratama", role: "Votura Virtual Photobooth" },
-        { text: "Proses penyiapan tautan sangat cepat dan responsif. Tampilannya terasa modern dan rapi saat dibagikan kepada seluruh peserta kegiatan.", author: "Panitia Dies Natalis", role: "Event Kampus & Komunitas" }
+        { text: "Tampilan undangannya sangat bersih dan mudah dibuka oleh keluarga maupun tamu.", author: "Nadia & Dimas", role: "Votura Wedding Invitation" }
       ]
     };
 
@@ -972,14 +765,8 @@
       venueAddress: "Jl. Asia Afrika Senayan, Jakarta Pusat",
       quote: "Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu pasangan hidup dari jenismu sendiri, supaya kamu cenderung dan merasa tenteram kepadanya.",
       coverUrl: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=650&q=85",
-      schedules: [
-        { title: "Akad Nikah", time: "08.00 - 10.00 WIB", place: "Masjid / Ruang Akad Utama" },
-        { title: "Resepsi Pernikahan", time: "11.00 - 14.00 WIB", place: "Grand Ballroom" }
-      ],
-      gallery: [
-        { url: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=650&q=85", caption: "Momen Kebersamaan" },
-        { url: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=650&q=85", caption: "Menuju Hari Bahagia" }
-      ]
+      schedules: [{ title: "Akad Nikah", time: "08.00 - 10.00 WIB", place: "Masjid / Ruang Akad Utama" }],
+      gallery: [{ url: "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=650&q=85", caption: "Momen Kebersamaan" }]
     };
 
     const defaultDemoPhotobooth = {
@@ -1064,7 +851,7 @@
       populateLandingForm();
       populateDemoWeddingForm();
       populateDemoPhotoboothForm();
-      listenSuperAdminEvents();
+      await refreshClientsFromServer();
     }
 
     /* 1. FORM WEB UTAMA */
@@ -1136,10 +923,7 @@
 
     function updateProd(idx, key, val) { currentData.products[idx][key] = val; }
     function updateProdFeatures(idx, val) { currentData.products[idx].features = val.split('\n').map(s => s.trim()).filter(Boolean); }
-    function addProductItem() {
-      currentData.products.push({ tag: "Layanan Baru", title: "Nama Paket Baru", desc: "Deskripsi paket.", price: "Rp 129.000", unit: "/ acara", features: ["Akses via browser"], demoLabel: "Lihat Demo", demoUrl: "demo-wedding.html", ctaLabel: "Tanya Paket Ini" });
-      renderProductsEditor();
-    }
+    function addProductItem() { currentData.products.push({ tag: "Layanan Baru", title: "Nama Paket Baru", desc: "Deskripsi paket.", price: "Rp 129.000", unit: "/ acara", features: ["Akses via browser"], demoLabel: "Lihat Demo", demoUrl: "demo-wedding.html", ctaLabel: "Tanya Paket Ini" }); renderProductsEditor(); }
     function removeProduct(idx) { currentData.products.splice(idx, 1); renderProductsEditor(); }
 
     function renderTestiEditor() {
@@ -1149,10 +933,7 @@
         const div = document.createElement('div');
         div.className = 'dynamic-item';
         div.innerHTML = `
-          <div class="item-header">
-            <strong>Ulasan #${idx + 1} — ${escapeHtml(item.author || 'Klien')}</strong>
-            <button type="button" class="btn btn-danger" onclick="removeTesti(${idx})">Hapus Ulasan</button>
-          </div>
+          <div class="item-header"><strong>Ulasan #${idx + 1} — ${escapeHtml(item.author || 'Klien')}</strong><button type="button" class="btn btn-danger" onclick="removeTesti(${idx})">Hapus Ulasan</button></div>
           <div class="grid-2">
             <div class="form-group"><label>Nama Klien</label><input type="text" value="${escapeHtml(item.author)}" onchange="updateTesti(${idx}, 'author', this.value)"></div>
             <div class="form-group"><label>Jenis Layanan</label><input type="text" value="${escapeHtml(item.role)}" onchange="updateTesti(${idx}, 'role', this.value)"></div>
@@ -1272,23 +1053,46 @@
     function removeDpFrame(idx) { demoPhotoboothData.frames.splice(idx, 1); renderDpFramesEditor(); }
 
     /* ============================================================
-       4. WEB VISUAL PESANAN KLIEN (LENGKAP PER SECTION, ANIMASI & MUSIK)
+       4. WEB VISUAL PESANAN KLIEN (ISIAN PERSISTEN + TOMBOL EDIT + ORNAMEN)
        ============================================================ */
-    function listenSuperAdminEvents() {
+    async function refreshClientsFromServer() {
       const container = document.getElementById('clients-editor-list');
-      db.collection("events").onSnapshot((snapshot) => {
+      try {
+        const snapshot = await db.collection("events").get();
         superAdminEvents = [];
         snapshot.forEach(doc => {
           const evData = doc.data();
           superAdminEvents.push({ id: doc.id, ...evData });
+          // Jika client sudah pernah memiliki data tersimpan, tampilkan dalam mode terkunci dengan tombol "Edit Data"
+          if (clientEditModes[doc.id] === undefined) {
+            const hasSavedDetail = Boolean(evData.groomFullName || evData.brideFullName || evData.groomPhoto || evData.bridePhoto);
+            clientEditModes[doc.id] = !hasSavedDetail;
+          }
           if (evData.type === 'wedding') listenClientSubPhotos(doc.id);
         });
         const countBadge = document.getElementById('client-count-badge');
         if (countBadge) countBadge.textContent = superAdminEvents.length;
-        renderSuperAdminClients();
-      }, (err) => {
-        if (container) container.innerHTML = `<p style="font-size: 13px; color: var(--danger);">Gagal memuat data: ${escapeHtml(err.message)}</p>`;
-      });
+        renderSuperAdminClients(true);
+      } catch (err) {
+        if (container) container.innerHTML = `<p style="font-size: 13px; color: var(--danger);">Gagal memuat data client: ${escapeHtml(err.message)}</p>`;
+      }
+    }
+
+    function toggleClientEditMode(eventId) {
+      clientEditModes[eventId] = !clientEditModes[eventId];
+      const wrap = document.getElementById(`client-body-${eventId}`);
+      const btn = document.getElementById(`btn-toggle-edit-${eventId}`);
+      if (wrap && btn) {
+        if (clientEditModes[eventId]) {
+          wrap.classList.remove('is-locked');
+          btn.textContent = "Kunci Form";
+          btn.className = "btn btn-outline btn-sm";
+        } else {
+          wrap.classList.add('is-locked');
+          btn.textContent = "Edit Data";
+          btn.className = "btn btn-accent btn-sm";
+        }
+      }
     }
 
     function listenClientSubPhotos(eventId) {
@@ -1403,18 +1207,9 @@
             <input type="url" id="sa-music-url-${escapeHtml(ev.id)}" value="${escapeHtml(currentMusic)}" placeholder="https://.../lagu-pernikahan.mp3">
           </div>
           <div class="grid-3">
-            <div class="form-group" style="margin-bottom:0;">
-              <label>Warna Latar Utama</label>
-              <input type="color" id="sa-bg-${escapeHtml(ev.id)}" value="${escapeHtml(bgMain)}">
-            </div>
-            <div class="form-group" style="margin-bottom:0;">
-              <label>Warna Aksen &amp; Emas</label>
-              <input type="color" id="sa-acc-${escapeHtml(ev.id)}" value="${escapeHtml(accent)}">
-            </div>
-            <div class="form-group" style="margin-bottom:0;">
-              <label>Warna Teks Utama</label>
-              <input type="color" id="sa-ink-${escapeHtml(ev.id)}" value="${escapeHtml(ink)}">
-            </div>
+            <div class="form-group" style="margin-bottom:0;"><label>Warna Latar Utama</label><input type="color" id="sa-bg-${escapeHtml(ev.id)}" value="${escapeHtml(bgMain)}"></div>
+            <div class="form-group" style="margin-bottom:0;"><label>Warna Aksen &amp; Emas</label><input type="color" id="sa-acc-${escapeHtml(ev.id)}" value="${escapeHtml(accent)}"></div>
+            <div class="form-group" style="margin-bottom:0;"><label>Warna Teks Utama</label><input type="color" id="sa-ink-${escapeHtml(ev.id)}" value="${escapeHtml(ink)}"></div>
           </div>
         </div>
       `;
@@ -1479,9 +1274,51 @@
       `;
     }
 
+    function buildClientCustomAssetsHtml(ev) {
+      const assets = ev.customAssets || {};
+      const placeholderPng = `${GITHUB_RAW_BASE}/votura-icon.png`;
+      const slots = [
+        { key: 'heroBgUrl', label: '1. Background Cover & Hero Utama (Foto / Ilustrasi Pendopo)', hint: 'Menggantikan background gelap awal pada Cover & Hero atas.', isPng: false },
+        { key: 'jogloOrnamentUrl', label: '2. Ornamen Rumah Joglo / Pendopo (PNG Transparan)', hint: 'Tampil di atas nama mempelai pada Cover & Hero.', isPng: true },
+        { key: 'gununganOrnamentUrl', label: '3. Ornamen Gunungan / Wayang Kiri & Kanan (PNG Transparan)', hint: 'Tampil mengapit di sisi kiri & kanan Hero serta bagian bawah.', isPng: true },
+        { key: 'cornerOrnamentUrl', label: '4. Ornamen Bunga / Batik Sudut Kartu (PNG Transparan)', hint: 'Menggantikan segitiga emas polos di sudut atas & bawah setiap section.', isPng: true },
+        { key: 'closingBgUrl', label: '5. Background Section Penutup / Closing (Foto / Tekstur)', hint: 'Menggantikan latar gelap di bagian akhir undangan.', isPng: false }
+      ];
+
+      return `
+        <div class="theme-config-box">
+          <div class="theme-config-header">
+            <strong style="font-size:13px;">10. Kustomisasi Ornamen Grafis (Joglo, Gunungan, Bunga Sudut) &amp; Background</strong>
+            <span style="font-size:11.5px; color:var(--ink-muted);">Gunakan file PNG transparan agar menyatu mulus</span>
+          </div>
+          <div class="grid-2">
+            ${slots.map(s => {
+              const currentUrl = assets[s.key] || "";
+              return `
+                <div class="form-group" style="margin-bottom:6px;">
+                  <label>${s.label}</label>
+                  <div class="img-upload-row" style="padding:10px 12px;">
+                    <img src="${escapeHtml(currentUrl || placeholderPng)}" id="sa-asset-prev-${ev.id}-${s.key}" class="${s.isPng ? 'img-preview-ornament' : 'img-preview'}" style="width:60px; height:60px;" alt="${s.key}">
+                    <div class="upload-controls">
+                      <input type="file" id="sa-asset-file-${ev.id}-${s.key}" accept="image/*" style="display:none;" onchange="handleCompressedImage(this, ${s.isPng}, (dataUrl) => { setClientNestedCache('${ev.id}', 'customAssets', '${s.key}', dataUrl); document.getElementById('sa-asset-prev-${ev.id}-${s.key}').src = dataUrl; }, 680)">
+                      <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                        <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('sa-asset-file-${ev.id}-${s.key}').click()">Unggah ${s.isPng ? 'PNG' : 'Gambar'}</button>
+                        ${currentUrl ? `<button type="button" class="btn btn-danger" style="padding:5px 10px;" onclick="setClientNestedCache('${ev.id}', 'customAssets', '${s.key}', ''); document.getElementById('sa-asset-prev-${ev.id}-${s.key}').src='${placeholderPng}';">Reset</button>` : ''}
+                      </div>
+                      <div class="upload-hint">${s.hint}</div>
+                    </div>
+                  </div>
+                </div>
+              `;
+            }).join('')}
+          </div>
+        </div>
+      `;
+    }
+
     function buildClientScheduleRowsHtml(eventId, schedules) {
       if (!Array.isArray(schedules) || schedules.length === 0) {
-        return `<p style="font-size:12px; color:var(--ink-muted);">Belum ada sesi acara. Klik "+ Tambah Sesi" untuk menambahkan Akad, Resepsi, atau Ngunduh Mantu.</p>`;
+        return `<p style="font-size:12px; color:var(--ink-muted);">Belum ada sesi acara. Klik "+ Tambah Sesi".</p>`;
       }
       const defaultPhoto = "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=400&q=80";
       return schedules.map((sch, idx) => `
@@ -1491,21 +1328,21 @@
             <button type="button" class="btn btn-danger" onclick="removeClientSchedule('${escapeHtml(eventId)}', ${idx})">Hapus</button>
           </div>
           <div class="grid-3">
-            <div class="form-group"><label>Nama Sesi</label><input type="text" value="${escapeHtml(sch.title || '')}" placeholder="Akad Nikah" onchange="updateClientScheduleField('${escapeHtml(eventId)}', ${idx}, 'title', this.value)"></div>
-            <div class="form-group"><label>Hari</label><input type="text" value="${escapeHtml(sch.day || 'Sabtu')}" placeholder="Sabtu" onchange="updateClientScheduleField('${escapeHtml(eventId)}', ${idx}, 'day', this.value)"></div>
-            <div class="form-group"><label>Tanggal Angka</label><input type="text" value="${escapeHtml(sch.dateNum || '14')}" placeholder="14" onchange="updateClientScheduleField('${escapeHtml(eventId)}', ${idx}, 'dateNum', this.value)"></div>
-            <div class="form-group"><label>Bulan &amp; Tahun</label><input type="text" value="${escapeHtml(sch.monthYear || 'Agustus 2027')}" placeholder="Agustus 2027" onchange="updateClientScheduleField('${escapeHtml(eventId)}', ${idx}, 'monthYear', this.value)"></div>
-            <div class="form-group"><label>Jam Acara</label><input type="text" value="${escapeHtml(sch.time || '')}" placeholder="09:00 - 10:00 WIB" onchange="updateClientScheduleField('${escapeHtml(eventId)}', ${idx}, 'time', this.value)"></div>
-            <div class="form-group"><label>Nama Gedung / Tempat</label><input type="text" value="${escapeHtml(sch.place || '')}" placeholder="Masjid Raya" onchange="updateClientScheduleField('${escapeHtml(eventId)}', ${idx}, 'place', this.value)"></div>
+            <div class="form-group"><label>Nama Sesi</label><input type="text" value="${escapeHtml(sch.title || '')}" onchange="updateClientScheduleField('${escapeHtml(eventId)}', ${idx}, 'title', this.value)"></div>
+            <div class="form-group"><label>Hari</label><input type="text" value="${escapeHtml(sch.day || 'Sabtu')}" onchange="updateClientScheduleField('${escapeHtml(eventId)}', ${idx}, 'day', this.value)"></div>
+            <div class="form-group"><label>Tanggal Angka</label><input type="text" value="${escapeHtml(sch.dateNum || '14')}" onchange="updateClientScheduleField('${escapeHtml(eventId)}', ${idx}, 'dateNum', this.value)"></div>
+            <div class="form-group"><label>Bulan &amp; Tahun</label><input type="text" value="${escapeHtml(sch.monthYear || 'Agustus 2027')}" onchange="updateClientScheduleField('${escapeHtml(eventId)}', ${idx}, 'monthYear', this.value)"></div>
+            <div class="form-group"><label>Jam Acara</label><input type="text" value="${escapeHtml(sch.time || '')}" onchange="updateClientScheduleField('${escapeHtml(eventId)}', ${idx}, 'time', this.value)"></div>
+            <div class="form-group"><label>Nama Gedung / Tempat</label><input type="text" value="${escapeHtml(sch.place || '')}" onchange="updateClientScheduleField('${escapeHtml(eventId)}', ${idx}, 'place', this.value)"></div>
           </div>
           <div class="grid-2">
-            <div class="form-group"><label>Alamat Lokasi</label><input type="text" value="${escapeHtml(sch.address || '')}" placeholder="Jl. Merdeka No. 12..." onchange="updateClientScheduleField('${escapeHtml(eventId)}', ${idx}, 'address', this.value)"></div>
-            <div class="form-group"><label>Link Google Maps Sesi</label><input type="url" value="${escapeHtml(sch.maps || '')}" placeholder="https://maps.google.com/..." onchange="updateClientScheduleField('${escapeHtml(eventId)}', ${idx}, 'maps', this.value)"></div>
+            <div class="form-group"><label>Alamat Lokasi</label><input type="text" value="${escapeHtml(sch.address || '')}" onchange="updateClientScheduleField('${escapeHtml(eventId)}', ${idx}, 'address', this.value)"></div>
+            <div class="form-group"><label>Link Google Maps Sesi</label><input type="url" value="${escapeHtml(sch.maps || '')}" onchange="updateClientScheduleField('${escapeHtml(eventId)}', ${idx}, 'maps', this.value)"></div>
           </div>
           <div class="img-upload-row">
-            <img src="${escapeHtml(sch.photo || defaultPhoto)}" class="img-preview" alt="Foto Sesi">
+            <img src="${escapeHtml(sch.photo || defaultPhoto)}" id="sa-sch-prev-${eventId}-${idx}" class="img-preview" alt="Foto Sesi">
             <div class="upload-controls">
-              <input type="file" id="sa-sch-photo-${eventId}-${idx}" accept="image/*" style="display:none;" onchange="handleCompressedImage(this, false, (dataUrl) => { updateClientScheduleField('${escapeHtml(eventId)}', ${idx}, 'photo', dataUrl); renderSuperAdminClients(); })">
+              <input type="file" id="sa-sch-photo-${eventId}-${idx}" accept="image/*" style="display:none;" onchange="handleCompressedImage(this, false, (dataUrl) => { updateClientScheduleField('${escapeHtml(eventId)}', ${idx}, 'photo', dataUrl); document.getElementById('sa-sch-prev-${eventId}-${idx}').src = dataUrl; })">
               <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('sa-sch-photo-${eventId}-${idx}').click()">Unggah Foto Kartu Sesi</button>
             </div>
           </div>
@@ -1515,7 +1352,7 @@
 
     function buildClientStoriesRowsHtml(eventId, stories) {
       if (!Array.isArray(stories) || stories.length === 0) {
-        return `<p style="font-size:12px; color:var(--ink-muted);">Belum ada tahapan kisah cinta. Klik "+ Tambah Cerita" untuk menambahkan.</p>`;
+        return `<p style="font-size:12px; color:var(--ink-muted);">Belum ada tahapan kisah cinta. Klik "+ Tambah Cerita".</p>`;
       }
       const defaultPhoto = "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=400&q=80";
       return stories.map((st, idx) => `
@@ -1525,14 +1362,14 @@
             <button type="button" class="btn btn-danger" onclick="removeClientStory('${escapeHtml(eventId)}', ${idx})">Hapus</button>
           </div>
           <div class="grid-2">
-            <div class="form-group"><label>Tahun / Periode</label><input type="text" value="${escapeHtml(st.year || '')}" placeholder="2021" onchange="updateClientStoryField('${escapeHtml(eventId)}', ${idx}, 'year', this.value)"></div>
-            <div class="form-group"><label>Judul Momen</label><input type="text" value="${escapeHtml(st.title || '')}" placeholder="Pertama Bertemu" onchange="updateClientStoryField('${escapeHtml(eventId)}', ${idx}, 'title', this.value)"></div>
+            <div class="form-group"><label>Tahun / Periode</label><input type="text" value="${escapeHtml(st.year || '')}" onchange="updateClientStoryField('${escapeHtml(eventId)}', ${idx}, 'year', this.value)"></div>
+            <div class="form-group"><label>Judul Momen</label><input type="text" value="${escapeHtml(st.title || '')}" onchange="updateClientStoryField('${escapeHtml(eventId)}', ${idx}, 'title', this.value)"></div>
           </div>
           <div class="form-group"><label>Cerita Singkat</label><textarea rows="2" onchange="updateClientStoryField('${escapeHtml(eventId)}', ${idx}, 'desc', this.value)">${escapeHtml(st.desc || '')}</textarea></div>
           <div class="img-upload-row">
-            <img src="${escapeHtml(st.photo || defaultPhoto)}" class="img-preview" alt="Foto Kisah">
+            <img src="${escapeHtml(st.photo || defaultPhoto)}" id="sa-story-prev-${eventId}-${idx}" class="img-preview" alt="Foto Kisah">
             <div class="upload-controls">
-              <input type="file" id="sa-story-photo-${eventId}-${idx}" accept="image/*" style="display:none;" onchange="handleCompressedImage(this, false, (dataUrl) => { updateClientStoryField('${escapeHtml(eventId)}', ${idx}, 'photo', dataUrl); renderSuperAdminClients(); })">
+              <input type="file" id="sa-story-photo-${eventId}-${idx}" accept="image/*" style="display:none;" onchange="handleCompressedImage(this, false, (dataUrl) => { updateClientStoryField('${escapeHtml(eventId)}', ${idx}, 'photo', dataUrl); document.getElementById('sa-story-prev-${eventId}-${idx}').src = dataUrl; })">
               <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('sa-story-photo-${eventId}-${idx}').click()">Unggah Foto Momen</button>
             </div>
           </div>
@@ -1542,22 +1379,13 @@
 
     function buildClientBanksRowsHtml(eventId, banks) {
       if (!Array.isArray(banks) || banks.length === 0) {
-        return `<p style="font-size:12px; color:var(--ink-muted);">Belum ada nomor rekening. Klik "+ Tambah Rekening" untuk Tanda Kasih.</p>`;
+        return `<p style="font-size:12px; color:var(--ink-muted);">Belum ada nomor rekening. Klik "+ Tambah Rekening".</p>`;
       }
       return banks.map((bk, idx) => `
         <div class="client-frame-row">
-          <div style="width:120px;">
-            <label style="margin-bottom:4px;">Nama Bank</label>
-            <input type="text" value="${escapeHtml(bk.bank || '')}" placeholder="BCA" onchange="updateClientBankField('${escapeHtml(eventId)}', ${idx}, 'bank', this.value)">
-          </div>
-          <div style="flex:1; min-width:140px;">
-            <label style="margin-bottom:4px;">Nomor Rekening</label>
-            <input type="text" value="${escapeHtml(bk.number || '')}" placeholder="1234567890" onchange="updateClientBankField('${escapeHtml(eventId)}', ${idx}, 'number', this.value)">
-          </div>
-          <div style="flex:1; min-width:140px;">
-            <label style="margin-bottom:4px;">Atas Nama (A.N.)</label>
-            <input type="text" value="${escapeHtml(bk.holder || '')}" placeholder="NAMA PEMILIK" onchange="updateClientBankField('${escapeHtml(eventId)}', ${idx}, 'holder', this.value)">
-          </div>
+          <div style="width:120px;"><label style="margin-bottom:4px;">Nama Bank</label><input type="text" value="${escapeHtml(bk.bank || '')}" onchange="updateClientBankField('${escapeHtml(eventId)}', ${idx}, 'bank', this.value)"></div>
+          <div style="flex:1; min-width:140px;"><label style="margin-bottom:4px;">Nomor Rekening</label><input type="text" value="${escapeHtml(bk.number || '')}" onchange="updateClientBankField('${escapeHtml(eventId)}', ${idx}, 'number', this.value)"></div>
+          <div style="flex:1; min-width:140px;"><label style="margin-bottom:4px;">Atas Nama (A.N.)</label><input type="text" value="${escapeHtml(bk.holder || '')}" onchange="updateClientBankField('${escapeHtml(eventId)}', ${idx}, 'holder', this.value)"></div>
           <button type="button" class="btn btn-danger" style="align-self:flex-end;" onclick="removeClientBank('${escapeHtml(eventId)}', ${idx})">Hapus</button>
         </div>
       `).join('');
@@ -1572,7 +1400,7 @@
           <img src="${escapeHtml(p.url)}" class="img-preview" alt="Galeri #${idx + 1}">
           <div style="flex:1; min-width:180px;">
             <label style="margin-bottom:4px;">Keterangan Foto #${idx + 1}</label>
-            <input type="text" value="${escapeHtml(p.caption || '')}" placeholder="Keterangan singkat foto" onchange="updateClientSubPhotoCaption('${escapeHtml(eventId)}', '${escapeHtml(p.photoId)}', this.value)">
+            <input type="text" value="${escapeHtml(p.caption || '')}" onchange="updateClientSubPhotoCaption('${escapeHtml(eventId)}', '${escapeHtml(p.photoId)}', this.value)">
           </div>
           <button type="button" class="btn btn-danger" onclick="deleteClientSubPhoto('${escapeHtml(eventId)}', '${escapeHtml(p.photoId)}')">Hapus Foto</button>
         </div>
@@ -1587,7 +1415,7 @@
       const filtered = superAdminEvents.filter(ev => filterType === 'all' || ev.type === filterType);
 
       if (filtered.length === 0) {
-        container.innerHTML = `<p style="font-size: 13px; color: var(--ink-muted);">Belum ada client pada kategori ini. Silakan buat event/client baru melalui <strong>Super Admin</strong>.</p>`;
+        container.innerHTML = `<p style="font-size: 13px; color: var(--ink-muted);">Belum ada client pada kategori ini.</p>`;
         return;
       }
 
@@ -1602,6 +1430,8 @@
         const stories = Array.isArray(ev.stories) ? ev.stories : [];
         const banks = Array.isArray(ev.banks) ? ev.banks : [];
         const subPhotos = clientSubPhotosCache[ev.id] || [];
+        const isEditable = clientEditModes[ev.id] !== false;
+
         const defaultPhoto = "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=400&q=80";
         const defaultGroom = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80";
         const defaultBride = "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80";
@@ -1620,6 +1450,7 @@
                 <span class="badge-pill ${ev.status === 'active' ? 'badge-active' : 'badge-locked'}" style="margin-left:4px;">${escapeHtml(ev.status || 'active')}</span>
               </div>
               <div style="display:flex; gap:8px; flex-wrap:wrap;">
+                <button type="button" id="btn-toggle-edit-${escapeHtml(ev.id)}" class="btn ${isEditable ? 'btn-outline' : 'btn-accent'} btn-sm" onclick="toggleClientEditMode('${escapeHtml(ev.id)}')">${isEditable ? 'Kunci Form' : 'Edit Data'}</button>
                 <button type="button" class="btn btn-outline btn-sm" onclick="copyClientUrl('${escapeHtml(pageFile)}', '${escapeHtml(ev.id)}')">Salin Link</button>
                 <a href="${pageFile}?event=${encodeURIComponent(ev.id)}" target="_blank" class="btn btn-outline btn-sm">Lihat Event</a>
                 <a href="${adminFile}?event=${encodeURIComponent(ev.id)}" target="_blank" class="btn btn-outline btn-sm">Admin Client</a>
@@ -1627,142 +1458,133 @@
               </div>
             </div>
 
-            ${themeBoxHtml}
-            ${buildClientSectionTogglesHtml(ev)}
+            <div id="client-body-${escapeHtml(ev.id)}" class="client-body-wrap ${isEditable ? '' : 'is-locked'}">
+              ${themeBoxHtml}
+              ${buildClientSectionTogglesHtml(ev)}
 
-            <!-- 3. IDENTITAS COVER & AYAT -->
-            <div class="theme-config-box">
-              <strong style="display:block; font-size:13px; margin-bottom:12px;">3. Identitas Cover, Countdown &amp; Ayat Pembuka</strong>
-              <div class="grid-3">
-                <div class="form-group">
-                  <label>Nama Pasangan (Pria &amp; Wanita)</label>
-                  <input type="text" id="sa-name-${ev.id}" value="${escapeHtml(ev.name || '')}">
+              <!-- 3. IDENTITAS COVER & AYAT -->
+              <div class="theme-config-box">
+                <strong style="display:block; font-size:13px; margin-bottom:12px;">3. Identitas Cover, Countdown &amp; Ayat Pembuka</strong>
+                <div class="grid-3">
+                  <div class="form-group"><label>Nama Pasangan (Pria &amp; Wanita)</label><input type="text" id="sa-name-${ev.id}" value="${escapeHtml(ev.name || '')}"></div>
+                  <div class="form-group"><label>Teks Tanggal Cover</label><input type="text" id="sa-date-${ev.id}" value="${escapeHtml(ev.eventDate || '')}"></div>
+                  <div class="form-group"><label>Target Waktu Countdown</label><input type="datetime-local" id="sa-countdown-${ev.id}" value="${escapeHtml(ev.countdownIso || '2027-08-14T09:00')}"></div>
                 </div>
-                <div class="form-group">
-                  <label>Teks Tanggal Cover (Misal: 14 . 08 . 27)</label>
-                  <input type="text" id="sa-date-${ev.id}" value="${escapeHtml(ev.eventDate || '')}">
-                </div>
-                <div class="form-group">
-                  <label>Target Waktu Countdown</label>
-                  <input type="datetime-local" id="sa-countdown-${ev.id}" value="${escapeHtml(ev.countdownIso || '2027-08-14T09:00')}">
-                </div>
-              </div>
-              <div class="form-group">
-                <label>Kutipan / Ayat Pembuka Undangan</label>
-                <textarea rows="2" id="sa-quote-${ev.id}">${escapeHtml(ev.quote || '')}</textarea>
-              </div>
-              <div class="img-upload-row">
-                <img src="${escapeHtml(ev.coverUrl || defaultPhoto)}" id="sa-cover-prev-${ev.id}" class="img-preview" alt="Sampul Client">
-                <div class="upload-controls">
-                  <input type="file" id="sa-cover-file-${ev.id}" accept="image/*" style="display:none;" onchange="handleCompressedImage(this, false, (dataUrl) => { setClientPhotoCache('${ev.id}', 'coverUrl', dataUrl); document.getElementById('sa-cover-prev-${ev.id}').src = dataUrl; })">
-                  <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('sa-cover-file-${ev.id}').click()">Unggah Foto Pasangan (Ayat, Countdown &amp; Closing)</button>
-                </div>
-              </div>
-            </div>
-
-            <!-- 4. PROFIL MEMPELAI PRIA & WANITA -->
-            <div class="theme-config-box">
-              <strong style="display:block; font-size:13px; margin-bottom:12px;">4. Profil Mempelai Pria &amp; Wanita</strong>
-              <div class="grid-2">
-                <div>
-                  <div class="form-group"><label>Nama Panggilan Pria</label><input type="text" id="sa-groom-nick-${ev.id}" value="${escapeHtml(ev.groomNick || '')}" placeholder="Fadli"></div>
-                  <div class="form-group"><label>Nama Lengkap &amp; Gelar Pria</label><input type="text" id="sa-groom-full-${ev.id}" value="${escapeHtml(ev.groomFullName || '')}" placeholder="Muhammad Fadli, S.Kom."></div>
-                  <div class="form-group"><label>Nama Orang Tua Pria</label><input type="text" id="sa-groom-${ev.id}" value="${escapeHtml(ev.groomName || '')}" placeholder="Putra pertama dari Bpk. ... & Ibu ..."></div>
-                  <div class="form-group"><label>Username Instagram Pria</label><input type="text" id="sa-groom-ig-${ev.id}" value="${escapeHtml(ev.groomIg || '')}" placeholder="@fadli"></div>
-                  <div class="img-upload-row">
-                    <img src="${escapeHtml(ev.groomPhoto || defaultGroom)}" id="sa-groom-prev-${ev.id}" class="img-preview" alt="Foto Pria">
-                    <div class="upload-controls">
-                      <input type="file" id="sa-groom-file-${ev.id}" accept="image/*" style="display:none;" onchange="handleCompressedImage(this, false, (dataUrl) => { setClientPhotoCache('${ev.id}', 'groomPhoto', dataUrl); document.getElementById('sa-groom-prev-${ev.id}').src = dataUrl; })">
-                      <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('sa-groom-file-${ev.id}').click()">Unggah Foto Pria</button>
-                    </div>
+                <div class="form-group"><label>Kutipan / Ayat Pembuka Undangan</label><textarea rows="2" id="sa-quote-${ev.id}">${escapeHtml(ev.quote || '')}</textarea></div>
+                <div class="img-upload-row">
+                  <img src="${escapeHtml(ev.coverUrl || defaultPhoto)}" id="sa-cover-prev-${ev.id}" class="img-preview" alt="Sampul Client">
+                  <div class="upload-controls">
+                    <input type="file" id="sa-cover-file-${ev.id}" accept="image/*" style="display:none;" onchange="handleCompressedImage(this, false, (dataUrl) => { setClientPhotoCache('${ev.id}', 'coverUrl', dataUrl); document.getElementById('sa-cover-prev-${ev.id}').src = dataUrl; })">
+                    <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('sa-cover-file-${ev.id}').click()">Unggah Foto Pasangan (Ayat, Countdown &amp; Closing)</button>
                   </div>
                 </div>
-                <div>
-                  <div class="form-group"><label>Nama Panggilan Wanita</label><input type="text" id="sa-bride-nick-${ev.id}" value="${escapeHtml(ev.brideNick || '')}" placeholder="Vina"></div>
-                  <div class="form-group"><label>Nama Lengkap &amp; Gelar Wanita</label><input type="text" id="sa-bride-full-${ev.id}" value="${escapeHtml(ev.brideFullName || '')}" placeholder="Vina Aulia Rahma, S.Psi."></div>
-                  <div class="form-group"><label>Nama Orang Tua Wanita</label><input type="text" id="sa-bride-${ev.id}" value="${escapeHtml(ev.brideName || '')}" placeholder="Putri kedua dari Bpk. ... & Ibu ..."></div>
-                  <div class="form-group"><label>Username Instagram Wanita</label><input type="text" id="sa-bride-ig-${ev.id}" value="${escapeHtml(ev.brideIg || '')}" placeholder="@vina"></div>
-                  <div class="img-upload-row">
-                    <img src="${escapeHtml(ev.bridePhoto || defaultBride)}" id="sa-bride-prev-${ev.id}" class="img-preview" alt="Foto Wanita">
-                    <div class="upload-controls">
-                      <input type="file" id="sa-bride-file-${ev.id}" accept="image/*" style="display:none;" onchange="handleCompressedImage(this, false, (dataUrl) => { setClientPhotoCache('${ev.id}', 'bridePhoto', dataUrl); document.getElementById('sa-bride-prev-${ev.id}').src = dataUrl; })">
-                      <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('sa-bride-file-${ev.id}').click()">Unggah Foto Wanita</button>
+              </div>
+
+              <!-- 4. PROFIL MEMPELAI PRIA & WANITA -->
+              <div class="theme-config-box">
+                <strong style="display:block; font-size:13px; margin-bottom:12px;">4. Profil Mempelai Pria &amp; Wanita</strong>
+                <div class="grid-2">
+                  <div>
+                    <div class="form-group"><label>Nama Panggilan Pria</label><input type="text" id="sa-groom-nick-${ev.id}" value="${escapeHtml(ev.groomNick || '')}"></div>
+                    <div class="form-group"><label>Nama Lengkap &amp; Gelar Pria</label><input type="text" id="sa-groom-full-${ev.id}" value="${escapeHtml(ev.groomFullName || '')}"></div>
+                    <div class="form-group"><label>Nama Orang Tua Pria</label><input type="text" id="sa-groom-${ev.id}" value="${escapeHtml(ev.groomName || '')}"></div>
+                    <div class="form-group"><label>Username Instagram Pria</label><input type="text" id="sa-groom-ig-${ev.id}" value="${escapeHtml(ev.groomIg || '')}"></div>
+                    <div class="img-upload-row">
+                      <img src="${escapeHtml(ev.groomPhoto || defaultGroom)}" id="sa-groom-prev-${ev.id}" class="img-preview" alt="Foto Pria">
+                      <div class="upload-controls">
+                        <input type="file" id="sa-groom-file-${ev.id}" accept="image/*" style="display:none;" onchange="handleCompressedImage(this, false, (dataUrl) => { setClientPhotoCache('${ev.id}', 'groomPhoto', dataUrl); document.getElementById('sa-groom-prev-${ev.id}').src = dataUrl; })">
+                        <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('sa-groom-file-${ev.id}').click()">Unggah Foto Pria</button>
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="form-group"><label>Nama Panggilan Wanita</label><input type="text" id="sa-bride-nick-${ev.id}" value="${escapeHtml(ev.brideNick || '')}"></div>
+                    <div class="form-group"><label>Nama Lengkap &amp; Gelar Wanita</label><input type="text" id="sa-bride-full-${ev.id}" value="${escapeHtml(ev.brideFullName || '')}"></div>
+                    <div class="form-group"><label>Nama Orang Tua Wanita</label><input type="text" id="sa-bride-${ev.id}" value="${escapeHtml(ev.brideName || '')}"></div>
+                    <div class="form-group"><label>Username Instagram Wanita</label><input type="text" id="sa-bride-ig-${ev.id}" value="${escapeHtml(ev.brideIg || '')}"></div>
+                    <div class="img-upload-row">
+                      <img src="${escapeHtml(ev.bridePhoto || defaultBride)}" id="sa-bride-prev-${ev.id}" class="img-preview" alt="Foto Wanita">
+                      <div class="upload-controls">
+                        <input type="file" id="sa-bride-file-${ev.id}" accept="image/*" style="display:none;" onchange="handleCompressedImage(this, false, (dataUrl) => { setClientPhotoCache('${ev.id}', 'bridePhoto', dataUrl); document.getElementById('sa-bride-prev-${ev.id}').src = dataUrl; })">
+                        <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('sa-bride-file-${ev.id}').click()">Unggah Foto Wanita</button>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
 
-            <!-- 5. RANGKAIAN ACARA -->
-            <div class="client-frame-sublist">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                <strong style="font-size:13px;">5. Rangkaian Acara (${schedules.length} Sesi)</strong>
-                <button type="button" class="btn btn-accent btn-sm" onclick="addClientSchedule('${escapeHtml(ev.id)}')">+ Tambah Sesi</button>
+              <!-- 5. RANGKAIAN ACARA -->
+              <div class="client-frame-sublist">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                  <strong style="font-size:13px;">5. Rangkaian Acara (${schedules.length} Sesi)</strong>
+                  <button type="button" class="btn btn-accent btn-sm" onclick="addClientSchedule('${escapeHtml(ev.id)}')">+ Tambah Sesi</button>
+                </div>
+                <div id="sa-sch-container-${ev.id}">${buildClientScheduleRowsHtml(ev.id, schedules)}</div>
               </div>
-              ${buildClientScheduleRowsHtml(ev.id, schedules)}
-            </div>
 
-            <!-- 6. DRESSCODE & LIVE STREAMING -->
-            <div class="theme-config-box" style="margin-top:12px;">
-              <strong style="display:block; font-size:13px; margin-bottom:12px;">6. Dresscode &amp; Live Streaming</strong>
-              <div class="grid-2">
-                <div class="form-group"><label>Keterangan Dresscode</label><input type="text" id="sa-dc-text-${ev.id}" value="${escapeHtml(ev.dresscodeText || 'Busana adat atau batik sopan. Hindari warna putih polos dan hitam polos.')}"></div>
-                <div class="form-group">
-                  <label>3 Warna Palet Dresscode</label>
-                  <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;">
-                    <input type="color" id="sa-dc-c1-${ev.id}" value="${escapeHtml(dcColors[0])}">
-                    <input type="color" id="sa-dc-c2-${ev.id}" value="${escapeHtml(dcColors[1])}">
-                    <input type="color" id="sa-dc-c3-${ev.id}" value="${escapeHtml(dcColors[2])}">
+              <!-- 6. DRESSCODE & LIVE STREAMING -->
+              <div class="theme-config-box" style="margin-top:12px;">
+                <strong style="display:block; font-size:13px; margin-bottom:12px;">6. Dresscode &amp; Live Streaming</strong>
+                <div class="grid-2">
+                  <div class="form-group"><label>Keterangan Dresscode</label><input type="text" id="sa-dc-text-${ev.id}" value="${escapeHtml(ev.dresscodeText || 'Busana adat atau batik sopan. Hindari warna putih polos dan hitam polos.')}"></div>
+                  <div class="form-group">
+                    <label>3 Warna Palet Dresscode</label>
+                    <div style="display:grid; grid-template-columns:1fr 1fr 1fr; gap:8px;">
+                      <input type="color" id="sa-dc-c1-${ev.id}" value="${escapeHtml(dcColors[0])}">
+                      <input type="color" id="sa-dc-c2-${ev.id}" value="${escapeHtml(dcColors[1])}">
+                      <input type="color" id="sa-dc-c3-${ev.id}" value="${escapeHtml(dcColors[2])}">
+                    </div>
+                  </div>
+                  <div class="form-group"><label>Judul Live Streaming</label><input type="text" id="sa-stream-title-${ev.id}" value="${escapeHtml(ev.streamTitle || 'Siaran Langsung Pernikahan')}"></div>
+                  <div class="form-group"><label>Link YouTube Live Streaming</label><input type="url" id="sa-stream-url-${ev.id}" value="${escapeHtml(ev.streamUrl || 'https://youtube.com')}"></div>
+                </div>
+              </div>
+
+              <!-- 7. KISAH CINTA -->
+              <div class="client-frame-sublist">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                  <strong style="font-size:13px;">7. Kisah Cinta (${stories.length} Momen)</strong>
+                  <button type="button" class="btn btn-accent btn-sm" onclick="addClientStory('${escapeHtml(ev.id)}')">+ Tambah Cerita</button>
+                </div>
+                <div id="sa-story-container-${ev.id}">${buildClientStoriesRowsHtml(ev.id, stories)}</div>
+              </div>
+
+              <!-- 8. GALERI & VIDEO -->
+              <div class="client-frame-sublist">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                  <strong style="font-size:13px;">8. Galeri Multi-Foto (${subPhotos.length} Foto) &amp; Video Kami</strong>
+                  <div>
+                    <input type="file" id="sa-add-gal-${ev.id}" accept="image/*" style="display:none;" onchange="uploadClientSubPhoto('${escapeHtml(ev.id)}', this)">
+                    <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('sa-add-gal-${ev.id}').click()">+ Unggah Foto Galeri</button>
                   </div>
                 </div>
-                <div class="form-group"><label>Judul Live Streaming</label><input type="text" id="sa-stream-title-${ev.id}" value="${escapeHtml(ev.streamTitle || 'Siaran Langsung Pernikahan')}"></div>
-                <div class="form-group"><label>Link YouTube Live Streaming</label><input type="url" id="sa-stream-url-${ev.id}" value="${escapeHtml(ev.streamUrl || 'https://youtube.com')}"></div>
+                <div class="form-group">
+                  <label>Link Embed / URL Video YouTube Prewedding</label>
+                  <input type="url" id="sa-video-url-${ev.id}" value="${escapeHtml(ev.videoUrl || '')}" placeholder="https://www.youtube.com/embed/...">
+                </div>
+                <div id="sa-gal-list-${ev.id}">${buildClientGalleryRowsHtml(ev.id, subPhotos)}</div>
               </div>
-            </div>
 
-            <!-- 7. KISAH CINTA -->
-            <div class="client-frame-sublist">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                <strong style="font-size:13px;">7. Kisah Cinta (${stories.length} Momen)</strong>
-                <button type="button" class="btn btn-accent btn-sm" onclick="addClientStory('${escapeHtml(ev.id)}')">+ Tambah Cerita</button>
-              </div>
-              ${buildClientStoriesRowsHtml(ev.id, stories)}
-            </div>
-
-            <!-- 8. GALERI & VIDEO -->
-            <div class="client-frame-sublist">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                <strong style="font-size:13px;">8. Galeri Multi-Foto (${subPhotos.length} Foto) &amp; Video Kami</strong>
-                <div>
-                  <input type="file" id="sa-add-gal-${ev.id}" accept="image/*" style="display:none;" onchange="uploadClientSubPhoto('${escapeHtml(ev.id)}', this)">
-                  <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('sa-add-gal-${ev.id}').click()">+ Unggah Foto Galeri</button>
+              <!-- 9. TANDA KASIH & TURUT MENGUNDANG -->
+              <div class="theme-config-box" style="margin-top:12px;">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+                  <strong style="font-size:13px;">9. Tanda Kasih (Rekening &amp; Kado) &amp; Turut Mengundang</strong>
+                  <button type="button" class="btn btn-accent btn-sm" onclick="addClientBank('${escapeHtml(ev.id)}')">+ Tambah Rekening</button>
+                </div>
+                <div id="sa-bank-container-${ev.id}">${buildClientBanksRowsHtml(ev.id, banks)}</div>
+                <div class="grid-2" style="margin-top:12px;">
+                  <div class="form-group"><label>Nama Penerima Kado Fisik</label><input type="text" id="sa-gift-name-${ev.id}" value="${escapeHtml(ev.giftRecipient || '')}"></div>
+                  <div class="form-group"><label>Alamat Pengiriman Kado Fisik</label><input type="text" id="sa-gift-addr-${ev.id}" value="${escapeHtml(ev.giftAddress || '')}"></div>
+                </div>
+                <div class="grid-3">
+                  <div class="form-group" style="margin-bottom:0;"><label>Turut Mengundang (Kel. Pria)</label><textarea rows="3" id="sa-turut-pria-${ev.id}">${escapeHtml(ev.turutPria || '')}</textarea></div>
+                  <div class="form-group" style="margin-bottom:0;"><label>Turut Mengundang (Kel. Wanita)</label><textarea rows="3" id="sa-turut-wanita-${ev.id}">${escapeHtml(ev.turutWanita || '')}</textarea></div>
+                  <div class="form-group" style="margin-bottom:0;"><label>Turut Mengundang (Sahabat/Rekan)</label><textarea rows="3" id="sa-turut-rekan-${ev.id}">${escapeHtml(ev.turutRekan || '')}</textarea></div>
                 </div>
               </div>
-              <div class="form-group">
-                <label>Link Embed / URL Video YouTube Prewedding</label>
-                <input type="url" id="sa-video-url-${ev.id}" value="${escapeHtml(ev.videoUrl || '')}" placeholder="https://www.youtube.com/embed/...">
-              </div>
-              <div id="sa-gal-list-${ev.id}">
-                ${buildClientGalleryRowsHtml(ev.id, subPhotos)}
-              </div>
-            </div>
 
-            <!-- 9. TANDA KASIH & TURUT MENGUNDANG -->
-            <div class="theme-config-box" style="margin-top:12px;">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
-                <strong style="font-size:13px;">9. Tanda Kasih (Rekening &amp; Kado) &amp; Turut Mengundang</strong>
-                <button type="button" class="btn btn-accent btn-sm" onclick="addClientBank('${escapeHtml(ev.id)}')">+ Tambah Rekening</button>
-              </div>
-              ${buildClientBanksRowsHtml(ev.id, banks)}
-              <div class="grid-2" style="margin-top:12px;">
-                <div class="form-group"><label>Nama Penerima Kado Fisik</label><input type="text" id="sa-gift-name-${ev.id}" value="${escapeHtml(ev.giftRecipient || '')}"></div>
-                <div class="form-group"><label>Alamat Pengiriman Kado Fisik</label><input type="text" id="sa-gift-addr-${ev.id}" value="${escapeHtml(ev.giftAddress || '')}"></div>
-              </div>
-              <div class="grid-3">
-                <div class="form-group" style="margin-bottom:0;"><label>Turut Mengundang (Kel. Pria)</label><textarea rows="3" id="sa-turut-pria-${ev.id}">${escapeHtml(ev.turutPria || '')}</textarea></div>
-                <div class="form-group" style="margin-bottom:0;"><label>Turut Mengundang (Kel. Wanita)</label><textarea rows="3" id="sa-turut-wanita-${ev.id}">${escapeHtml(ev.turutWanita || '')}</textarea></div>
-                <div class="form-group" style="margin-bottom:0;"><label>Turut Mengundang (Sahabat/Rekan)</label><textarea rows="3" id="sa-turut-rekan-${ev.id}">${escapeHtml(ev.turutRekan || '')}</textarea></div>
-              </div>
+              <!-- 10. ORNAMEN GRAFIS & BACKGROUND CUSTOM -->
+              ${buildClientCustomAssetsHtml(ev)}
             </div>
 
             <div style="margin-top:14px; text-align:right;">
@@ -1773,12 +1595,8 @@
           const framesRowsHtml = frames.map((fr, fIdx) => `
             <div class="client-frame-row">
               <img src="${escapeHtml(fr.path || `${GITHUB_RAW_BASE}/frame/dsg3.png`)}" class="img-preview-frame" alt="Frame">
-              <div style="flex:1; min-width:160px;">
-                <label style="margin-bottom:4px;">Nama Frame</label>
-                <input type="text" value="${escapeHtml(fr.name || '')}" onchange="updateClientFrameField('${escapeHtml(ev.id)}', ${fIdx}, 'name', this.value)">
-              </div>
-              <div style="width:120px;">
-                <label style="margin-bottom:4px;">Jumlah Slot</label>
+              <div style="flex:1; min-width:160px;"><label style="margin-bottom:4px;">Nama Frame</label><input type="text" value="${escapeHtml(fr.name || '')}" onchange="updateClientFrameField('${escapeHtml(ev.id)}', ${fIdx}, 'name', this.value)"></div>
+              <div style="width:120px;"><label style="margin-bottom:4px;">Jumlah Slot</label>
                 <select onchange="updateClientFrameField('${escapeHtml(ev.id)}', ${fIdx}, 'count', parseInt(this.value, 10))">
                   <option value="1" ${Number(fr.count) === 1 ? 'selected' : ''}>1 Foto</option>
                   <option value="2" ${Number(fr.count) === 2 ? 'selected' : ''}>2 Foto</option>
@@ -1799,7 +1617,6 @@
               <div>
                 <strong>ID: ${escapeHtml(ev.id)} — ${escapeHtml(ev.name || 'Tanpa Nama')}</strong>
                 <span class="badge-pill" style="margin-left:8px;">PHOTOBOOTH</span>
-                <span class="badge-pill ${ev.status === 'active' ? 'badge-active' : 'badge-locked'}" style="margin-left:4px;">${escapeHtml(ev.status || 'active')}</span>
               </div>
               <div style="display:flex; gap:8px; flex-wrap:wrap;">
                 <button type="button" class="btn btn-outline btn-sm" onclick="copyClientUrl('${escapeHtml(pageFile)}', '${escapeHtml(ev.id)}')">Salin Link</button>
@@ -1808,9 +1625,7 @@
                 <button type="button" class="btn btn-dark btn-sm" onclick="saveSuperAdminClientVisual('${escapeHtml(ev.id)}', 'photobooth')">Simpan Visual</button>
               </div>
             </div>
-
             ${themeBoxHtml}
-
             <div class="grid-2">
               <div class="form-group"><label>Nama Event / Pasangan</label><input type="text" id="sa-name-${ev.id}" value="${escapeHtml(ev.name || '')}"></div>
               <div class="form-group"><label>Tanggal Acara</label><input type="text" id="sa-date-${ev.id}" value="${escapeHtml(ev.eventDate || '')}"></div>
@@ -1844,12 +1659,20 @@
       if (target) target[fieldKey] = url;
     }
 
+    function setClientNestedCache(eventId, parentKey, subKey, val) {
+      const target = superAdminEvents.find(e => e.id === eventId);
+      if (!target) return;
+      if (!target[parentKey] || typeof target[parentKey] !== 'object') target[parentKey] = {};
+      target[parentKey][subKey] = val;
+    }
+
     function addClientSchedule(eventId) {
       const target = superAdminEvents.find(e => e.id === eventId);
       if (!target) return;
       if (!Array.isArray(target.schedules)) target.schedules = [];
       target.schedules.push({ title: "Akad Nikah", day: "Sabtu", dateNum: "14", monthYear: "Agustus 2027", time: "09:00 - 10:00 WIB", place: "Masjid Raya", address: "Jl. Merdeka No. 12", maps: "https://maps.google.com", photo: "" });
-      renderSuperAdminClients();
+      const box = document.getElementById(`sa-sch-container-${eventId}`);
+      if (box) box.innerHTML = buildClientScheduleRowsHtml(eventId, target.schedules);
     }
     function updateClientScheduleField(eventId, idx, key, val) {
       const target = superAdminEvents.find(e => e.id === eventId);
@@ -1857,7 +1680,11 @@
     }
     function removeClientSchedule(eventId, idx) {
       const target = superAdminEvents.find(e => e.id === eventId);
-      if (target && target.schedules) { target.schedules.splice(idx, 1); renderSuperAdminClients(); }
+      if (target && target.schedules) {
+        target.schedules.splice(idx, 1);
+        const box = document.getElementById(`sa-sch-container-${eventId}`);
+        if (box) box.innerHTML = buildClientScheduleRowsHtml(eventId, target.schedules);
+      }
     }
 
     function addClientStory(eventId) {
@@ -1865,7 +1692,8 @@
       if (!target) return;
       if (!Array.isArray(target.stories)) target.stories = [];
       target.stories.push({ year: "2024", title: "Momen Spesial", desc: "Cerita singkat perjalanan cinta kami.", photo: "" });
-      renderSuperAdminClients();
+      const box = document.getElementById(`sa-story-container-${eventId}`);
+      if (box) box.innerHTML = buildClientStoriesRowsHtml(eventId, target.stories);
     }
     function updateClientStoryField(eventId, idx, key, val) {
       const target = superAdminEvents.find(e => e.id === eventId);
@@ -1873,7 +1701,11 @@
     }
     function removeClientStory(eventId, idx) {
       const target = superAdminEvents.find(e => e.id === eventId);
-      if (target && target.stories) { target.stories.splice(idx, 1); renderSuperAdminClients(); }
+      if (target && target.stories) {
+        target.stories.splice(idx, 1);
+        const box = document.getElementById(`sa-story-container-${eventId}`);
+        if (box) box.innerHTML = buildClientStoriesRowsHtml(eventId, target.stories);
+      }
     }
 
     function addClientBank(eventId) {
@@ -1881,7 +1713,8 @@
       if (!target) return;
       if (!Array.isArray(target.banks)) target.banks = [];
       target.banks.push({ bank: "BCA", number: "1234567890", holder: "NAMA PENERIMA" });
-      renderSuperAdminClients();
+      const box = document.getElementById(`sa-bank-container-${eventId}`);
+      if (box) box.innerHTML = buildClientBanksRowsHtml(eventId, target.banks);
     }
     function updateClientBankField(eventId, idx, key, val) {
       const target = superAdminEvents.find(e => e.id === eventId);
@@ -1889,7 +1722,11 @@
     }
     function removeClientBank(eventId, idx) {
       const target = superAdminEvents.find(e => e.id === eventId);
-      if (target && target.banks) { target.banks.splice(idx, 1); renderSuperAdminClients(); }
+      if (target && target.banks) {
+        target.banks.splice(idx, 1);
+        const box = document.getElementById(`sa-bank-container-${eventId}`);
+        if (box) box.innerHTML = buildClientBanksRowsHtml(eventId, target.banks);
+      }
     }
 
     function uploadClientSubPhoto(eventId, inputEl) {
@@ -2005,16 +1842,26 @@
         payload.turutPria = document.getElementById(`sa-turut-pria-${eventId}`)?.value.trim() || "";
         payload.turutWanita = document.getElementById(`sa-turut-wanita-${eventId}`)?.value.trim() || "";
         payload.turutRekan = document.getElementById(`sa-turut-rekan-${eventId}`)?.value.trim() || "";
+        payload.customAssets = target.customAssets || {};
       } else {
         payload.heroUrl = target.heroUrl || "";
         payload.frames = Array.isArray(target.frames) ? target.frames : [];
       }
 
+      const payloadSizeKb = Math.round(new Blob([JSON.stringify(payload)]).size / 1024);
+      if (payloadSizeKb > 980) {
+        showCmsModal("Ukuran Total Terlalu Besar", `Total ukuran foto dalam satu dokumen mencapai ${payloadSizeKb} KB (batas maksimal 980 KB). Silakan unggah ulang beberapa foto agar terkompresi lebih ringan.`);
+        return;
+      }
+
       try {
         await db.collection("events").doc(eventId).set(payload, { merge: true });
-        showCmsModal("Berhasil Disimpan", `Seluruh pengaturan visual, section, animasi, musik, dan konten untuk "${updatedName}" telah diperbarui.`);
+        Object.assign(target, payload);
+        clientEditModes[eventId] = false;
+        renderSuperAdminClients();
+        showCmsModal("Tersimpan Permanen (" + payloadSizeKb + " KB)", `Seluruh data, foto mempelai, dan ornamen grafis untuk "${updatedName}" telah tersimpan.\n\nKlik tombol "Edit Data" kapan saja jika ingin mengubahnya lagi.`);
       } catch (err) {
-        showCmsModal("Gagal Menyimpan", "Pastikan total ukuran foto dalam 1 dokumen tidak melebihi batas: " + err.message);
+        showCmsModal("Gagal Menyimpan", err.message);
       }
     }
 
