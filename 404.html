@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Memuat Undangan — Votura Studio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+</head>
+<body style="background:#EFECE6;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;font-family:sans-serif;color:#68635C;font-size:13px;">
+  Memuat undangan...
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAvCF0gKmZ9n28JltwoOS5QqcnlHhGz4Ww",
+      authDomain: "votura-studio.firebaseapp.com",
+      projectId: "votura-studio",
+      storageBucket: "votura-studio.firebasestorage.app"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    (async function routeShortlink() {
+      const pathParts = window.location.pathname.split('/').filter(Boolean);
+      // Ambil segmen terakhir sebagai slug mempelai (misal: "rusdi-marin")
+      const slug = (pathParts[pathParts.length - 1] || '').toLowerCase();
+      const params = new URLSearchParams(window.location.search);
+      const guestTo = params.get('to') || '';
+
+      if (!slug) {
+        window.location.replace('/');
+        return;
+      }
+
+      try {
+        // 1. Cek apakah ada event dengan field 'slug' yang cocok
+        let snap = await db.collection('events').where('slug', '==', slug).limit(1).get();
+
+        // 2. Jika belum diset manual, cocokkan otomatis dari nama mempelai (misal "Rusdi & Marin" -> "rusdi-marin")
+        if (snap.empty) {
+          const allSnap = await db.collection('events').get();
+          let matchedDoc = null;
+          allSnap.forEach(doc => {
+            const d = doc.data();
+            const rawName = (d.name || d.coupleName || '').toLowerCase();
+            const generatedSlug = rawName.replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+            if (generatedSlug === slug || doc.id.toLowerCase() === slug) {
+              matchedDoc = doc;
+            }
+          });
+          if (matchedDoc) {
+            redirectToTemplate(matchedDoc.id, matchedDoc.data(), guestTo);
+            return;
+          }
+        } else {
+          const doc = snap.docs[0];
+          redirectToTemplate(doc.id, doc.data(), guestTo);
+          return;
+        }
+      } catch (e) {
+        console.error(e);
+      }
+
+      window.location.replace('/');
+    })();
+
+    function redirectToTemplate(eventId, data, guestTo) {
+      const tpl = data.templateFile || 'templates/wedding-1.html';
+      const baseOrigin = window.location.origin;
+      // Cek apakah hosted di subpath /votura-app atau root custom domain
+      const prefix = window.location.pathname.startsWith('/votura-app/') ? '/votura-app/' : '/';
+      const targetUrl = new URL(prefix + tpl.replace(/^\/+/, ''), baseOrigin);
+      targetUrl.searchParams.set('event', eventId);
+      if (guestTo) targetUrl.searchParams.set('to', guestTo);
+      window.location.replace(targetUrl.toString());
+    }
+  </script>
+</body>
+</html>
