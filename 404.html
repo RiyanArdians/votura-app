@@ -2,12 +2,23 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <title>Memuat Undangan — Votura Studio</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Wedding Invitation — Votura Studio</title>
+
+  <!-- OPEN GRAPH META TAGS UNTUK PREVIEW WHATSAPP -->
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Votura Studio">
+  <meta property="og:title" content="The Wedding Invitation">
+  <meta property="og:description" content="Tanpa mengurangi rasa hormat, kami mengundang Bapak/Ibu/Saudara/i untuk hadir dan memberikan doa restu pada acara pernikahan kami.">
+  <meta property="og:image" content="https://raw.githubusercontent.com/RiyanArdians/votura-app/main/assets/votura-og-cover.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 </head>
-<body style="background:#EFECE6;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;font-family:sans-serif;color:#68635C;font-size:13px;">
+<body style="background:#EFECE6;display:flex;align-items:center;justify-content:center;height:100vh;margin:0;font-family:sans-serif;color:#23211E;font-size:13px;">
   Memuat undangan...
   <script>
     const firebaseConfig = {
@@ -21,7 +32,6 @@
 
     (async function routeShortlink() {
       const pathParts = window.location.pathname.split('/').filter(Boolean);
-      // Ambil segmen terakhir sebagai slug mempelai (misal: "rusdi-marin")
       const slug = (pathParts[pathParts.length - 1] || '').toLowerCase();
       const params = new URLSearchParams(window.location.search);
       const guestTo = params.get('to') || '';
@@ -32,10 +42,8 @@
       }
 
       try {
-        // 1. Cek apakah ada event dengan field 'slug' yang cocok
         let snap = await db.collection('events').where('slug', '==', slug).limit(1).get();
 
-        // 2. Jika belum diset manual, cocokkan otomatis dari nama mempelai (misal "Rusdi & Marin" -> "rusdi-marin")
         if (snap.empty) {
           const allSnap = await db.collection('events').get();
           let matchedDoc = null;
@@ -66,7 +74,6 @@
     function redirectToTemplate(eventId, data, guestTo) {
       const tpl = data.templateFile || 'templates/wedding-1.html';
       const baseOrigin = window.location.origin;
-      // Cek apakah hosted di subpath /votura-app atau root custom domain
       const prefix = window.location.pathname.startsWith('/votura-app/') ? '/votura-app/' : '/';
       const targetUrl = new URL(prefix + tpl.replace(/^\/+/, ''), baseOrigin);
       targetUrl.searchParams.set('event', eventId);
