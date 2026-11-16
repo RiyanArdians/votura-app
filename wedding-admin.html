@@ -92,11 +92,6 @@
 
     .badge-active { background: #DCFCE7; color: var(--success); }
 
-    header p {
-      font-size: 12.5px;
-      color: var(--ink-muted);
-    }
-
     .header-actions {
       display: flex;
       gap: 6px;
@@ -368,6 +363,7 @@
     .guest-table th, .guest-table td {
       padding: 10px 12px;
       border-bottom: 1px solid var(--border);
+      vertical-align: middle;
     }
 
     .guest-table th {
@@ -548,12 +544,11 @@
 <body>
 
   <div class="container">
-    <!-- HEADER -->
+    <!-- HEADER (TANPA EVENT ID) -->
     <header>
       <div>
         <h1 id="client-couple-heading">Admin Tamu &amp; RSVP Undangan</h1>
         <div class="header-meta">
-          <span class="badge-pill" id="event-id-badge">ID: MEMUAT...</span>
           <span class="badge-pill badge-active" id="event-date-badge">Votura Studio</span>
         </div>
       </div>
@@ -664,22 +659,22 @@
     </div>
   </div>
 
-  <!-- MODAL TEKS PENGANTAR WA & BASE LINK TUJUAN -->
+  <!-- MODAL TEKS PENGANTAR WA & SHORTLINK TUJUAN -->
   <div id="text-template-modal" class="modal-overlay hidden" onclick="if(event.target.id==='text-template-modal') closeTextTemplateModal()">
     <div class="modal-card">
       <button type="button" class="modal-close-btn" onclick="closeTextTemplateModal()">✕</button>
       <div class="modal-title">Pengaturan Undangan &amp; Link</div>
       <p style="font-size: 12px; color: var(--ink-muted); text-align: center; margin-bottom: 14px;">
-        Atur link utama undangan dan format pesan WhatsApp otomatis.
+        Atur shortlink undangan dan format pesan WhatsApp otomatis.
       </p>
 
       <div class="form-group">
-        <label>Link Utama Tujuan Undangan</label>
-        <input type="url" id="input-base-url" placeholder="https://riyanardians.github.io/votura-app/templates/wedding-1.html">
+        <label>Shortlink Utama Tujuan Undangan</label>
+        <input type="url" id="input-base-url" placeholder="https://voturastudio.site/rusdi-marin">
       </div>
 
       <p style="font-size: 11.5px; color: var(--ink-muted); margin: 8px 0 10px; background: #FFFFFF; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--border);">
-        Gunakan tag <b>{nama}</b> untuk menyisipkan nama tamu &amp; <b>{link}</b> untuk link undangan otomatis.
+        Gunakan tag <b>{nama}</b> untuk menyisipkan nama tamu &amp; <b>{link}</b> untuk shortlink undangan otomatis.
       </p>
 
       <div class="form-group">
@@ -779,9 +774,9 @@
     let guestViewMode = 'card';
     let onDialogCallback = null;
     let coupleDisplayName = "Riyan & Amelia";
-    let eventTemplateFile = "templates/wedding-1.html";
+    let eventSlug = "";
 
-    // DEFAULT LINK UTAMA UNDANGAN & TEMPLATE WA
+    // DEFAULT SHORTLINK UTAMA UNDANGAN & TEMPLATE WA
     let baseInvitationUrl = "";
     let defaultWaTemplate = "Kepada Yth. Bapak/Ibu/Saudara/i {nama},\n\nTanpa mengurangi rasa hormat, perkenankan kami mengundang Anda untuk menghadiri acara pernikahan kami.\n\nBerikut link undangan digital kami:\n{link}\n\nMerupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.\n\nTerima kasih,\n{mempelai}";
 
@@ -803,28 +798,36 @@
       return isNaN(d) ? 0 : d;
     }
 
-    function getDefaultEventBaseUrl() {
-      const currentDir = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
-      return `${currentDir}${eventTemplateFile}`;
+    function slugifyName(name) {
+      return String(name || '')
+        .toLowerCase()
+        .replace(/[^a-z0-9]+/g, '-')
+        .replace(/^-|-$/g, '') || EVENT_ID.toLowerCase();
+    }
+
+    function getDefaultShortlinkUrl() {
+      const slug = eventSlug || slugifyName(coupleDisplayName);
+      // Otomatis membentuk shortlink bersih tanpa /templates/wedding-1.html
+      const origin = window.location.origin;
+      const prefix = window.location.pathname.startsWith('/votura-app/') ? '/votura-app/' : '/';
+      return `${origin}${prefix}${slug}`;
     }
 
     function getInvitationLink(guestName) {
-      let cleanBase = (baseInvitationUrl || getDefaultEventBaseUrl()).trim();
+      let cleanBase = (baseInvitationUrl || getDefaultShortlinkUrl()).trim();
+      // Bersihkan otomatis jika masih ada sisa path templates/wedding-x.html lama
+      if (cleanBase.includes('/templates/')) {
+        cleanBase = getDefaultShortlinkUrl();
+      }
       try {
         const u = new URL(cleanBase);
-        if (cleanBase.includes('templates/')) {
-          u.searchParams.set('event', EVENT_ID);
-        }
         if (guestName) {
           u.searchParams.set('to', guestName);
         }
         return u.toString();
       } catch (e) {
         const sep = cleanBase.includes('?') ? '&' : '?';
-        const evPart = cleanBase.includes('templates/') && !cleanBase.includes('event=')
-          ? `event=${encodeURIComponent(EVENT_ID)}&`
-          : '';
-        return `${cleanBase}${sep}${evPart}to=${encodeURIComponent(guestName)}`;
+        return `${cleanBase}${sep}to=${encodeURIComponent(guestName)}`;
       }
     }
 
@@ -884,7 +887,6 @@
 
     /* INISIALISASI EVENT & FIRESTORE PER CLIENT */
     async function initClientAdmin() {
-      document.getElementById('event-id-badge').textContent = `EVENT ID: ${EVENT_ID}`;
       const eventRef = db.collection('events').doc(EVENT_ID);
 
       try {
@@ -892,7 +894,7 @@
         if (docSnap.exists) {
           const data = docSnap.data();
           coupleDisplayName = data.name || data.coupleName || "Riyan & Amelia";
-          eventTemplateFile = data.templateFile || "templates/wedding-1.html";
+          eventSlug = data.slug || slugifyName(coupleDisplayName);
 
           document.getElementById('client-couple-heading').textContent = `Undangan ${coupleDisplayName}`;
           if (data.eventDate) {
@@ -905,15 +907,22 @@
             defaultWaTemplate = defaultWaTemplate.replace('{mempelai}', coupleDisplayName);
           }
 
-          baseInvitationUrl = data.baseUrl || getDefaultEventBaseUrl();
+          // Gunakan shortlink bersih jika baseUrl belum diset atau masih mengarah ke /templates/
+          if (data.baseUrl && !data.baseUrl.includes('/templates/')) {
+            baseInvitationUrl = data.baseUrl;
+          } else {
+            baseInvitationUrl = getDefaultShortlinkUrl();
+          }
         } else {
+          eventSlug = slugifyName(coupleDisplayName);
           defaultWaTemplate = defaultWaTemplate.replace('{mempelai}', coupleDisplayName);
-          baseInvitationUrl = getDefaultEventBaseUrl();
+          baseInvitationUrl = getDefaultShortlinkUrl();
         }
       } catch (err) {
         console.warn('Gagal memuat detail event:', err);
+        eventSlug = slugifyName(coupleDisplayName);
         defaultWaTemplate = defaultWaTemplate.replace('{mempelai}', coupleDisplayName);
-        baseInvitationUrl = getDefaultEventBaseUrl();
+        baseInvitationUrl = getDefaultShortlinkUrl();
       }
 
       const openInvBtn = document.getElementById('btn-open-invitation');
@@ -981,6 +990,13 @@
           case 'edit': openEditGuestModal(guest.id); break;
           case 'del': deleteGuest(guest.id); break;
         }
+      });
+
+      // DELEGASI TOMBOL HAPUS RSVP / KOMENTAR TAMU
+      document.getElementById('rsvp-list-container').addEventListener('click', e => {
+        const btn = e.target.closest('[data-rsvp-del]');
+        if (!btn) return;
+        deleteRsvpItem(btn.dataset.rsvpDel, btn.dataset.rsvpName || 'tamu ini');
       });
     }
 
@@ -1080,6 +1096,7 @@
                 <th>Nama Tamu</th>
                 <th>Kehadiran</th>
                 <th>Ucapan &amp; Doa</th>
+                <th style="text-align: right; width: 76px;">Aksi</th>
               </tr>
             </thead>
             <tbody>
@@ -1088,21 +1105,39 @@
       rsvps.forEach(item => {
         const statusRaw = item.attendance || item.status || 'Hadir';
         const isNotComing = String(statusRaw).toLowerCase().includes('tidak') || String(statusRaw).toLowerCase().includes('berhalangan');
+        const guestName = item.name || 'Tamu';
         html += `
           <tr>
-            <td><strong>${escapeHtml(item.name || 'Tamu')}</strong></td>
+            <td><strong>${escapeHtml(guestName)}</strong></td>
             <td>
               <span class="badge-pill" style="${isNotComing ? 'background:#FEE2E2; color:var(--danger);' : 'background:#DCFCE7; color:var(--success);'}">
                 ${escapeHtml(statusRaw)}
               </span>
             </td>
             <td style="color: var(--ink-muted);">${escapeHtml(item.message || item.wish || '-')}</td>
+            <td style="text-align: right;">
+              <button type="button" class="btn-action-icon btn-act-del" data-rsvp-del="${item.id}" data-rsvp-name="${escapeHtml(guestName)}">Hapus</button>
+            </td>
           </tr>
         `;
       });
 
       html += '</tbody></table></div>';
       container.innerHTML = html;
+    }
+
+    function deleteRsvpItem(rsvpId, guestName) {
+      showAdminConfirm(
+        "Hapus Komentar RSVP",
+        `Hapus ucapan & konfirmasi kehadiran dari "${guestName}"?`,
+        (confirmed) => {
+          if (!confirmed) return;
+          db.collection('events').doc(EVENT_ID).collection('rsvps').doc(rsvpId).delete()
+            .then(() => showAdminAlert("Berhasil", "Komentar tamu berhasil dihapus."))
+            .catch(err => showAdminAlert("Gagal", "Gagal menghapus komentar: " + err.message));
+        },
+        true
+      );
     }
 
     /* TAMBAH / EDIT / HAPUS TAMU */
@@ -1209,7 +1244,7 @@
 
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
       const url = URL.createObjectURL(blob);
-      triggerDownload(url, `contoh_tamu_${EVENT_ID}.csv`);
+      triggerDownload(url, `contoh_tamu_${eventSlug || 'undangan'}.csv`);
       setTimeout(() => URL.revokeObjectURL(url), 2000);
     }
 
@@ -1286,9 +1321,9 @@
       reader.readAsText(file);
     }
 
-    /* MODAL TEKS PENGANTAR WA & EDIT BASE LINK */
+    /* MODAL TEKS PENGANTAR WA & EDIT SHORTLINK */
     function openTextTemplateModal() {
-      document.getElementById('input-base-url').value = baseInvitationUrl || getDefaultEventBaseUrl();
+      document.getElementById('input-base-url').value = baseInvitationUrl || getDefaultShortlinkUrl();
       document.getElementById('input-text-template').value = defaultWaTemplate;
       document.getElementById('text-template-modal').classList.remove('hidden');
     }
@@ -1301,17 +1336,29 @@
       const newBaseUrl = document.getElementById('input-base-url').value.trim();
       const text = document.getElementById('input-text-template').value;
 
-      if (newBaseUrl) baseInvitationUrl = newBaseUrl;
+      if (newBaseUrl) {
+        baseInvitationUrl = newBaseUrl;
+        // Simpan juga custom slug jika user mengubah segmen akhir URL
+        try {
+          const parsed = new URL(newBaseUrl);
+          const parts = parsed.pathname.split('/').filter(Boolean);
+          const lastSeg = parts[parts.length - 1];
+          if (lastSeg && !lastSeg.endsWith('.html')) {
+            eventSlug = lastSeg.toLowerCase();
+          }
+        } catch (e) {}
+      }
       defaultWaTemplate = text;
 
       db.collection('events').doc(EVENT_ID).set({
+        slug: eventSlug,
         baseUrl: baseInvitationUrl,
         waTemplate: text
       }, { merge: true })
       .then(() => {
         const openInvBtn = document.getElementById('btn-open-invitation');
         if (openInvBtn) openInvBtn.href = getInvitationLink('Tamu Undangan');
-        showAdminAlert("Berhasil", "Pengaturan link & template WhatsApp berhasil disimpan!");
+        showAdminAlert("Berhasil", "Pengaturan shortlink & template WhatsApp berhasil disimpan!");
         closeTextTemplateModal();
         renderGuestList();
       })
@@ -1354,7 +1401,7 @@
     function copyWaText(name) {
       const message = formatWaMessage(name);
       copyToClipboard(message);
-      showAdminAlert("Teks Disalin", "Teks pengantar beserta link undangan berhasil disalin!");
+      showAdminAlert("Teks Disalin", "Teks pengantar beserta shortlink undangan berhasil disalin!");
     }
 
     function copyToClipboard(text) {
