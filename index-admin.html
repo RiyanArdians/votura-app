@@ -295,6 +295,12 @@
       pointer-events: none;
     }
 
+    .client-body-wrap.is-locked .img-upload-row button,
+    .client-body-wrap.is-locked .client-frame-sublist button {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
     .theme-config-box {
       background: #FFFFFF;
       border: 1px solid rgba(140, 115, 85, 0.28);
@@ -1060,7 +1066,7 @@
         const img = new Image();
         img.onload = function() {
           const canvas = document.createElement('canvas');
-          const maxDim = customMaxDim || (keepTransparency ? 600 : 580);
+          const maxDim = customMaxDim || (keepTransparency ? 580 : 560);
           let width = img.width;
           let height = img.height;
 
@@ -1082,21 +1088,21 @@
 
           let dataUrl;
           if (keepTransparency) {
-            dataUrl = canvas.toDataURL('image/webp', 0.78);
+            dataUrl = canvas.toDataURL('image/webp', 0.76);
             if (!dataUrl.startsWith('data:image/webp')) dataUrl = canvas.toDataURL('image/png');
           } else {
-            dataUrl = canvas.toDataURL('image/webp', 0.72);
-            if (!dataUrl.startsWith('data:image/webp')) dataUrl = canvas.toDataURL('image/jpeg', 0.72);
+            dataUrl = canvas.toDataURL('image/webp', 0.70);
+            if (!dataUrl.startsWith('data:image/webp')) dataUrl = canvas.toDataURL('image/jpeg', 0.70);
           }
 
           const approxBytes = Math.round((dataUrl.length * 3) / 4);
-          if (approxBytes > 90 * 1024) {
-            const ratio = 420 / Math.max(width, height);
+          if (approxBytes > 65 * 1024) {
+            const ratio = 400 / Math.max(width, height);
             canvas.width = Math.round(width * ratio);
             canvas.height = Math.round(height * ratio);
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            dataUrl = keepTransparency ? canvas.toDataURL('image/webp', 0.70) : canvas.toDataURL('image/jpeg', 0.65);
+            dataUrl = keepTransparency ? canvas.toDataURL('image/webp', 0.68) : canvas.toDataURL('image/jpeg', 0.64);
           }
 
           if (onSuccess) onSuccess(dataUrl);
@@ -1719,10 +1725,10 @@
                   <div class="img-upload-row" style="padding:10px 12px;">
                     <img src="${escapeHtml(currentUrl || placeholderPng)}" id="sa-asset-prev-${ev.id}-${s.key}" class="${s.isPng ? 'img-preview-ornament' : 'img-preview'}" style="width:56px; height:56px;" alt="${s.key}">
                     <div class="upload-controls">
-                      <input type="file" id="sa-asset-file-${ev.id}-${s.key}" accept="image/*" style="display:none;" onchange="handleCompressedImage(this, ${s.isPng}, (dataUrl) => { setClientNestedCache('${ev.id}', 'customAssets', '${s.key}', dataUrl); document.getElementById('sa-asset-prev-${ev.id}-${s.key}').src = dataUrl; }, 680)">
+                      <input type="file" id="sa-asset-file-${ev.id}-${s.key}" accept="image/*" style="display:none;" onchange="handleCompressedImage(this, ${s.isPng}, (dataUrl) => { setClientNestedCache('${ev.id}', 'customAssets', '${s.key}', dataUrl); document.getElementById('sa-asset-prev-${ev.id}-${s.key}').src = dataUrl; document.getElementById('sa-asset-reset-${ev.id}-${s.key}').style.display = 'inline-flex'; }, 580)">
                       <div style="display:flex; gap:6px; flex-wrap:wrap;">
                         <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('sa-asset-file-${ev.id}-${s.key}').click()">Unggah ${s.isPng ? 'PNG' : 'Gambar'}</button>
-                        ${currentUrl ? `<button type="button" class="btn btn-danger" style="padding:5px 10px;" onclick="setClientNestedCache('${ev.id}', 'customAssets', '${s.key}', ''); document.getElementById('sa-asset-prev-${ev.id}-${s.key}').src='${placeholderPng}';">Reset</button>` : ''}
+                        <button type="button" id="sa-asset-reset-${ev.id}-${s.key}" class="btn btn-danger" style="padding:5px 10px; display:${currentUrl ? 'inline-flex' : 'none'};" onclick="setClientNestedCache('${ev.id}', 'customAssets', '${s.key}', ''); document.getElementById('sa-asset-prev-${ev.id}-${s.key}').src='${placeholderPng}'; this.style.display='none';">Reset</button>
                       </div>
                       <div class="upload-hint">${s.hint}</div>
                     </div>
