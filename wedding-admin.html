@@ -3,157 +3,760 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Client — Votura Wedding</title>
+  <title>Admin Klien Undangan — Votura Studio</title>
   <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/RiyanArdians/votura-app/main/assets/votura-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #fafaf9;
-      --card-bg: #ffffff;
-      --text: #1a1a1a;
-      --accent: #e11d48;
-      --border: 2px solid #1a1a1a;
-      --shadow: 4px 4px 0px #1a1a1a;
+      --bg-base: #EFECE6;
+      --surface: #F8F6F2;
+      --card: #FFFFFF;
+      --ink: #23211E;
+      --ink-muted: #68635C;
+      --accent: #8C7355;
+      --dark: #262421;
+      --danger: #B91C1C;
+      --success: #15803D;
+      --border: rgba(35, 33, 30, 0.12);
+      --radius-lg: 20px;
+      --radius-pill: 999px;
+      --transition: cubic-bezier(0.22, 1, 0.36, 1);
     }
 
-    * { box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
-    body { background-color: var(--bg); color: var(--text); padding: 20px; margin: 0; line-height: 1.5; }
-    .container { max-width: 700px; margin: 0 auto; }
-    
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    html, body {
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--ink);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      line-height: 1.5;
+      padding: 18px 14px 48px 14px;
+    }
+
+    .container {
+      max-width: 820px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .hidden { display: none !important; }
+
+    /* HEADER */
     header {
-      background: #fda4af;
-      border: var(--border);
-      box-shadow: var(--shadow);
-      padding: 20px;
-      margin-bottom: 24px;
-    }
-    header h1 { font-family: 'Cormorant Garamond', serif; margin: 0; font-size: 24px; text-transform: uppercase; }
-    header p { margin: 5px 0 0 0; font-size: 13px; font-weight: bold; }
-
-    .card {
-      background: var(--card-bg);
-      border: var(--border);
-      box-shadow: var(--shadow);
-      padding: 20px;
-      margin-bottom: 24px;
+      background: var(--surface);
+      border: 1px solid #FFFFFF;
+      border-radius: 24px;
+      padding: 20px 22px;
+      margin-bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      box-shadow: 0 12px 32px rgba(35, 33, 30, 0.05);
     }
 
-    .card h3 { font-family: 'Cormorant Garamond', serif; font-size: 20px; margin-top: 0; margin-bottom: 16px; }
-
-    .form-group { margin-bottom: 15px; text-align: left; }
-    label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 13px; color: #4b5563; }
-    input, textarea {
-      width: 100%;
-      padding: 10px;
-      border: var(--border);
-      font-size: 14px;
-      outline: none;
-      background: #fafafa;
-      border-radius: 8px;
+    header h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      line-height: 1.15;
+      color: var(--ink);
     }
 
-    input:focus, textarea:focus { background: #fff; border-color: var(--accent); }
+    .header-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+    }
 
-    button {
-      background: var(--accent);
-      color: white;
-      font-weight: bold;
-      border: var(--border);
-      box-shadow: var(--shadow);
-      padding: 12px 20px;
-      cursor: pointer;
+    .badge-pill {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 10.5px;
+      font-weight: 700;
+      background: #EFECE6;
+      color: var(--ink);
       text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .badge-active { background: #DCFCE7; color: var(--success); }
+
+    header p {
+      font-size: 12.5px;
+      color: var(--ink-muted);
+    }
+
+    .header-actions {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    /* NAVIGASI TAB CARD RINGKAS */
+    .mode-switcher {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      background: var(--surface);
+      padding: 8px;
+      border-radius: 20px;
+      border: 1px solid #FFFFFF;
+      margin-bottom: 18px;
+      box-shadow: 0 8px 24px rgba(35, 33, 30, 0.04);
+    }
+
+    .mode-tab {
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 14px;
+      padding: 12px 14px;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.25s var(--transition);
+      color: var(--ink-muted);
+      min-width: 0;
+    }
+
+    .mode-tab:hover {
+      background: rgba(255, 255, 255, 0.65);
+      color: var(--ink);
+    }
+
+    .mode-tab.active {
+      background: var(--dark);
+      color: #FFFFFF;
+      box-shadow: 0 8px 20px rgba(38, 36, 33, 0.18);
+    }
+
+    .mode-tab-badge {
+      display: block;
+      font-size: 9.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      opacity: 0.75;
+      margin-bottom: 2px;
+    }
+
+    .mode-tab-title {
+      display: block;
+      font-size: 13.5px;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; animation: fadePane 0.22s ease; }
+
+    @keyframes fadePane {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* CARD & FORM */
+    .section-card {
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      margin-bottom: 16px;
+      border: 1px solid rgba(35, 33, 30, 0.06);
+      box-shadow: 0 8px 24px rgba(35, 33, 30, 0.03);
+    }
+
+    .section-title {
+      font-size: 15.5px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .section-sub {
+      font-size: 12.5px;
+      color: var(--ink-muted);
+      margin-bottom: 16px;
+    }
+
+    .form-group { margin-bottom: 12px; min-width: 0; }
+    label {
+      display: block;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--ink-muted);
+      margin-bottom: 5px;
+    }
+
+    input[type="text"], input[type="url"], select, textarea {
       width: 100%;
-      border-radius: 8px;
-      transition: transform 0.1s, box-shadow 0.1s;
-    }
-    button:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px #1a1a1a; }
-
-    table { width: 100%; border-collapse: collapse; margin-top: 15px; }
-    th, td { border: var(--border); padding: 10px; text-align: left; font-size: 13px; }
-    th { background: #ffe4e6; }
-
-    /* MODAL POPUP */
-    .modal-overlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center;
-      z-index: 999;
-    }
-    .modal-box {
-      background: white; border: 3px solid #1a1a1a; box-shadow: 6px 6px 0px #1a1a1a;
-      width: 90%; max-width: 350px; padding: 20px; text-align: center;
+      max-width: 100%;
+      padding: 10px 13px;
       border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      font-family: inherit;
+      font-size: 13px;
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--accent);
+      background: #FFFFFF;
+    }
+
+    /* BUTTONS */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 10px 16px;
+      border-radius: var(--radius-pill);
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      text-decoration: none;
+      border: none;
+      transition: all 0.2s var(--transition);
+      max-width: 100%;
+    }
+
+    .btn:active { transform: scale(0.97); }
+    .btn-dark { background: var(--dark); color: #FFFFFF; }
+    .btn-dark:hover { box-shadow: 0 6px 16px rgba(38, 36, 33, 0.18); }
+    .btn-accent { background: var(--accent); color: #FFFFFF; }
+    .btn-accent:hover { opacity: 0.92; }
+    .btn-outline { background: #FFFFFF; color: var(--ink); border: 1px solid var(--border); }
+    .btn-outline:hover { background: var(--bg-base); }
+    .btn-danger { background: #FEE2E2; color: var(--danger); }
+    .btn-danger:hover { background: #FECACA; }
+    .btn-sm { padding: 7px 13px; font-size: 11.5px; }
+
+    /* TOOLS GRID TAMU UNDANGAN */
+    .guest-tools-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .search-box-wrapper {
+      margin-bottom: 12px;
+    }
+
+    .search-box-wrapper input {
+      border-radius: var(--radius-pill);
+      padding: 10px 16px;
+      background: var(--surface);
+    }
+
+    .view-toggle-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4px;
+      background: var(--surface);
+      padding: 4px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border);
+      margin-bottom: 14px;
+    }
+
+    .btn-view-mode {
+      padding: 7px 10px;
+      border: none;
+      border-radius: var(--radius-pill);
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--ink-muted);
+      background: transparent;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .btn-view-mode.active {
+      background: var(--dark);
+      color: #FFFFFF;
+    }
+
+    /* KARTU TAMU & TABEL TAMU */
+    .guest-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px;
+      margin-bottom: 10px;
+      transition: border-color 0.2s ease;
+    }
+
+    .guest-card:hover { border-color: var(--accent); }
+
+    .guest-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 10px;
+      gap: 8px;
+    }
+
+    .guest-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .guest-phone {
+      font-size: 11.5px;
+      color: var(--ink-muted);
+      margin-top: 2px;
+    }
+
+    .guest-actions-row {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+    }
+
+    .btn-action-icon {
+      padding: 6px 11px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border);
+      background: #FFFFFF;
+      color: var(--ink);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 700;
+      transition: transform 0.15s ease, background 0.2s ease;
+    }
+
+    .btn-action-icon:active { transform: scale(0.95); }
+    .btn-act-wa { background: #DCFCE7; border-color: #86EFAC; color: var(--success); }
+    .btn-act-share { background: #F5EFE6; border-color: rgba(140, 115, 85, 0.4); color: var(--accent); }
+    .btn-act-del { background: #FEE2E2; border-color: #FECACA; color: var(--danger); }
+
+    .table-wrap {
+      width: 100%;
+      overflow-x: auto;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+    }
+
+    .guest-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12.5px;
+      text-align: left;
+    }
+
+    .guest-table th, .guest-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .guest-table th {
+      background: var(--surface);
+      color: var(--ink-muted);
+      font-weight: 700;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .guest-table tr:last-child td { border-bottom: none; }
+
+    /* STATS RSVP */
+    .rsvp-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .stat-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .stat-box-val {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.1;
+    }
+
+    .stat-box-lbl {
+      font-size: 11px;
+      color: var(--ink-muted);
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    /* MODAL GLASS Votura Admin */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(35, 33, 30, 0.48);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 9999;
+    }
+
+    .modal-card {
+      background: var(--surface);
+      border: 1px solid #FFFFFF;
+      border-radius: 22px;
+      padding: 24px 20px 20px;
+      max-width: 420px;
+      width: 100%;
+      position: relative;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.18);
+      max-height: 90vh;
+      overflow-y: auto;
+      color: var(--ink);
+    }
+
+    .modal-close-btn {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      background: #FFFFFF;
+      color: var(--ink);
+      border: 1px solid var(--border);
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      font-weight: 700;
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .modal-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 23px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 4px;
+      text-align: center;
+    }
+
+    /* CUSTOM DIALOG ALERT & CONFIRM */
+    .admin-dialog-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(35, 33, 30, 0.5);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      z-index: 999999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.2s ease;
+    }
+
+    .admin-dialog-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .admin-dialog-card {
+      background: var(--surface);
+      border: 1px solid #FFFFFF;
+      border-radius: 22px;
+      padding: 24px 20px;
+      max-width: 360px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.2);
+      transform: scale(0.94);
+      transition: transform 0.2s var(--transition);
+    }
+
+    .admin-dialog-overlay.active .admin-dialog-card {
+      transform: scale(1);
+    }
+
+    .admin-dialog-title {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+
+    .admin-dialog-msg {
+      font-size: 13px;
+      color: var(--ink-muted);
+      margin-bottom: 18px;
+      line-height: 1.45;
+      white-space: pre-line;
+    }
+
+    .admin-dialog-actions {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+    }
+
+    .app-official-footer {
+      text-align: center;
+      padding: 14px 10px 2px;
+      font-size: 11.5px;
+      color: var(--ink-muted);
+      margin-top: 8px;
+    }
+
+    @media (max-width: 680px) {
+      body { padding: 12px 10px 36px 10px; }
+      header { padding: 16px; border-radius: 18px; }
+      header h1 { font-size: 22px; }
+      .header-actions { width: 100%; }
+      .header-actions .btn { flex: 1; }
+      .section-card { padding: 15px; border-radius: 16px; }
+      .guest-tools-grid { grid-template-columns: repeat(2, 1fr); }
+      .guest-actions-row .btn-action-icon { flex: 1 1 calc(33.33% - 6px); }
     }
   </style>
 </head>
 <body>
 
   <div class="container">
+    <!-- HEADER -->
     <header>
-      <h1>Pengaturan Undangan Digital</h1>
-      <p id="event-id-display">EVENT ID: Memuat...</p>
+      <div>
+        <h1 id="client-couple-heading">Admin Tamu &amp; RSVP Undangan</h1>
+        <div class="header-meta">
+          <span class="badge-pill" id="event-id-badge">ID: MEMUAT...</span>
+          <span class="badge-pill badge-active" id="event-date-badge">Votura Studio</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <a href="#" id="btn-open-invitation" target="_blank" class="btn btn-outline btn-sm">Lihat Undangan</a>
+        <button type="button" class="btn btn-dark btn-sm" onclick="openTextTemplateModal()">Atur Link &amp; Teks WA</button>
+      </div>
     </header>
 
-    <!-- FORM EDIT INFORMASI NIKAH -->
-    <div class="card">
-      <h3>Edit Informasi Acara</h3>
-      <form id="wedding-admin-form">
-        <div class="form-group">
-          <label for="couple-name">Nama Pasangan Pengantin:</label>
-          <input type="text" id="couple-name" placeholder="contoh: Amelia & Riyan" required>
-        </div>
-
-        <div class="form-group">
-          <label for="wedding-date">Tanggal & Waktu Acara:</label>
-          <input type="text" id="wedding-date" placeholder="contoh: Sabtu, 12 Desember 2026" required>
-        </div>
-
-        <div class="form-group">
-          <label for="wedding-location">Lokasi Acara (Nama Tempat/Gedung):</label>
-          <textarea id="wedding-location" rows="2" placeholder="contoh: Warung D'Empang, Balaraja, Tangerang" required></textarea>
-        </div>
-
-        <div class="form-group">
-          <label for="maps-url">Link Google Maps (URL):</label>
-          <input type="url" id="maps-url" placeholder="https://maps.google.com/...">
-        </div>
-
-        <button type="submit" id="save-btn">Simpan Data Undangan 💾</button>
-      </form>
+    <!-- NAVIGASI TAB CARD RINGKAS -->
+    <div class="mode-switcher" role="tablist">
+      <button type="button" class="mode-tab active" onclick="switchClientTab('tab-guests', this)">
+        <span class="mode-tab-badge">Sebar Undangan</span>
+        <span class="mode-tab-title">Tamu Undangan (<span id="tab-guest-count">0</span>)</span>
+      </button>
+      <button type="button" class="mode-tab" onclick="switchClientTab('tab-rsvp', this)">
+        <span class="mode-tab-badge">Kehadiran &amp; Doa</span>
+        <span class="mode-tab-title">Konfirmasi RSVP (<span id="tab-rsvp-count">0</span>)</span>
+      </button>
     </div>
 
-    <!-- REKAP DATA RSVP TAMU -->
-    <div class="card">
-      <h3>Daftar Konfirmasi Tamu (RSVP)</h3>
-      <table>
-        <thead>
-          <tr>
-            <th>Nama Tamu</th>
-            <th>Kehadiran</th>
-            <th>Ucapan & Doa</th>
-          </tr>
-        </thead>
-        <tbody id="rsvp-table-body">
-          <tr>
-            <td colspan="3" style="text-align: center;">Memuat rekap RSVP...</td>
-          </tr>
-        </tbody>
-      </table>
+    <!-- TAB 1: KELOLA TAMU UNDANGAN -->
+    <div id="tab-guests" class="tab-panel active">
+      <div class="section-card">
+        <div class="section-title">
+          <span id="guest-count-label">Bagikan Undangan (0 Tamu)</span>
+        </div>
+        <div class="section-sub">
+          Tambahkan nama tamu &amp; nomor WhatsApp untuk membuat link undangan khusus per nama tamu secara otomatis.
+        </div>
+
+        <!-- TOMBOL FITUR TAMU -->
+        <div class="guest-tools-grid">
+          <button type="button" class="btn btn-dark btn-sm" onclick="openAddGuestModal()">+ Tambah Tamu</button>
+          <button type="button" class="btn btn-outline btn-sm" onclick="openImportTutorialModal()">Panduan &amp; Import</button>
+          <button type="button" class="btn btn-accent btn-sm" onclick="openTextTemplateModal()">Teks &amp; Link</button>
+          <button type="button" class="btn btn-danger btn-sm" onclick="deleteAllGuests()">Hapus Semua</button>
+        </div>
+        <input type="file" id="csv-file-input" accept=".csv,text/csv" style="display: none;" onchange="handleImportCSV(this)">
+
+        <!-- SEARCH BAR -->
+        <div class="search-box-wrapper">
+          <input type="text" id="search-guest-input" placeholder="Cari nama tamu atau nomor WhatsApp..." oninput="renderGuestList()">
+        </div>
+
+        <!-- TOGGLE TAMPILAN TABEL / KARTU -->
+        <div class="view-toggle-row">
+          <button type="button" class="btn-view-mode" id="btn-view-table" onclick="setGuestViewMode('table')">Tampilan Tabel</button>
+          <button type="button" class="btn-view-mode active" id="btn-view-card" onclick="setGuestViewMode('card')">Tampilan Kartu</button>
+        </div>
+
+        <!-- CONTAINER DAFTAR TAMU -->
+        <div id="guest-list-container">
+          <p style="font-size: 13px; color: var(--ink-muted); text-align: center; padding: 16px 0;">Memuat daftar tamu...</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- TAB 2: DAFTAR KONFIRMASI TAMU (RSVP) -->
+    <div id="tab-rsvp" class="tab-panel">
+      <div class="section-card">
+        <div class="section-title">Daftar Konfirmasi Tamu (RSVP)</div>
+        <div class="section-sub">Pantau konfirmasi kehadiran serta doa restu yang dikirim tamu melalui halaman undangan.</div>
+
+        <div class="rsvp-stats-grid">
+          <div class="stat-box">
+            <div class="stat-box-val" id="rsvp-stat-total">0</div>
+            <div class="stat-box-lbl">Total Ucapan</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-box-val" style="color: var(--success);" id="rsvp-stat-hadir">0</div>
+            <div class="stat-box-lbl">Konfirmasi Hadir</div>
+          </div>
+          <div class="stat-box">
+            <div class="stat-box-val" style="color: var(--danger);" id="rsvp-stat-tidak">0</div>
+            <div class="stat-box-lbl">Berhalangan</div>
+          </div>
+        </div>
+
+        <div id="rsvp-list-container">
+          <p style="font-size: 13px; color: var(--ink-muted); text-align: center; padding: 16px 0;">Belum ada tamu yang mengisi RSVP.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="app-official-footer">
+      © 2026 Votura Studio. Client Invitation Manager.
     </div>
   </div>
 
-  <!-- CUSTOM MODAL -->
-  <div class="modal-overlay" id="custom-modal">
-    <div class="modal-box">
-      <h3 id="modal-title" style="font-family: 'Cormorant Garamond', serif; margin-top:0;">Notifikasi</h3>
-      <p id="modal-message" style="font-size: 13.5px; color: #4b5563;">Pesan...</p>
-      <button onclick="closeModal()" style="padding: 8px 16px; font-size: 12px; width: auto;">Tutup</button>
+  <!-- MODAL TAMBAH / EDIT TAMU -->
+  <div id="guest-modal" class="modal-overlay hidden" onclick="if(event.target.id==='guest-modal') closeGuestModal()">
+    <div class="modal-card">
+      <button type="button" class="modal-close-btn" onclick="closeGuestModal()">✕</button>
+      <div class="modal-title" id="guest-modal-title">Tambah Tamu Baru</div>
+      <p style="font-size: 12px; color: var(--ink-muted); text-align: center; margin-bottom: 14px;">
+        Nama tamu akan otomatis muncul di sampul undangan.
+      </p>
+      <div class="form-group">
+        <label>Nama Tamu / Pasangan</label>
+        <input type="text" id="input-guest-name" placeholder="Misal: Budi & Sarah">
+      </div>
+      <div class="form-group">
+        <label>Nomor WhatsApp (Opsional)</label>
+        <input type="text" id="input-guest-phone" placeholder="081234567890">
+      </div>
+      <button type="button" class="btn btn-dark" style="width: 100%; margin-top: 6px;" onclick="saveGuestData()">Simpan Tamu</button>
     </div>
   </div>
 
-  <!-- FIREBASE SDK -->
+  <!-- MODAL TEKS PENGANTAR WA & BASE LINK TUJUAN -->
+  <div id="text-template-modal" class="modal-overlay hidden" onclick="if(event.target.id==='text-template-modal') closeTextTemplateModal()">
+    <div class="modal-card">
+      <button type="button" class="modal-close-btn" onclick="closeTextTemplateModal()">✕</button>
+      <div class="modal-title">Pengaturan Undangan &amp; Link</div>
+      <p style="font-size: 12px; color: var(--ink-muted); text-align: center; margin-bottom: 14px;">
+        Atur link utama undangan dan format pesan WhatsApp otomatis.
+      </p>
+
+      <div class="form-group">
+        <label>Link Utama Tujuan Undangan</label>
+        <input type="url" id="input-base-url" placeholder="https://riyanardians.github.io/votura-app/templates/wedding-1.html">
+      </div>
+
+      <p style="font-size: 11.5px; color: var(--ink-muted); margin: 8px 0 10px; background: #FFFFFF; padding: 8px 10px; border-radius: 10px; border: 1px solid var(--border);">
+        Gunakan tag <b>{nama}</b> untuk menyisipkan nama tamu &amp; <b>{link}</b> untuk link undangan otomatis.
+      </p>
+
+      <div class="form-group">
+        <label>Teks Pengantar WhatsApp</label>
+        <textarea id="input-text-template" rows="7" style="resize: vertical;"></textarea>
+      </div>
+
+      <button type="button" class="btn btn-dark" style="width: 100%;" onclick="saveTextTemplate()">Simpan Pengaturan</button>
+    </div>
+  </div>
+
+  <!-- MODAL TUTORIAL & PANDUAN IMPORT CSV -->
+  <div id="import-tutorial-modal" class="modal-overlay hidden" onclick="if(event.target.id==='import-tutorial-modal') closeImportTutorialModal()">
+    <div class="modal-card">
+      <button type="button" class="modal-close-btn" onclick="closeImportTutorialModal()">✕</button>
+      <div class="modal-title" style="margin-bottom: 10px;">Panduan Import Tamu (CSV)</div>
+
+      <div style="font-size: 12.5px; color: var(--ink); line-height: 1.5;">
+        <p style="margin-bottom: 10px; color: var(--ink-muted);">Untuk menambahkan puluhan hingga ratusan tamu sekaligus, unggah file berformat <b>.CSV</b>.</p>
+
+        <div style="background: #FFFFFF; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--border); margin-bottom: 10px;">
+          <strong style="font-size: 12px; color: var(--accent);">Aturan Susunan Kolom:</strong>
+          <ul style="padding-left: 18px; margin-top: 4px; font-size: 12px;">
+            <li><b>Kolom A:</b> Nama Tamu / Pasangan (Wajib)</li>
+            <li><b>Kolom B:</b> Nomor WhatsApp (Opsional)</li>
+          </ul>
+        </div>
+
+        <strong style="font-size: 12px;">Contoh Susunan di Excel / Google Sheets:</strong>
+        <div class="table-wrap" style="margin: 6px 0 12px; background: #FFFFFF;">
+          <table class="guest-table" style="font-size: 11.5px;">
+            <thead>
+              <tr>
+                <th>Kolom A (Nama)</th>
+                <th>Kolom B (WhatsApp)</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Budi &amp; Sarah</td>
+                <td>081234567890</td>
+              </tr>
+              <tr>
+                <td>Kiki &amp; Pasangan</td>
+                <td style="color: var(--ink-muted); font-style: italic;">(Kosong)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <strong style="font-size: 12px;">Cara Simpan dari Excel:</strong>
+        <ol style="padding-left: 18px; margin: 4px 0 14px; font-size: 12px; color: var(--ink-muted);">
+          <li>Isi data nama &amp; nomor WhatsApp sesuai kolom.</li>
+          <li>Pilih menu <b>File &gt; Save As / Download</b>.</li>
+          <li>Pilih format <b>CSV (Comma delimited) (*.csv)</b>.</li>
+        </ol>
+
+        <div style="display: flex; gap: 8px; margin-top: 10px;">
+          <button type="button" class="btn btn-outline" style="flex: 1;" onclick="downloadSampleCSV()">Contoh CSV</button>
+          <button type="button" class="btn btn-dark" style="flex: 1.3;" onclick="triggerImportCSV()">Pilih &amp; Import CSV</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CUSTOM DIALOG OVERLAY (ALERT & CONFIRM) -->
+  <div id="admin-dialog" class="admin-dialog-overlay">
+    <div class="admin-dialog-card">
+      <div id="admin-dialog-title" class="admin-dialog-title">Pemberitahuan</div>
+      <div id="admin-dialog-msg" class="admin-dialog-msg">Pesan dialog...</div>
+      <div class="admin-dialog-actions">
+        <button type="button" id="btn-dialog-cancel" class="btn btn-outline hidden" style="flex:1;" onclick="closeAdminDialog(false)">Batal</button>
+        <button type="button" id="btn-dialog-confirm" class="btn btn-dark" style="flex:1;" onclick="closeAdminDialog(true)">Oke</button>
+      </div>
+    </div>
+  </div>
+
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
 
@@ -169,111 +772,611 @@
     const db = firebase.firestore();
 
     const urlParams = new URLSearchParams(window.location.search);
-    const eventId = urlParams.get('event');
+    const EVENT_ID = (urlParams.get('event') || 'w001').trim();
 
-    const form = document.getElementById('wedding-admin-form');
-    const coupleInput = document.getElementById('couple-name');
-    const dateInput = document.getElementById('wedding-date');
-    const locationInput = document.getElementById('wedding-location');
-    const mapsInput = document.getElementById('maps-url');
-    const rsvpTableBody = document.getElementById('rsvp-table-body');
-    const saveBtn = document.getElementById('save-btn');
+    let allGuests = [];
+    let editingGuestId = null;
+    let guestViewMode = 'card';
+    let onDialogCallback = null;
+    let coupleDisplayName = "Riyan & Amelia";
+    let eventTemplateFile = "templates/wedding-1.html";
 
-    function showModal(title, msg) {
-      document.getElementById('modal-title').textContent = title;
-      document.getElementById('modal-message').textContent = msg;
-      document.getElementById('custom-modal').style.display = 'flex';
-    }
-    function closeModal() { document.getElementById('custom-modal').style.display = 'none'; }
+    // DEFAULT LINK UTAMA UNDANGAN & TEMPLATE WA
+    let baseInvitationUrl = "";
+    let defaultWaTemplate = "Kepada Yth. Bapak/Ibu/Saudara/i {nama},\n\nTanpa mengurangi rasa hormat, perkenankan kami mengundang Anda untuk menghadiri acara pernikahan kami.\n\nBerikut link undangan digital kami:\n{link}\n\nMerupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.\n\nTerima kasih,\n{mempelai}";
 
     function escapeHtml(str) {
-      return String(str || "")
-        .replace(/&/g, "&amp;")
-        .replace(/</g, "&lt;")
-        .replace(/>/g, "&gt;")
-        .replace(/"/g, "&quot;");
+      return String(str == null ? '' : str).replace(/[&<>"']/g, ch => ({
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;'
+      }[ch]));
     }
 
-    // 1. Load Data Event dari Firestore
-    function loadEventData() {
-      if (!eventId) {
-        showModal("Error", "ID Event tidak ditemukan di URL!");
-        return;
-      }
-      document.getElementById('event-id-display').textContent = `EVENT ID: ${eventId.toUpperCase()}`;
+    function tsToMillis(ts) {
+      if (!ts) return 0;
+      if (ts.toMillis) return ts.toMillis();
+      if (ts.seconds) return ts.seconds * 1000;
+      const d = new Date(ts).getTime();
+      return isNaN(d) ? 0 : d;
+    }
 
-      db.collection("events").doc(eventId).get().then((doc) => {
-        if (doc.exists) {
-          const data = doc.data();
-          coupleInput.value = data.coupleName || data.name || "";
-          dateInput.value = data.weddingDate || data.eventDate || "";
-          locationInput.value = data.weddingLocation || data.venue || "";
-          mapsInput.value = data.mapsUrl || "";
-        } else {
-          showModal("Error", "Event tidak ditemukan di database!");
+    function getDefaultEventBaseUrl() {
+      const currentDir = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
+      return `${currentDir}${eventTemplateFile}`;
+    }
+
+    function getInvitationLink(guestName) {
+      let cleanBase = (baseInvitationUrl || getDefaultEventBaseUrl()).trim();
+      try {
+        const u = new URL(cleanBase);
+        if (cleanBase.includes('templates/')) {
+          u.searchParams.set('event', EVENT_ID);
         }
-      }).catch((err) => {
-        showModal("Gagal Memuat", err.message);
-      });
-
-      loadRSVPData();
+        if (guestName) {
+          u.searchParams.set('to', guestName);
+        }
+        return u.toString();
+      } catch (e) {
+        const sep = cleanBase.includes('?') ? '&' : '?';
+        const evPart = cleanBase.includes('templates/') && !cleanBase.includes('event=')
+          ? `event=${encodeURIComponent(EVENT_ID)}&`
+          : '';
+        return `${cleanBase}${sep}${evPart}to=${encodeURIComponent(guestName)}`;
+      }
     }
 
-    // 2. Simpan Data ke Firestore
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      saveBtn.disabled = true;
-      saveBtn.textContent = "Menyimpan... ⏳";
+    function switchClientTab(tabId, btnEl) {
+      document.querySelectorAll('.mode-tab').forEach(b => b.classList.remove('active'));
+      if (btnEl) btnEl.classList.add('active');
+
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      const target = document.getElementById(tabId);
+      if (target) target.classList.add('active');
+    }
+
+    /* CUSTOM DIALOG ALERT & CONFIRM */
+    function showAdminAlert(title, message) {
+      document.getElementById('admin-dialog-title').innerText = title;
+      document.getElementById('admin-dialog-msg').innerText = message;
+      document.getElementById('btn-dialog-cancel').classList.add('hidden');
+
+      const confirmBtn = document.getElementById('btn-dialog-confirm');
+      confirmBtn.innerText = "Oke";
+      confirmBtn.className = "btn btn-dark";
+
+      onDialogCallback = null;
+      document.getElementById('admin-dialog').classList.add('active');
+    }
+
+    function showAdminConfirm(title, message, callback, isDanger = false) {
+      document.getElementById('admin-dialog-title').innerText = title;
+      document.getElementById('admin-dialog-msg').innerText = message;
+      document.getElementById('btn-dialog-cancel').classList.remove('hidden');
+
+      const confirmBtn = document.getElementById('btn-dialog-confirm');
+      confirmBtn.innerText = "Ya, Lanjutkan";
+      confirmBtn.className = isDanger ? "btn btn-danger" : "btn btn-dark";
+
+      onDialogCallback = callback;
+      document.getElementById('admin-dialog').classList.add('active');
+    }
+
+    function closeAdminDialog(result) {
+      document.getElementById('admin-dialog').classList.remove('active');
+      if (onDialogCallback) {
+        const cb = onDialogCallback;
+        onDialogCallback = null;
+        cb(result);
+      }
+    }
+
+    function triggerDownload(href, fileName) {
+      const a = document.createElement('a');
+      a.href = href;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+    }
+
+    /* INISIALISASI EVENT & FIRESTORE PER CLIENT */
+    async function initClientAdmin() {
+      document.getElementById('event-id-badge').textContent = `EVENT ID: ${EVENT_ID}`;
+      const eventRef = db.collection('events').doc(EVENT_ID);
 
       try {
-        await db.collection("events").doc(eventId).update({
-          coupleName: coupleInput.value,
-          name: coupleInput.value,
-          weddingDate: dateInput.value,
-          eventDate: dateInput.value,
-          weddingLocation: locationInput.value,
-          venue: locationInput.value,
-          mapsUrl: mapsInput.value,
-          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-        });
+        const docSnap = await eventRef.get();
+        if (docSnap.exists) {
+          const data = docSnap.data();
+          coupleDisplayName = data.name || data.coupleName || "Riyan & Amelia";
+          eventTemplateFile = data.templateFile || "templates/wedding-1.html";
 
-        showModal("Sukses", "Informasi pernikahan berhasil diperbarui!");
-      } catch (err) {
-        showModal("Gagal", "Error: " + err.message);
-      } finally {
-        saveBtn.disabled = false;
-        saveBtn.textContent = "Simpan Data Undangan 💾";
-      }
-    });
-
-    // 3. Load Rekap RSVP Tamu Real-time
-    function loadRSVPData() {
-      db.collection("events").doc(eventId).collection("rsvps")
-        .orderBy("createdAt", "desc")
-        .onSnapshot((snapshot) => {
-          rsvpTableBody.innerHTML = "";
-
-          if (snapshot.empty) {
-            rsvpTableBody.innerHTML = `<tr><td colspan="3" style="text-align: center;">Belum ada tamu yang mengisi RSVP.</td></tr>`;
-            return;
+          document.getElementById('client-couple-heading').textContent = `Undangan ${coupleDisplayName}`;
+          if (data.eventDate) {
+            document.getElementById('event-date-badge').textContent = data.eventDate;
           }
 
-          snapshot.forEach((doc) => {
-            const data = doc.data();
-            const tr = document.createElement('tr');
-            tr.innerHTML = `
-              <td><strong>${escapeHtml(data.name || 'Tamu')}</strong></td>
-              <td>${escapeHtml(data.status || data.attendance || '-')}</td>
-              <td>${escapeHtml(data.message || data.ucapan || '-')}</td>
-            `;
-            rsvpTableBody.appendChild(tr);
-          });
-        }, (error) => {
-          rsvpTableBody.innerHTML = `<tr><td colspan="3" style="text-align: center; color: #b91c1c;">Gagal memuat RSVP: ${escapeHtml(error.message)}</td></tr>`;
+          if (data.waTemplate) {
+            defaultWaTemplate = data.waTemplate;
+          } else {
+            defaultWaTemplate = defaultWaTemplate.replace('{mempelai}', coupleDisplayName);
+          }
+
+          baseInvitationUrl = data.baseUrl || getDefaultEventBaseUrl();
+        } else {
+          defaultWaTemplate = defaultWaTemplate.replace('{mempelai}', coupleDisplayName);
+          baseInvitationUrl = getDefaultEventBaseUrl();
+        }
+      } catch (err) {
+        console.warn('Gagal memuat detail event:', err);
+        defaultWaTemplate = defaultWaTemplate.replace('{mempelai}', coupleDisplayName);
+        baseInvitationUrl = getDefaultEventBaseUrl();
+      }
+
+      const openInvBtn = document.getElementById('btn-open-invitation');
+      if (openInvBtn) {
+        openInvBtn.href = getInvitationLink('Tamu Undangan');
+      }
+
+      // REAL-TIME LISTENER DAFTAR TAMU KHUSUS EVENT INI
+      eventRef.collection('guests').onSnapshot(snapshot => {
+        allGuests = [];
+        snapshot.forEach(doc => {
+          allGuests.push({ id: doc.id, ...doc.data() });
         });
+        allGuests.sort((a, b) => tsToMillis(a.createdAt) - tsToMillis(b.createdAt));
+
+        document.getElementById('guest-count-label').innerText = `Bagikan Undangan (${allGuests.length} Tamu)`;
+        document.getElementById('tab-guest-count').innerText = allGuests.length;
+        renderGuestList();
+      }, err => {
+        console.warn('Gagal memuat tamu:', err);
+        document.getElementById('guest-list-container').innerHTML = '<p style="font-size: 13px; color: var(--danger); text-align: center;">Gagal memuat daftar tamu. Periksa koneksi internet.</p>';
+      });
+
+      // REAL-TIME LISTENER RSVP & UCAPAN KHUSUS EVENT INI
+      eventRef.collection('rsvps').onSnapshot(snapshot => {
+        const rsvps = [];
+        let hadirCount = 0;
+        let tidakCount = 0;
+
+        snapshot.forEach(doc => {
+          const d = doc.data();
+          rsvps.push({ id: doc.id, ...d });
+          const status = String(d.attendance || d.status || '').toLowerCase();
+          if (status.includes('tidak') || status.includes('berhalangan')) {
+            tidakCount++;
+          } else {
+            hadirCount++;
+          }
+        });
+
+        rsvps.sort((a, b) => tsToMillis(b.createdAt) - tsToMillis(a.createdAt));
+
+        document.getElementById('tab-rsvp-count').innerText = rsvps.length;
+        document.getElementById('rsvp-stat-total').innerText = rsvps.length;
+        document.getElementById('rsvp-stat-hadir').innerText = hadirCount;
+        document.getElementById('rsvp-stat-tidak').innerText = tidakCount;
+
+        renderRsvpList(rsvps);
+      }, err => {
+        console.warn('Gagal memuat RSVP:', err);
+      });
+
+      // DELEGASI TOMBOL AKSI TAMU
+      document.getElementById('guest-list-container').addEventListener('click', e => {
+        const btn = e.target.closest('[data-act]');
+        if (!btn) return;
+        const guest = allGuests.find(g => g.id === btn.dataset.id);
+        if (!guest) return;
+
+        switch (btn.dataset.act) {
+          case 'wa': sendWhatsApp(guest.name, guest.phone); break;
+          case 'share': shareInvitation(guest.name); break;
+          case 'open': window.open(getInvitationLink(guest.name), '_blank'); break;
+          case 'copy': copyWaText(guest.name); break;
+          case 'edit': openEditGuestModal(guest.id); break;
+          case 'del': deleteGuest(guest.id); break;
+        }
+      });
     }
 
-    loadEventData();
+    function setGuestViewMode(mode) {
+      guestViewMode = mode;
+      document.getElementById('btn-view-table').classList.toggle('active', mode === 'table');
+      document.getElementById('btn-view-card').classList.toggle('active', mode === 'card');
+      renderGuestList();
+    }
+
+    function renderGuestList() {
+      const container = document.getElementById('guest-list-container');
+      const query = document.getElementById('search-guest-input').value.toLowerCase().trim();
+
+      const filtered = allGuests.filter(g =>
+        (g.name && g.name.toLowerCase().includes(query)) ||
+        (g.phone && g.phone.includes(query))
+      );
+
+      if (filtered.length === 0) {
+        container.innerHTML = '<p style="font-size: 13px; color: var(--ink-muted); text-align: center; padding: 18px 0;">Belum ada tamu ditemukan.</p>';
+        return;
+      }
+
+      if (guestViewMode === 'card') {
+        let html = '';
+        filtered.forEach((guest, index) => {
+          html += `
+            <div class="guest-card">
+              <div class="guest-card-header">
+                <div>
+                  <div class="guest-name">${index + 1}. ${escapeHtml(guest.name)}</div>
+                  ${guest.phone ? `<div class="guest-phone">WA: ${escapeHtml(guest.phone)}</div>` : '<div class="guest-phone" style="font-style:italic;">Nomor WA belum diisi</div>'}
+                </div>
+              </div>
+              <div class="guest-actions-row">
+                <button type="button" class="btn-action-icon btn-act-wa" data-act="wa" data-id="${guest.id}">Kirim WA</button>
+                <button type="button" class="btn-action-icon btn-act-share" data-act="share" data-id="${guest.id}">Bagikan</button>
+                <button type="button" class="btn-action-icon" data-act="open" data-id="${guest.id}">Buka Link</button>
+                <button type="button" class="btn-action-icon" data-act="copy" data-id="${guest.id}">Salin Teks</button>
+                <button type="button" class="btn-action-icon" data-act="edit" data-id="${guest.id}">Edit</button>
+                <button type="button" class="btn-action-icon btn-act-del" data-act="del" data-id="${guest.id}">Hapus</button>
+              </div>
+            </div>
+          `;
+        });
+        container.innerHTML = html;
+      } else {
+        let html = `
+          <div class="table-wrap">
+            <table class="guest-table">
+              <thead>
+                <tr>
+                  <th style="width: 40px;">No</th>
+                  <th>Nama Tamu</th>
+                  <th style="text-align: right;">Aksi Cepat</th>
+                </tr>
+              </thead>
+              <tbody>
+        `;
+        filtered.forEach((guest, index) => {
+          html += `
+            <tr>
+              <td>${index + 1}</td>
+              <td>
+                <strong>${escapeHtml(guest.name)}</strong>
+                ${guest.phone ? `<br><span style="font-size:11px; color:var(--ink-muted);">${escapeHtml(guest.phone)}</span>` : ''}
+              </td>
+              <td style="text-align: right;">
+                <div style="display:flex; gap:4px; justify-content:flex-end; flex-wrap:wrap;">
+                  <button type="button" class="btn-action-icon btn-act-wa" data-act="wa" data-id="${guest.id}">WA</button>
+                  <button type="button" class="btn-action-icon" data-act="open" data-id="${guest.id}">Link</button>
+                  <button type="button" class="btn-action-icon" data-act="edit" data-id="${guest.id}">Edit</button>
+                  <button type="button" class="btn-action-icon btn-act-del" data-act="del" data-id="${guest.id}">Hapus</button>
+                </div>
+              </td>
+            </tr>
+          `;
+        });
+        html += '</tbody></table></div>';
+        container.innerHTML = html;
+      }
+    }
+
+    function renderRsvpList(rsvps) {
+      const container = document.getElementById('rsvp-list-container');
+      if (!rsvps || rsvps.length === 0) {
+        container.innerHTML = '<p style="font-size: 13px; color: var(--ink-muted); text-align: center; padding: 18px 0;">Belum ada tamu yang mengisi RSVP.</p>';
+        return;
+      }
+
+      let html = `
+        <div class="table-wrap">
+          <table class="guest-table">
+            <thead>
+              <tr>
+                <th>Nama Tamu</th>
+                <th>Kehadiran</th>
+                <th>Ucapan &amp; Doa</th>
+              </tr>
+            </thead>
+            <tbody>
+      `;
+
+      rsvps.forEach(item => {
+        const statusRaw = item.attendance || item.status || 'Hadir';
+        const isNotComing = String(statusRaw).toLowerCase().includes('tidak') || String(statusRaw).toLowerCase().includes('berhalangan');
+        html += `
+          <tr>
+            <td><strong>${escapeHtml(item.name || 'Tamu')}</strong></td>
+            <td>
+              <span class="badge-pill" style="${isNotComing ? 'background:#FEE2E2; color:var(--danger);' : 'background:#DCFCE7; color:var(--success);'}">
+                ${escapeHtml(statusRaw)}
+              </span>
+            </td>
+            <td style="color: var(--ink-muted);">${escapeHtml(item.message || item.wish || '-')}</td>
+          </tr>
+        `;
+      });
+
+      html += '</tbody></table></div>';
+      container.innerHTML = html;
+    }
+
+    /* TAMBAH / EDIT / HAPUS TAMU */
+    function openAddGuestModal() {
+      editingGuestId = null;
+      document.getElementById('guest-modal-title').innerText = 'Tambah Tamu Baru';
+      document.getElementById('input-guest-name').value = '';
+      document.getElementById('input-guest-phone').value = '';
+      document.getElementById('guest-modal').classList.remove('hidden');
+      setTimeout(() => document.getElementById('input-guest-name').focus(), 50);
+    }
+
+    function openEditGuestModal(id) {
+      const guest = allGuests.find(g => g.id === id);
+      if (!guest) return;
+      editingGuestId = id;
+      document.getElementById('guest-modal-title').innerText = 'Edit Data Tamu';
+      document.getElementById('input-guest-name').value = guest.name || '';
+      document.getElementById('input-guest-phone').value = guest.phone || '';
+      document.getElementById('guest-modal').classList.remove('hidden');
+    }
+
+    function closeGuestModal() {
+      document.getElementById('guest-modal').classList.add('hidden');
+    }
+
+    function saveGuestData() {
+      const name = document.getElementById('input-guest-name').value.trim();
+      const phone = document.getElementById('input-guest-phone').value.trim();
+
+      if (!name) {
+        showAdminAlert("Peringatan", "Harap isi nama tamu terlebih dahulu!");
+        return;
+      }
+
+      const guestsCol = db.collection('events').doc(EVENT_ID).collection('guests');
+      const payload = {
+        name: name,
+        phone: phone || "",
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      };
+
+      if (editingGuestId) {
+        guestsCol.doc(editingGuestId).update(payload).then(() => {
+          closeGuestModal();
+          showAdminAlert("Berhasil", "Data tamu telah diperbarui.");
+        }).catch(err => showAdminAlert("Gagal", "Gagal menyimpan: " + err.message));
+      } else {
+        payload.createdAt = firebase.firestore.FieldValue.serverTimestamp();
+        guestsCol.add(payload).then(() => {
+          closeGuestModal();
+          showAdminAlert("Berhasil", "Tamu baru telah ditambahkan.");
+        }).catch(err => showAdminAlert("Gagal", "Gagal menyimpan: " + err.message));
+      }
+    }
+
+    function deleteGuest(id) {
+      showAdminConfirm("Hapus Tamu", "Hapus tamu ini dari daftar undangan?", (confirmed) => {
+        if (confirmed) {
+          db.collection('events').doc(EVENT_ID).collection('guests').doc(id).delete().then(() => {
+            showAdminAlert("Berhasil", "Tamu telah dihapus.");
+          }).catch(err => showAdminAlert("Gagal", "Gagal menghapus: " + err.message));
+        }
+      }, true);
+    }
+
+    function deleteAllGuests() {
+      if (allGuests.length === 0) {
+        showAdminAlert("Info", "Daftar tamu masih kosong.");
+        return;
+      }
+
+      showAdminConfirm("Hapus Semua Tamu", `Apakah Anda yakin ingin menghapus SELURUH (${allGuests.length}) data tamu?`, async (confirmed) => {
+        if (!confirmed) return;
+        try {
+          const guestsCol = db.collection('events').doc(EVENT_ID).collection('guests');
+          const ids = allGuests.map(g => g.id);
+          for (let i = 0; i < ids.length; i += 400) {
+            const batch = db.batch();
+            ids.slice(i, i + 400).forEach(id => batch.delete(guestsCol.doc(id)));
+            await batch.commit();
+          }
+          showAdminAlert("Berhasil", "Semua data tamu berhasil dihapus!");
+        } catch (err) {
+          showAdminAlert("Gagal", "Gagal menghapus: " + err.message);
+        }
+      }, true);
+    }
+
+    /* IMPORT CSV & PANDUAN */
+    function openImportTutorialModal() {
+      document.getElementById('import-tutorial-modal').classList.remove('hidden');
+    }
+
+    function closeImportTutorialModal() {
+      document.getElementById('import-tutorial-modal').classList.add('hidden');
+    }
+
+    function downloadSampleCSV() {
+      const csvContent = "Budi & Sarah,081234567890\n"
+        + "Kiki & Pasangan,085712345678\n"
+        + "Ayu & Dani,\n"
+        + "Raka & Keluarga,081399887766";
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      triggerDownload(url, `contoh_tamu_${EVENT_ID}.csv`);
+      setTimeout(() => URL.revokeObjectURL(url), 2000);
+    }
+
+    function triggerImportCSV() {
+      closeImportTutorialModal();
+      document.getElementById('csv-file-input').click();
+    }
+
+    function parseCsvLine(line) {
+      const out = [];
+      let cur = '';
+      let inQuotes = false;
+      for (let i = 0; i < line.length; i++) {
+        const ch = line[i];
+        if (ch === '"') {
+          if (inQuotes && line[i + 1] === '"') { cur += '"'; i++; }
+          else inQuotes = !inQuotes;
+        } else if ((ch === ',' || ch === ';') && !inQuotes) {
+          out.push(cur);
+          cur = '';
+        } else {
+          cur += ch;
+        }
+      }
+      out.push(cur);
+      return out.map(s => s.trim());
+    }
+
+    function handleImportCSV(input) {
+      const file = input.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = async function(e) {
+        let text = String(e.target.result || '').replace(/^\uFEFF/, '');
+        const lines = text.split(/\r?\n/);
+        const rows = [];
+
+        lines.forEach((line, idx) => {
+          if (!line.trim()) return;
+          const cols = parseCsvLine(line);
+          const name = (cols[0] || '').trim();
+          if (!name) return;
+          if (idx === 0 && /^(nama|name)/i.test(name)) return;
+          rows.push({ name: name, phone: (cols[1] || '').trim() });
+        });
+
+        if (rows.length === 0) {
+          showAdminAlert("Gagal", "Tidak ada data tamu yang terbaca dari file CSV.");
+          input.value = '';
+          return;
+        }
+
+        try {
+          const guestsCol = db.collection('events').doc(EVENT_ID).collection('guests');
+          for (let i = 0; i < rows.length; i += 400) {
+            const batch = db.batch();
+            rows.slice(i, i + 400).forEach(r => {
+              batch.set(guestsCol.doc(), {
+                name: r.name,
+                phone: r.phone,
+                createdAt: firebase.firestore.FieldValue.serverTimestamp()
+              });
+            });
+            await batch.commit();
+          }
+          showAdminAlert("Berhasil", `Berhasil mengimpor ${rows.length} data tamu!`);
+        } catch (err) {
+          showAdminAlert("Gagal", "Gagal mengimpor: " + err.message);
+        }
+        input.value = '';
+      };
+      reader.onerror = () => showAdminAlert("Gagal", "File tidak bisa dibaca.");
+      reader.readAsText(file);
+    }
+
+    /* MODAL TEKS PENGANTAR WA & EDIT BASE LINK */
+    function openTextTemplateModal() {
+      document.getElementById('input-base-url').value = baseInvitationUrl || getDefaultEventBaseUrl();
+      document.getElementById('input-text-template').value = defaultWaTemplate;
+      document.getElementById('text-template-modal').classList.remove('hidden');
+    }
+
+    function closeTextTemplateModal() {
+      document.getElementById('text-template-modal').classList.add('hidden');
+    }
+
+    function saveTextTemplate() {
+      const newBaseUrl = document.getElementById('input-base-url').value.trim();
+      const text = document.getElementById('input-text-template').value;
+
+      if (newBaseUrl) baseInvitationUrl = newBaseUrl;
+      defaultWaTemplate = text;
+
+      db.collection('events').doc(EVENT_ID).set({
+        baseUrl: baseInvitationUrl,
+        waTemplate: text
+      }, { merge: true })
+      .then(() => {
+        const openInvBtn = document.getElementById('btn-open-invitation');
+        if (openInvBtn) openInvBtn.href = getInvitationLink('Tamu Undangan');
+        showAdminAlert("Berhasil", "Pengaturan link & template WhatsApp berhasil disimpan!");
+        closeTextTemplateModal();
+        renderGuestList();
+      })
+      .catch(err => showAdminAlert("Gagal", "Gagal menyimpan pengaturan: " + err.message));
+    }
+
+    function formatWaMessage(guestName) {
+      const link = getInvitationLink(guestName);
+      return defaultWaTemplate
+        .replace(/{nama}/g, guestName)
+        .replace(/{link}/g, link)
+        .replace(/{mempelai}/g, coupleDisplayName);
+    }
+
+    function sendWhatsApp(name, phone) {
+      const message = formatWaMessage(name);
+      let targetPhone = (phone || '').replace(/[^\d]/g, '');
+      if (targetPhone.startsWith('0')) {
+        targetPhone = '62' + targetPhone.substring(1);
+      }
+      const url = targetPhone
+        ? `https://wa.me/${targetPhone}?text=${encodeURIComponent(message)}`
+        : `https://wa.me/?text=${encodeURIComponent(message)}`;
+      window.open(url, '_blank');
+    }
+
+    function shareInvitation(name) {
+      const message = formatWaMessage(name);
+      if (navigator.share) {
+        navigator.share({
+          title: `Wedding Invitation ${coupleDisplayName}`,
+          text: message
+        }).catch(() => {});
+      } else {
+        copyToClipboard(message);
+        showAdminAlert("Teks Disalin", "Teks undangan berhasil disalin ke clipboard!");
+      }
+    }
+
+    function copyWaText(name) {
+      const message = formatWaMessage(name);
+      copyToClipboard(message);
+      showAdminAlert("Teks Disalin", "Teks pengantar beserta link undangan berhasil disalin!");
+    }
+
+    function copyToClipboard(text) {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).catch(() => fallbackCopy(text));
+      } else {
+        fallbackCopy(text);
+      }
+    }
+
+    function fallbackCopy(text) {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch (e) {}
+      document.body.removeChild(ta);
+    }
+
+    initClientAdmin();
   </script>
 </body>
 </html>
