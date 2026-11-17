@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" class="is-locked">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -36,6 +36,26 @@
       min-height: 100vh;
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
+    }
+
+    /* KUNCI SCROLL TOTAL SAAT SAMPUL BELUM DIBUKA */
+    html.is-locked,
+    body.is-locked {
+      overflow: hidden !important;
+      height: 100dvh !important;
+      max-height: 100dvh !important;
+      overscroll-behavior: none !important;
+      touch-action: none !important;
+    }
+
+    .app-shell.is-locked {
+      height: 100dvh !important;
+      max-height: 100dvh !important;
+      overflow: hidden !important;
+    }
+
+    #invitation-content.is-hidden {
+      display: none !important;
     }
 
     /* ANTI-GLITCH PRELOADER */
@@ -110,9 +130,8 @@
        ============================================================ */
     .cover-overlay {
       position: fixed;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
+      inset: 0;
+      margin: 0 auto;
       width: 100%;
       max-width: 430px;
       height: 100dvh;
@@ -124,12 +143,14 @@
       justify-content: space-between;
       padding: 44px 24px 36px 24px;
       overflow: hidden;
+      touch-action: none;
       transition: opacity 0.85s cubic-bezier(0.22, 1, 0.36, 1), visibility 0.85s ease;
     }
     .cover-overlay.opened {
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
+      display: none;
     }
 
     .cover-scenery {
@@ -1348,7 +1369,7 @@
     }
   </style>
 </head>
-<body>
+<body class="is-locked">
 
   <!-- PRELOADER ANTI-GLITCH -->
   <div class="page-loader" id="page-loader">
@@ -1356,7 +1377,7 @@
     <div class="loader-text">Memuat Undangan</div>
   </div>
 
-  <div class="app-shell">
+  <div class="app-shell is-locked" id="app-shell">
 
     <!-- COVER PEMBUKA -->
     <div class="cover-overlay" id="cover-overlay">
@@ -1381,319 +1402,324 @@
       <div class="cover-bottom-art" id="cover-joglo-slot"></div>
     </div>
 
-    <!-- HERO STAGE -->
-    <section class="hero-stage">
-      <div class="hero-trees-bg" id="hero-scenery-bg"></div>
+    <!-- KONTEN UNDANGAN UTAMA (TERSEMBUNYI SEBELUM SAMPUL DIBUKA) -->
+    <div id="invitation-content" class="is-hidden">
 
-      <div class="hero-top-title reveal">
-        <span>The Wedding Celebration</span>
-        <h1 id="hero-couple-names"></h1>
-      </div>
+      <!-- HERO STAGE -->
+      <section class="hero-stage">
+        <div class="hero-trees-bg" id="hero-scenery-bg"></div>
 
-      <div class="hero-arch-showcase reveal-scale">
-        <img id="hero-couple-photo" src="" alt="Mempelai">
-      </div>
-
-      <div class="hero-date-badge reveal" id="hero-date-text"></div>
-      <div class="cover-bottom-art" id="hero-joglo-slot" style="margin-top: 20px;"></div>
-    </section>
-
-    <!-- SECTION 1: AYAT AR-RUM -->
-    <section class="sec-verse dark-textured-bg">
-      <div class="verse-card reveal">
-        <div class="couple-initials" id="couple-initials"></div>
-        <div class="verse-divider"></div>
-        <p class="verse-text" id="verse-quote">
-          “Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.”
-        </p>
-        <div class="verse-ref">QS. Ar-Rum: 21</div>
-      </div>
-    </section>
-
-    <!-- SECTION 2: PROFIL MEMPELAI -->
-    <section class="sec-couple">
-      <div class="reveal">
-        <div class="bismillah">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم</div>
-        <div class="salam-title">Assalamu’alaikum<br>Warahmatullahi Wabarakatuh</div>
-        <p class="salam-desc">
-          Dengan memohon rahmat dan ridho Allah SWT, kami bermaksud mengundang Bapak/Ibu/Saudara/i untuk menghadiri acara pernikahan kami:
-        </p>
-      </div>
-
-      <!-- Mempelai Pria -->
-      <div class="person-block reveal">
-        <div class="arch-frame">
-          <img id="groom-photo" src="" alt="Mempelai Pria">
-        </div>
-        <div class="person-nick" id="groom-nick"></div>
-        <div class="person-fullname" id="groom-fullname"></div>
-        <div class="person-parents" id="groom-parents"></div>
-        <a id="groom-ig-link" href="https://instagram.com" target="_blank" class="btn-ig-pill">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
-          <span id="groom-ig-text">@mempelai</span>
-        </a>
-      </div>
-
-      <div class="amp-divider reveal">&amp;</div>
-
-      <!-- Mempelai Wanita -->
-      <div class="person-block reveal">
-        <div class="arch-frame">
-          <img id="bride-photo" src="" alt="Mempelai Wanita">
-        </div>
-        <div class="person-nick" id="bride-nick"></div>
-        <div class="person-fullname" id="bride-fullname"></div>
-        <div class="person-parents" id="bride-parents"></div>
-        <a id="bride-ig-link" href="https://instagram.com" target="_blank" class="btn-ig-pill">
-          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
-          <span id="bride-ig-text">@mempelai</span>
-        </a>
-      </div>
-    </section>
-
-    <!-- SECTION 3: SAVE THE DATE & COUNTDOWN -->
-    <section class="sec-countdown dark-textured-bg">
-      <div class="reveal">
-        <div class="gunungan-holder" id="gunungan-slot"></div>
-        <h2 class="sec-title-script">Save the Date</h2>
-
-        <div class="countdown-arch reveal-scale">
-          <img id="countdown-photo" src="" alt="Save the Date">
+        <div class="hero-top-title reveal">
+          <span>The Wedding Celebration</span>
+          <h1 id="hero-couple-names"></h1>
         </div>
 
-        <div class="countdown-grid">
-          <div class="cd-box"><strong id="cd-days">00</strong><span>Hari</span></div>
-          <div class="cd-box"><strong id="cd-hours">00</strong><span>Jam</span></div>
-          <div class="cd-box"><strong id="cd-mins">00</strong><span>Menit</span></div>
-          <div class="cd-box"><strong id="cd-secs">00</strong><span>Detik</span></div>
+        <div class="hero-arch-showcase reveal-scale">
+          <img id="hero-couple-photo" src="" alt="Mempelai">
         </div>
 
-        <a id="btn-save-calendar" href="#" target="_blank" class="btn-calendar">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
-          Simpan di Kalender
-        </a>
-      </div>
-    </section>
+        <div class="hero-date-badge reveal" id="hero-date-text"></div>
+        <div class="cover-bottom-art" id="hero-joglo-slot" style="margin-top: 20px;"></div>
+      </section>
 
-    <!-- SECTION 4: RANGKAIAN ACARA & DRESSCODE -->
-    <section class="sec-events dark-textured-bg">
-      <div id="events-cards-container"></div>
-
-      <div class="dresscode-card reveal">
-        <h3 class="sec-title-script dark" style="font-size: 36px; margin-bottom: 8px;">Dresscode</h3>
-        <p class="dresscode-desc" id="dresscode-text">
-          Busana formal atau batik sopan bernuansa hangat.
-        </p>
-        <div class="swatch-row">
-          <span class="swatch-dot" style="background: #5C3A21;"></span>
-          <span class="swatch-dot" style="background: #C8A063;"></span>
-          <span class="swatch-dot" style="background: #E8DCCB;"></span>
+      <!-- SECTION 1: AYAT AR-RUM -->
+      <section class="sec-verse dark-textured-bg">
+        <div class="verse-card reveal">
+          <div class="couple-initials" id="couple-initials"></div>
+          <div class="verse-divider"></div>
+          <p class="verse-text" id="verse-quote">
+            “Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan pasangan-pasangan untukmu dari jenismu sendiri, agar kamu cenderung dan merasa tenteram kepadanya, dan Dia menjadikan di antaramu rasa kasih dan sayang.”
+          </p>
+          <div class="verse-ref">QS. Ar-Rum: 21</div>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- SECTION 5: LIVE STREAMING -->
-    <section class="sec-stream dark-textured-bg">
-      <div class="reveal">
-        <h2 class="sec-title-script">Live Streaming</h2>
-        <p class="stream-sub">
-          Bagi keluarga dan sahabat yang berhalangan hadir, saksikan momen bahagia kami secara langsung melalui:
-        </p>
-        <div class="stream-card">
-          <div class="stream-head">
-            <div style="display:flex; align-items:center; gap:12px;">
-              <div class="yt-badge">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"/></svg>
-              </div>
-              <div>
-                <strong style="display:block; font-size:13px;" id="stream-title">Siaran Langsung Pernikahan</strong>
-                <small style="font-size:11px; opacity:0.75;" id="stream-date"></small>
-              </div>
-            </div>
-            <span class="live-pill"><span class="live-dot"></span> LIVE</span>
+      <!-- SECTION 2: PROFIL MEMPELAI -->
+      <section class="sec-couple">
+        <div class="reveal">
+          <div class="bismillah">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيم</div>
+          <div class="salam-title">Assalamu’alaikum<br>Warahmatullahi Wabarakatuh</div>
+          <p class="salam-desc">
+            Dengan memohon rahmat dan ridho Allah SWT, kami bermaksud mengundang Bapak/Ibu/Saudara/i untuk menghadiri acara pernikahan kami:
+          </p>
+        </div>
+
+        <!-- Mempelai Pria -->
+        <div class="person-block reveal">
+          <div class="arch-frame">
+            <img id="groom-photo" src="" alt="Mempelai Pria">
           </div>
-          <a id="stream-url" href="https://youtube.com" target="_blank" class="btn-gold-block">
-            Tonton Siaran Langsung
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+          <div class="person-nick" id="groom-nick"></div>
+          <div class="person-fullname" id="groom-fullname"></div>
+          <div class="person-parents" id="groom-parents"></div>
+          <a id="groom-ig-link" href="https://instagram.com" target="_blank" class="btn-ig-pill">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+            <span id="groom-ig-text">@mempelai</span>
           </a>
         </div>
-      </div>
-    </section>
 
-    <!-- SECTION 6: KISAH CINTA -->
-    <section class="sec-story">
-      <h2 class="sec-title-script dark reveal" style="text-align:center;">Kisah Cinta</h2>
-      <div class="story-timeline" id="love-story-list"></div>
-    </section>
+        <div class="amp-divider reveal">&amp;</div>
 
-    <!-- SECTION 7: GALERI SLIDER & VIDEO KAMI -->
-    <section class="sec-gallery">
-      <h2 class="sec-title-script dark reveal">Galeri Momen</h2>
+        <!-- Mempelai Wanita -->
+        <div class="person-block reveal">
+          <div class="arch-frame">
+            <img id="bride-photo" src="" alt="Mempelai Wanita">
+          </div>
+          <div class="person-nick" id="bride-nick"></div>
+          <div class="person-fullname" id="bride-fullname"></div>
+          <div class="person-parents" id="bride-parents"></div>
+          <a id="bride-ig-link" href="https://instagram.com" target="_blank" class="btn-ig-pill">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/></svg>
+            <span id="bride-ig-text">@mempelai</span>
+          </a>
+        </div>
+      </section>
 
-      <div class="slider-container reveal" id="gallery-slider-box">
-        <div class="slider-track" id="gallery-slider-track"></div>
-        <button type="button" class="slider-nav-btn slider-prev" onclick="moveSlide(-1)" aria-label="Sebelumnya">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-        </button>
-        <button type="button" class="slider-nav-btn slider-next" onclick="moveSlide(1)" aria-label="Berikutnya">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-        </button>
-      </div>
-      <div class="slider-dots" id="gallery-slider-dots"></div>
+      <!-- SECTION 3: SAVE THE DATE & COUNTDOWN -->
+      <section class="sec-countdown dark-textured-bg">
+        <div class="reveal">
+          <div class="gunungan-holder" id="gunungan-slot"></div>
+          <h2 class="sec-title-script">Save the Date</h2>
 
-      <h2 class="sec-title-script dark reveal">Video Kami</h2>
-      <div class="video-card-box reveal" id="video-wrapper">
-        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?controls=1" title="Prewedding Video" allowfullscreen></iframe>
-      </div>
-    </section>
-
-    <!-- SECTION 8: TANDA KASIH (KARTU ATM LUXURY & KIRIM KADO) -->
-    <section class="sec-gift dark-textured-bg">
-      <div class="reveal">
-        <h2 class="sec-title-script">Tanda Kasih</h2>
-        <p class="gift-sub">
-          Doa restu Anda adalah karunia terindah. Jika ingin memberikan tanda kasih, dapat melalui:
-        </p>
-
-        <div id="gift-cards-container">
-          <!-- BCA -->
-          <div class="atm-card">
-            <div class="atm-top">
-              <span class="bank-brand">BANK BCA</span>
-              <div class="emv-chip"></div>
-            </div>
-            <div class="atm-number">1234 5678 90</div>
-            <div class="atm-bottom">
-              <div class="atm-holder">
-                <small>Nama Pemilik Rekening</small>
-                <strong>MUHAMMAD FADLI</strong>
-              </div>
-              <button type="button" class="btn-copy-gold" onclick="copyText('1234567890', 'Nomor rekening BCA')">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-                Salin
-              </button>
-            </div>
+          <div class="countdown-arch reveal-scale">
+            <img id="countdown-photo" src="" alt="Save the Date">
           </div>
 
-          <!-- MANDIRI -->
-          <div class="atm-card">
-            <div class="atm-top">
-              <span class="bank-brand">BANK MANDIRI</span>
-              <div class="emv-chip"></div>
-            </div>
-            <div class="atm-number">1300 0987 6543</div>
-            <div class="atm-bottom">
-              <div class="atm-holder">
-                <small>Nama Pemilik Rekening</small>
-                <strong>VINA AULIA RAHMA</strong>
-              </div>
-              <button type="button" class="btn-copy-gold" onclick="copyText('130009876543', 'Nomor rekening Mandiri')">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-                Salin
-              </button>
-            </div>
+          <div class="countdown-grid">
+            <div class="cd-box"><strong id="cd-days">00</strong><span>Hari</span></div>
+            <div class="cd-box"><strong id="cd-hours">00</strong><span>Jam</span></div>
+            <div class="cd-box"><strong id="cd-mins">00</strong><span>Menit</span></div>
+            <div class="cd-box"><strong id="cd-secs">00</strong><span>Detik</span></div>
           </div>
 
-          <!-- KIRIM KADO -->
-          <div class="atm-card">
-            <div class="atm-top" style="margin-bottom: 10px;">
-              <span class="bank-brand" style="font-size: 16px;">Pengiriman Kado Fisik</span>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E2C592" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect width="20" height="5" x="2" y="7"/><line x1="12" x2="12" y1="22" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
-            </div>
-            <p style="font-size:12px; font-weight:600; color:#FFFBF5; margin-bottom:4px;" id="gift-recipient">Penerima</p>
-            <p style="font-size:11.5px; line-height:1.6; color:rgba(247,242,235,0.78); margin-bottom:14px;" id="gift-address">
-              Jl. Cempaka Putih No. 8, Kota Bandung, Jawa Barat 40123
-            </p>
-            <div style="text-align:right;">
-              <button type="button" class="btn-copy-gold" onclick="copyText(document.getElementById('gift-address').textContent.trim(), 'Alamat pengiriman kado')">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
-                Salin Alamat
-              </button>
-            </div>
-          </div>
+          <a id="btn-save-calendar" href="#" target="_blank" class="btn-calendar">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="4" rx="2" ry="2"/><line x1="16" x2="16" y1="2" y2="6"/><line x1="8" x2="8" y1="2" y2="6"/><line x1="3" x2="21" y1="10" y2="10"/></svg>
+            Simpan di Kalender
+          </a>
         </div>
-      </div>
-    </section>
+      </section>
 
-    <!-- SECTION 9: DOA & UCAPAN -->
-    <section class="sec-rsvp">
-      <div class="reveal">
-        <h2 class="sec-title-script dark">Doa &amp; Ucapan</h2>
-        <p class="rsvp-sub">Konfirmasi kehadiran dan titipkan doa terbaik Anda.</p>
+      <!-- SECTION 4: RANGKAIAN ACARA & DRESSCODE -->
+      <section class="sec-events dark-textured-bg">
+        <div id="events-cards-container"></div>
 
-        <form class="rsvp-form" id="rsvp-form">
-          <input type="text" class="rsvp-input" id="rsvp-name" placeholder="Nama Tamu" required>
-
-          <div class="status-pills">
-            <button type="button" class="status-pill-btn active" onclick="selectRsvpStatus('Hadir', this)">Hadir</button>
-            <button type="button" class="status-pill-btn" onclick="selectRsvpStatus('Tidak bisa hadir', this)">Tidak hadir</button>
-            <button type="button" class="status-pill-btn" onclick="selectRsvpStatus('Belum pasti', this)">Belum pasti</button>
-          </div>
-
-          <label style="display:block; font-size:11.5px; font-weight:600; margin-bottom:4px; color:var(--ink-muted);">Jumlah kehadiran</label>
-          <select class="rsvp-select" id="rsvp-guests">
-            <option value="1">1 Orang</option>
-            <option value="2">2 Orang</option>
-            <option value="3">3 Orang</option>
-            <option value="4">4 Orang</option>
-          </select>
-
-          <textarea class="rsvp-textarea" id="rsvp-message" rows="3" placeholder="Tulis ucapan dan doa untuk kedua mempelai" required></textarea>
-
-          <button type="submit" class="btn-dark-pill" id="rsvp-submit-btn" style="width:100%; padding:13px;">Kirim Ucapan</button>
-        </form>
-
-        <div class="rsvp-list-header" id="rsvp-count-label">0 Ucapan &amp; Doa</div>
-        <div class="rsvp-feed" id="rsvp-feed-list"></div>
-      </div>
-    </section>
-
-    <!-- SECTION 10: TURUT MENGUNDANG & CLOSING FOOTER -->
-    <section class="sec-closing dark-textured-bg">
-      <div class="reveal">
-        <h2 class="sec-title-script">Turut Mengundang</h2>
-
-        <div class="turut-group">
-          <h4>Keluarga Besar Mempelai Pria</h4>
-          <p id="turut-pria">Kel. Besar Mempelai Pria</p>
-        </div>
-
-        <div class="turut-group">
-          <h4>Keluarga Besar Mempelai Wanita</h4>
-          <p id="turut-wanita">Kel. Besar Mempelai Wanita</p>
-        </div>
-      </div>
-
-      <div class="closing-visual" id="closing-visual-box">
-        <div class="closing-arch-photo reveal-scale">
-          <img id="closing-photo" src="" alt="Closing Couple">
-        </div>
-        <div class="closing-overlay-text reveal">
-          <p>
-            Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.
+        <div class="dresscode-card reveal">
+          <h3 class="sec-title-script dark" style="font-size: 36px; margin-bottom: 8px;">Dresscode</h3>
+          <p class="dresscode-desc" id="dresscode-text">
+            Busana formal atau batik sopan bernuansa hangat.
           </p>
-          <div style="font-size:11.5px; letter-spacing:1px; text-transform:uppercase; color:var(--accent-gold-light); margin-bottom:6px;">Kami yang berbahagia</div>
-          <div class="closing-names" id="closing-couple-names"></div>
+          <div class="swatch-row">
+            <span class="swatch-dot" style="background: #5C3A21;"></span>
+            <span class="swatch-dot" style="background: #C8A063;"></span>
+            <span class="swatch-dot" style="background: #E8DCCB;"></span>
+          </div>
         </div>
-        <div class="cover-bottom-art" id="closing-joglo-slot" style="margin-top: 20px;"></div>
+      </section>
+
+      <!-- SECTION 5: LIVE STREAMING -->
+      <section class="sec-stream dark-textured-bg">
+        <div class="reveal">
+          <h2 class="sec-title-script">Live Streaming</h2>
+          <p class="stream-sub">
+            Bagi keluarga dan sahabat yang berhalangan hadir, saksikan momen bahagia kami secara langsung melalui:
+          </p>
+          <div class="stream-card">
+            <div class="stream-head">
+              <div style="display:flex; align-items:center; gap:12px;">
+                <div class="yt-badge">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="6 3 20 12 6 21 6 3"/></svg>
+                </div>
+                <div>
+                  <strong style="display:block; font-size:13px;" id="stream-title">Siaran Langsung Pernikahan</strong>
+                  <small style="font-size:11px; opacity:0.75;" id="stream-date"></small>
+                </div>
+              </div>
+              <span class="live-pill"><span class="live-dot"></span> LIVE</span>
+            </div>
+            <a id="stream-url" href="https://youtube.com" target="_blank" class="btn-gold-block">
+              Tonton Siaran Langsung
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7"/><path d="M7 7h10v10"/></svg>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 6: KISAH CINTA -->
+      <section class="sec-story">
+        <h2 class="sec-title-script dark reveal" style="text-align:center;">Kisah Cinta</h2>
+        <div class="story-timeline" id="love-story-list"></div>
+      </section>
+
+      <!-- SECTION 7: GALERI SLIDER & VIDEO KAMI -->
+      <section class="sec-gallery">
+        <h2 class="sec-title-script dark reveal">Galeri Momen</h2>
+
+        <div class="slider-container reveal" id="gallery-slider-box">
+          <div class="slider-track" id="gallery-slider-track"></div>
+          <button type="button" class="slider-nav-btn slider-prev" onclick="moveSlide(-1)" aria-label="Sebelumnya">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          </button>
+          <button type="button" class="slider-nav-btn slider-next" onclick="moveSlide(1)" aria-label="Berikutnya">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+          </button>
+        </div>
+        <div class="slider-dots" id="gallery-slider-dots"></div>
+
+        <h2 class="sec-title-script dark reveal">Video Kami</h2>
+        <div class="video-card-box reveal" id="video-wrapper">
+          <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ?controls=1" title="Prewedding Video" allowfullscreen></iframe>
+        </div>
+      </section>
+
+      <!-- SECTION 8: TANDA KASIH (KARTU ATM LUXURY & KIRIM KADO) -->
+      <section class="sec-gift dark-textured-bg">
+        <div class="reveal">
+          <h2 class="sec-title-script">Tanda Kasih</h2>
+          <p class="gift-sub">
+            Doa restu Anda adalah karunia terindah. Jika ingin memberikan tanda kasih, dapat melalui:
+          </p>
+
+          <div id="gift-cards-container">
+            <!-- BCA -->
+            <div class="atm-card">
+              <div class="atm-top">
+                <span class="bank-brand">BANK BCA</span>
+                <div class="emv-chip"></div>
+              </div>
+              <div class="atm-number">1234 5678 90</div>
+              <div class="atm-bottom">
+                <div class="atm-holder">
+                  <small>Nama Pemilik Rekening</small>
+                  <strong>MUHAMMAD FADLI</strong>
+                </div>
+                <button type="button" class="btn-copy-gold" onclick="copyText('1234567890', 'Nomor rekening BCA')">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                  Salin
+                </button>
+              </div>
+            </div>
+
+            <!-- MANDIRI -->
+            <div class="atm-card">
+              <div class="atm-top">
+                <span class="bank-brand">BANK MANDIRI</span>
+                <div class="emv-chip"></div>
+              </div>
+              <div class="atm-number">1300 0987 6543</div>
+              <div class="atm-bottom">
+                <div class="atm-holder">
+                  <small>Nama Pemilik Rekening</small>
+                  <strong>VINA AULIA RAHMA</strong>
+                </div>
+                <button type="button" class="btn-copy-gold" onclick="copyText('130009876543', 'Nomor rekening Mandiri')">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                  Salin
+                </button>
+              </div>
+            </div>
+
+            <!-- KIRIM KADO -->
+            <div class="atm-card">
+              <div class="atm-top" style="margin-bottom: 10px;">
+                <span class="bank-brand" style="font-size: 16px;">Pengiriman Kado Fisik</span>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#E2C592" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 12 20 22 4 22 4 12"/><rect width="20" height="5" x="2" y="7"/><line x1="12" x2="12" y1="22" y2="7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
+              </div>
+              <p style="font-size:12px; font-weight:600; color:#FFFBF5; margin-bottom:4px;" id="gift-recipient">Penerima</p>
+              <p style="font-size:11.5px; line-height:1.6; color:rgba(247,242,235,0.78); margin-bottom:14px;" id="gift-address">
+                Jl. Cempaka Putih No. 8, Kota Bandung, Jawa Barat 40123
+              </p>
+              <div style="text-align:right;">
+                <button type="button" class="btn-copy-gold" onclick="copyText(document.getElementById('gift-address').textContent.trim(), 'Alamat pengiriman kado')">
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                  Salin Alamat
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 9: DOA & UCAPAN -->
+      <section class="sec-rsvp">
+        <div class="reveal">
+          <h2 class="sec-title-script dark">Doa &amp; Ucapan</h2>
+          <p class="rsvp-sub">Konfirmasi kehadiran dan titipkan doa terbaik Anda.</p>
+
+          <form class="rsvp-form" id="rsvp-form">
+            <input type="text" class="rsvp-input" id="rsvp-name" placeholder="Nama Tamu" required>
+
+            <div class="status-pills">
+              <button type="button" class="status-pill-btn active" onclick="selectRsvpStatus('Hadir', this)">Hadir</button>
+              <button type="button" class="status-pill-btn" onclick="selectRsvpStatus('Tidak bisa hadir', this)">Tidak hadir</button>
+              <button type="button" class="status-pill-btn" onclick="selectRsvpStatus('Belum pasti', this)">Belum pasti</button>
+            </div>
+
+            <label style="display:block; font-size:11.5px; font-weight:600; margin-bottom:4px; color:var(--ink-muted);">Jumlah kehadiran</label>
+            <select class="rsvp-select" id="rsvp-guests">
+              <option value="1">1 Orang</option>
+              <option value="2">2 Orang</option>
+              <option value="3">3 Orang</option>
+              <option value="4">4 Orang</option>
+            </select>
+
+            <textarea class="rsvp-textarea" id="rsvp-message" rows="3" placeholder="Tulis ucapan dan doa untuk kedua mempelai" required></textarea>
+
+            <button type="submit" class="btn-dark-pill" id="rsvp-submit-btn" style="width:100%; padding:13px;">Kirim Ucapan</button>
+          </form>
+
+          <div class="rsvp-list-header" id="rsvp-count-label">0 Ucapan &amp; Doa</div>
+          <div class="rsvp-feed" id="rsvp-feed-list"></div>
+        </div>
+      </section>
+
+      <!-- SECTION 10: TURUT MENGUNDANG & CLOSING FOOTER -->
+      <section class="sec-closing dark-textured-bg">
+        <div class="reveal">
+          <h2 class="sec-title-script">Turut Mengundang</h2>
+
+          <div class="turut-group">
+            <h4>Keluarga Besar Mempelai Pria</h4>
+            <p id="turut-pria">Kel. Besar Mempelai Pria</p>
+          </div>
+
+          <div class="turut-group">
+            <h4>Keluarga Besar Mempelai Wanita</h4>
+            <p id="turut-wanita">Kel. Besar Mempelai Wanita</p>
+          </div>
+        </div>
+
+        <div class="closing-visual" id="closing-visual-box">
+          <div class="closing-arch-photo reveal-scale">
+            <img id="closing-photo" src="" alt="Closing Couple">
+          </div>
+          <div class="closing-overlay-text reveal">
+            <p>
+              Merupakan suatu kehormatan dan kebahagiaan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.
+            </p>
+            <div style="font-size:11.5px; letter-spacing:1px; text-transform:uppercase; color:var(--accent-gold-light); margin-bottom:6px;">Kami yang berbahagia</div>
+            <div class="closing-names" id="closing-couple-names"></div>
+          </div>
+          <div class="cover-bottom-art" id="closing-joglo-slot" style="margin-top: 20px;"></div>
+        </div>
+
+        <footer class="footer-brand">
+          <strong style="color:var(--accent-gold-light); font-size:12px; letter-spacing:2px; text-transform:uppercase;">Votura Studio</strong><br>
+          Digital Wedding Invitation
+        </footer>
+      </section>
+
+      <!-- FLOATING CONTROLS -->
+      <div class="floating-controls">
+        <button type="button" class="btn-qr-float" onclick="openQrModal()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="5" height="5" x="3" y="3" rx="1"/><rect width="5" height="5" x="16" y="3" rx="1"/><rect width="5" height="5" x="3" y="16" rx="1"/><path d="M21 16h-3a2 2 0 0 0-2 2v3"/><path d="M21 21v.01"/><path d="M12 7v3a2 2 0 0 1-2 2H7"/><path d="M3 12h.01"/><path d="M12 3h.01"/><path d="M12 16v.01"/><path d="M16 12h1"/><path d="M21 12v.01"/><path d="M12 21v-1"/></svg>
+          QR Tamu
+        </button>
+        <button type="button" class="btn-audio-float" id="audio-toggle-btn" onclick="toggleAudio()" title="Putar / Jeda Musik">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+        </button>
       </div>
 
-      <footer class="footer-brand">
-        <strong style="color:var(--accent-gold-light); font-size:12px; letter-spacing:2px; text-transform:uppercase;">Votura Studio</strong><br>
-        Digital Wedding Invitation
-      </footer>
-    </section>
-
-    <!-- FLOATING CONTROLS -->
-    <div class="floating-controls">
-      <button type="button" class="btn-qr-float" onclick="openQrModal()">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="5" height="5" x="3" y="3" rx="1"/><rect width="5" height="5" x="16" y="3" rx="1"/><rect width="5" height="5" x="3" y="16" rx="1"/><path d="M21 16h-3a2 2 0 0 0-2 2v3"/><path d="M21 21v.01"/><path d="M12 7v3a2 2 0 0 1-2 2H7"/><path d="M3 12h.01"/><path d="M12 3h.01"/><path d="M12 16v.01"/><path d="M16 12h1"/><path d="M21 12v.01"/><path d="M12 21v-1"/></svg>
-        QR Tamu
-      </button>
-      <button type="button" class="btn-audio-float" id="audio-toggle-btn" onclick="toggleAudio()" title="Putar / Jeda Musik">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
-      </button>
-    </div>
+    </div><!-- END #invitation-content -->
 
     <audio id="bg-music" loop preload="none">
       <source id="bg-music-source" src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
@@ -1767,10 +1793,20 @@
     document.getElementById('qr-guest-label').textContent = guestParam;
     document.getElementById('qr-image').src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(eventId + '|' + guestParam)}`;
 
-    // 1. BUKA UNDANGAN + MUSIK
+    // 1. BUKA UNDANGAN + LEPAS KUNCI SCROLL + MUSIK
     function openInvitation() {
       const cover = document.getElementById('cover-overlay');
+      const content = document.getElementById('invitation-content');
+      const shell = document.getElementById('app-shell');
+
       cover.classList.add('opening');
+
+      // Tampilkan konten undangan dan buka kunci scroll
+      if (content) content.classList.remove('is-hidden');
+      document.documentElement.classList.remove('is-locked');
+      document.body.classList.remove('is-locked');
+      if (shell) shell.classList.remove('is-locked');
+      window.scrollTo(0, 0);
 
       const audio = document.getElementById('bg-music');
       const audioBtn = document.getElementById('audio-toggle-btn');
