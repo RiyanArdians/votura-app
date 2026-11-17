@@ -97,6 +97,7 @@
       color: var(--ink);
       text-transform: uppercase;
       letter-spacing: 0.5px;
+      white-space: nowrap;
     }
 
     .badge-active { background: #DCFCE7; color: var(--success); }
@@ -336,6 +337,7 @@
       justify-content: center;
       font-size: 11.5px;
       font-weight: 700;
+      white-space: nowrap;
     }
 
     .btn-action-icon:active { transform: scale(0.95); }
@@ -386,7 +388,7 @@
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 14px;
-      padding: 12px;
+      padding: 12px 8px;
       text-align: center;
     }
 
@@ -403,6 +405,84 @@
       color: var(--ink-muted);
       font-weight: 700;
       margin-top: 3px;
+    }
+
+    /* KARTU RSVP RESPONSIF (ANTI TERPOTONG DI MOBILE) */
+    .rsvp-card-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .rsvp-item-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .rsvp-item-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .rsvp-guest-name {
+      font-size: 14.5px;
+      font-weight: 700;
+      color: var(--ink);
+      word-break: break-word;
+    }
+
+    .rsvp-status-badge {
+      display: inline-block;
+      padding: 4px 11px;
+      border-radius: 999px;
+      font-size: 10.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.4px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+
+    .rsvp-status-hadir {
+      background: #DCFCE7;
+      color: var(--success);
+    }
+
+    .rsvp-status-tidak {
+      background: #FEE2E2;
+      color: var(--danger);
+    }
+
+    .rsvp-message-box {
+      background: #FFFFFF;
+      border: 1px solid rgba(28, 26, 23, 0.08);
+      border-radius: 12px;
+      padding: 11px 13px;
+      font-size: 13.5px;
+      color: #2C2925;
+      line-height: 1.55;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+    }
+
+    .rsvp-item-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .rsvp-time-text {
+      font-size: 11px;
+      color: var(--ink-muted);
     }
 
     /* MODAL KONTRAS TINGGI */
@@ -808,6 +888,22 @@
       return isNaN(d) ? 0 : d;
     }
 
+    function formatRsvpDate(ts) {
+      const ms = tsToMillis(ts);
+      if (!ms) return '';
+      try {
+        return new Date(ms).toLocaleDateString('id-ID', {
+          day: 'numeric',
+          month: 'short',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+      } catch (e) {
+        return '';
+      }
+    }
+
     function slugifyName(name) {
       return String(name || '')
         .toLowerCase()
@@ -1155,41 +1251,33 @@
         return;
       }
 
-      let html = `
-        <div class="table-wrap">
-          <table class="guest-table">
-            <thead>
-              <tr>
-                <th>Nama Tamu</th>
-                <th>Kehadiran</th>
-                <th>Ucapan &amp; Doa</th>
-                <th style="text-align: right; width: 76px;">Aksi</th>
-              </tr>
-            </thead>
-            <tbody>
-      `;
+      let html = '<div class="rsvp-card-list">';
 
-      rsvps.forEach(item => {
+      rsvps.forEach((item, index) => {
         const statusRaw = item.attendance || item.status || 'Hadir';
         const isNotComing = String(statusRaw).toLowerCase().includes('tidak') || String(statusRaw).toLowerCase().includes('berhalangan');
         const guestName = item.name || 'Tamu';
+        const messageText = item.message || item.wish || '-';
+        const timeFormatted = formatRsvpDate(item.createdAt);
+
         html += `
-          <tr>
-            <td><strong>${escapeHtml(guestName)}</strong></td>
-            <td>
-              <span class="badge-pill" style="${isNotComing ? 'background:#FEE2E2; color:var(--danger);' : 'background:#DCFCE7; color:var(--success);'}">
+          <div class="rsvp-item-card">
+            <div class="rsvp-item-top">
+              <div class="rsvp-guest-name">${index + 1}. ${escapeHtml(guestName)}</div>
+              <span class="rsvp-status-badge ${isNotComing ? 'rsvp-status-tidak' : 'rsvp-status-hadir'}">
                 ${escapeHtml(statusRaw)}
               </span>
-            </td>
-            <td style="color: #2C2925;">${escapeHtml(item.message || item.wish || '-')}</td>
-            <td style="text-align: right;">
+            </div>
+            <div class="rsvp-message-box">${escapeHtml(messageText)}</div>
+            <div class="rsvp-item-footer">
+              <span class="rsvp-time-text">${timeFormatted ? escapeHtml(timeFormatted) : ''}</span>
               <button type="button" class="btn-action-icon btn-act-del" data-rsvp-del="${item.id}" data-rsvp-name="${escapeHtml(guestName)}">Hapus</button>
-            </td>
-          </tr>
+            </div>
+          </div>
         `;
       });
 
-      html += '</tbody></table></div>';
+      html += '</div>';
       container.innerHTML = html;
     }
 
