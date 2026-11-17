@@ -336,8 +336,8 @@
           </div>
           <div class="form-group">
             <label for="event-id">ID Event (Otomatis)</label>
-            <input type="text" id="event-id" value="W001" readonly required>
-            <div class="id-preview-hint">Parameter URL: <code>?event=<strong id="slug-preview">W001</strong></code></div>
+            <input type="text" id="event-id" value="w001" readonly required>
+            <div class="id-preview-hint">Parameter URL: <code>?event=<strong id="slug-preview">w001</strong></code></div>
           </div>
           <div class="form-group">
             <label for="event-name">Nama Event / Pasangan Klien</label>
@@ -424,7 +424,7 @@
 
     /* GENERATE ID OTOMATIS: W001..W999..W1000 atau P001..P999..P1000 */
     function generateNextEventId(type) {
-      const prefix = type === 'photobooth' ? 'P' : 'W';
+      const prefix = type === 'photobooth' ? 'p' : 'w';
       const regex = new RegExp(`^${prefix}(\\d+)$`, 'i');
       let maxNumber = 0;
 
