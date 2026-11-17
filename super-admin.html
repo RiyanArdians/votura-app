@@ -37,7 +37,6 @@
 
     .container { max-width: 960px; margin: 0 auto; }
 
-    /* HEADER SELARAS DENGAN INDEX-ADMIN */
     header {
       background: var(--surface);
       border: 1px solid #FFFFFF;
@@ -62,7 +61,6 @@
 
     .header-actions { display: flex; gap: 8px; flex-wrap: wrap; }
 
-    /* BUTTONS */
     .btn {
       display: inline-flex;
       align-items: center;
@@ -91,7 +89,6 @@
     .btn-danger:hover { background: #FECACA; }
     .btn-sm { padding: 7px 14px; font-size: 12px; }
 
-    /* SECTION CARDS & STATS */
     .stats-row {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -146,7 +143,6 @@
 
     .section-sub { font-size: 12.5px; color: var(--ink-muted); margin-bottom: 20px; }
 
-    /* FORM ELEMENTS */
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .form-group { margin-bottom: 14px; }
     label { display: block; font-size: 12px; font-weight: 600; color: var(--ink-muted); margin-bottom: 6px; }
@@ -180,7 +176,6 @@
       margin-top: 5px;
     }
 
-    /* EVENT CLIENT CARDS (RESPONSIVE DI MOBILE & DESKTOP) */
     .event-list {
       display: flex;
       flex-direction: column;
@@ -251,7 +246,6 @@
       gap: 8px;
     }
 
-    /* MATCHING GLASS MODAL */
     .modal-backdrop {
       position: fixed;
       inset: 0;
@@ -323,7 +317,7 @@
     <!-- FORM BUAT EVENT / KLIEN BARU -->
     <div class="section-card">
       <div class="section-title">1. Tambah Pesanan Klien Baru</div>
-      <div class="section-sub">ID Event terisi otomatis berdasarkan jenis layanan (<code>W001</code> untuk Wedding, <code>P001</code> untuk Photobooth). Pengaturan warna, font, dan galeri foto dapat diubah di <strong>Pusat Visual (CMS)</strong>.</div>
+      <div class="section-sub">ID Event terisi otomatis berdasarkan jenis layanan (<code>w001</code> untuk Wedding, <code>p001</code> untuk Photobooth). Pengaturan warna, font, dan galeri foto dapat diubah di <strong>Pusat Visual (CMS)</strong>.</div>
 
       <form id="create-event-form">
         <div class="grid-2">
@@ -396,7 +390,6 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    /* KATALOG TEMA BESAR (SINKRON DENGAN FOLDER /templates/) */
     const TEMPLATE_CATALOG = {
       wedding: [
         { file: "templates/wedding-1.html", label: "Wedding 1 — Editorial Warm Arch (Default)" },
@@ -422,7 +415,7 @@
         .replace(/"/g, "&quot;");
     }
 
-    /* GENERATE ID OTOMATIS: W001..W999..W1000 atau P001..P999..P1000 */
+    /* GENERATE ID OTOMATIS HURUF KECIL: w001..w999..w1000 atau p001..p999..p1000 */
     function generateNextEventId(type) {
       const prefix = type === 'photobooth' ? 'p' : 'w';
       const regex = new RegExp(`^${prefix}(\\d+)$`, 'i');
@@ -439,7 +432,6 @@
       });
 
       const nextNumber = maxNumber + 1;
-      // Minimal 3 digit (001 - 999), otomatis menjadi 4+ digit (1000, 1001, ...) jika lewat 999
       const formattedNum = nextNumber <= 999
         ? String(nextNumber).padStart(3, '0')
         : String(nextNumber);
@@ -615,10 +607,32 @@
       db.collection("events").doc(id).update({ status: newStatus });
     };
 
-    // DELETE: Hapus Event dengan Custom Modal
+    // HAPUS BERSIH DOKUMEN INDUK + SELURUH SUB-KOLEKSI (guests, rsvp, photos, wishes, captures)
+    async function deleteEventWithSubcollections(eventId) {
+      const eventRef = db.collection("events").doc(eventId);
+      const subCollections = ["guests", "rsvp", "photos", "wishes", "captures", "messages"];
+
+      for (const subName of subCollections) {
+        const subSnap = await eventRef.collection(subName).get();
+        if (!subSnap.empty) {
+          const batch = db.batch();
+          subSnap.forEach(doc => batch.delete(doc.ref));
+          await batch.commit();
+        }
+      }
+
+      await eventRef.delete();
+    }
+
+    // DELETE: Hapus Event & Sub-koleksi dengan Custom Modal
     window.confirmDelete = function(id) {
-      showModal("Hapus Pesanan Klien", `Apakah kamu yakin ingin menghapus permanen event ID "${id}"?`, true, () => {
-        db.collection("events").doc(id).delete();
+      showModal("Hapus Pesanan Klien", `Apakah kamu yakin ingin menghapus permanen event ID "${id}" beserta seluruh data tamu, RSVP, dan galeri fotonya?`, true, async () => {
+        try {
+          await deleteEventWithSubcollections(id);
+          showModal("Terhapus Bersih", `Event ID "${id}" beserta seluruh data tamu dan sub-koleksinya telah dihapus permanen.`);
+        } catch (err) {
+          showModal("Gagal Menghapus", err.message);
+        }
       });
     };
 
