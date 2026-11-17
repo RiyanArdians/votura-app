@@ -815,15 +815,20 @@
         .replace(/^-|-$/g, '') || EVENT_ID.toLowerCase();
     }
 
+    function sanitizeShortlinkUrl(url) {
+      return String(url || '').replace(/\/votura-app(?=\/|$)/g, '');
+    }
+
     function getDefaultShortlinkUrl() {
       const slug = eventSlug || slugifyName(coupleDisplayName);
-      const origin = window.location.origin;
-      const prefix = window.location.pathname.startsWith('/votura-app/') ? '/votura-app/' : '/';
-      return `${origin}${prefix}${slug}`;
+      const origin = window.location.origin.includes('voturastudio.site')
+        ? 'https://voturastudio.site'
+        : window.location.origin;
+      return `${origin}/${slug}`;
     }
 
     function getInvitationLink(guestName) {
-      let cleanBase = (baseInvitationUrl || getDefaultShortlinkUrl()).trim();
+      let cleanBase = sanitizeShortlinkUrl(baseInvitationUrl || getDefaultShortlinkUrl()).trim();
       if (cleanBase.includes('/templates/')) {
         cleanBase = getDefaultShortlinkUrl();
       }
@@ -865,7 +870,7 @@
           document.getElementById('event-date-badge').textContent = c.eventDate;
         }
         if (c.eventSlug) eventSlug = c.eventSlug;
-        if (c.baseInvitationUrl) baseInvitationUrl = c.baseInvitationUrl;
+        if (c.baseInvitationUrl) baseInvitationUrl = sanitizeShortlinkUrl(c.baseInvitationUrl);
         if (c.defaultWaTemplate) defaultWaTemplate = c.defaultWaTemplate;
         if (Array.isArray(c.guests)) {
           allGuests = c.guests;
@@ -964,7 +969,7 @@
           }
 
           if (data.baseUrl && !data.baseUrl.includes('/templates/')) {
-            baseInvitationUrl = data.baseUrl;
+            baseInvitationUrl = sanitizeShortlinkUrl(data.baseUrl);
           } else {
             baseInvitationUrl = getDefaultShortlinkUrl();
           }
@@ -1385,7 +1390,7 @@
 
     /* MODAL TEKS PENGANTAR WA & EDIT SHORTLINK */
     function openTextTemplateModal() {
-      document.getElementById('input-base-url').value = baseInvitationUrl || getDefaultShortlinkUrl();
+      document.getElementById('input-base-url').value = sanitizeShortlinkUrl(baseInvitationUrl || getDefaultShortlinkUrl());
       document.getElementById('input-text-template').value = defaultWaTemplate;
       document.getElementById('text-template-modal').classList.remove('hidden');
     }
@@ -1395,7 +1400,7 @@
     }
 
     function saveTextTemplate() {
-      const newBaseUrl = document.getElementById('input-base-url').value.trim();
+      const newBaseUrl = sanitizeShortlinkUrl(document.getElementById('input-base-url').value.trim());
       const text = document.getElementById('input-text-template').value;
 
       if (newBaseUrl) {
