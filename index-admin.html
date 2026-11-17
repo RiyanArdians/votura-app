@@ -233,6 +233,22 @@
 
     .section-sub { font-size: 12.5px; color: var(--ink-muted); margin-bottom: 16px; }
 
+    .client-toolbar {
+      display: grid;
+      grid-template-columns: 180px 1fr auto auto;
+      gap: 8px;
+      width: 100%;
+      margin-top: 8px;
+      margin-bottom: 8px;
+      align-items: center;
+    }
+
+    .client-toolbar select {
+      padding: 8px 12px;
+      font-size: 12.5px;
+      font-weight: 600;
+    }
+
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
     .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
     .form-group { margin-bottom: 12px; min-width: 0; }
@@ -490,6 +506,13 @@
       .sub-card-grid { grid-template-columns: 1fr 1fr; gap: 6px; padding: 8px; }
       .sub-card-btn { padding: 9px 10px; }
       .sub-card-name { font-size: 11.5px; }
+
+      .client-toolbar {
+        grid-template-columns: 1fr 1fr;
+      }
+      .client-toolbar select {
+        grid-column: span 2;
+      }
 
       .section-card { padding: 14px; border-radius: 16px; }
       .dynamic-item { padding: 12px; }
@@ -775,18 +798,21 @@
       <div class="section-card">
         <div class="section-title">
           <span>Daftar Pesanan Client</span>
-          <div style="display:flex; gap:6px; flex-wrap:wrap; width:100%;">
-            <select id="client-filter-type" style="flex:1; min-width:140px; padding:8px 12px; font-size:12px;" onchange="renderSuperAdminClients(true)">
-              <option value="all">Semua Tipe Layanan</option>
-              <option value="wedding">Wedding Invitation</option>
-              <option value="photobooth">Virtual Photobooth</option>
-            </select>
-            <button type="button" class="btn btn-outline btn-sm" onclick="refreshClientsFromServer()">Segarkan</button>
-            <a href="super-admin.html" target="_blank" class="btn btn-dark btn-sm">+ Client Baru</a>
-          </div>
+        </div>
+        <div class="client-toolbar">
+          <select id="client-filter-type" onchange="handleClientFilterChange()">
+            <option value="all">Semua Tipe Layanan</option>
+            <option value="wedding">Wedding Invitation</option>
+            <option value="photobooth">Virtual Photobooth</option>
+          </select>
+          <select id="client-select-event" onchange="handleClientSelectChange(this.value)">
+            <option value="">Memuat daftar client...</option>
+          </select>
+          <button type="button" class="btn btn-outline btn-sm" onclick="refreshClientsFromServer()">Segarkan</button>
+          <a href="super-admin.html" target="_blank" class="btn btn-dark btn-sm">+ Client Baru</a>
         </div>
         <div class="section-sub">
-          Klik salah satu <strong>kartu section</strong> pada client untuk membuka bagian yang ingin diubah, tanpa perlu menggulir panjang ke bawah.
+          Pilih nama client pada dropdown di atas, lalu klik salah satu <strong>kartu section</strong> untuk membuka bagian yang ingin diubah tanpa perlu scroll panjang ke bawah.
         </div>
         <div id="clients-editor-list">
           <p style="font-size: 13px; color: var(--ink-muted);">Memuat data client...</p>
@@ -831,6 +857,7 @@
     let activeTabId = "tab-landing";
     let clientEditModes = {};
     let clientActiveSubCards = {};
+    let selectedClientId = "";
     let activePreviewEventId = null;
 
     function switchSubCard(groupName, targetPaneId, btnEl) {
@@ -1453,7 +1480,7 @@
     function removeDpFrame(idx) { demoPhotoboothData.frames.splice(idx, 1); renderDpFramesEditor(); }
 
     /* ============================================================
-       4. WEB VISUAL PESANAN KLIEN (CARD GRID RINGKAS PER SECTION)
+       4. WEB VISUAL PESANAN KLIEN (DROPDOWN PEMILIH CLIENT + CARD RINGKAS)
        ============================================================ */
     async function refreshClientsFromServer() {
       const container = document.getElementById('clients-editor-list');
@@ -1482,10 +1509,54 @@
         });
         const countBadge = document.getElementById('client-count-badge');
         if (countBadge) countBadge.textContent = superAdminEvents.length;
-        renderSuperAdminClients(true);
+        populateClientSelectorDropdown();
+        renderSuperAdminClients();
       } catch (err) {
         if (container) container.innerHTML = `<p style="font-size: 13px; color: var(--danger);">Gagal memuat data client: ${escapeHtml(err.message)}</p>`;
       }
+    }
+
+    function populateClientSelectorDropdown() {
+      const selectEl = document.getElementById('client-select-event');
+      if (!selectEl) return;
+
+      const filterType = document.getElementById('client-filter-type')?.value || 'all';
+      const filtered = superAdminEvents.filter(ev => filterType === 'all' || ev.type === filterType);
+
+      if (filtered.length === 0) {
+        selectedClientId = "";
+        selectEl.innerHTML = `<option value="">-- Tidak ada client --</option>`;
+        return;
+      }
+
+      // Pastikan selectedClientId valid di dalam daftar hasil filter; jika tidak, pilih client pertama otomatis
+      const stillExists = filtered.some(ev => ev.id === selectedClientId) || selectedClientId === 'all';
+      if (!stillExists || !selectedClientId) {
+        selectedClientId = filtered[0].id;
+      }
+
+      let optionsHtml = filtered.map(ev => {
+        const typeBadge = ev.type === 'wedding' ? 'Wedding' : 'Photobooth';
+        const label = `ID: ${ev.id} — ${ev.name || 'Tanpa Nama'} (${typeBadge})`;
+        return `<option value="${escapeHtml(ev.id)}" ${selectedClientId === ev.id ? 'selected' : ''}>${escapeHtml(label)}</option>`;
+      }).join('');
+
+      if (filtered.length > 1) {
+        optionsHtml += `<option value="all" ${selectedClientId === 'all' ? 'selected' : ''}>Tampilkan Semua Client (${filtered.length})</option>`;
+      }
+
+      selectEl.innerHTML = optionsHtml;
+    }
+
+    function handleClientFilterChange() {
+      selectedClientId = "";
+      populateClientSelectorDropdown();
+      renderSuperAdminClients();
+    }
+
+    function handleClientSelectChange(val) {
+      selectedClientId = val;
+      renderSuperAdminClients();
     }
 
     function toggleClientEditMode(eventId) {
@@ -1837,12 +1908,16 @@
       if (!container) return;
 
       const filterType = document.getElementById('client-filter-type')?.value || 'all';
-      const filtered = superAdminEvents.filter(ev => filterType === 'all' || ev.type === filterType);
+      const byType = superAdminEvents.filter(ev => filterType === 'all' || ev.type === filterType);
 
-      if (filtered.length === 0) {
+      if (byType.length === 0) {
         container.innerHTML = `<p style="font-size: 13px; color: var(--ink-muted);">Belum ada client pada kategori ini.</p>`;
         return;
       }
+
+      const filtered = (selectedClientId && selectedClientId !== 'all')
+        ? byType.filter(ev => ev.id === selectedClientId)
+        : byType;
 
       container.innerHTML = "";
       filtered.forEach((ev) => {
@@ -2357,6 +2432,7 @@
         await db.collection("events").doc(eventId).set(payload, { merge: true });
         Object.assign(target, payload);
         clientEditModes[eventId] = false;
+        populateClientSelectorDropdown();
         renderSuperAdminClients();
         showCmsModal("Tersimpan Permanen (" + payloadSizeKb + " KB)", `Seluruh data, musik latar, foto mempelai, dan ornamen grafis untuk "${updatedName}" telah tersimpan.\n\nKlik tombol "Edit Data" kapan saja jika ingin mengubahnya lagi.`);
       } catch (err) {
