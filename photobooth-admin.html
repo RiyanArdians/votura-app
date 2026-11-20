@@ -1197,8 +1197,10 @@
   function buildPublicPhotoboothUrl(eventId, slug) {
     const origin = window.location.origin;
     const basePath = window.location.pathname.replace(/\/[^/]*$/, '');
-    if (slug) return `${origin}${basePath}/pb-1.html?event=${encodeURIComponent(eventId)}`;
-    return `${origin}${basePath}/pb-1.html?event=${encodeURIComponent(eventId)}`;
+    if (slug) {
+      return `${origin}${basePath}/templates/pb-1.html?event=${encodeURIComponent(eventId)}&slug=${encodeURIComponent(slug)}`;
+    }
+    return `${origin}${basePath}/templates/pb-1.html?event=${encodeURIComponent(eventId)}`;
   }
 
   function copyPhotoboothLink() {
@@ -1250,10 +1252,8 @@
           dateEl.classList.add('hidden');
         }
 
-        if (d.publicUrl) {
-          eventShareUrl = d.publicUrl;
-          if (openBtn) openBtn.href = eventShareUrl;
-        }
+        eventShareUrl = buildPublicPhotoboothUrl(EVENT_ID, d.slug);
+        if (openBtn) openBtn.href = eventShareUrl;
       }
     }, err => console.warn('Gagal memuat info event:', err));
 
