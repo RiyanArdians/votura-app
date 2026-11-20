@@ -207,32 +207,6 @@
 
     .btn-dark-pill:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(38, 36, 33, 0.18); }
 
-    .btn-ghost-demo {
-      display: inline-flex;
-      align-items: center;
-      gap: 10px;
-      color: var(--ink);
-      text-decoration: none;
-      font-size: 13.5px;
-      font-weight: 600;
-      padding: 8px 14px;
-      border-radius: var(--radius-pill);
-      transition: opacity 0.3s ease;
-    }
-
-    .btn-ghost-demo:hover { opacity: 0.72; }
-
-    .play-ring {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      border: 1px solid rgba(35, 33, 30, 0.35);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(255, 255, 255, 0.65);
-    }
-
     /* HERO VISUAL SHOWCASE */
     .hero-visual-card {
       background: var(--glass);
@@ -412,6 +386,7 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 8px;
     }
     .catalog-caption strong { font-size: 13.5px; }
     .catalog-caption span {
@@ -421,6 +396,7 @@
       background: var(--bg-base);
       color: var(--ink-muted);
       font-weight: 600;
+      white-space: nowrap;
     }
 
     /* PRICING GRID */
@@ -599,7 +575,7 @@
     }
     .faq-item.open .faq-answer { display: block; }
 
-    /* TESTIMONIALS */
+    /* TESTIMONIALS & COMMITMENT CARDS */
     .testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
     .testi-card {
       background: #FFFFFF;
@@ -793,11 +769,8 @@
               <span>Lihat Pilihan Paket</span>
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
             </a>
-            <a href="templates/pb-1.html?event=p001" target="_blank" id="hero-demo-link" class="btn-ghost-demo">
-              <span class="play-ring">
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-              </span>
-              <span id="hero-demo-label">Coba Demo Photobooth</span>
+            <a href="#demo" class="btn-outline-pill">
+              <span>Lihat Live Demo</span>
             </a>
           </div>
         </div>
@@ -946,11 +919,12 @@
       <div class="faq-list" id="faq-list"></div>
     </section>
 
-    <!-- 7. TESTIMONI KLIEN -->
+    <!-- 7. KOMITMEN LAYANAN / TESTIMONI KLIEN (OTOMATIS Beralih SAAT DATA DIISI DI SUPER ADMIN) -->
     <section class="content-section" id="testimoni">
       <div class="section-head">
-        <span class="eyebrow">Ulasan Klien</span>
-        <h2 class="serif">Cerita di Balik <span class="serif-accent">Setiap Acara</span></h2>
+        <span class="eyebrow" id="testi-eyebrow">Komitmen Votura Studio</span>
+        <h2 class="serif" id="testi-heading">Dirancang untuk <span class="serif-accent">Momen Tanpa Kendala</span></h2>
+        <p id="testi-sub">Setiap layanan kami disiapkan dengan standar kualitas visual dan kemudahan akses bagi seluruh tamu undangan.</p>
       </div>
 
       <div class="testi-grid" id="testi-grid"></div>
@@ -1026,8 +1000,6 @@
       heroEyebrow: "Votura Virtual Photobooth — Digital Invitation — Creative Studio",
       heroTitle: "Abadikan Serunya Acara Langsung dari *Ponsel Tamu*",
       heroSubtitle: "Hadirkan pengalaman photobooth interaktif tanpa antre mesin dan tanpa instal aplikasi. Tamu cukup scan QR Code, berfoto dengan frame eksklusif acaramu, dan semua kenangan otomatis tersimpan rapi di galeri pengantin.",
-      heroDemoLabel: "Coba Demo Photobooth",
-      heroDemoUrl: "templates/pb-1.html?event=p001",
       heroImageUrl: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=900&q=80",
       showcaseTitle: "Tanpa Antre, Tanpa Batas Jumlah Foto",
       showcaseDesc: "Dilengkapi opsi cetak Kartu Meja QR, Standing Banner, hingga Kain Sign Gantung estetik yang menyatu dengan dekorasi acaramu.",
@@ -1234,25 +1206,27 @@
           a: "Kartu Meja QR, Banner Sign, maupun Kain Sign Gantung dapat kami kirim ke seluruh Indonesia menggunakan ekspedisi reguler maupun kilat. Untuk kebutuhan mendadak, kamu juga bisa memilih Paket Digital Only agar file siap cetak langsung dikirim hari itu juga."
         }
       ],
-      testimonials: [
-        {
-          text: "Tamu acara sangat antusias mencoba virtual photobooth-nya. Cukup scan QR di meja tamu, langsung bisa berfoto dengan frame khusus acara kami tanpa antre.",
-          author: "Nadia & Dimas",
-          role: "Votura Virtual Photobooth"
-        },
-        {
-          text: "Kain sign gantungnya estetik banget waktu dipasang di depan pintu masuk gedung! Fitur download ZIP di panel pengantin juga sangat memudahkan.",
-          author: "Raka & Aulia",
-          role: "Paket Silver + Kain Sign"
-        },
-        {
-          text: "Ambil bundling undangan digital sekalian virtual photobooth di Votura bikin persiapan jauh lebih hemat dan praktis. Adminnya juga sangat responsif.",
-          author: "Tari & Bagas",
-          role: "Bundling Wedding & Photobooth"
-        }
-      ],
+      testimonials: [],
       footerDesc: "Menghadirkan pengalaman Virtual Photobooth interaktif dan Undangan Digital elegan untuk merayakan setiap momen istimewa."
     };
+
+    const launchCommitments = [
+      {
+        text: "Aplikasi berbasis web ringan yang langsung terbuka di browser ponsel tamu dalam hitungan detik tanpa perlu mengunduh aplikasi tambahan.",
+        author: "Akses Instan Tanpa Aplikasi",
+        role: "Standar Performa Votura"
+      },
+      {
+        text: "Setiap pasangan mendapatkan akses khusus untuk meninjau hasil foto tamu, menyaring foto yang kurang sesuai, dan mengunduh seluruh galeri dalam satu klik ZIP.",
+        author: "Kontrol Penuh Galeri Pengantin",
+        role: "Privasi & Kenyamanan Acara"
+      },
+      {
+        text: "Tim studio siap membantu mulai dari pemilihan desain frame, penyesuaian warna tema acara, hingga persiapan file siap cetak maupun pengiriman media display QR.",
+        author: "Pendampingan Desain & Teknis",
+        role: "Dukungan Penuh Sebelum Hari-H"
+      }
+    ];
 
     function formatHeadline(raw) {
       return String(raw || "").replace(/\*([^*]+)\*/g, '<span class="serif-accent">$1</span>');
@@ -1266,8 +1240,6 @@
       document.getElementById('hero-eyebrow').textContent = data.heroEyebrow || "";
       document.getElementById('hero-headline').innerHTML = formatHeadline(data.heroTitle || fallbackData.heroTitle);
       document.getElementById('hero-subtitle').textContent = data.heroSubtitle || "";
-      document.getElementById('hero-demo-label').textContent = data.heroDemoLabel || "Coba Demo Photobooth";
-      document.getElementById('hero-demo-link').href = data.heroDemoUrl || "templates/pb-1.html?event=p001";
       document.getElementById('showcase-title').textContent = data.showcaseTitle || "";
       document.getElementById('showcase-desc').textContent = data.showcaseDesc || "";
 
@@ -1343,11 +1315,22 @@
         </div>
       `).join('');
 
-      // 7. Render Testimonials
-      const testis = data.testimonials && data.testimonials.length ? data.testimonials : fallbackData.testimonials;
-      document.getElementById('testi-grid').innerHTML = testis.map(t => `
+      // 7. Render Testimonials (Jika kosong di Super Admin -> tampilkan Komitmen Layanan)
+      const validTestis = Array.isArray(data.testimonials)
+        ? data.testimonials.filter(t => t && (t.text || '').trim() !== '')
+        : [];
+
+      const hasRealTestimonials = validTestis.length > 0;
+      document.getElementById('testi-eyebrow').textContent = hasRealTestimonials ? "Ulasan Klien" : "Komitmen Votura Studio";
+      document.getElementById('testi-heading').innerHTML = hasRealTestimonials
+        ? 'Cerita di Balik <span class="serif-accent">Setiap Acara</span>'
+        : 'Dirancang untuk <span class="serif-accent">Momen Tanpa Kendala</span>';
+      document.getElementById('testi-sub').style.display = hasRealTestimonials ? 'none' : 'block';
+
+      const cardsToRender = hasRealTestimonials ? validTestis : launchCommitments;
+      document.getElementById('testi-grid').innerHTML = cardsToRender.map(t => `
         <div class="testi-card">
-          <p class="testi-text">&ldquo;${t.text || ''}&rdquo;</p>
+          <p class="testi-text">${hasRealTestimonials ? `&ldquo;${t.text || ''}&rdquo;` : (t.text || '')}</p>
           <div class="testi-client">
             <strong>${t.author || ''}</strong>
             <span>${t.role || ''}</span>
@@ -1444,7 +1427,7 @@
       });
     }, { passive: true });
 
-    const CACHE_KEY = "votura_landing_cache_v2";
+    const CACHE_KEY = "votura_landing_cache_v3";
     const shellEl = document.getElementById("beranda");
 
     function revealShell() {
