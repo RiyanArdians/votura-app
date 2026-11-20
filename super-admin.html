@@ -32,17 +32,17 @@
       color: var(--ink);
       font-family: 'Plus Jakarta Sans', sans-serif;
       line-height: 1.5;
-      padding: 24px 16px 64px 16px;
+      padding: 24px 16px 84px 16px;
     }
 
-    .container { max-width: 960px; margin: 0 auto; }
+    .container { max-width: 980px; margin: 0 auto; }
 
     header {
       background: var(--surface);
       border: 1px solid #FFFFFF;
       border-radius: 26px;
       padding: 24px 28px;
-      margin-bottom: 20px;
+      margin-bottom: 18px;
       display: flex;
       justify-content: space-between;
       align-items: center;
@@ -60,6 +60,38 @@
     header p { font-size: 13px; color: var(--ink-muted); margin-top: 4px; }
 
     .header-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+
+    .main-tabs {
+      display: inline-flex;
+      gap: 6px;
+      background: var(--surface);
+      border: 1px solid #FFFFFF;
+      padding: 6px;
+      border-radius: var(--radius-pill);
+      margin-bottom: 20px;
+      box-shadow: 0 6px 18px rgba(35, 33, 30, 0.04);
+    }
+
+    .main-tab-btn {
+      border: none;
+      background: transparent;
+      color: var(--ink-muted);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 10px 22px;
+      border-radius: var(--radius-pill);
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .main-tab-btn.active {
+      background: var(--dark);
+      color: #FFFFFF;
+    }
+
+    .tab-pane { display: none; }
+    .tab-pane.active { display: block; }
 
     .btn {
       display: inline-flex;
@@ -143,11 +175,66 @@
 
     .section-sub { font-size: 12.5px; color: var(--ink-muted); margin-bottom: 20px; }
 
+    .figma-guide-box {
+      background: #FAF6F0;
+      border: 1px solid rgba(140, 115, 85, 0.28);
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+      font-size: 12.5px;
+      color: var(--ink);
+    }
+
+    .figma-guide-box strong {
+      display: block;
+      color: var(--accent);
+      margin-bottom: 6px;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .figma-guide-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .figma-spec-pill {
+      background: #FFFFFF;
+      border: 1px solid rgba(35, 33, 30, 0.08);
+      border-radius: 10px;
+      padding: 8px 12px;
+    }
+
+    .figma-spec-pill span {
+      display: block;
+      font-size: 11px;
+      color: var(--ink-muted);
+    }
+
+    .figma-spec-pill b {
+      font-size: 12.5px;
+      color: var(--dark);
+    }
+
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
     .form-group { margin-bottom: 14px; }
     label { display: block; font-size: 12px; font-weight: 600; color: var(--ink-muted); margin-bottom: 6px; }
 
-    input[type="text"], select {
+    .size-badge {
+      display: inline-block;
+      background: #EFECE6;
+      color: var(--accent);
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 999px;
+      margin-left: 4px;
+    }
+
+    input[type="text"], input[type="url"], textarea, select {
       width: 100%;
       padding: 11px 14px;
       border-radius: 12px;
@@ -160,6 +247,8 @@
       transition: border-color 0.2s ease, background 0.2s ease;
     }
 
+    textarea { resize: vertical; min-height: 76px; }
+
     input[readonly] {
       background: #ECE8E0;
       font-weight: 700;
@@ -167,7 +256,7 @@
       cursor: default;
     }
 
-    input:focus, select:focus { border-color: var(--accent); background: #FFFFFF; }
+    input:focus, textarea:focus, select:focus { border-color: var(--accent); background: #FFFFFF; }
     input[readonly]:focus { background: #ECE8E0; border-color: var(--border); }
 
     .id-preview-hint {
@@ -175,6 +264,87 @@
       color: var(--ink-muted);
       margin-top: 5px;
     }
+
+    .cms-item-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+
+    .cms-item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid rgba(35, 33, 30, 0.08);
+    }
+
+    .cms-item-header strong {
+      font-size: 13px;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .img-preview-strip {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    .img-preview-strip img {
+      width: 54px;
+      height: 68px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #E5DFD5;
+      flex-shrink: 0;
+    }
+
+    .checkbox-inline {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--ink);
+      cursor: pointer;
+    }
+
+    .toggle-banner {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .sticky-save-bar {
+      position: sticky;
+      bottom: 16px;
+      background: var(--dark);
+      color: #FFFFFF;
+      padding: 14px 22px;
+      border-radius: var(--radius-pill);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 16px 36px rgba(35, 33, 30, 0.25);
+      z-index: 80;
+    }
+
+    .sticky-save-bar span { font-size: 13px; color: rgba(255, 255, 255, 0.85); }
 
     .event-list {
       display: flex;
@@ -195,14 +365,8 @@
       transition: border-color 0.2s ease;
     }
 
-    .event-card:hover {
-      border-color: rgba(140, 115, 85, 0.45);
-    }
-
-    .event-info {
-      flex: 1;
-      min-width: 240px;
-    }
+    .event-card:hover { border-color: rgba(140, 115, 85, 0.45); }
+    .event-info { flex: 1; min-width: 240px; }
 
     .event-meta {
       display: flex;
@@ -219,10 +383,7 @@
       margin-bottom: 3px;
     }
 
-    .event-theme-tag {
-      font-size: 12px;
-      color: var(--ink-muted);
-    }
+    .event-theme-tag { font-size: 12px; color: var(--ink-muted); }
 
     .badge-pill {
       display: inline-block;
@@ -275,12 +436,12 @@
     }
 
     @media (max-width: 720px) {
-      .stats-row { grid-template-columns: 1fr; }
-      .grid-2 { grid-template-columns: 1fr; }
+      .stats-row, .grid-2, .grid-3, .figma-guide-grid { grid-template-columns: 1fr; }
       header { padding: 20px; }
       .section-card { padding: 20px 16px; }
       .event-actions { width: 100%; }
       .event-actions .btn { flex: 1; }
+      .sticky-save-bar { flex-direction: column; border-radius: 20px; text-align: center; }
     }
   </style>
 </head>
@@ -290,76 +451,291 @@
     <header>
       <div>
         <h1>Votura Studio — Super Admin</h1>
-        <p>Manajemen pesanan klien, pemilihan tema besar, dan aktivasi akses tautan acara.</p>
+        <p>Manajemen pesanan klien, pemilihan tema besar, dan CMS halaman utama Votura Studio.</p>
       </div>
       <div class="header-actions">
-        <a href="index.html" target="_blank" class="btn btn-outline btn-sm">Web Utama</a>
-        <a href="index-admin.html" class="btn btn-dark btn-sm">Buka Pusat Visual (CMS)</a>
+        <a href="index.html" target="_blank" class="btn btn-outline btn-sm">Lihat Landing Page</a>
+        <a href="index-admin.html" class="btn btn-dark btn-sm">Buka Pusat Visual Event</a>
       </div>
     </header>
 
-    <!-- RINGKASAN STATUS KLIEN -->
-    <div class="stats-row">
-      <div class="stat-card">
-        <span>Total Pesanan Klien</span>
-        <strong id="stat-total">0</strong>
+    <div class="main-tabs">
+      <button type="button" class="main-tab-btn active" onclick="switchMainTab('clients', this)">Manajemen Klien</button>
+      <button type="button" class="main-tab-btn" onclick="switchMainTab('landing', this)">CMS Landing Page</button>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- PANE 1: MANAJEMEN KLIEN                    -->
+    <!-- ========================================== -->
+    <div id="pane-clients" class="tab-pane active">
+      <div class="stats-row">
+        <div class="stat-card">
+          <span>Total Pesanan Klien</span>
+          <strong id="stat-total">0</strong>
+        </div>
+        <div class="stat-card">
+          <span>Status Aktif</span>
+          <strong id="stat-active" style="color: var(--success);">0</strong>
+        </div>
+        <div class="stat-card">
+          <span>Terkunci / Nonaktif</span>
+          <strong id="stat-locked" style="color: var(--danger);">0</strong>
+        </div>
       </div>
-      <div class="stat-card">
-        <span>Status Aktif</span>
-        <strong id="stat-active" style="color: var(--success);">0</strong>
+
+      <div class="section-card">
+        <div class="section-title">1. Tambah Pesanan Klien Baru</div>
+        <div class="section-sub">ID Event terisi otomatis berdasarkan jenis layanan (<code>w001</code> untuk Wedding, <code>p001</code> untuk Photobooth).</div>
+
+        <form id="create-event-form">
+          <div class="grid-2">
+            <div class="form-group">
+              <label for="event-type">Jenis Produk / Layanan</label>
+              <select id="event-type" onchange="handleProductTypeChange()">
+                <option value="wedding">Votura Wedding Invitation</option>
+                <option value="photobooth">Votura Virtual Photobooth</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="event-id">ID Event (Otomatis)</label>
+              <input type="text" id="event-id" value="w001" readonly required>
+              <div class="id-preview-hint">Parameter URL: <code>?event=<strong id="slug-preview">w001</strong></code></div>
+            </div>
+            <div class="form-group">
+              <label for="event-name">Nama Event / Pasangan Klien</label>
+              <input type="text" id="event-name" placeholder="contoh: Amelia &amp; Riyan" required>
+            </div>
+            <div class="form-group">
+              <label for="event-template">Pilih Tema Besar (File Template)</label>
+              <select id="event-template"></select>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-dark" id="submit-btn">Simpan &amp; Aktifkan Klien Baru</button>
+        </form>
       </div>
-      <div class="stat-card">
-        <span>Terkunci / Nonaktif</span>
-        <strong id="stat-locked" style="color: var(--danger);">0</strong>
+
+      <div class="section-card">
+        <div class="section-title">
+          <span>2. Daftar Klien Terdaftar (Real-Time)</span>
+          <select id="filter-status" style="width:auto; padding:8px 14px; font-size:12px;" onchange="renderEventList()">
+            <option value="all">Semua Status</option>
+            <option value="active">Aktif Saja</option>
+            <option value="locked">Terkunci Saja</option>
+          </select>
+        </div>
+        <div class="section-sub">Kelola status akses tautan klien, salin URL untuk dibagikan, atau buka panel kustomisasi visualnya.</div>
+
+        <div class="event-list" id="event-list-container">
+          <p style="font-size: 13px; color: var(--ink-muted);">Memuat daftar pesanan klien...</p>
+        </div>
       </div>
     </div>
 
-    <!-- FORM BUAT EVENT / KLIEN BARU -->
-    <div class="section-card">
-      <div class="section-title">1. Tambah Pesanan Klien Baru</div>
-      <div class="section-sub">ID Event terisi otomatis berdasarkan jenis layanan (<code>w001</code> untuk Wedding, <code>p001</code> untuk Photobooth). Pengaturan warna, font, dan galeri foto dapat diubah di <strong>Pusat Visual (CMS)</strong>.</div>
+    <!-- ========================================== -->
+    <!-- PANE 2: CMS LANDING PAGE                   -->
+    <!-- ========================================== -->
+    <div id="pane-landing" class="tab-pane">
 
-      <form id="create-event-form">
-        <div class="grid-2">
-          <div class="form-group">
-            <label for="event-type">Jenis Produk / Layanan</label>
-            <select id="event-type" onchange="handleProductTypeChange()">
-              <option value="wedding">Votura Wedding Invitation</option>
-              <option value="photobooth">Votura Virtual Photobooth</option>
-            </select>
+      <!-- PANDUAN UKURAN ARTBOARD FIGMA -->
+      <div class="figma-guide-box">
+        <strong>Panduan Ukuran Artboard Figma (Agar Gambar Presisi &amp; Tidak Terpotong)</strong>
+        <div class="figma-guide-grid">
+          <div class="figma-spec-pill">
+            <span>Hero Showcase Card (Kanan)</span>
+            <b>1000 &times; 750 px (Rasio 4:3)</b>
           </div>
-          <div class="form-group">
-            <label for="event-id">ID Event (Otomatis)</label>
-            <input type="text" id="event-id" value="w001" readonly required>
-            <div class="id-preview-hint">Parameter URL: <code>?event=<strong id="slug-preview">w001</strong></code></div>
+          <div class="figma-spec-pill">
+            <span>Thumbnail Kartu Live Demo</span>
+            <b>900 &times; 700 px (1 Kartu) / 800 &times; 500 px (Grid)</b>
           </div>
-          <div class="form-group">
-            <label for="event-name">Nama Event / Pasangan Klien</label>
-            <input type="text" id="event-name" placeholder="contoh: Amelia &amp; Riyan" required>
-          </div>
-          <div class="form-group">
-            <label for="event-template">Pilih Tema Besar (File Template)</label>
-            <select id="event-template"></select>
+          <div class="figma-spec-pill">
+            <span>Katalog Frame &amp; Kain Sign / QR</span>
+            <b>900 &times; 1200 px (Rasio 3:4 Portrait)</b>
           </div>
         </div>
-        <button type="submit" class="btn btn-dark" id="submit-btn">Simpan &amp; Aktifkan Klien Baru</button>
-      </form>
-    </div>
-
-    <!-- DAFTAR EVENT / KLIEN TERDAFTAR -->
-    <div class="section-card">
-      <div class="section-title">
-        <span>2. Daftar Klien Terdaftar (Real-Time)</span>
-        <select id="filter-status" style="width:auto; padding:8px 14px; font-size:12px;" onchange="renderEventList()">
-          <option value="all">Semua Status</option>
-          <option value="active">Aktif Saja</option>
-          <option value="locked">Terkunci Saja</option>
-        </select>
       </div>
-      <div class="section-sub">Kelola status akses tautan klien, salin URL untuk dibagikan, atau buka panel kustomisasi visualnya.</div>
 
-      <div class="event-list" id="event-list-container">
-        <p style="font-size: 13px; color: var(--ink-muted);">Memuat daftar pesanan klien...</p>
+      <!-- A. IDENTITAS, KONTAK & HERO -->
+      <div class="section-card">
+        <div class="section-title">
+          <span>A. Kontak, Media Sosial &amp; Hero Section</span>
+          <button type="button" class="btn btn-outline btn-sm" onclick="resetLandingToDefault()">Muat Ulang Default</button>
+        </div>
+        <div class="section-sub">Atur nomor WhatsApp tujuan, judul utama, dan gambar <em>mockup</em> utama di bagian atas landing page. Gunakan tanda bintang <code>*kata*</code> untuk memberi aksen warna emas hangat.</div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label>Nomor WhatsApp Admin (format 628...)</label>
+            <input type="text" id="cms-waNumber" placeholder="6282298966860">
+          </div>
+          <div class="form-group">
+            <label>Teks Tombol CTA Header</label>
+            <input type="text" id="cms-navCta" placeholder="Ngobrol Dulu">
+          </div>
+          <div class="form-group">
+            <label>Link Instagram</label>
+            <input type="url" id="cms-igUrl" placeholder="https://instagram.com/voturastudio">
+          </div>
+          <div class="form-group">
+            <label>Link TikTok</label>
+            <input type="url" id="cms-tiktokUrl" placeholder="https://tiktok.com/@voturastudio">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Eyebrow Tag (Teks Kecil di Atas Judul)</label>
+          <input type="text" id="cms-heroEyebrow">
+        </div>
+        <div class="form-group">
+          <label>Headline Utama Hero</label>
+          <input type="text" id="cms-heroTitle">
+        </div>
+        <div class="form-group">
+          <label>Sub-judul / Deskripsi Hero</label>
+          <textarea id="cms-heroSubtitle"></textarea>
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label>Judul Kartu Showcase Kanan</label>
+            <input type="text" id="cms-showcaseTitle">
+          </div>
+          <div class="form-group">
+            <label>URL Gambar Showcase Utama <span class="size-badge">Figma: 1000 &times; 750 px (4:3)</span></label>
+            <input type="url" id="cms-heroImageUrl" oninput="document.getElementById('prev-hero-img').src=this.value">
+            <div class="img-preview-strip">
+              <img id="prev-hero-img" src="" alt="Preview Hero" style="width:72px; height:54px;">
+              <span style="font-size:11.5px; color:var(--ink-muted);">Sisakan ruang kosong di area bawah artboard agar teks putih tetap kontras terbaca.</span>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Deskripsi Kartu Showcase Kanan</label>
+          <textarea id="cms-showcaseDesc"></textarea>
+        </div>
+      </div>
+
+      <!-- B. LIVE DEMO CARDS -->
+      <div class="section-card">
+        <div class="section-title">
+          <span>B. Kartu Live Demo Virtual Photobooth</span>
+          <button type="button" class="btn btn-outline btn-sm" onclick="addDemoItem()">+ Tambah Tema Demo</button>
+        </div>
+        <div class="section-sub">Saat ini disetel 1 kartu utama (<code>demo-photobooth.html</code>). Jika nanti menambah tema baru, cukup klik tombol tambah di kanan.</div>
+        <div id="cms-demos-list"></div>
+      </div>
+
+      <!-- C. KATALOG FRAME & MEDIA CETAK -->
+      <div class="section-card">
+        <div class="section-title">
+          <span>C. Katalog Desain Frame &amp; Media Cetak QR</span>
+          <button type="button" class="btn btn-outline btn-sm" onclick="addCatalogItem()">+ Tambah Item Katalog</button>
+        </div>
+        <div class="section-sub">Seluruh kartu katalog menggunakan rasio vertikal <strong>3:4 (Figma: 900 &times; 1200 px)</strong> agar tampilan frame Strip, Polaroid, 4R, Story, maupun Kain Sign Gantung tampil utuh.</div>
+        <div id="cms-catalog-list"></div>
+      </div>
+
+      <!-- D. PAKET DIGITAL ONLY -->
+      <div class="section-card">
+        <div class="section-title">
+          <span>D. Paket Harga — Digital Only</span>
+          <button type="button" class="btn btn-outline btn-sm" onclick="addPackageItem('digital')">+ Tambah Paket Digital</button>
+        </div>
+        <div class="section-sub">Atur paket layanan online tanpa cetak fisik. Satu baris pada kolom fasilitas = satu poin centang.</div>
+        <div id="cms-digital-packages-list"></div>
+      </div>
+
+      <!-- E. PAKET LENGKAP + CETAK FISIK -->
+      <div class="section-card">
+        <div class="section-title">
+          <span>E. Paket Harga — Lengkap + Media Cetak Fisik</span>
+          <button type="button" class="btn btn-outline btn-sm" onclick="addPackageItem('physical')">+ Tambah Paket Fisik</button>
+        </div>
+        <div class="section-sub">Atur paket bundling yang sudah termasuk cetak Kartu Meja QR, Banner Sign, maupun Kain Sign Gantung.</div>
+        <div id="cms-physical-packages-list"></div>
+      </div>
+
+      <!-- F. ADD-ON LAYANAN TAMBAHAN -->
+      <div class="section-card">
+        <div class="section-title">
+          <span>F. Add-On Media Cetak &amp; Custom Desain</span>
+          <button type="button" class="btn btn-outline btn-sm" onclick="addAddonItem()">+ Tambah Add-On</button>
+        </div>
+        <div class="section-sub">Item tambahan opsional yang tampil di bawah tabel paket harga.</div>
+        <div id="cms-addons-list"></div>
+      </div>
+
+      <!-- G. SECTION SEKUNDER: UNDANGAN DIGITAL -->
+      <div class="section-card">
+        <div class="section-title">G. Section Pendamping — Votura Wedding Invitation</div>
+        <div class="section-sub">Penawaran layanan undangan digital yang tampil setelah pricelist photobooth.</div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label>Judul Banner Undangan</label>
+            <input type="text" id="cms-wedTitle">
+          </div>
+          <div class="form-group">
+            <label>Label Harga Mulai Dari</label>
+            <input type="text" id="cms-wedPrice" placeholder="Rp 99.000">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Deskripsi Penawaran Undangan &amp; Bundling</label>
+          <textarea id="cms-wedDesc"></textarea>
+        </div>
+        <div class="grid-2">
+          <div class="form-group">
+            <label>Link Demo Undangan Digital</label>
+            <input type="text" id="cms-wedDemoUrl" placeholder="demo-wedding.html">
+          </div>
+          <div class="form-group">
+            <label>Poin Fitur Undangan (1 baris = 1 poin)</label>
+            <textarea id="cms-wedFeatures"></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- H. FAQ -->
+      <div class="section-card">
+        <div class="section-title">
+          <span>H. Daftar Pertanyaan Umum (FAQ)</span>
+          <button type="button" class="btn btn-outline btn-sm" onclick="addFaqItem()">+ Tambah FAQ</button>
+        </div>
+        <div id="cms-faqs-list"></div>
+      </div>
+
+      <!-- I. TESTIMONI KLIEN -->
+      <div class="section-card">
+        <div class="section-title">
+          <span>I. Testimoni Klien</span>
+          <button type="button" class="btn btn-outline btn-sm" onclick="addTestimonialItem()">+ Tambah Testimoni Klien</button>
+        </div>
+
+        <div class="toggle-banner">
+          <div>
+            <strong style="font-size:13.5px; display:block;">Mode Tampilan Bagian Bawah</strong>
+            <span style="font-size:12px; color:var(--ink-muted);">Jika dimatikan, landing page menampilkan 3 kartu <em>Komitmen Votura Studio</em> (cocok untuk awal peluncuran).</span>
+          </div>
+          <label class="checkbox-inline">
+            <input type="checkbox" id="cms-useRealTestimonials">
+            <span>Tampilkan Ulasan Klien Asli</span>
+          </label>
+        </div>
+
+        <div id="cms-testimonials-list"></div>
+      </div>
+
+      <!-- J. FOOTER -->
+      <div class="section-card">
+        <div class="section-title">J. Teks Footer</div>
+        <div class="form-group" style="margin-bottom:0;">
+          <textarea id="cms-footerDesc"></textarea>
+        </div>
+      </div>
+
+      <!-- FLOATING SAVE BAR -->
+      <div class="sticky-save-bar">
+        <span>Perubahan akan langsung tayang secara real-time di halaman utama.</span>
+        <button type="button" class="btn btn-accent" id="save-landing-btn" onclick="saveLandingPageData()">Simpan Perubahan Landing Page</button>
       </div>
     </div>
   </div>
@@ -415,7 +791,16 @@
         .replace(/"/g, "&quot;");
     }
 
-    /* GENERATE ID OTOMATIS HURUF KECIL: w001..w999..w1000 atau p001..p999..p1000 */
+    function switchMainTab(tabName, btn) {
+      document.querySelectorAll('.main-tab-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+      document.getElementById(`pane-${tabName}`).classList.add('active');
+    }
+
+    /* ====================================================== */
+    /* BAGIAN 1: MANAJEMEN KLIEN                              */
+    /* ====================================================== */
     function generateNextEventId(type) {
       const prefix = type === 'photobooth' ? 'p' : 'w';
       const regex = new RegExp(`^${prefix}(\\d+)$`, 'i');
@@ -425,9 +810,7 @@
         const match = String(ev.id || '').trim().match(regex);
         if (match) {
           const num = parseInt(match[1], 10);
-          if (!isNaN(num) && num > maxNumber) {
-            maxNumber = num;
-          }
+          if (!isNaN(num) && num > maxNumber) maxNumber = num;
         }
       });
 
@@ -461,7 +844,7 @@
       refreshAutoGeneratedId();
     }
 
-    function showModal(title, message, isConfirm = false, onConfirm = null) {
+    function showModal(title, message, isConfirm = false, onConfirm = null, confirmLabel = "Ya, Hapus") {
       document.getElementById('modal-title').textContent = title;
       document.getElementById('modal-message').textContent = message;
       const actionsEl = document.getElementById('modal-actions');
@@ -469,7 +852,7 @@
       if (isConfirm) {
         actionsEl.innerHTML = `
           <button type="button" class="btn btn-outline" style="flex:1;" onclick="closeModal()">Batal</button>
-          <button type="button" class="btn btn-danger" style="flex:1;" id="confirm-btn">Ya, Hapus</button>
+          <button type="button" class="btn btn-danger" style="flex:1;" id="confirm-btn">${confirmLabel}</button>
         `;
         document.getElementById('confirm-btn').onclick = () => {
           closeModal();
@@ -496,7 +879,6 @@
       });
     }
 
-    // READ: Load Events dari Firestore
     function loadEvents() {
       db.collection("events").onSnapshot((snapshot) => {
         cachedEvents = [];
@@ -565,7 +947,6 @@
       });
     }
 
-    // CREATE: Tambah Event Baru dengan ID Otomatis
     document.getElementById('create-event-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const btn = document.getElementById('submit-btn');
@@ -601,13 +982,11 @@
       }
     });
 
-    // UPDATE: Lock / Unlock Event
     window.toggleStatus = function(id, currentStatus) {
       const newStatus = currentStatus === 'active' ? 'locked' : 'active';
       db.collection("events").doc(id).update({ status: newStatus });
     };
 
-    // HAPUS BERSIH DOKUMEN INDUK + SELURUH SUB-KOLEKSI (guests, rsvp, photos, wishes, captures)
     async function deleteEventWithSubcollections(eventId) {
       const eventRef = db.collection("events").doc(eventId);
       const subCollections = ["guests", "rsvp", "photos", "wishes", "captures", "messages"];
@@ -624,7 +1003,6 @@
       await eventRef.delete();
     }
 
-    // DELETE: Hapus Event & Sub-koleksi dengan Custom Modal
     window.confirmDelete = function(id) {
       showModal("Hapus Pesanan Klien", `Apakah kamu yakin ingin menghapus permanen event ID "${id}" beserta seluruh data tamu, RSVP, dan galeri fotonya?`, true, async () => {
         try {
@@ -636,10 +1014,527 @@
       });
     };
 
-    // Inisialisasi awal
+    /* ====================================================== */
+    /* BAGIAN 2: CMS LANDING PAGE (settings/landing_page)     */
+    /* ====================================================== */
+    const DEFAULT_LANDING_DATA = {
+      waNumber: "6282298966860",
+      navCta: "Ngobrol Dulu",
+      igUrl: "https://instagram.com/voturastudio",
+      tiktokUrl: "https://tiktok.com/@voturastudio",
+      heroEyebrow: "Votura Virtual Photobooth — Digital Invitation — Creative Studio",
+      heroTitle: "Abadikan Serunya Acara Langsung dari *Ponsel Tamu*",
+      heroSubtitle: "Hadirkan pengalaman photobooth interaktif tanpa antre mesin dan tanpa instal aplikasi. Tamu cukup scan QR Code, berfoto dengan frame eksklusif acaramu, dan semua kenangan otomatis tersimpan rapi di galeri pengantin.",
+      heroImageUrl: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1000&q=80",
+      showcaseTitle: "Tanpa Antre, Tanpa Batas Jumlah Foto",
+      showcaseDesc: "Dilengkapi opsi cetak Kartu Meja QR, Standing Banner, hingga Kain Sign Gantung estetik yang menyatu dengan dekorasi acaramu.",
+      demos: [
+        {
+          tag: "Interactive Demo",
+          title: "Votura Virtual Photobooth",
+          desc: "Coba langsung pengalaman ambil foto, ganti filter, tulis pesan ucapan untuk pengantin, dan unduh hasil strip fotonya langsung dari browser HP-mu.",
+          imageUrl: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=900&q=80",
+          demoUrl: "demo-photobooth.html"
+        }
+      ],
+      catalogItems: [
+        { category: "frame", title: "Frame Strip Classic (3 Pose)", badge: "Strip", imageUrl: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=900&q=80" },
+        { category: "frame", title: "Frame Polaroid Minimalist", badge: "Polaroid", imageUrl: "https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=900&q=80" },
+        { category: "frame", title: "Frame 4R Editorial", badge: "4R", imageUrl: "https://images.unsplash.com/photo-1507504031003-b417219a0fde?auto=format&fit=crop&w=900&q=80" },
+        { category: "frame", title: "Frame IG Story 9:16", badge: "IG Story", imageUrl: "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&w=900&q=80" },
+        { category: "print", title: "Kain Sign Gantung Linen QR", badge: "Kain Sign", imageUrl: "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?auto=format&fit=crop&w=900&q=80" },
+        { category: "print", title: "Kartu Meja QR Art Carton", badge: "Kartu QR", imageUrl: "https://images.unsplash.com/photo-1544078751-58fee2d8a03b?auto=format&fit=crop&w=900&q=80" },
+        { category: "print", title: "Standing Welcome Banner QR", badge: "Banner Sign", imageUrl: "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=900&q=80" },
+        { category: "print", title: "Display QR Akrilik / Meja Tamu", badge: "Table Sign", imageUrl: "https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=900&q=80" }
+      ],
+      digitalPackages: [
+        {
+          tag: "Digital Only",
+          name: "Digital Basic",
+          desc: "Solusi praktis 100% online tanpa ongkir untuk intimate wedding atau acara komunitas.",
+          strikePrice: "Rp 149.000",
+          price: "Rp 99.000",
+          unit: "/ acara",
+          popular: false,
+          features: [
+            "Unlimited foto & ucapan tamu selama acara",
+            "Free 1 desain frame katalog + file master QR siap cetak",
+            "Masa aktif galeri online 7 hari sejak hari-H",
+            "Panel Klien Mandiri (moderasi galeri & unduh ZIP)"
+          ]
+        },
+        {
+          tag: "Digital Only",
+          name: "Digital Signature",
+          desc: "Pilihan favorit untuk acara pernikahan dengan variasi desain bingkai lebih lengkap.",
+          strikePrice: "Rp 199.000",
+          price: "Rp 149.000",
+          unit: "/ acara",
+          popular: true,
+          features: [
+            "Unlimited foto & ucapan tamu selama acara",
+            "Free 2 desain frame (bisa mix Strip / Polaroid / Story)",
+            "File master desain Kartu QR & Kain Sign siap cetak",
+            "Masa aktif galeri online 14 hari + unduh massal ZIP"
+          ]
+        },
+        {
+          tag: "Digital + Undangan",
+          name: "Digital Complete",
+          desc: "Paket bundling lengkap Virtual Photobooth + Undangan Digital Votura dalam satu harga hemat.",
+          strikePrice: "Rp 279.000",
+          price: "Rp 199.000",
+          unit: "/ acara",
+          popular: false,
+          features: [
+            "Semua fitur paket Digital Signature",
+            "Termasuk 1 Website Undangan Digital Votura Wedding",
+            "Custom 1 desain frame sesuai tema undanganmu",
+            "Masa aktif galeri online 30 hari penuh"
+          ]
+        }
+      ],
+      physicalPackages: [
+        {
+          tag: "Paket Lengkap Fisik",
+          name: "Paket Bronze",
+          desc: "Terima beres dengan cetak kartu QR fisik untuk dibagikan di meja tamu.",
+          strikePrice: "Rp 299.000",
+          price: "Rp 249.000",
+          unit: "/ acara",
+          popular: false,
+          features: [
+            "Virtual Photobooth Unlimited Foto & Ucapan",
+            "Free 1 desain frame + Cetak 100 pcs Kartu QR",
+            "Masa aktif galeri online 7 hari sejak hari-H",
+            "Panel Klien Mandiri (moderasi galeri & unduh ZIP)"
+          ]
+        },
+        {
+          tag: "Paket Lengkap Fisik",
+          name: "Paket Silver",
+          desc: "Paling diminati! Sudah termasuk cetak kartu QR dan Kain Sign Gantung estetik.",
+          strikePrice: "Rp 399.000",
+          price: "Rp 349.000",
+          unit: "/ acara",
+          popular: true,
+          features: [
+            "Virtual Photobooth Unlimited Foto & Ucapan",
+            "Free 2 desain frame + Cetak 150 pcs Kartu QR",
+            "Gratis 1 Kain Sign Gantung / Banner Sign QR",
+            "Masa aktif galeri online 14 hari + unduh massal ZIP"
+          ]
+        },
+        {
+          tag: "Paket Lengkap Fisik",
+          name: "Paket Gold",
+          desc: "Paket terlengkap untuk resepsi besar dengan display fisik maksimal.",
+          strikePrice: "Rp 499.000",
+          price: "Rp 449.000",
+          unit: "/ acara",
+          popular: false,
+          features: [
+            "Virtual Photobooth Unlimited Foto & Ucapan",
+            "Free 3 desain frame (termasuk custom nama/tanggal)",
+            "Cetak 250 pcs Kartu QR + 1 Kain Sign Gantung Premium",
+            "Masa aktif galeri online 30 hari + unduh massal ZIP"
+          ]
+        }
+      ],
+      addons: [
+        { name: "Custom Desain Frame Eksklusif", desc: "Desain bingkai khusus menyesuaikan motif undangan atau tema dekorasi", price: "Rp 25.000" },
+        { name: "Kain Sign Gantung (Linen QR Sign)", desc: "Cetak kain estetik ukuran 60x90 cm siap gantung di welcome gate", price: "Rp 85.000" },
+        { name: "Standing Banner / X-Banner QR", desc: "Cetak banner lengkap dengan tiang penyangga untuk area pintu masuk", price: "Rp 95.000" },
+        { name: "Tambah Cetak Kartu Meja QR (100 pcs)", desc: "Bahan Art Carton tebal 260gsm cetak dua sisi", price: "Rp 50.000" }
+      ],
+      weddingSection: {
+        title: "Lengkapi Acara dengan *Undangan Digital Elegan*",
+        desc: "Sebar kabar bahagia lebih praktis dan berkelas. Tamu cukup membuka satu tautan untuk melihat detail acara, navigasi Google Maps, hingga mengisi RSVP & doa restu secara real-time. Tersedia harga spesial bundling bersama Virtual Photobooth!",
+        price: "Rp 99.000",
+        demoUrl: "demo-wedding.html",
+        features: [
+          "Tautan khusus acara di domain voturastudio.site",
+          "Konfirmasi kehadiran (RSVP) dan ucapan tamu real-time",
+          "Navigasi lokasi sekali klik menuju Google Maps",
+          "Halaman kelola mandiri untuk update info & rekap tamu"
+        ]
+      },
+      faqs: [
+        {
+          q: "Apakah tamu harus mengunduh aplikasi terlebih dahulu?",
+          a: "Tidak perlu sama sekali. Tamu cukup memindai (scan) QR Code menggunakan kamera ponsel atau membuka tautan acara, lalu kamera photobooth langsung terbuka di browser HP."
+        },
+        {
+          q: "Apakah jumlah foto tamu dibatasi?",
+          a: "Tidak ada batasan (unlimited). Seluruh tamu dapat berfoto berkali-kali selama acara berlangsung dan mengunduh hasilnya langsung ke ponsel masing-masing."
+        },
+        {
+          q: "Bagaimana cara pengantin mendapatkan semua foto tamu?",
+          a: "Pengantin akan diberikan akses ke Panel Galeri Klien Mandiri. Di sana pengantin bisa meninjau seluruh foto yang masuk, menyaring foto yang kurang sesuai, dan mengunduh semua foto sekaligus dalam satu file ZIP."
+        },
+        {
+          q: "Bagaimana jika saya berada di luar kota dan ingin memesan Paket Fisik?",
+          a: "Kartu Meja QR, Banner Sign, maupun Kain Sign Gantung dapat kami kirim ke seluruh Indonesia menggunakan ekspedisi reguler maupun kilat. Untuk kebutuhan mendadak, kamu juga bisa memilih Paket Digital Only agar file siap cetak langsung dikirim hari itu juga."
+        }
+      ],
+      useRealTestimonials: false,
+      testimonials: [],
+      footerDesc: "Menghadirkan pengalaman Virtual Photobooth interaktif dan Undangan Digital elegan untuk merayakan setiap momen istimewa."
+    };
+
+    let cmsState = JSON.parse(JSON.stringify(DEFAULT_LANDING_DATA));
+
+    function populateCmsForms(data) {
+      cmsState = {
+        ...JSON.parse(JSON.stringify(DEFAULT_LANDING_DATA)),
+        ...data,
+        weddingSection: {
+          ...DEFAULT_LANDING_DATA.weddingSection,
+          ...(data.weddingSection || {})
+        }
+      };
+
+      document.getElementById('cms-waNumber').value = cmsState.waNumber || "";
+      document.getElementById('cms-navCta').value = cmsState.navCta || "";
+      document.getElementById('cms-igUrl').value = cmsState.igUrl || "";
+      document.getElementById('cms-tiktokUrl').value = cmsState.tiktokUrl || "";
+      document.getElementById('cms-heroEyebrow').value = cmsState.heroEyebrow || "";
+      document.getElementById('cms-heroTitle').value = cmsState.heroTitle || "";
+      document.getElementById('cms-heroSubtitle').value = cmsState.heroSubtitle || "";
+      document.getElementById('cms-showcaseTitle').value = cmsState.showcaseTitle || "";
+      document.getElementById('cms-showcaseDesc').value = cmsState.showcaseDesc || "";
+      document.getElementById('cms-heroImageUrl').value = cmsState.heroImageUrl || "";
+      document.getElementById('prev-hero-img').src = cmsState.heroImageUrl || "";
+
+      document.getElementById('cms-wedTitle').value = cmsState.weddingSection.title || "";
+      document.getElementById('cms-wedPrice').value = cmsState.weddingSection.price || "";
+      document.getElementById('cms-wedDesc').value = cmsState.weddingSection.desc || "";
+      document.getElementById('cms-wedDemoUrl').value = cmsState.weddingSection.demoUrl || "";
+      document.getElementById('cms-wedFeatures').value = (cmsState.weddingSection.features || []).join("\n");
+
+      document.getElementById('cms-useRealTestimonials').checked = cmsState.useRealTestimonials === true;
+      document.getElementById('cms-footerDesc').value = cmsState.footerDesc || "";
+
+      renderCmsDemos();
+      renderCmsCatalog();
+      renderCmsPackages('digital');
+      renderCmsPackages('physical');
+      renderCmsAddons();
+      renderCmsFaqs();
+      renderCmsTestimonials();
+    }
+
+    function renderCmsDemos() {
+      const container = document.getElementById('cms-demos-list');
+      const isSingle = (cmsState.demos || []).length === 1;
+      const sizeText = isSingle ? "Figma: 900 &times; 700 px (4:3)" : "Figma: 800 &times; 500 px (16:10)";
+
+      container.innerHTML = (cmsState.demos || []).map((item, idx) => `
+        <div class="cms-item-box">
+          <div class="cms-item-header">
+            <strong>Tema Demo #${idx + 1}</strong>
+            <button type="button" class="btn btn-danger btn-sm" onclick="removeCmsArrayItem('demos', ${idx}, renderCmsDemos)">Hapus</button>
+          </div>
+          <div class="grid-3">
+            <div class="form-group">
+              <label>Label Tag</label>
+              <input type="text" value="${escapeHtml(item.tag)}" onchange="cmsState.demos[${idx}].tag=this.value">
+            </div>
+            <div class="form-group">
+              <label>Judul Tema</label>
+              <input type="text" value="${escapeHtml(item.title)}" onchange="cmsState.demos[${idx}].title=this.value">
+            </div>
+            <div class="form-group">
+              <label>URL Link Demo</label>
+              <input type="text" value="${escapeHtml(item.demoUrl)}" onchange="cmsState.demos[${idx}].demoUrl=this.value">
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="form-group" style="margin-bottom:0;">
+              <label>Deskripsi Singkat</label>
+              <input type="text" value="${escapeHtml(item.desc)}" onchange="cmsState.demos[${idx}].desc=this.value">
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label>URL Gambar Thumbnail <span class="size-badge">${sizeText}</span></label>
+              <input type="url" value="${escapeHtml(item.imageUrl)}" onchange="cmsState.demos[${idx}].imageUrl=this.value">
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function addDemoItem() {
+      cmsState.demos.push({ tag: "Tema Baru", title: "Nama Tema", desc: "Deskripsi tema demo.", imageUrl: "", demoUrl: "demo-photobooth.html" });
+      renderCmsDemos();
+    }
+
+    function renderCmsCatalog() {
+      const container = document.getElementById('cms-catalog-list');
+      container.innerHTML = (cmsState.catalogItems || []).map((item, idx) => `
+        <div class="cms-item-box">
+          <div class="cms-item-header">
+            <strong>Katalog #${idx + 1}</strong>
+            <button type="button" class="btn btn-danger btn-sm" onclick="removeCmsArrayItem('catalogItems', ${idx}, renderCmsCatalog)">Hapus</button>
+          </div>
+          <div class="grid-3">
+            <div class="form-group">
+              <label>Kategori Filter</label>
+              <select onchange="cmsState.catalogItems[${idx}].category=this.value">
+                <option value="frame" ${item.category === 'frame' ? 'selected' : ''}>Desain Frame Foto</option>
+                <option value="print" ${item.category === 'print' ? 'selected' : ''}>Kartu QR, Banner &amp; Kain Sign</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Nama Item</label>
+              <input type="text" value="${escapeHtml(item.title)}" onchange="cmsState.catalogItems[${idx}].title=this.value">
+            </div>
+            <div class="form-group">
+              <label>Badge Label (Strip / Polaroid / Kain Sign)</label>
+              <input type="text" value="${escapeHtml(item.badge)}" onchange="cmsState.catalogItems[${idx}].badge=this.value">
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label>URL Gambar Katalog <span class="size-badge">Figma: 900 &times; 1200 px (Rasio 3:4 Portrait)</span></label>
+            <div class="img-preview-strip">
+              <img src="${escapeHtml(item.imageUrl)}" alt="Preview">
+              <input type="url" value="${escapeHtml(item.imageUrl)}" onchange="cmsState.catalogItems[${idx}].imageUrl=this.value; this.previousElementSibling.src=this.value;">
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function addCatalogItem() {
+      cmsState.catalogItems.push({ category: "frame", title: "Frame Baru", badge: "Strip", imageUrl: "" });
+      renderCmsCatalog();
+    }
+
+    function renderCmsPackages(kind) {
+      const key = kind === 'physical' ? 'physicalPackages' : 'digitalPackages';
+      const container = document.getElementById(`cms-${kind}-packages-list`);
+      container.innerHTML = (cmsState[key] || []).map((pkg, idx) => `
+        <div class="cms-item-box">
+          <div class="cms-item-header">
+            <strong>Paket #${idx + 1} — ${escapeHtml(pkg.name)}</strong>
+            <div style="display:flex; align-items:center; gap:12px;">
+              <label class="checkbox-inline" style="margin:0;">
+                <input type="checkbox" ${pkg.popular ? 'checked' : ''} onchange="cmsState.${key}[${idx}].popular=this.checked">
+                <span>Badge Terlaris</span>
+              </label>
+              <button type="button" class="btn btn-danger btn-sm" onclick="removeCmsArrayItem('${key}', ${idx}, () => renderCmsPackages('${kind}'))">Hapus</button>
+            </div>
+          </div>
+          <div class="grid-3">
+            <div class="form-group">
+              <label>Label Kategori Atas</label>
+              <input type="text" value="${escapeHtml(pkg.tag)}" onchange="cmsState.${key}[${idx}].tag=this.value">
+            </div>
+            <div class="form-group">
+              <label>Nama Paket</label>
+              <input type="text" value="${escapeHtml(pkg.name)}" onchange="cmsState.${key}[${idx}].name=this.value">
+            </div>
+            <div class="form-group">
+              <label>Satuan Harga</label>
+              <input type="text" value="${escapeHtml(pkg.unit || '/ acara')}" onchange="cmsState.${key}[${idx}].unit=this.value">
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label>Harga Coret (Opsional)</label>
+              <input type="text" value="${escapeHtml(pkg.strikePrice || '')}" placeholder="Rp 199.000" onchange="cmsState.${key}[${idx}].strikePrice=this.value">
+            </div>
+            <div class="form-group">
+              <label>Harga Utama</label>
+              <input type="text" value="${escapeHtml(pkg.price || '')}" placeholder="Rp 149.000" onchange="cmsState.${key}[${idx}].price=this.value">
+            </div>
+          </div>
+          <div class="form-group">
+            <label>Deskripsi Singkat Paket</label>
+            <input type="text" value="${escapeHtml(pkg.desc || '')}" onchange="cmsState.${key}[${idx}].desc=this.value">
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label>Daftar Fasilitas (1 baris = 1 poin centang)</label>
+            <textarea onchange="cmsState.${key}[${idx}].features=this.value.split('\\n').map(s=>s.trim()).filter(Boolean)">${escapeHtml((pkg.features || []).join('\n'))}</textarea>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function addPackageItem(kind) {
+      const key = kind === 'physical' ? 'physicalPackages' : 'digitalPackages';
+      cmsState[key].push({
+        tag: kind === 'physical' ? "Paket Lengkap Fisik" : "Digital Only",
+        name: "Paket Baru",
+        desc: "Deskripsi paket baru.",
+        strikePrice: "",
+        price: "Rp 199.000",
+        unit: "/ acara",
+        popular: false,
+        features: ["Unlimited foto & ucapan tamu"]
+      });
+      renderCmsPackages(kind);
+    }
+
+    function renderCmsAddons() {
+      const container = document.getElementById('cms-addons-list');
+      container.innerHTML = (cmsState.addons || []).map((item, idx) => `
+        <div class="cms-item-box">
+          <div class="cms-item-header">
+            <strong>Add-On #${idx + 1}</strong>
+            <button type="button" class="btn btn-danger btn-sm" onclick="removeCmsArrayItem('addons', ${idx}, renderCmsAddons)">Hapus</button>
+          </div>
+          <div class="grid-3">
+            <div class="form-group" style="margin-bottom:0;">
+              <label>Nama Layanan Tambahan</label>
+              <input type="text" value="${escapeHtml(item.name)}" onchange="cmsState.addons[${idx}].name=this.value">
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label>Keterangan Singkat</label>
+              <input type="text" value="${escapeHtml(item.desc)}" onchange="cmsState.addons[${idx}].desc=this.value">
+            </div>
+            <div class="form-group" style="margin-bottom:0;">
+              <label>Harga Add-On</label>
+              <input type="text" value="${escapeHtml(item.price)}" onchange="cmsState.addons[${idx}].price=this.value">
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function addAddonItem() {
+      cmsState.addons.push({ name: "Layanan Tambahan Baru", desc: "Keterangan layanan.", price: "Rp 50.000" });
+      renderCmsAddons();
+    }
+
+    function renderCmsFaqs() {
+      const container = document.getElementById('cms-faqs-list');
+      container.innerHTML = (cmsState.faqs || []).map((item, idx) => `
+        <div class="cms-item-box">
+          <div class="cms-item-header">
+            <strong>Pertanyaan #${idx + 1}</strong>
+            <button type="button" class="btn btn-danger btn-sm" onclick="removeCmsArrayItem('faqs', ${idx}, renderCmsFaqs)">Hapus</button>
+          </div>
+          <div class="form-group">
+            <label>Pertanyaan</label>
+            <input type="text" value="${escapeHtml(item.q)}" onchange="cmsState.faqs[${idx}].q=this.value">
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label>Jawaban</label>
+            <textarea onchange="cmsState.faqs[${idx}].a=this.value">${escapeHtml(item.a)}</textarea>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function addFaqItem() {
+      cmsState.faqs.push({ q: "Pertanyaan baru?", a: "Jawaban lengkap di sini." });
+      renderCmsFaqs();
+    }
+
+    function renderCmsTestimonials() {
+      const container = document.getElementById('cms-testimonials-list');
+      const list = cmsState.testimonials || [];
+      if (list.length === 0) {
+        container.innerHTML = `<p style="font-size:13px; color:var(--ink-muted); padding:6px 0;">Belum ada ulasan klien tersimpan. Klik <strong>+ Tambah Testimoni Klien</strong> di atas apabila sudah ada testimoni asli dari klien.</p>`;
+        return;
+      }
+      container.innerHTML = list.map((item, idx) => `
+        <div class="cms-item-box">
+          <div class="cms-item-header">
+            <strong>Testimoni #${idx + 1}</strong>
+            <button type="button" class="btn btn-danger btn-sm" onclick="removeCmsArrayItem('testimonials', ${idx}, renderCmsTestimonials)">Hapus</button>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label>Nama Pasangan / Klien</label>
+              <input type="text" value="${escapeHtml(item.author)}" placeholder="contoh: Nadia & Dimas" onchange="cmsState.testimonials[${idx}].author=this.value">
+            </div>
+            <div class="form-group">
+              <label>Paket / Jenis Acara</label>
+              <input type="text" value="${escapeHtml(item.role)}" placeholder="contoh: Paket Silver + Kain Sign" onchange="cmsState.testimonials[${idx}].role=this.value">
+            </div>
+          </div>
+          <div class="form-group" style="margin-bottom:0;">
+            <label>Isi Ulasan Klien</label>
+            <textarea onchange="cmsState.testimonials[${idx}].text=this.value">${escapeHtml(item.text)}</textarea>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    function addTestimonialItem() {
+      if (!Array.isArray(cmsState.testimonials)) cmsState.testimonials = [];
+      cmsState.testimonials.push({ author: "", role: "", text: "" });
+      renderCmsTestimonials();
+    }
+
+    function removeCmsArrayItem(key, idx, renderFn) {
+      cmsState[key].splice(idx, 1);
+      renderFn();
+    }
+
+    function resetLandingToDefault() {
+      showModal("Reset Konten Default", "Kembalikan seluruh isian form CMS ke pengaturan bawaan awal? (Belum tersimpan sebelum menekan tombol Simpan).", true, () => {
+        populateCmsForms(DEFAULT_LANDING_DATA);
+      }, "Ya, Reset");
+    }
+
+    async function saveLandingPageData() {
+      const btn = document.getElementById('save-landing-btn');
+      btn.disabled = true;
+      btn.textContent = "Menyimpan...";
+
+      const payload = {
+        ...cmsState,
+        waNumber: document.getElementById('cms-waNumber').value.trim(),
+        navCta: document.getElementById('cms-navCta').value.trim(),
+        igUrl: document.getElementById('cms-igUrl').value.trim(),
+        tiktokUrl: document.getElementById('cms-tiktokUrl').value.trim(),
+        heroEyebrow: document.getElementById('cms-heroEyebrow').value.trim(),
+        heroTitle: document.getElementById('cms-heroTitle').value.trim(),
+        heroSubtitle: document.getElementById('cms-heroSubtitle').value.trim(),
+        showcaseTitle: document.getElementById('cms-showcaseTitle').value.trim(),
+        showcaseDesc: document.getElementById('cms-showcaseDesc').value.trim(),
+        heroImageUrl: document.getElementById('cms-heroImageUrl').value.trim(),
+        weddingSection: {
+          title: document.getElementById('cms-wedTitle').value.trim(),
+          price: document.getElementById('cms-wedPrice').value.trim(),
+          desc: document.getElementById('cms-wedDesc').value.trim(),
+          demoUrl: document.getElementById('cms-wedDemoUrl').value.trim(),
+          features: document.getElementById('cms-wedFeatures').value.split('\n').map(s => s.trim()).filter(Boolean)
+        },
+        useRealTestimonials: document.getElementById('cms-useRealTestimonials').checked,
+        footerDesc: document.getElementById('cms-footerDesc').value.trim(),
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      };
+
+      try {
+        await db.collection("settings").doc("landing_page").set(payload, { merge: true });
+        showModal("Berhasil Disimpan", "Seluruh perubahan konten, paket, dan gambar di Landing Page Votura Studio sudah diperbarui.");
+      } catch (err) {
+        showModal("Gagal Menyimpan", "Terjadi kesalahan: " + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.textContent = "Simpan Perubahan Landing Page";
+      }
+    }
+
+    function loadLandingSettings() {
+      db.collection("settings").doc("landing_page").get().then((doc) => {
+        if (doc.exists) {
+          populateCmsForms(doc.data());
+        } else {
+          populateCmsForms(DEFAULT_LANDING_DATA);
+        }
+      }).catch(() => {
+        populateCmsForms(DEFAULT_LANDING_DATA);
+      });
+    }
+
     syncTemplateOptionsByType();
     refreshAutoGeneratedId();
     loadEvents();
+    loadLandingSettings();
   </script>
 </body>
 </html>
