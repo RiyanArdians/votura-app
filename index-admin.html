@@ -452,57 +452,6 @@
 
     .client-frame-row:last-child { border-bottom: none; padding-bottom: 0; }
 
-    .pb-posts-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
-      gap: 10px;
-      margin-top: 10px;
-    }
-
-    .pb-post-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .pb-post-card img {
-      width: 100%;
-      aspect-ratio: 3 / 4;
-      object-fit: cover;
-      background: #1C1A17;
-      display: block;
-    }
-
-    .pb-post-info {
-      padding: 10px;
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-      flex: 1;
-    }
-
-    .pb-post-info strong {
-      font-size: 12.5px;
-      color: var(--ink);
-    }
-
-    .pb-post-info span {
-      font-size: 10.5px;
-      color: var(--ink-muted);
-    }
-
-    .pb-post-info p {
-      font-size: 11.5px;
-      color: #3A3631;
-      font-style: italic;
-      flex: 1;
-      margin: 2px 0 6px;
-      word-break: break-word;
-    }
-
     .save-bar {
       position: fixed;
       bottom: 14px;
@@ -1282,7 +1231,6 @@
     let demoPhotoboothData = JSON.parse(JSON.stringify(defaultDemoPhotobooth));
     let superAdminEvents = [];
     let clientSubPhotosCache = {};
-    let clientPhotoboothPostsCache = {};
 
     function switchAdminTab(tabId, btnEl) {
       activeTabId = tabId;
@@ -1326,16 +1274,6 @@
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;");
-    }
-
-    function formatShortDate(ts) {
-      if (!ts) return "";
-      let ms = 0;
-      if (ts.toMillis) ms = ts.toMillis();
-      else if (ts.seconds) ms = ts.seconds * 1000;
-      else ms = new Date(ts).getTime();
-      if (!ms || isNaN(ms)) return "";
-      return new Date(ms).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
     }
 
     async function initCms() {
@@ -1589,8 +1527,6 @@
           }
           if (evData.type === 'wedding') {
             listenClientSubPhotos(doc.id);
-          } else {
-            listenClientPhotoboothPosts(doc.id);
           }
         });
         const countBadge = document.getElementById('client-count-badge');
@@ -1673,56 +1609,73 @@
       });
     }
 
-    function listenClientPhotoboothPosts(eventId) {
-      if (clientPhotoboothPostsCache[eventId]) return;
-      clientPhotoboothPostsCache[eventId] = [];
-      db.collection("events").doc(eventId).collection("photobooth_posts").onSnapshot((snap) => {
-        const items = [];
-        snap.forEach(d => items.push({ postId: d.id, ...d.data() }));
-        items.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
-        clientPhotoboothPostsCache[eventId] = items;
-        const box = document.getElementById(`sa-pb-posts-list-${eventId}`);
-        if (box) box.innerHTML = buildClientPhotoboothPostsHtml(eventId, items);
-        const countSpan = document.getElementById(`sa-pb-posts-count-${eventId}`);
-        if (countSpan) countSpan.textContent = items.length;
-      });
-    }
-
-    function buildClientPhotoboothPostsHtml(eventId, posts) {
-      if (!Array.isArray(posts) || posts.length === 0) {
-        return `<p style="font-size:12.5px; color:var(--ink-muted); padding:10px 0;">Belum ada foto yang diunggah tamu pada acara ini.</p>`;
-      }
-      return `<div class="pb-posts-grid">` + posts.map(p => `
-        <div class="pb-post-card">
-          <img src="${escapeHtml(p.photoData || '')}" alt="${escapeHtml(p.name || 'Tamu')}" loading="lazy">
-          <div class="pb-post-info">
-            <strong>${escapeHtml(p.name || 'Tamu Undangan')}</strong>
-            <span>${escapeHtml(formatShortDate(p.createdAt))}</span>
-            <p>"${escapeHtml(p.message || '-')}"</p>
-            <div style="display:flex; gap:6px;">
-              <a href="${escapeHtml(p.photoData || '')}" download="${escapeHtml((p.name || 'Tamu') + '-Votura.jpg')}" class="btn btn-outline btn-sm" style="flex:1; padding:6px 8px;">Unduh</a>
-              <button type="button" class="btn btn-danger" style="flex:1; padding:6px 8px;" onclick="deleteClientPhotoboothPost('${escapeHtml(eventId)}', '${escapeHtml(p.postId)}')">Hapus</button>
-            </div>
-          </div>
-        </div>
-      `).join('') + `</div>`;
-    }
-
-    async function deleteClientPhotoboothPost(eventId, postId) {
-      try {
-        await db.collection("events").doc(eventId).collection("photobooth_posts").doc(postId).delete();
-        showCmsModal("Kiriman Dihapus", "Foto kiriman tamu telah dihapus dari galeri.");
-      } catch (err) {
-        showCmsModal("Gagal Menghapus", err.message);
-      }
-    }
-
     function copyClientUrl(fileName, eventId) {
       const baseUrl = window.location.href.substring(0, window.location.href.lastIndexOf('/') + 1);
       const fullUrl = `${baseUrl}${fileName}?event=${encodeURIComponent(eventId)}`;
       navigator.clipboard.writeText(fullUrl).then(() => {
         showCmsModal("Tautan Klien Disalin", `Link acara berhasil disalin:\n${fullUrl}`);
       });
+    }
+
+    function buildPhotoboothFontColorEditorHtml(ev) {
+      const preset = TEMPLATE_CATALOG.photobooth[0];
+      const style = ev.customStyle || {};
+
+      const bgMain = style.bgMain || preset.bgMain;
+      const accent = style.accent || preset.accent;
+      const ink = style.ink || preset.ink;
+      const fontH = style.fontHeading || preset.fontH;
+      const fontB = style.fontBody || preset.fontB;
+
+      return `
+        <div class="theme-config-box">
+          <div class="theme-config-header">
+            <strong style="font-size:13px;">1. Gaya Font &amp; Warna Tampilan</strong>
+            <button type="button" class="btn btn-outline btn-sm" onclick="resetPhotoboothColors('${escapeHtml(ev.id)}')">Reset Warna</button>
+          </div>
+          <div class="grid-2">
+            <div class="form-group">
+              <label>Gaya Font Judul</label>
+              <select id="sa-font-h-${escapeHtml(ev.id)}">
+                <option value="'Cormorant Garamond', serif" ${fontH === "'Cormorant Garamond', serif" ? 'selected' : ''}>Cormorant Garamond (Editorial)</option>
+                <option value="'Cinzel', serif" ${fontH === "'Cinzel', serif" ? 'selected' : ''}>Cinzel (Royal / Klasik)</option>
+                <option value="'Playfair Display', serif" ${fontH === "'Playfair Display', serif" ? 'selected' : ''}>Playfair Display (Botanical)</option>
+                <option value="'Space Grotesk', sans-serif" ${fontH === "'Space Grotesk', sans-serif" ? 'selected' : ''}>Space Grotesk (Modern)</option>
+                <option value="'Bodoni Moda', serif" ${fontH === "'Bodoni Moda', serif" ? 'selected' : ''}>Bodoni Moda (Luxury)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Gaya Font Teks Isi</label>
+              <select id="sa-font-b-${escapeHtml(ev.id)}">
+                <option value="'Plus Jakarta Sans', sans-serif" ${fontB === "'Plus Jakarta Sans', sans-serif" ? 'selected' : ''}>Plus Jakarta Sans</option>
+                <option value="'Lora', serif" ${fontB === "'Lora', serif" ? 'selected' : ''}>Lora Serif</option>
+                <option value="'DM Sans', sans-serif" ${fontB === "'DM Sans', sans-serif" ? 'selected' : ''}>DM Sans</option>
+                <option value="'Inter', sans-serif" ${fontB === "'Inter', sans-serif" ? 'selected' : ''}>Inter Clean</option>
+                <option value="'Montserrat', sans-serif" ${fontB === "'Montserrat', sans-serif" ? 'selected' : ''}>Montserrat</option>
+              </select>
+            </div>
+          </div>
+          <div class="grid-3">
+            <div class="form-group" style="margin-bottom:0;"><label>Warna Latar Utama</label><input type="color" id="sa-bg-${escapeHtml(ev.id)}" value="${escapeHtml(bgMain)}"></div>
+            <div class="form-group" style="margin-bottom:0;"><label>Warna Aksen</label><input type="color" id="sa-acc-${escapeHtml(ev.id)}" value="${escapeHtml(accent)}"></div>
+            <div class="form-group" style="margin-bottom:0;"><label>Warna Teks Utama</label><input type="color" id="sa-ink-${escapeHtml(ev.id)}" value="${escapeHtml(ink)}"></div>
+          </div>
+        </div>
+      `;
+    }
+
+    function resetPhotoboothColors(eventId) {
+      const p = TEMPLATE_CATALOG.photobooth[0];
+      const bgEl = document.getElementById(`sa-bg-${eventId}`);
+      const accEl = document.getElementById(`sa-acc-${eventId}`);
+      const inkEl = document.getElementById(`sa-ink-${eventId}`);
+      const fhEl = document.getElementById(`sa-font-h-${eventId}`);
+      const fbEl = document.getElementById(`sa-font-b-${eventId}`);
+      if (bgEl) bgEl.value = p.bgMain;
+      if (accEl) accEl.value = p.accent;
+      if (inkEl) inkEl.value = p.ink;
+      if (fhEl) fhEl.value = p.fontH;
+      if (fbEl) fbEl.value = p.fontB;
     }
 
     function buildClientThemeEditorHtml(ev) {
@@ -2059,19 +2012,18 @@
         const stories = Array.isArray(ev.stories) ? ev.stories : [];
         const banks = Array.isArray(ev.banks) ? ev.banks : [];
         const subPhotos = clientSubPhotosCache[ev.id] || [];
-        const pbPosts = clientPhotoboothPostsCache[ev.id] || [];
         const isEditable = clientEditModes[ev.id] !== false;
         const activeCardId = clientActiveSubCards[ev.id] || `cl-sec-1-${ev.id}`;
 
         const defaultPhoto = "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=400&q=80";
         const defaultGroom = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=400&q=80";
         const defaultBride = "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=400&q=80";
-        const themeBoxHtml = buildClientThemeEditorHtml(ev);
 
         const div = document.createElement('div');
         div.className = 'dynamic-item';
 
         if (isWedding) {
+          const themeBoxHtml = buildClientThemeEditorHtml(ev);
           const dcColors = Array.isArray(ev.dresscodeColors) && ev.dresscodeColors.length === 3 ? ev.dresscodeColors : ['#991B1B', '#EAB308', '#1E4E4A'];
           const weddingSubCards = [
             { id: `cl-sec-1-${ev.id}`, step: '1', name: 'Tema, Warna & Musik' },
@@ -2267,18 +2219,22 @@
           const pbEyebrow = ev.eyebrowText || "VIRTUAL PHOTOBOOTH";
           const pbPrimaryBtn = ev.ctaPrimaryLabel || "TAMBAHKAN MOMEN";
           const pbGalleryBtn = ev.ctaGalleryLabel || "JELAJAHI KENANGAN";
+          const safeActiveCardId = [
+            `cl-sec-1-${ev.id}`,
+            `cl-sec-2-${ev.id}`,
+            `cl-sec-3-${ev.id}`
+          ].includes(activeCardId) ? activeCardId : `cl-sec-1-${ev.id}`;
 
           const pbSubCards = [
-            { id: `cl-sec-1-${ev.id}`, step: '1', name: 'Tema & Warna' },
+            { id: `cl-sec-1-${ev.id}`, step: '1', name: 'Font & Warna' },
             { id: `cl-sec-2-${ev.id}`, step: '2', name: 'Halaman Utama & Sampul' },
-            { id: `cl-sec-3-${ev.id}`, step: '3', name: `Daftar Frame PNG (${frames.length})` },
-            { id: `cl-sec-4-${ev.id}`, step: '4', name: `Galeri Tamu (${pbPosts.length})` }
+            { id: `cl-sec-3-${ev.id}`, step: '3', name: `Daftar Frame PNG (${frames.length})` }
           ];
 
           const pbGridHtml = `
             <div class="sub-card-grid" data-group="client-${escapeHtml(ev.id)}">
               ${pbSubCards.map(sc => `
-                <button type="button" class="sub-card-btn ${activeCardId === sc.id ? 'active' : ''}" data-target="${sc.id}" onclick="switchSubCard('client-${escapeHtml(ev.id)}', '${sc.id}', this)">
+                <button type="button" class="sub-card-btn ${safeActiveCardId === sc.id ? 'active' : ''}" data-target="${sc.id}" onclick="switchSubCard('client-${escapeHtml(ev.id)}', '${sc.id}', this)">
                   <span class="sub-card-step">Bagian ${sc.step}</span>
                   <span class="sub-card-name">${sc.name}</span>
                 </button>
@@ -2331,11 +2287,11 @@
 
             ${pbGridHtml}
 
-            <div id="cl-sec-1-${ev.id}" class="sub-section-pane ${activeCardId === `cl-sec-1-${ev.id}` ? 'active' : ''}" data-group="client-${escapeHtml(ev.id)}">
-              ${themeBoxHtml}
+            <div id="cl-sec-1-${ev.id}" class="sub-section-pane ${safeActiveCardId === `cl-sec-1-${ev.id}` ? 'active' : ''}" data-group="client-${escapeHtml(ev.id)}">
+              ${buildPhotoboothFontColorEditorHtml(ev)}
             </div>
 
-            <div id="cl-sec-2-${ev.id}" class="sub-section-pane ${activeCardId === `cl-sec-2-${ev.id}` ? 'active' : ''}" data-group="client-${escapeHtml(ev.id)}">
+            <div id="cl-sec-2-${ev.id}" class="sub-section-pane ${safeActiveCardId === `cl-sec-2-${ev.id}` ? 'active' : ''}" data-group="client-${escapeHtml(ev.id)}">
               <div class="theme-config-box">
                 <div class="theme-config-header">
                   <strong style="font-size:13px;">2. Pengaturan Halaman Utama &amp; Sampul Photobooth Client</strong>
@@ -2387,7 +2343,7 @@
               </div>
             </div>
 
-            <div id="cl-sec-3-${ev.id}" class="sub-section-pane ${activeCardId === `cl-sec-3-${ev.id}` ? 'active' : ''}" data-group="client-${escapeHtml(ev.id)}">
+            <div id="cl-sec-3-${ev.id}" class="sub-section-pane ${safeActiveCardId === `cl-sec-3-${ev.id}` ? 'active' : ''}" data-group="client-${escapeHtml(ev.id)}">
               <div class="client-frame-sublist">
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; flex-wrap:wrap; gap:8px;">
                   <div>
@@ -2400,16 +2356,6 @@
                   </div>
                 </div>
                 ${frames.length > 0 ? framesRowsHtml : '<p style="font-size:12px; color:var(--ink-muted); padding:8px 0;">Belum ada frame custom. Klik "+ Tambah Frame PNG" atau "Isi 9 Frame Bawaan".</p>'}
-              </div>
-            </div>
-
-            <div id="cl-sec-4-${ev.id}" class="sub-section-pane ${activeCardId === `cl-sec-4-${ev.id}` ? 'active' : ''}" data-group="client-${escapeHtml(ev.id)}">
-              <div class="client-frame-sublist">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
-                  <strong style="font-size:13px;">4. Galeri Kiriman Foto Tamu (<span id="sa-pb-posts-count-${ev.id}">${pbPosts.length}</span> Foto)</strong>
-                </div>
-                <div style="font-size:11.5px; color:var(--ink-muted); margin-bottom:8px;">Foto strip &amp; ucapan doa yang dikirim tamu secara real-time.</div>
-                <div id="sa-pb-posts-list-${ev.id}">${buildClientPhotoboothPostsHtml(ev.id, pbPosts)}</div>
               </div>
             </div>
 
@@ -2553,27 +2499,32 @@
 
       const updatedName = document.getElementById(`sa-name-${eventId}`)?.value.trim() || target.name;
       const updatedDate = document.getElementById(`sa-date-${eventId}`)?.value.trim() || "";
-      const tplSelect = document.getElementById(`sa-tpl-${eventId}`);
-      const selectedFile = tplSelect?.value || (type === 'wedding' ? 'templates/wedding-1.html' : 'templates/pb-1.html');
-      const selectedLabel = tplSelect?.options[tplSelect.selectedIndex]?.text || selectedFile;
-
-      const inputMusicUrl = normalizeMusicUrl(document.getElementById(`sa-music-url-${eventId}`)?.value || "");
-      const presetMusic = document.getElementById(`sa-music-preset-${eventId}`)?.value || "";
-      const finalMusicUrl = inputMusicUrl || (presetMusic !== 'custom' ? presetMusic : "");
-
-      if (finalMusicUrl) {
-        const songTitle = extractMusicTitleFromSource(finalMusicUrl);
-        await addTrackToMusicLibrary(finalMusicUrl, songTitle, eventId);
-      }
 
       let payload = {
         name: updatedName,
         coupleName: updatedName,
         eventDate: updatedDate,
-        templateFile: selectedFile,
-        templateLabel: selectedLabel,
-        musicUrl: finalMusicUrl,
-        customStyle: {
+        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      };
+
+      if (type === 'wedding') {
+        const tplSelect = document.getElementById(`sa-tpl-${eventId}`);
+        const selectedFile = tplSelect?.value || 'templates/wedding-1.html';
+        const selectedLabel = tplSelect?.options[tplSelect.selectedIndex]?.text || selectedFile;
+
+        const inputMusicUrl = normalizeMusicUrl(document.getElementById(`sa-music-url-${eventId}`)?.value || "");
+        const presetMusic = document.getElementById(`sa-music-preset-${eventId}`)?.value || "";
+        const finalMusicUrl = inputMusicUrl || (presetMusic !== 'custom' ? presetMusic : "");
+
+        if (finalMusicUrl) {
+          const songTitle = extractMusicTitleFromSource(finalMusicUrl);
+          await addTrackToMusicLibrary(finalMusicUrl, songTitle, eventId);
+        }
+
+        payload.templateFile = selectedFile;
+        payload.templateLabel = selectedLabel;
+        payload.musicUrl = finalMusicUrl;
+        payload.customStyle = {
           bgMain: document.getElementById(`sa-bg-${eventId}`)?.value || "#F5EFE6",
           accent: document.getElementById(`sa-acc-${eventId}`)?.value || "#C8A063",
           ink: document.getElementById(`sa-ink-${eventId}`)?.value || "#3B2A1E",
@@ -2581,11 +2532,8 @@
           fontBody: document.getElementById(`sa-font-b-${eventId}`)?.value || "'Plus Jakarta Sans', sans-serif",
           animationStyle: document.getElementById(`sa-anim-${eventId}`)?.value || "fade-up",
           motionOrnament: document.getElementById(`sa-motion-${eventId}`)?.value || "birds-butterflies"
-        },
-        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-      };
+        };
 
-      if (type === 'wedding') {
         const secKeys = ['verse', 'couple', 'countdown', 'events', 'dresscode', 'stream', 'story', 'gallery', 'video', 'gift', 'rsvp', 'turut'];
         const sectionsObj = {};
         secKeys.forEach(k => {
@@ -2631,6 +2579,15 @@
       } else {
         const pbCover = target.photoboothCover || target.heroUrl || "";
         const pbQuote = document.getElementById(`sa-pb-quote-${eventId}`)?.value.trim() || "";
+        payload.templateFile = target.templateFile || "templates/pb-1.html";
+        payload.customStyle = {
+          ...(target.customStyle || {}),
+          bgMain: document.getElementById(`sa-bg-${eventId}`)?.value || "#7A3D44",
+          accent: document.getElementById(`sa-acc-${eventId}`)?.value || "#D4AF37",
+          ink: document.getElementById(`sa-ink-${eventId}`)?.value || "#FFFFFF",
+          fontHeading: document.getElementById(`sa-font-h-${eventId}`)?.value || "'Cormorant Garamond', serif",
+          fontBody: document.getElementById(`sa-font-b-${eventId}`)?.value || "'Plus Jakarta Sans', sans-serif"
+        };
         payload.heroUrl = pbCover;
         payload.photoboothCover = pbCover;
         payload.photoboothQuote = pbQuote;
@@ -2653,7 +2610,7 @@
         if (type === 'wedding') clientEditModes[eventId] = false;
         populateClientSelectorDropdown();
         renderSuperAdminClients();
-        showCmsModal("Tersimpan Permanen (" + payloadSizeKb + " KB)", `Seluruh pengaturan halaman utama, foto sampul, dan frame untuk "${updatedName}" telah tersimpan dan langsung aktif di web client.`);
+        showCmsModal("Tersimpan Permanen (" + payloadSizeKb + " KB)", `Seluruh pengaturan untuk "${updatedName}" telah tersimpan dan langsung aktif di web client.`);
       } catch (err) {
         showCmsModal("Gagal Menyimpan", err.message);
       }
