@@ -309,7 +309,7 @@
       letter-spacing: 0.5px;
     }
 
-    /* UPLOAD FILE BOX */
+    /* UPLOAD FILE BOX BERSIH TANPA BROKEN IMAGE */
     .upload-drop-box {
       display: flex;
       align-items: center;
@@ -320,19 +320,47 @@
       padding: 12px 14px;
     }
 
-    .upload-thumb {
+    .upload-thumb-frame {
       width: 64px;
-      height: 80px;
-      object-fit: cover;
+      height: 82px;
       border-radius: 10px;
       border: 1px solid var(--border);
-      background: #EAE5DC;
+      background: #EFECE6;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       flex-shrink: 0;
+      position: relative;
     }
 
-    .upload-thumb.landscape {
-      width: 84px;
-      height: 62px;
+    .upload-thumb-frame.landscape {
+      width: 88px;
+      height: 66px;
+    }
+
+    .upload-thumb-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: none;
+    }
+
+    .upload-thumb-frame.has-image img {
+      display: block;
+    }
+
+    .upload-placeholder-text {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--ink-muted);
+      text-align: center;
+      line-height: 1.25;
+      padding: 4px;
+    }
+
+    .upload-thumb-frame.has-image .upload-placeholder-text {
+      display: none;
     }
 
     .upload-controls {
@@ -695,9 +723,12 @@
               <input type="text" id="cms-showcaseTitle">
             </div>
             <div class="form-group">
-              <label>Upload Gambar Showcase Utama <span class="size-badge">Figma: 1000 &times; 750 px (Rasio 4:3)</span></label>
+              <label>Upload Gambar Showcase Utama <span class="size-badge">Figma: 1000 &times; 750 px (4:3)</span></label>
               <div class="upload-drop-box">
-                <img id="prev-hero-img" class="upload-thumb landscape" src="" alt="Preview Hero">
+                <div class="upload-thumb-frame landscape" id="frame-hero-img">
+                  <img id="prev-hero-img" src="" alt="" onload="markFrameHasImage('frame-hero-img', true)" onerror="markFrameHasImage('frame-hero-img', false)">
+                  <span class="upload-placeholder-text">Belum Ada<br>Gambar</span>
+                </div>
                 <div class="upload-controls">
                   <label class="upload-btn-label">
                     <span>Pilih &amp; Upload Gambar</span>
@@ -911,6 +942,25 @@
         .replace(/"/g, "&quot;");
     }
 
+    function markFrameHasImage(frameId, loaded) {
+      const frame = document.getElementById(frameId);
+      if (!frame) return;
+      frame.classList.toggle("has-image", Boolean(loaded));
+    }
+
+    function setPreviewImageSource(frameId, imgId, src) {
+      const frame = document.getElementById(frameId);
+      const img = document.getElementById(imgId);
+      const cleanSrc = String(src || "").trim();
+      if (!frame || !img) return;
+      if (!cleanSrc) {
+        img.removeAttribute("src");
+        frame.classList.remove("has-image");
+        return;
+      }
+      img.src = cleanSrc;
+    }
+
     function switchMainTab(tabName, btn) {
       document.querySelectorAll('.main-tab-btn').forEach(b => b.classList.remove('active'));
       if (btn) btn.classList.add('active');
@@ -972,7 +1022,7 @@
       try {
         const compressed = await compressImageToDataUrl(file, 1000, 0.8);
         cmsState.heroImageUrl = compressed;
-        document.getElementById('prev-hero-img').src = compressed;
+        setPreviewImageSource('frame-hero-img', 'prev-hero-img', compressed);
         statusEl.textContent = `Siap disimpan (${file.name})`;
       } catch (err) {
         statusEl.textContent = err.message;
@@ -987,8 +1037,7 @@
       try {
         const compressed = await compressImageToDataUrl(file, 900, 0.8);
         cmsState.demos[idx].imageUrl = compressed;
-        const prevImg = document.getElementById(`prev-demo-${idx}`);
-        if (prevImg) prevImg.src = compressed;
+        setPreviewImageSource(`frame-demo-${idx}`, `prev-demo-${idx}`, compressed);
         if (statusEl) statusEl.textContent = `Siap disimpan (${file.name})`;
       } catch (err) {
         if (statusEl) statusEl.textContent = err.message;
@@ -1003,8 +1052,7 @@
       try {
         const compressed = await compressImageToDataUrl(file, 820, 0.78);
         cmsState.catalogItems[idx].imageUrl = compressed;
-        const prevImg = document.getElementById(`prev-cat-${idx}`);
-        if (prevImg) prevImg.src = compressed;
+        setPreviewImageSource(`frame-cat-${idx}`, `prev-cat-${idx}`, compressed);
         if (statusEl) statusEl.textContent = `Siap disimpan (${file.name})`;
       } catch (err) {
         if (statusEl) statusEl.textContent = err.message;
@@ -1416,7 +1464,7 @@
       document.getElementById('cms-heroSubtitle').value = cmsState.heroSubtitle || "";
       document.getElementById('cms-showcaseTitle').value = cmsState.showcaseTitle || "";
       document.getElementById('cms-showcaseDesc').value = cmsState.showcaseDesc || "";
-      document.getElementById('prev-hero-img').src = cmsState.heroImageUrl || "";
+      setPreviewImageSource('frame-hero-img', 'prev-hero-img', cmsState.heroImageUrl);
 
       document.getElementById('cms-wedTitle').value = cmsState.weddingSection.title || "";
       document.getElementById('cms-wedPrice').value = cmsState.weddingSection.price || "";
@@ -1441,47 +1489,53 @@
       const isSingle = (cmsState.demos || []).length === 1;
       const sizeText = isSingle ? "Figma: 900 &times; 700 px (Rasio 4:3)" : "Figma: 800 &times; 500 px (Rasio 16:10)";
 
-      container.innerHTML = (cmsState.demos || []).map((item, idx) => `
-        <div class="cms-item-box">
-          <div class="cms-item-header">
-            <strong>Tema Demo #${idx + 1}</strong>
-            <button type="button" class="btn btn-danger btn-sm" onclick="removeCmsArrayItem('demos', ${idx}, renderCmsDemos)">Hapus</button>
-          </div>
-          <div class="grid-3">
-            <div class="form-group">
-              <label>Label Tag</label>
-              <input type="text" value="${escapeHtml(item.tag)}" onchange="cmsState.demos[${idx}].tag=this.value">
+      container.innerHTML = (cmsState.demos || []).map((item, idx) => {
+        const hasImg = Boolean((item.imageUrl || '').trim());
+        return `
+          <div class="cms-item-box">
+            <div class="cms-item-header">
+              <strong>Tema Demo #${idx + 1}</strong>
+              <button type="button" class="btn btn-danger btn-sm" onclick="removeCmsArrayItem('demos', ${idx}, renderCmsDemos)">Hapus</button>
             </div>
-            <div class="form-group">
-              <label>Judul Tema</label>
-              <input type="text" value="${escapeHtml(item.title)}" onchange="cmsState.demos[${idx}].title=this.value">
+            <div class="grid-3">
+              <div class="form-group">
+                <label>Label Tag</label>
+                <input type="text" value="${escapeHtml(item.tag)}" onchange="cmsState.demos[${idx}].tag=this.value">
+              </div>
+              <div class="form-group">
+                <label>Judul Tema</label>
+                <input type="text" value="${escapeHtml(item.title)}" onchange="cmsState.demos[${idx}].title=this.value">
+              </div>
+              <div class="form-group">
+                <label>File Halaman Demo</label>
+                <input type="text" value="${escapeHtml(item.demoUrl)}" onchange="cmsState.demos[${idx}].demoUrl=this.value">
+              </div>
             </div>
-            <div class="form-group">
-              <label>File Halaman Demo</label>
-              <input type="text" value="${escapeHtml(item.demoUrl)}" onchange="cmsState.demos[${idx}].demoUrl=this.value">
-            </div>
-          </div>
-          <div class="grid-2">
-            <div class="form-group" style="margin-bottom:0;">
-              <label>Deskripsi Singkat</label>
-              <textarea onchange="cmsState.demos[${idx}].desc=this.value">${escapeHtml(item.desc)}</textarea>
-            </div>
-            <div class="form-group" style="margin-bottom:0;">
-              <label>Upload Gambar Thumbnail <span class="size-badge">${sizeText}</span></label>
-              <div class="upload-drop-box">
-                <img id="prev-demo-${idx}" class="upload-thumb landscape" src="${escapeHtml(item.imageUrl)}" alt="Preview Demo">
-                <div class="upload-controls">
-                  <label class="upload-btn-label">
-                    <span>Pilih &amp; Upload Gambar</span>
-                    <input type="file" accept="image/*" onchange="handleDemoImageUpload(${idx}, this)">
-                  </label>
-                  <span class="upload-hint" id="status-demo-${idx}">Unggah langsung dari perangkatmu (JPG/PNG/WebP).</span>
+            <div class="grid-2">
+              <div class="form-group" style="margin-bottom:0;">
+                <label>Deskripsi Singkat</label>
+                <textarea onchange="cmsState.demos[${idx}].desc=this.value">${escapeHtml(item.desc)}</textarea>
+              </div>
+              <div class="form-group" style="margin-bottom:0;">
+                <label>Upload Gambar Thumbnail <span class="size-badge">${sizeText}</span></label>
+                <div class="upload-drop-box">
+                  <div class="upload-thumb-frame landscape ${hasImg ? 'has-image' : ''}" id="frame-demo-${idx}">
+                    <img id="prev-demo-${idx}" src="${hasImg ? escapeHtml(item.imageUrl) : ''}" alt="" onload="markFrameHasImage('frame-demo-${idx}', true)" onerror="markFrameHasImage('frame-demo-${idx}', false)">
+                    <span class="upload-placeholder-text">Belum Ada<br>Gambar</span>
+                  </div>
+                  <div class="upload-controls">
+                    <label class="upload-btn-label">
+                      <span>Pilih &amp; Upload Gambar</span>
+                      <input type="file" accept="image/*" onchange="handleDemoImageUpload(${idx}, this)">
+                    </label>
+                    <span class="upload-hint" id="status-demo-${idx}">Unggah langsung dari perangkatmu (JPG/PNG/WebP).</span>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     function addDemoItem() {
@@ -1491,44 +1545,50 @@
 
     function renderCmsCatalog() {
       const container = document.getElementById('cms-catalog-list');
-      container.innerHTML = (cmsState.catalogItems || []).map((item, idx) => `
-        <div class="cms-item-box">
-          <div class="cms-item-header">
-            <strong>Katalog #${idx + 1}</strong>
-            <button type="button" class="btn btn-danger btn-sm" onclick="removeCmsArrayItem('catalogItems', ${idx}, renderCmsCatalog)">Hapus</button>
-          </div>
-          <div class="grid-3">
-            <div class="form-group">
-              <label>Kategori Filter</label>
-              <select onchange="cmsState.catalogItems[${idx}].category=this.value">
-                <option value="frame" ${item.category === 'frame' ? 'selected' : ''}>Desain Frame Foto</option>
-                <option value="print" ${item.category === 'print' ? 'selected' : ''}>Kartu QR, Banner &amp; Kain Sign</option>
-              </select>
+      container.innerHTML = (cmsState.catalogItems || []).map((item, idx) => {
+        const hasImg = Boolean((item.imageUrl || '').trim());
+        return `
+          <div class="cms-item-box">
+            <div class="cms-item-header">
+              <strong>Katalog #${idx + 1}</strong>
+              <button type="button" class="btn btn-danger btn-sm" onclick="removeCmsArrayItem('catalogItems', ${idx}, renderCmsCatalog)">Hapus</button>
             </div>
-            <div class="form-group">
-              <label>Nama Item</label>
-              <input type="text" value="${escapeHtml(item.title)}" onchange="cmsState.catalogItems[${idx}].title=this.value">
+            <div class="grid-3">
+              <div class="form-group">
+                <label>Kategori Filter</label>
+                <select onchange="cmsState.catalogItems[${idx}].category=this.value">
+                  <option value="frame" ${item.category === 'frame' ? 'selected' : ''}>Desain Frame Foto</option>
+                  <option value="print" ${item.category === 'print' ? 'selected' : ''}>Kartu QR, Banner &amp; Kain Sign</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label>Nama Item</label>
+                <input type="text" value="${escapeHtml(item.title)}" onchange="cmsState.catalogItems[${idx}].title=this.value">
+              </div>
+              <div class="form-group">
+                <label>Badge Label (Strip / Polaroid / Kain Sign)</label>
+                <input type="text" value="${escapeHtml(item.badge)}" onchange="cmsState.catalogItems[${idx}].badge=this.value">
+              </div>
             </div>
-            <div class="form-group">
-              <label>Badge Label (Strip / Polaroid / Kain Sign)</label>
-              <input type="text" value="${escapeHtml(item.badge)}" onchange="cmsState.catalogItems[${idx}].badge=this.value">
-            </div>
-          </div>
-          <div class="form-group" style="margin-bottom:0;">
-            <label>Upload Gambar Katalog <span class="size-badge">Figma: 900 &times; 1200 px (Rasio 3:4 Portrait)</span></label>
-            <div class="upload-drop-box">
-              <img id="prev-cat-${idx}" class="upload-thumb" src="${escapeHtml(item.imageUrl)}" alt="Preview Katalog">
-              <div class="upload-controls">
-                <label class="upload-btn-label">
-                  <span>Pilih &amp; Upload Gambar</span>
-                  <input type="file" accept="image/*" onchange="handleCatalogImageUpload(${idx}, this)">
-                </label>
-                <span class="upload-hint" id="status-cat-${idx}">Rasio 3:4 Portrait agar frame &amp; display QR tidak terpotong.</span>
+            <div class="form-group" style="margin-bottom:0;">
+              <label>Upload Gambar Katalog <span class="size-badge">Figma: 900 &times; 1200 px (Rasio 3:4 Portrait)</span></label>
+              <div class="upload-drop-box">
+                <div class="upload-thumb-frame ${hasImg ? 'has-image' : ''}" id="frame-cat-${idx}">
+                  <img id="prev-cat-${idx}" src="${hasImg ? escapeHtml(item.imageUrl) : ''}" alt="" onload="markFrameHasImage('frame-cat-${idx}', true)" onerror="markFrameHasImage('frame-cat-${idx}', false)">
+                  <span class="upload-placeholder-text">Belum Ada<br>Gambar</span>
+                </div>
+                <div class="upload-controls">
+                  <label class="upload-btn-label">
+                    <span>Pilih &amp; Upload Gambar</span>
+                    <input type="file" accept="image/*" onchange="handleCatalogImageUpload(${idx}, this)">
+                  </label>
+                  <span class="upload-hint" id="status-cat-${idx}">Rasio 3:4 Portrait agar frame &amp; display QR tidak terpotong.</span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      `).join('');
+        `;
+      }).join('');
     }
 
     function addCatalogItem() {
