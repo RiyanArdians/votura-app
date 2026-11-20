@@ -297,7 +297,7 @@
     .section-head h2 { font-size: clamp(30px, 3.6vw, 42px); line-height: 1.12; margin-top: 6px; margin-bottom: 10px; }
     .section-head p { font-size: 14.5px; color: var(--ink-muted); }
 
-    /* DEMO GRID (OTOMATIS MENYESUAIKAN 1, 2, ATAU 3 KARTU) */
+    /* DEMO GRID */
     .demo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
     .demo-grid.single-demo {
       grid-template-columns: 1fr;
@@ -359,6 +359,7 @@
       padding: 6px;
       border-radius: var(--radius-pill);
       margin-bottom: 28px;
+      max-width: 100%;
     }
     .filter-tab-btn {
       border: none;
@@ -389,6 +390,7 @@
       border-radius: 20px;
       overflow: hidden;
       transition: transform 0.3s ease;
+      min-width: 0;
     }
     .catalog-item:hover { transform: translateY(-3px); }
     .catalog-img {
@@ -405,7 +407,12 @@
       align-items: center;
       gap: 8px;
     }
-    .catalog-caption strong { font-size: 13.5px; }
+    .catalog-caption strong {
+      font-size: 13.5px;
+      line-height: 1.35;
+      overflow-wrap: break-word;
+      word-break: normal;
+    }
     .catalog-caption span {
       font-size: 11px;
       padding: 3px 10px;
@@ -414,6 +421,7 @@
       color: var(--ink-muted);
       font-weight: 600;
       white-space: nowrap;
+      flex-shrink: 0;
     }
 
     /* PRICING GRID */
@@ -429,6 +437,7 @@
       justify-content: space-between;
       position: relative;
       transition: transform 0.35s var(--transition), box-shadow 0.35s var(--transition);
+      min-width: 0;
     }
 
     .price-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(35, 33, 30, 0.06); }
@@ -510,10 +519,12 @@
       background: var(--surface);
       border-radius: 16px;
       border: 1px solid rgba(35, 33, 30, 0.06);
+      min-width: 0;
     }
+    .addon-row > div:first-child { min-width: 0; }
     .addon-row strong { display: block; font-size: 14px; }
-    .addon-row span { font-size: 12px; color: var(--ink-muted); }
-    .addon-price { font-weight: 700; font-size: 14px; color: var(--accent-warm); white-space: nowrap; }
+    .addon-row span { font-size: 12px; color: var(--ink-muted); display: block; }
+    .addon-price { font-weight: 700; font-size: 14px; color: var(--accent-warm); white-space: nowrap; flex-shrink: 0; }
 
     /* SECONDARY CROSS-SELL: WEDDING INVITATION */
     .wedding-banner {
@@ -581,8 +592,10 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
+      gap: 12px;
       cursor: pointer;
     }
+    .faq-question svg { flex-shrink: 0; }
     .faq-answer {
       padding: 0 22px 18px 22px;
       font-size: 13.5px;
@@ -715,10 +728,10 @@
 
       .dock-divider { width: 1px; height: 18px; }
       .hero-section, .content-section, .studio-footer { padding-left: 20px; padding-right: 20px; }
+      .content-section { padding-top: 48px; padding-bottom: 48px; }
       .studio-footer { padding-bottom: 92px; }
       .hero-bento-grid { grid-template-columns: 1fr; }
 
-      /* PERBAIKAN 1: Wadah tab paket & katalog agar tidak meluber saat turun baris di HP */
       .filter-tabs {
         display: flex;
         flex-wrap: wrap;
@@ -730,13 +743,32 @@
         text-align: center;
         border-radius: 14px;
         padding: 9px 14px;
+        font-size: 12.5px;
       }
 
-      /* PERBAIKAN 2: Grid katalog tetap 2 kolom di HP agar kartu tidak melebar penuh */
       .catalog-grid {
         grid-template-columns: repeat(2, 1fr);
         gap: 12px;
       }
+      .catalog-caption {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+        padding: 11px 12px 13px;
+      }
+      .catalog-caption strong {
+        font-size: 12.5px;
+        line-height: 1.35;
+      }
+      .catalog-caption span {
+        font-size: 10px;
+        padding: 2px 8px;
+      }
+
+      .price-card { padding: 24px 20px; }
+      .addons-wrapper { padding: 22px 18px; }
+      .addon-row { flex-direction: column; align-items: flex-start; gap: 6px; padding: 12px 14px; }
+      .wedding-banner { padding: 26px 20px; }
     }
   </style>
 </head>
