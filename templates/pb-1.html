@@ -24,20 +24,45 @@
       --text-dark: #2C2223;
       --card-glass: rgba(255, 255, 255, 0.12);
       --card-border: rgba(212, 175, 55, 0.35);
+      --font-heading: 'Cormorant Garamond', serif;
+      --font-body: 'Plus Jakarta Sans', sans-serif;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    body.pb-loading #envelope-names,
+    body.pb-loading #inside-card-names,
+    body.pb-loading #display-event-title,
+    body.pb-loading #display-event-date,
+    body.pb-loading #ask-event-title,
+    body.pb-loading #ask-event-date,
+    body.pb-loading #welcome-quote-text,
+    body.pb-loading .hero-pill-frame-pure {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    #envelope-names,
+    #inside-card-names,
+    #display-event-title,
+    #display-event-date,
+    #ask-event-title,
+    #ask-event-date,
+    #welcome-quote-text,
+    .hero-pill-frame-pure {
+      transition: opacity 0.35s ease, visibility 0.35s ease;
+    }
 
     html, body {
       width: 100vw;
       height: 100%;
       overflow-x: hidden;
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background: linear-gradient(180deg, #7A3D44 0%, #5C2B32 100%);
+      font-family: var(--font-body);
+      background: linear-gradient(180deg, var(--primary-crimson) 0%, var(--deep-crimson) 100%);
       color: #FFFFFF;
     }
 
-    .font-serif { font-family: 'Cormorant Garamond', serif; }
+    .font-serif { font-family: var(--font-heading); }
     .font-script { font-family: 'Alex Brush', cursive; }
     .hidden { display: none !important; }
 
@@ -60,7 +85,7 @@
       align-items: center;
       padding: 24px 16px 14px;
       position: relative;
-      background: linear-gradient(180deg, #7A3D44 0%, #5C2B32 100%);
+      background: linear-gradient(180deg, var(--primary-crimson) 0%, var(--deep-crimson) 100%);
       color: #FFFFFF;
       overflow: hidden;
     }
@@ -71,14 +96,14 @@
       display: block;
       padding: 26px 16px 80px;
       position: relative;
-      background: linear-gradient(180deg, #7A3D44 0%, #5C2B32 100%);
+      background: linear-gradient(180deg, var(--primary-crimson) 0%, var(--deep-crimson) 100%);
       color: #FFFFFF;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
     }
 
     .btn-gold-v2 {
-      background: linear-gradient(135deg, #E2C275 0%, #C39B38 100%);
+      background: linear-gradient(135deg, #E2C275 0%, var(--gold-accent) 100%);
       color: #2A1A1C;
       border: 1px solid #FFF;
       padding: 13px 20px;
@@ -186,7 +211,7 @@
     .envelope-screen {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100dvh;
-      background: linear-gradient(180deg, #7A3D44 0%, #5C2B32 100%);
+      background: linear-gradient(180deg, var(--primary-crimson) 0%, var(--deep-crimson) 100%);
       z-index: 99999;
       display: flex;
       flex-direction: column;
@@ -253,7 +278,7 @@
       top: 50%; left: 50%;
       transform: translate(-50%, -50%);
       width: 46px; height: 46px;
-      background: radial-gradient(circle, #E2C275 0%, #C39B38 70%, #906F1E 100%);
+      background: radial-gradient(circle, #E2C275 0%, var(--gold-accent) 70%, #906F1E 100%);
       border-radius: 50%;
       box-shadow: inset 0 2px 4px rgba(255,255,255,0.6), 0 6px 16px rgba(0, 0, 0, 0.4);
       border: 1px solid #FFF;
@@ -266,7 +291,7 @@
 
     .envelope-gold-seal::after {
       content: "V";
-      font-family: 'Cormorant Garamond', serif;
+      font-family: var(--font-heading);
       font-weight: 700;
       font-size: 1.2rem;
       color: #3D2605;
@@ -277,7 +302,7 @@
       position: absolute;
       width: 268px;
       height: 168px;
-      background: #FDFBF7;
+      background: var(--bg-cream);
       border-radius: 6px;
       border: 1px solid var(--gold-accent);
       padding: 16px 12px;
@@ -358,7 +383,7 @@
       text-align: center;
       padding: 12px 16px;
       outline: none;
-      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-family: var(--font-body);
       transition: all 0.3s ease;
       margin: 16px 0 4px;
     }
@@ -368,7 +393,7 @@
 
     .slider-header-box { text-align: center; z-index: 10; width: 100%; max-width: 360px; margin-top: 4px; }
     .section-label-fullscreen { font-size: 0.68rem; font-weight: 700; color: var(--gold-accent); text-transform: uppercase; letter-spacing: 2.5px; margin-bottom: 2px; }
-    .slider-main-title { font-family: 'Cormorant Garamond', serif; font-size: 1.35rem; font-weight: 700; color: #FFFFFF; line-height: 1.2; margin-bottom: 2px; }
+    .slider-main-title { font-family: var(--font-heading); font-size: 1.35rem; font-weight: 700; color: #FFFFFF; line-height: 1.2; margin-bottom: 2px; }
 
     .slider-cards-viewport {
       position: relative; width: 100%; max-width: 340px; height: 47dvh; min-height: 270px;
@@ -586,7 +611,7 @@
     }
 
     .printer-lottie-stage {
-      width: 100vw; min-height: 100dvh; background: linear-gradient(180deg, #7A3D44 0%, #5C2B32 100%); color: #FFF; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 28px 14px 20px; position: relative; overflow-y: auto;
+      width: 100vw; min-height: 100dvh; background: linear-gradient(180deg, var(--primary-crimson) 0%, var(--deep-crimson) 100%); color: #FFF; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; padding: 28px 14px 20px; position: relative; overflow-y: auto;
     }
 
     .vector-printer-wrapper {
@@ -596,7 +621,7 @@
     .vector-printer-wrapper.fade-out-printer { opacity: 0; transform: translateY(-30px) scale(0.85); pointer-events: none; height: 0; margin: 0; overflow: hidden; }
 
     .paper-tray-input {
-      width: 110px; height: 50px; background: #FDFBF7; border: 2px solid var(--gold-accent); border-bottom: none; border-radius: 8px 8px 0 0; margin-bottom: -12px; box-shadow: 0 -3px 8px rgba(0,0,0,0.2); transition: transform 2s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1;
+      width: 110px; height: 50px; background: var(--bg-cream); border: 2px solid var(--gold-accent); border-bottom: none; border-radius: 8px 8px 0 0; margin-bottom: -12px; box-shadow: 0 -3px 8px rgba(0,0,0,0.2); transition: transform 2s cubic-bezier(0.4, 0, 0.2, 1); z-index: 1;
     }
 
     .paper-tray-input.pulled-in { transform: translateY(45px); }
@@ -615,7 +640,7 @@
     @keyframes ledBlinkRed { 0% { background: #FF7675; } 100% { background: #7F1D1D; } }
     @keyframes ledBlinkGreen { 0% { background: #55E6C1; } 100% { background: #145A32; } }
 
-    .printer-brand-tag { font-family: 'Plus Jakarta Sans', sans-serif; font-size: 0.58rem; font-weight: 700; color: var(--gold-accent); letter-spacing: 1.5px; text-transform: uppercase; }
+    .printer-brand-tag { font-family: var(--font-body); font-size: 0.58rem; font-weight: 700; color: var(--gold-accent); letter-spacing: 1.5px; text-transform: uppercase; }
 
     .printer-door-tray { width: 100%; height: 26px; background: #281115; border-radius: 6px; box-shadow: inset 0 2px 5px rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; }
     .printer-slot-gap { width: 88%; height: 5px; background: #000; border-radius: 3px; }
@@ -692,7 +717,7 @@
     .app-official-footer { text-align: center; padding: 8px 10px 2px; font-size: 0.65rem; color: rgba(255, 255, 255, 0.65); border-top: 1px dashed rgba(255, 255, 255, 0.2); margin-top: 8px; width: 100%; letter-spacing: 0.5px; }
 
     .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.8); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 100002; padding: 15px; }
-    .modal-card { background: linear-gradient(180deg, #7A3D44 0%, #5C2B32 100%); color: #FFF; border-radius: 20px; padding: 20px 16px 16px; max-width: 330px; width: 100%; text-align: center; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.5); border: 1px solid var(--gold-accent); max-height: 90vh; display: flex; flex-direction: column; overflow-y: auto; }
+    .modal-card { background: linear-gradient(180deg, var(--primary-crimson) 0%, var(--deep-crimson) 100%); color: #FFF; border-radius: 20px; padding: 20px 16px 16px; max-width: 330px; width: 100%; text-align: center; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.5); border: 1px solid var(--gold-accent); max-height: 90vh; display: flex; flex-direction: column; overflow-y: auto; }
     .modal-close-btn { position: absolute; top: 10px; right: 12px; background: rgba(0,0,0,0.3); color: var(--gold-accent); border: 1px solid var(--gold-accent); width: 28px; height: 28px; border-radius: 50%; font-weight: 700; font-size: 0.8rem; cursor: pointer; z-index: 100; }
     .modal-user-name { font-size: 0.95rem; font-weight: 700; color: var(--gold-accent); margin-bottom: 1px; padding-right: 25px; letter-spacing: 1px; }
     .modal-user-date { font-size: 0.65rem; color: rgba(255,255,255,0.65); margin-bottom: 6px; }
@@ -702,12 +727,12 @@
     canvas { display: none; }
   </style>
 </head>
-<body>
+<body class="pb-loading">
 
 <div id="envelope-screen" class="envelope-screen" onclick="openEnvelopeAnimation()">
   <div style="text-align:center; color:#FFF; margin-bottom:10px;">
     <div style="font-size:0.7rem; letter-spacing:3px; color:var(--gold-accent); font-weight:700; margin-bottom:4px; text-transform:uppercase;">Virtual Photobooth</div>
-    <div class="font-script" style="font-size:2.8rem; color:#FFF; line-height:1;" id="envelope-names">Riyan &amp; Amelia</div>
+    <div class="font-script" style="font-size:2.8rem; color:#FFF; line-height:1;" id="envelope-names"></div>
   </div>
 
   <div class="envelope-wrapper" id="envelope-wrapper">
@@ -716,7 +741,7 @@
 
     <div class="envelope-card-inside">
       <div style="font-size:0.62rem; color:var(--gold-accent); font-weight:700; letter-spacing:2px; text-transform:uppercase;">Pernikahan Kami</div>
-      <div class="font-script" style="font-size:2.2rem; color:var(--primary-crimson); line-height:1.1; margin:4px 0;" id="inside-card-names">Riyan &amp; Amelia</div>
+      <div class="font-script" style="font-size:2.2rem; color:var(--primary-crimson); line-height:1.1; margin:4px 0;" id="inside-card-names"></div>
       <div style="font-size:0.7rem; color:#666; font-style:italic;">Virtual Photobooth &amp; Guestbook</div>
     </div>
   </div>
@@ -729,8 +754,8 @@
 <div id="step-welcome" class="page-fullscreen">
   <div style="width:100%; text-align:center; display:flex; flex-direction:column; align-items:center;">
     <p style="font-size:0.7rem; color:var(--gold-accent); letter-spacing:2.5px; font-weight:700; margin-bottom:1px;">VIRTUAL PHOTOBOOTH</p>
-    <h1 class="font-script" style="font-size:2.6rem; color:#FFF; line-height:1.05;" id="display-event-title">Riyan &amp; Amelia</h1>
-    <p style="font-size:0.72rem; color:rgba(255,255,255,0.8); letter-spacing:1px; margin-bottom:4px; text-transform:uppercase;" id="display-event-date">DESEMBER 2026</p>
+    <h1 class="font-script" style="font-size:2.6rem; color:#FFF; line-height:1.05;" id="display-event-title"></h1>
+    <p style="font-size:0.72rem; color:rgba(255,255,255,0.8); letter-spacing:1px; margin-bottom:4px; text-transform:uppercase;" id="display-event-date"></p>
 
     <div class="hero-pill-frame-pure">
       <img src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=650&q=85" alt="Foto Mempelai" id="welcome-couple-img">
@@ -757,8 +782,8 @@
 <div id="step-ask-name" class="page-fullscreen hidden">
   <div style="width:100%; text-align:center; padding-top:4px;">
     <p style="font-size:0.68rem; color:var(--gold-accent); letter-spacing:2.5px; font-weight:700; margin-bottom:2px;">VIRTUAL PHOTOBOOTH</p>
-    <h2 class="font-script" style="font-size:2.4rem; color:#FFF;" id="ask-event-title">Riyan &amp; Amelia</h2>
-    <p style="font-size:0.72rem; color:rgba(255,255,255,0.75); letter-spacing:1px; text-transform:uppercase;" id="ask-event-date">DESEMBER 2026</p>
+    <h2 class="font-script" style="font-size:2.4rem; color:#FFF;" id="ask-event-title"></h2>
+    <p style="font-size:0.72rem; color:rgba(255,255,255,0.75); letter-spacing:1px; text-transform:uppercase;" id="ask-event-date"></p>
   </div>
 
   <div class="ask-page-center-wrapper">
@@ -935,10 +960,10 @@
   <div class="printer-bottom-actions" id="printer-bottom-actions">
     <div style="background: rgba(255, 255, 255, 0.1); border: 1px solid var(--gold-accent); border-radius: 14px; padding: 12px; text-align: left; box-shadow: 0 8px 20px rgba(0,0,0,0.2); backdrop-filter: blur(8px);">
       <label style="display:block; font-size:0.68rem; font-weight:700; color:var(--gold-accent); margin-bottom:3px; letter-spacing:1px; text-transform:uppercase;">Dari (Pengirim)</label>
-      <input type="text" id="input-sender-name" style="width:100%; padding:8px 10px; border:1px solid rgba(212,175,55,0.4); border-radius:8px; font-size:0.8rem; outline:none; margin-bottom:8px; background:rgba(0,0,0,0.25); font-family:'Plus Jakarta Sans', sans-serif; font-weight:600; color:#FFF;" readonly>
+      <input type="text" id="input-sender-name" style="width:100%; padding:8px 10px; border:1px solid rgba(212,175,55,0.4); border-radius:8px; font-size:0.8rem; outline:none; margin-bottom:8px; background:rgba(0,0,0,0.25); font-family:var(--font-body); font-weight:600; color:#FFF;" readonly>
 
       <label style="display:block; font-size:0.68rem; font-weight:700; color:var(--gold-accent); margin-bottom:3px; letter-spacing:1px; text-transform:uppercase;">Pesan / Ucapan Doa Kamu</label>
-      <textarea id="input-sender-message" rows="2" style="width:100%; padding:8px 10px; border:1px solid rgba(212,175,55,0.4); border-radius:8px; font-size:0.8rem; outline:none; background:rgba(0,0,0,0.25); color:#FFF; font-family:'Plus Jakarta Sans', sans-serif;" placeholder="Tuliskan ucapan manismu di sini..."></textarea>
+      <textarea id="input-sender-message" rows="2" style="width:100%; padding:8px 10px; border:1px solid rgba(212,175,55,0.4); border-radius:8px; font-size:0.8rem; outline:none; background:rgba(0,0,0,0.25); color:#FFF; font-family:var(--font-body);" placeholder="Tuliskan ucapan manismu di sini..."></textarea>
     </div>
 
     <button class="btn-gold-v2" style="max-width:100%; margin-top:4px;" onclick="saveAndShareToFeed()">
@@ -972,7 +997,6 @@
         "Terima kasih telah melangkah bersama kami dan mengukir kehangatan dalam setiap senyuman. Setiap foto dan doa yang tertulis di sini adalah hadiah terindah yang akan selalu kami kenang sepanjang masa."
       </p>
       <div style="font-size:0.7rem; font-weight:700; color:var(--gold-accent); margin-top:8px; letter-spacing:1.5px; text-transform:uppercase;" id="gallery-couple-sub">
-        — RIYAN &amp; AMELIA
       </div>
     </div>
 
@@ -1015,7 +1039,7 @@
   <div class="modal-card">
     <button class="modal-close-btn" onclick="closeModal()">✕</button>
     <div class="modal-user-name" id="modal-name">Nama Tamu</div>
-    <div class="modal-user-date" id="modal-date">Desember 2026</div>
+    <div class="modal-user-date" id="modal-date"></div>
     <img id="modal-img" class="modal-img" src="" alt="Foto Perbesar">
     <div class="modal-msg" id="modal-msg">"Ucapan doa tamu..."</div>
   </div>
@@ -1050,8 +1074,8 @@
   let EVENT_ID = (urlParams.get('event') || '').trim();
   const INITIAL_GUEST_PARAM = (urlParams.get('to') || '').trim();
 
-  let eventTitle = "Riyan & Amelia";
-  let eventDateText = "DESEMBER 2026";
+  let eventTitle = "";
+  let eventDateText = "";
   let currentGuestName = INITIAL_GUEST_PARAM;
   let selectedFramePath = 'https://raw.githubusercontent.com/RiyanArdians/votura-app/main/assets/frame/dsg3.png';
   let requiredPhotoCount = 3;
@@ -1097,8 +1121,25 @@
   });
 
   function applyEventBrandUI(data) {
+    if (!data) return;
+
     eventTitle = data.name || data.coupleName || eventTitle;
     eventDateText = data.eventDate || eventDateText;
+
+    // Terapkan kustomisasi warna & font dari CMS jika ada
+    if (data.customStyle) {
+      const root = document.documentElement.style;
+      if (data.customStyle.bgMain) {
+        root.setProperty('--primary-crimson', data.customStyle.bgMain);
+        root.setProperty('--deep-crimson', data.customStyle.bgMain);
+        const themeMeta = document.querySelector('meta[name="theme-color"]');
+        if (themeMeta) themeMeta.setAttribute('content', data.customStyle.bgMain);
+      }
+      if (data.customStyle.accent) root.setProperty('--gold-accent', data.customStyle.accent);
+      if (data.customStyle.ink) root.setProperty('--text-dark', data.customStyle.ink);
+      if (data.customStyle.fontHeading) root.setProperty('--font-heading', data.customStyle.fontHeading);
+      if (data.customStyle.fontBody) root.setProperty('--font-body', data.customStyle.fontBody);
+    }
 
     document.title = `Virtual Photobooth ${eventTitle} — Votura Studio`;
 
@@ -1109,7 +1150,7 @@
     });
 
     const subEl = document.getElementById('gallery-couple-sub');
-    if (subEl) subEl.textContent = `— ${eventTitle.toUpperCase()}`;
+    if (subEl) subEl.textContent = eventTitle ? `— ${eventTitle.toUpperCase()}` : '';
 
     ['display-event-date', 'ask-event-date'].forEach(id => {
       const el = document.getElementById(id);
@@ -1175,16 +1216,38 @@
 
   async function initPhotoboothEvent() {
     EVENT_ID = await resolveEventId();
+    const PB_CACHE_KEY = `votura_pb_cache_${EVENT_ID}`;
+
+    // 1. Muat instan dari cache lokal saat refresh (0ms, bebas glitch)
+    try {
+      const cachedRaw = localStorage.getItem(PB_CACHE_KEY);
+      if (cachedRaw) {
+        applyEventBrandUI(JSON.parse(cachedRaw));
+        document.body.classList.remove('pb-loading');
+      }
+    } catch (e) {}
+
     const eventRef = db.collection('events').doc(EVENT_ID);
 
-    // Dengarkan perubahan konfigurasi dari Admin secara real-time
+    // 2. Dengarkan perubahan konfigurasi dari Admin secara real-time
     eventRef.onSnapshot(docSnap => {
       if (docSnap.exists) {
-        applyEventBrandUI(docSnap.data());
+        const freshData = docSnap.data();
+        applyEventBrandUI(freshData);
+        try {
+          localStorage.setItem(PB_CACHE_KEY, JSON.stringify(freshData));
+        } catch (e) {}
       }
+      document.body.classList.remove('pb-loading');
     }, err => {
       console.warn('Gagal memuat konfigurasi event:', err);
+      document.body.classList.remove('pb-loading');
     });
+
+    // Pengaman maksimal 1.5 detik jika jaringan lambat/offline
+    setTimeout(() => {
+      document.body.classList.remove('pb-loading');
+    }, 1500);
 
     // Dengarkan sub-koleksi frames khusus jika Admin menyimpan bingkai di sub-koleksi
     eventRef.collection('frames').onSnapshot(snap => {
