@@ -3,136 +3,785 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Client - Votura Photobooth</title>
+  <title>Admin Klien Photobooth — Votura Studio</title>
+  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/RiyanArdians/votura-app/main/assets/votura-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #f4f4f0;
-      --card-bg: #ffffff;
-      --text: #1a1a1a;
-      --accent: #8b5cf6;
-      --border: 2px solid #1a1a1a;
-      --shadow: 4px 4px 0px #1a1a1a;
+      --bg-base: #EFECE6;
+      --surface: #F8F6F2;
+      --card: #FFFFFF;
+      --ink: #1C1A17;
+      --ink-muted: #57524B;
+      --accent: #8C7355;
+      --dark: #22201D;
+      --danger: #B91C1C;
+      --success: #15803D;
+      --border: rgba(28, 26, 23, 0.14);
+      --radius-lg: 20px;
+      --radius-pill: 999px;
     }
 
-    * { box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-    body { background-color: var(--bg); color: var(--text); padding: 20px; margin: 0; }
-    .container { max-width: 600px; margin: 0 auto; }
-    
+    * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+    html, body {
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
+      background-color: var(--bg-base);
+      color: var(--ink);
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.5;
+      padding: 18px 14px 48px 14px;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 820px;
+      margin: 0 auto;
+      width: 100%;
+      opacity: 0;
+      transition: opacity 0.18s ease;
+    }
+
+    .container.ready { opacity: 1; }
+    .hidden { display: none !important; }
+
+    /* HEADER */
     header {
-      background: #c084fc;
-      border: var(--border);
-      box-shadow: var(--shadow);
-      padding: 20px;
-      margin-bottom: 24px;
-    }
-    header h1 { margin: 0; font-size: 20px; text-transform: uppercase; }
-    header p { margin: 5px 0 0 0; font-size: 13px; font-weight: bold; }
-
-    .card {
-      background: var(--card-bg);
-      border: var(--border);
-      box-shadow: var(--shadow);
-      padding: 20px;
-      margin-bottom: 24px;
+      background: var(--card);
+      border: 1px solid rgba(28, 26, 23, 0.08);
+      border-radius: 24px;
+      padding: 20px 22px;
+      margin-bottom: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 14px;
+      box-shadow: 0 10px 28px rgba(28, 26, 23, 0.05);
     }
 
-    .form-group { margin-bottom: 15px; text-align: left; }
-    label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 14px; }
-    input, select {
-      width: 100%;
-      padding: 10px;
-      border: var(--border);
-      font-size: 14px;
-      outline: none;
-      background: #fafafa;
+    header h1 {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 27px;
+      font-weight: 700;
+      line-height: 1.15;
+      color: var(--ink);
+      min-height: 31px;
     }
 
-    button {
-      background: var(--accent);
-      color: white;
-      font-weight: bold;
-      border: var(--border);
-      box-shadow: var(--shadow);
-      padding: 12px 20px;
-      cursor: pointer;
+    .header-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 6px;
+    }
+
+    .badge-pill {
+      display: inline-block;
+      padding: 4px 11px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      background: #EFECE6;
+      color: var(--ink);
       text-transform: uppercase;
-      width: 100%;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
     }
-    button:active { transform: translate(2px, 2px); box-shadow: 2px 2px 0px #1a1a1a; }
 
-    .preview-box {
+    .badge-active { background: #DCFCE7; color: var(--success); }
+
+    .header-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    /* NAVIGASI TAB CARD RINGKAS (3 TAB) */
+    .mode-switcher {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      background: var(--card);
+      padding: 8px;
+      border-radius: 20px;
+      border: 1px solid rgba(28, 26, 23, 0.08);
+      margin-bottom: 18px;
+      box-shadow: 0 8px 24px rgba(28, 26, 23, 0.04);
+    }
+
+    .mode-tab {
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 14px;
+      padding: 12px 12px;
+      text-align: left;
+      cursor: pointer;
+      transition: background 0.2s ease, color 0.2s ease;
+      color: var(--ink-muted);
+      min-width: 0;
+    }
+
+    .mode-tab:hover {
+      background: var(--surface);
+      color: var(--ink);
+    }
+
+    .mode-tab.active {
+      background: var(--dark);
+      color: #FFFFFF;
+      box-shadow: 0 6px 18px rgba(34, 32, 29, 0.18);
+    }
+
+    .mode-tab-badge {
+      display: block;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      opacity: 0.8;
+      margin-bottom: 2px;
+    }
+
+    .mode-tab-title {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+
+    /* CARD & FORM */
+    .section-card {
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      margin-bottom: 16px;
+      border: 1px solid rgba(28, 26, 23, 0.08);
+      box-shadow: 0 8px 24px rgba(28, 26, 23, 0.04);
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .section-sub {
+      font-size: 13px;
+      color: var(--ink-muted);
+      margin-bottom: 16px;
+    }
+
+    .form-grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    .form-group { margin-bottom: 14px; min-width: 0; }
+    label {
+      display: block;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+
+    .field-hint {
+      font-size: 11.5px;
+      color: var(--ink-muted);
+      margin-top: 4px;
+    }
+
+    input[type="text"], input[type="url"], select, textarea {
       width: 100%;
-      height: 250px;
-      border: var(--border);
-      background: #e2e8f0;
+      max-width: 100%;
+      padding: 11px 14px;
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      font-family: inherit;
+      font-size: 13.5px;
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      border-color: var(--dark);
+      background: #FFFFFF;
+    }
+
+    /* BUTTONS */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      padding: 11px 18px;
+      border-radius: var(--radius-pill);
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      text-decoration: none;
+      border: none;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+      max-width: 100%;
+    }
+
+    .btn:active { transform: scale(0.97); }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn-dark { background: var(--dark); color: #FFFFFF; }
+    .btn-accent { background: var(--accent); color: #FFFFFF; }
+    .btn-outline { background: #FFFFFF; color: var(--ink); border: 1.5px solid var(--border); }
+    .btn-outline:hover { background: var(--surface); }
+    .btn-danger { background: #FEE2E2; color: var(--danger); border: 1px solid #FECACA; }
+    .btn-sm { padding: 8px 14px; font-size: 12px; }
+
+    /* PREVIEW SAMPUL KAPSUL */
+    .cover-preview-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+
+    .cover-pill-thumb {
+      width: 84px;
+      height: 124px;
+      border-radius: 999px;
+      overflow: hidden;
+      border: 2px solid var(--accent);
+      background: #E5E0D8;
+      flex-shrink: 0;
+    }
+
+    .cover-pill-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center 20%;
+      display: block;
+    }
+
+    .cover-preview-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .cover-preview-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    /* FRAME UPLOAD & GRID */
+    .frame-upload-box {
+      background: var(--surface);
+      border: 1.5px dashed rgba(140, 115, 85, 0.55);
+      border-radius: 16px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .frame-preview-checkerboard {
+      width: 100%;
+      min-height: 220px;
+      max-height: 320px;
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      background-color: #E7E3DC;
+      background-image:
+        linear-gradient(45deg, #D8D3CA 25%, transparent 25%),
+        linear-gradient(-45deg, #D8D3CA 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #D8D3CA 75%),
+        linear-gradient(-45deg, transparent 75%, #D8D3CA 75%);
+      background-size: 18px 18px;
+      background-position: 0 0, 0 9px, 9px -9px, -9px 0;
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-top: 10px;
+      padding: 14px;
+      margin: 10px 0 14px;
       overflow: hidden;
-      position: relative;
     }
-    .preview-box img { max-width: 100%; max-height: 100%; object-fit: contain; }
 
-    /* MODAL POPUP */
-    .modal-overlay {
-      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.5); display: none; justify-content: center; align-items: center;
-      z-index: 999;
+    .frame-preview-checkerboard img {
+      max-height: 280px;
+      max-width: 100%;
+      object-fit: contain;
+      filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.18));
     }
-    .modal-box {
-      background: white; border: 3px solid #1a1a1a; box-shadow: 6px 6px 0px #1a1a1a;
-      width: 90%; max-width: 350px; padding: 20px; text-align: center;
+
+    .frames-list-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .frame-item-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 8px;
+      text-align: center;
+    }
+
+    .frame-item-thumb {
+      width: 100%;
+      height: 150px;
+      border-radius: 10px;
+      background: #E7E3DC;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      overflow: hidden;
+    }
+
+    .frame-item-thumb img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+    }
+
+    .frame-item-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--ink);
+      line-height: 1.3;
+    }
+
+    .frame-item-meta {
+      font-size: 11px;
+      color: var(--ink-muted);
+    }
+
+    /* GALERI KIRIMAN TAMU */
+    .posts-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .post-admin-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .post-admin-img {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      background: #1C1A17;
+      overflow: hidden;
+      cursor: pointer;
+    }
+
+    .post-admin-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .post-admin-body {
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+    }
+
+    .post-admin-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .post-admin-date {
+      font-size: 10.5px;
+      color: var(--ink-muted);
+    }
+
+    .post-admin-msg {
+      font-size: 12px;
+      color: #2C2925;
+      font-style: italic;
+      line-height: 1.4;
+      margin: 2px 0 8px;
+      word-break: break-word;
+      flex: 1;
+    }
+
+    .post-admin-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .btn-action-icon {
+      flex: 1;
+      padding: 6px 10px;
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border);
+      background: #FFFFFF;
+      color: var(--ink);
+      cursor: pointer;
+      font-size: 11.5px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .btn-act-del {
+      background: #FEE2E2;
+      border-color: #FECACA;
+      color: var(--danger);
+    }
+
+    /* MODAL & DIALOG */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(18, 16, 14, 0.68);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 9999;
+    }
+
+    .modal-card {
+      background: #FFFFFF;
+      border: 1px solid rgba(28, 26, 23, 0.15);
+      border-radius: 22px;
+      padding: 24px 20px 20px;
+      max-width: 400px;
+      width: 100%;
+      position: relative;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.28);
+      max-height: 90vh;
+      overflow-y: auto;
+      text-align: center;
+    }
+
+    .modal-close-btn {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: var(--surface);
+      color: var(--ink);
+      border: 1px solid var(--border);
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-weight: 700;
+      font-size: 13px;
+      cursor: pointer;
+    }
+
+    .admin-dialog-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(18, 16, 14, 0.68);
+      backdrop-filter: blur(6px);
+      -webkit-backdrop-filter: blur(6px);
+      z-index: 999999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.18s ease;
+    }
+
+    .admin-dialog-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .admin-dialog-card {
+      background: #FFFFFF;
+      border: 1px solid rgba(28, 26, 23, 0.16);
+      border-radius: 22px;
+      padding: 26px 22px 22px;
+      max-width: 370px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
+    }
+
+    .admin-dialog-title {
+      font-family: 'Cormorant Garamond', Georgia, serif;
+      font-size: 25px;
+      font-weight: 700;
+      color: #1C1A17;
+      margin-bottom: 8px;
+    }
+
+    .admin-dialog-msg {
+      font-size: 14px;
+      font-weight: 500;
+      color: #2C2925;
+      margin-bottom: 22px;
+      line-height: 1.5;
+      white-space: pre-line;
+    }
+
+    .admin-dialog-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+    }
+
+    .app-official-footer {
+      text-align: center;
+      padding: 14px 10px 2px;
+      font-size: 12px;
+      color: var(--ink-muted);
+      margin-top: 8px;
+    }
+
+    @media (max-width: 680px) {
+      body { padding: 12px 10px 36px 10px; }
+      header { padding: 16px; border-radius: 18px; }
+      header h1 { font-size: 23px; }
+      .header-actions { width: 100%; }
+      .header-actions .btn { flex: 1; }
+      .mode-switcher { grid-template-columns: 1fr; gap: 6px; }
+      .section-card { padding: 15px; border-radius: 16px; }
+      .form-grid-2 { grid-template-columns: 1fr; gap: 0; }
+      .frames-list-grid, .posts-grid { grid-template-columns: repeat(2, 1fr); }
     }
   </style>
 </head>
 <body>
 
-  <div class="container">
+  <div class="container" id="main-app-container">
+    <!-- HEADER -->
     <header>
-      <h1>Pengaturan Photobooth</h1>
-      <p id="event-id-display">EVENT ID: Memuat...</p>
+      <div>
+        <h1 id="pb-couple-heading">Photobooth Pernikahan</h1>
+        <div class="header-meta">
+          <span class="badge-pill" id="pb-event-id-badge">EVENT: P001</span>
+          <span class="badge-pill badge-active" id="pb-date-badge">Votura Studio</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <a href="#" id="btn-open-photobooth" target="_blank" class="btn btn-outline btn-sm">Buka Photobooth</a>
+        <button type="button" class="btn btn-dark btn-sm" onclick="copyPhotoboothLink()">Salin Link</button>
+      </div>
     </header>
 
-    <div class="card">
-      <h3>Edit Detail Event</h3>
-      <form id="admin-form">
-        <div class="form-group">
-          <label for="event-name">Nama Event / Acara:</label>
-          <input type="text" id="event-name" required>
+    <!-- NAVIGASI TAB -->
+    <div class="mode-switcher" role="tablist">
+      <button type="button" class="mode-tab active" onclick="switchPbTab('tab-landing', this)">
+        <span class="mode-tab-badge">Halaman Utama</span>
+        <span class="mode-tab-title">Identitas &amp; Sampul</span>
+      </button>
+      <button type="button" class="mode-tab" onclick="switchPbTab('tab-frames', this)">
+        <span class="mode-tab-badge">Desain Strip</span>
+        <span class="mode-tab-title">Bingkai Foto (<span id="tab-frame-count">0</span>)</span>
+      </button>
+      <button type="button" class="mode-tab" onclick="switchPbTab('tab-gallery', this)">
+        <span class="mode-tab-badge">Moderasi Tamu</span>
+        <span class="mode-tab-title">Galeri Kenangan (<span id="tab-post-count">0</span>)</span>
+      </button>
+    </div>
+
+    <!-- TAB 1: EDIT HALAMAN UTAMA CLIENT -->
+    <div id="tab-landing" class="tab-panel active">
+      <div class="section-card">
+        <div class="section-title">Pengaturan Halaman Utama Photobooth</div>
+        <div class="section-sub">
+          Ubah nama mempelai, tanggal acara, foto sampul, dan kalimat sambutan yang tampil pada amplop pembuka serta beranda photobooth tamu.
         </div>
 
-        <div class="form-group">
-          <label for="frame-file">Upload Frame Custom PNG (Transparan):</label>
-          <input type="file" id="frame-file" accept="image/png">
-        </div>
-
-        <div class="form-group">
-          <label>Preview Frame Aktif:</label>
-          <div class="preview-box" id="preview-container">
-            <span id="preview-text" style="color: #64748b; font-size: 13px;">Belum ada frame diunggah</span>
-            <img id="frame-preview-img" style="display: none;" alt="Preview Frame">
+        <div class="form-grid-2">
+          <div class="form-group">
+            <label>Nama Event / Pasangan Mempelai</label>
+            <input type="text" id="input-event-name" placeholder="Misal: Andri & Ani">
+          </div>
+          <div class="form-group">
+            <label>Tanggal Acara</label>
+            <input type="text" id="input-event-date" placeholder="Misal: 18 Oktober 2027">
           </div>
         </div>
 
-        <button type="submit" id="save-btn">Simpan Perubahan 💾</button>
-      </form>
+        <div class="form-group">
+          <label>Kalimat Sambutan di Halaman Beranda</label>
+          <textarea id="input-welcome-quote" rows="2" placeholder="Satu foto menyimpan sejuta kenangan. Terima kasih telah menjadi bagian dari hari bahagia kami!"></textarea>
+        </div>
+
+        <label>Foto Sampul Utama (Bingkai Kapsul Beranda)</label>
+        <div class="cover-preview-wrap">
+          <div class="cover-pill-thumb">
+            <img id="cover-preview-img" src="https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=650&q=85" alt="Preview Sampul">
+          </div>
+          <div class="cover-preview-info">
+            <div style="font-size: 13px; font-weight: 700; color: var(--ink);">Foto Sampul Mempelai</div>
+            <div style="font-size: 12px; color: var(--ink-muted); margin-top: 2px;">
+              Gunakan foto potret (vertikal) dengan wajah berada di bagian tengah atas agar pas di bingkai kapsul.
+            </div>
+            <div class="cover-preview-actions">
+              <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('cover-file-input').click()">Upload Foto dari Perangkat</button>
+              <button type="button" class="btn btn-outline btn-sm" onclick="resetDefaultCover()">Gunakan Foto Bawaan</button>
+            </div>
+            <input type="file" id="cover-file-input" accept="image/*" style="display: none;" onchange="handleCoverImageUpload(this)">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label>Atau Tempel URL Foto Sampul (Opsional)</label>
+          <input type="url" id="input-cover-url" placeholder="https://..." oninput="syncCoverUrlPreview(this.value)">
+        </div>
+
+        <button type="button" id="btn-save-landing" class="btn btn-dark" style="width: 100%; padding: 13px;" onclick="saveLandingSettings()">
+          Simpan Perubahan Halaman Utama
+        </button>
+      </div>
+    </div>
+
+    <!-- TAB 2: KELOLA BINGKAI FOTO (FRAME CUSTOM PNG) -->
+    <div id="tab-frames" class="tab-panel">
+      <div class="section-card">
+        <div class="section-title">Tambah Bingkai Kustom (PNG Transparan)</div>
+        <div class="section-sub">
+          Unggah desain frame berformat PNG dengan area foto transparan, atau gunakan paket bingkai bawaan Votura Studio.
+        </div>
+
+        <div class="frame-upload-box">
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label>Nama Desain Frame</label>
+              <input type="text" id="input-frame-name" placeholder="Misal: Classic Gold (3 Foto)">
+            </div>
+            <div class="form-group">
+              <label>Jumlah Slot Foto</label>
+              <select id="input-frame-count">
+                <option value="3">3 Foto (Strip Vertikal)</option>
+                <option value="2">2 Foto (Strip Vertikal)</option>
+                <option value="1">1 Foto (Single Frame)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label>Label Kategori / Tema</label>
+              <input type="text" id="input-frame-tag" placeholder="Misal: SPECIAL EDITION" value="CUSTOM EDITION">
+            </div>
+            <div class="form-group">
+              <label>Pilih File PNG Transparan</label>
+              <input type="file" id="frame-file-input" accept="image/png,image/webp" onchange="handleFrameFileSelect(this)" style="padding: 8px 10px; background: #FFFFFF;">
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: 6px;">
+            <label>Atau Masukkan URL Gambar PNG (Disarankan untuk Resolusi Tinggi)</label>
+            <input type="url" id="input-frame-url" placeholder="https://raw.githubusercontent.com/..." oninput="handleFrameUrlInput(this.value)">
+          </div>
+
+          <div class="frame-preview-checkerboard" id="frame-preview-box">
+            <span id="frame-preview-placeholder" style="font-size: 12.5px; color: var(--ink-muted); font-weight: 600;">Belum ada frame dipilih</span>
+            <img id="frame-preview-img" class="hidden" src="" alt="Preview Frame">
+          </div>
+
+          <button type="button" id="btn-add-frame" class="btn btn-dark" style="width: 100%; padding: 12px;" onclick="addCustomFrame()">
+            + Tambahkan ke Daftar Bingkai Acara
+          </button>
+        </div>
+
+        <div class="section-title" style="margin-top: 18px;">
+          <span>Daftar Bingkai Aktif</span>
+          <button type="button" class="btn btn-outline btn-sm" onclick="restoreDefaultFrames()">Reset ke 9 Bingkai Bawaan</button>
+        </div>
+        <div class="section-sub">
+          Bingkai di bawah ini yang akan muncul pada pilihan slider tamu saat membuka photobooth.
+        </div>
+
+        <div id="active-frames-container" class="frames-list-grid"></div>
+      </div>
+    </div>
+
+    <!-- TAB 3: GALERI KENANGAN TAMU -->
+    <div id="tab-gallery" class="tab-panel">
+      <div class="section-card">
+        <div class="section-title">
+          <span>Galeri Foto &amp; Ucapan Tamu</span>
+          <span class="badge-pill" id="gallery-total-badge">0 Kiriman</span>
+        </div>
+        <div class="section-sub">
+          Pantau, unduh, atau hapus kiriman foto dan ucapan doa yang masuk ke galeri photobooth acara ini.
+        </div>
+
+        <div id="admin-posts-container">
+          <p style="font-size: 13.5px; color: var(--ink-muted); text-align: center; padding: 18px 0;">Belum ada foto yang dibagikan tamu.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="app-official-footer">
+      © 2026 Votura Studio. Client Photobooth Manager.
     </div>
   </div>
 
-  <!-- CUSTOM MODAL -->
-  <div class="modal-overlay" id="custom-modal">
-    <div class="modal-box">
-      <h3 id="modal-title">Notifikasi</h3>
-      <p id="modal-message">Pesan...</p>
-      <button onclick="closeModal()" style="padding: 8px 16px; font-size: 12px;">Tutup</button>
+  <!-- MODAL LIHAT FOTO GALERI -->
+  <div id="post-preview-modal" class="modal-overlay hidden" onclick="if(event.target.id==='post-preview-modal') closePostPreviewModal()">
+    <div class="modal-card">
+      <button type="button" class="modal-close-btn" onclick="closePostPreviewModal()">✕</button>
+      <div style="font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 700; color: var(--ink);" id="modal-post-name">Nama Tamu</div>
+      <div style="font-size: 11.5px; color: var(--ink-muted); margin-bottom: 10px;" id="modal-post-date">-</div>
+      <img id="modal-post-img" src="" alt="Foto Tamu" style="width: 100%; max-height: 55vh; object-fit: contain; border-radius: 12px; background: var(--surface); border: 1px solid var(--border); margin-bottom: 10px;">
+      <div id="modal-post-msg" style="font-size: 13px; color: #2C2925; background: var(--surface); padding: 10px 12px; border-radius: 10px; font-style: italic; margin-bottom: 12px;"></div>
+      <a id="modal-post-download" href="#" download="photobooth-votura.jpg" class="btn btn-dark" style="width: 100%;">Unduh Foto Ini</a>
     </div>
   </div>
 
-  <!-- FIREBASE SDK (Firestore & Storage) -->
+  <!-- CUSTOM DIALOG -->
+  <div id="admin-dialog" class="admin-dialog-overlay">
+    <div class="admin-dialog-card">
+      <div id="admin-dialog-title" class="admin-dialog-title">Pemberitahuan</div>
+      <div id="admin-dialog-msg" class="admin-dialog-msg">Pesan...</div>
+      <div class="admin-dialog-actions">
+        <button type="button" id="btn-dialog-cancel" class="btn btn-outline hidden" style="flex:1;" onclick="closeAdminDialog(false)">Batal</button>
+        <button type="button" id="btn-dialog-confirm" class="btn btn-dark" style="flex:1;" onclick="closeAdminDialog(true)">Oke</button>
+      </div>
+    </div>
+  </div>
+
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-storage-compat.js"></script>
 
   <script>
     const firebaseConfig = {
@@ -144,88 +793,436 @@
 
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
-    const storage = firebase.storage();
 
     const urlParams = new URLSearchParams(window.location.search);
-    const eventId = urlParams.get('event');
+    const EVENT_ID = (urlParams.get('event') || 'p001').trim();
 
-    const form = document.getElementById('admin-form');
-    const nameInput = document.getElementById('event-name');
-    const fileInput = document.getElementById('frame-file');
-    const previewImg = document.getElementById('frame-preview-img');
-    const previewText = document.getElementById('preview-text');
-    const saveBtn = document.getElementById('save-btn');
+    const DEFAULT_COVER_IMG = "https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=650&q=85";
+    const DEFAULT_QUOTE = "Satu foto menyimpan sejuta kenangan. Terima kasih telah menjadi bagian dari hari bahagia kami!";
 
-    function showModal(title, msg) {
-      document.getElementById('modal-title').textContent = title;
-      document.getElementById('modal-message').textContent = msg;
-      document.getElementById('custom-modal').style.display = 'flex';
+    const DEFAULT_FRAMES = [
+      { path: "https://raw.githubusercontent.com/RiyanArdians/votura-app/main/assets/frame/dsg3.png", count: 3, name: "Classic Royal (3 Foto)", tag: "ROYAL EDITION" },
+      { path: "https://raw.githubusercontent.com/RiyanArdians/votura-app/main/assets/frame/dsg2.png", count: 2, name: "Classic Royal (2 Foto)", tag: "ROYAL EDITION" },
+      { path: "https://raw.githubusercontent.com/RiyanArdians/votura-app/main/assets/frame/dsg1.png", count: 1, name: "Classic Royal (1 Foto)", tag: "ROYAL EDITION" },
+      { path: "https://raw.githubusercontent.com/RiyanArdians/votura-app/main/assets/frame/flower3.png", count: 3, name: "Floral Romance (3 Foto)", tag: "FLORAL COLLECTION" },
+      { path: "https://raw.githubusercontent.com/RiyanArdians/votura-app/main/assets/frame/flower2.png", count: 2, name: "Floral Romance (2 Foto)", tag: "FLORAL COLLECTION" },
+      { path: "https://raw.githubusercontent.com/RiyanArdians/votura-app/main/assets/frame/flower1.png", count: 1, name: "Floral Romance (1 Foto)", tag: "FLORAL COLLECTION" },
+      { path: "https://raw.githubusercontent.com/RiyanArdians/votura-app/main/assets/frame/line%203.png", count: 3, name: "Minimalist Modern (3 Foto)", tag: "MINIMALIST STYLE" },
+      { path: "https://raw.githubusercontent.com/RiyanArdians/votura-app/main/assets/frame/line%202.png", count: 2, name: "Minimalist Modern (2 Foto)", tag: "MINIMALIST STYLE" },
+      { path: "https://raw.githubusercontent.com/RiyanArdians/votura-app/main/assets/frame/line%201.png", count: 1, name: "Minimalist Modern (1 Foto)", tag: "MINIMALIST STYLE" }
+    ];
+
+    let activeFrames = [...DEFAULT_FRAMES];
+    let currentCoverDataUrl = DEFAULT_COVER_IMG;
+    let pendingFrameDataUrl = "";
+    let allPosts = [];
+    let onDialogCallback = null;
+
+    function escapeHtml(str) {
+      return String(str == null ? '' : str).replace(/[&<>"']/g, ch => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[ch]));
     }
-    function closeModal() { document.getElementById('custom-modal').style.display = 'none'; }
 
-    // 1. Load Data Event dari Firestore
-    function loadEventData() {
-      if (!eventId) {
-        showModal("Error", "ID Event tidak ditemukan di URL!");
-        return;
+    function tsToMillis(ts) {
+      if (!ts) return 0;
+      if (ts.toMillis) return ts.toMillis();
+      if (ts.seconds) return ts.seconds * 1000;
+      const d = new Date(ts).getTime();
+      return isNaN(d) ? 0 : d;
+    }
+
+    function formatDate(ts) {
+      const ms = tsToMillis(ts);
+      if (!ms) return '';
+      try {
+        return new Date(ms).toLocaleDateString('id-ID', {
+          day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
+        });
+      } catch (e) { return ''; }
+    }
+
+    function getPublicPhotoboothUrl() {
+      const basePath = window.location.href.split('?')[0].replace(/photobooth-admin\.html$/i, 'pb-1.html');
+      return `${basePath}?event=${encodeURIComponent(EVENT_ID)}`;
+    }
+
+    function switchPbTab(tabId, btnEl) {
+      document.querySelectorAll('.mode-tab').forEach(b => b.classList.remove('active'));
+      if (btnEl) btnEl.classList.add('active');
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      const target = document.getElementById(tabId);
+      if (target) target.classList.add('active');
+    }
+
+    function showAdminAlert(title, message) {
+      document.getElementById('admin-dialog-title').innerText = title;
+      document.getElementById('admin-dialog-msg').innerText = message;
+      document.getElementById('btn-dialog-cancel').classList.add('hidden');
+      const confirmBtn = document.getElementById('btn-dialog-confirm');
+      confirmBtn.innerText = "Oke";
+      confirmBtn.className = "btn btn-dark";
+      onDialogCallback = null;
+      document.getElementById('admin-dialog').classList.add('active');
+    }
+
+    function showAdminConfirm(title, message, callback, isDanger = false) {
+      document.getElementById('admin-dialog-title').innerText = title;
+      document.getElementById('admin-dialog-msg').innerText = message;
+      document.getElementById('btn-dialog-cancel').classList.remove('hidden');
+      const confirmBtn = document.getElementById('btn-dialog-confirm');
+      confirmBtn.innerText = "Ya, Lanjutkan";
+      confirmBtn.className = isDanger ? "btn btn-danger" : "btn btn-dark";
+      onDialogCallback = callback;
+      document.getElementById('admin-dialog').classList.add('active');
+    }
+
+    function closeAdminDialog(result) {
+      document.getElementById('admin-dialog').classList.remove('active');
+      if (onDialogCallback) {
+        const cb = onDialogCallback;
+        onDialogCallback = null;
+        cb(result);
       }
-      document.getElementById('event-id-display').textContent = `EVENT ID: ${eventId.toUpperCase()}`;
+    }
 
-      db.collection("events").doc(eventId).get().then((doc) => {
-        if (doc.exists) {
-          const data = doc.data();
-          nameInput.value = data.name || "";
-          if (data.frameUrl) {
-            previewImg.src = data.frameUrl;
-            previewImg.style.display = 'block';
-            previewText.style.display = 'none';
-          }
-        } else {
-          showModal("Error", "Event tidak ditemukan!");
-        }
+    function copyPhotoboothLink() {
+      const link = getPublicPhotoboothUrl();
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(link).then(() => {
+          showAdminAlert("Link Disalin", `Link photobooth berhasil disalin:\n${link}`);
+        }).catch(() => showAdminAlert("Link Photobooth", link));
+      } else {
+        showAdminAlert("Link Photobooth", link);
+      }
+    }
+
+    /* KOMPRESI GAMBAR KE DATA URL AGAR AMAN DI FIRESTORE */
+    function compressImageFile(file, maxWidth, quality, outputType = 'image/jpeg') {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onload = () => {
+            const scale = img.width > maxWidth ? (maxWidth / img.width) : 1;
+            const w = Math.round(img.width * scale);
+            const h = Math.round(img.height * scale);
+            const canvas = document.createElement('canvas');
+            canvas.width = w;
+            canvas.height = h;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, w, h);
+            resolve(outputType === 'image/png' ? canvas.toDataURL('image/png') : canvas.toDataURL('image/jpeg', quality));
+          };
+          img.onerror = reject;
+          img.src = e.target.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
       });
     }
 
-    // 2. Simpan Data & Upload Frame ke Firebase Storage
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      saveBtn.disabled = true;
-      saveBtn.textContent = "Menyimpan... ⏳";
+    /* TAB 1: SAMPUL & HALAMAN UTAMA */
+    async function handleCoverImageUpload(input) {
+      const file = input.files[0];
+      if (!file) return;
+      try {
+        const compressed = await compressImageFile(file, 720, 0.82, 'image/jpeg');
+        currentCoverDataUrl = compressed;
+        document.getElementById('cover-preview-img').src = compressed;
+        document.getElementById('input-cover-url').value = '';
+      } catch (err) {
+        showAdminAlert("Gagal", "Gambar tidak dapat diproses. Pilih file JPG/PNG lain.");
+      }
+      input.value = '';
+    }
 
-      const newName = nameInput.value;
-      const file = fileInput.files[0];
-      let frameUrl = previewImg.src || "";
+    function syncCoverUrlPreview(url) {
+      const clean = url.trim();
+      if (clean) {
+        currentCoverDataUrl = clean;
+        document.getElementById('cover-preview-img').src = clean;
+      }
+    }
+
+    function resetDefaultCover() {
+      currentCoverDataUrl = DEFAULT_COVER_IMG;
+      document.getElementById('cover-preview-img').src = DEFAULT_COVER_IMG;
+      document.getElementById('input-cover-url').value = '';
+    }
+
+    async function saveLandingSettings() {
+      const nameVal = document.getElementById('input-event-name').value.trim();
+      const dateVal = document.getElementById('input-event-date').value.trim();
+      const quoteVal = document.getElementById('input-welcome-quote').value.trim();
+
+      if (!nameVal) {
+        showAdminAlert("Peringatan", "Harap isi Nama Event / Pasangan Mempelai terlebih dahulu.");
+        return;
+      }
+
+      const btn = document.getElementById('btn-save-landing');
+      btn.disabled = true;
+      btn.innerText = "Menyimpan...";
 
       try {
-        // Jika ada file frame baru yang dipilih
-        if (file) {
-          const storageRef = storage.ref(`frames/${eventId}_${Date.now()}.png`);
-          await storageRef.put(file);
-          frameUrl = await storageRef.getDownloadURL();
-        }
+        await db.collection('events').doc(EVENT_ID).set({
+          name: nameVal,
+          coupleName: nameVal,
+          eventDate: dateVal || "Votura Studio",
+          photoboothQuote: quoteVal || DEFAULT_QUOTE,
+          photoboothCover: currentCoverDataUrl || DEFAULT_COVER_IMG,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
 
-        // Update ke Firestore
-        await db.collection("events").doc(eventId).update({
-          name: newName,
-          frameUrl: frameUrl
-        });
-
-        if (frameUrl) {
-          previewImg.src = frameUrl;
-          previewImg.style.display = 'block';
-          previewText.style.display = 'none';
-        }
-
-        showModal("Sukses", "Pengaturan photobooth berhasil diperbarui!");
+        showAdminAlert("Berhasil", "Perubahan halaman utama photobooth telah disimpan dan langsung aktif.");
       } catch (err) {
-        showModal("Gagal", "Error: " + err.message);
+        showAdminAlert("Gagal", "Gagal menyimpan perubahan: " + err.message);
       } finally {
-        saveBtn.disabled = false;
-        saveBtn.textContent = "Simpan Perubahan 💾";
+        btn.disabled = false;
+        btn.innerText = "Simpan Perubahan Halaman Utama";
       }
-    });
+    }
 
-    loadEventData();
+    /* TAB 2: KELOLA BINGKAI (FRAME) */
+    async function handleFrameFileSelect(input) {
+      const file = input.files[0];
+      if (!file) return;
+      try {
+        const pngDataUrl = await compressImageFile(file, 900, 0.9, 'image/png');
+        pendingFrameDataUrl = pngDataUrl;
+        document.getElementById('input-frame-url').value = '';
+        showFramePreview(pngDataUrl);
+      } catch (err) {
+        showAdminAlert("Gagal", "File frame gagal dibaca.");
+      }
+    }
+
+    function handleFrameUrlInput(url) {
+      const clean = url.trim();
+      if (clean) {
+        pendingFrameDataUrl = clean;
+        showFramePreview(clean);
+      } else {
+        hideFramePreview();
+      }
+    }
+
+    function showFramePreview(src) {
+      const img = document.getElementById('frame-preview-img');
+      const ph = document.getElementById('frame-preview-placeholder');
+      img.src = src;
+      img.classList.remove('hidden');
+      ph.classList.add('hidden');
+    }
+
+    function hideFramePreview() {
+      const img = document.getElementById('frame-preview-img');
+      const ph = document.getElementById('frame-preview-placeholder');
+      img.src = '';
+      img.classList.add('hidden');
+      ph.classList.remove('hidden');
+    }
+
+    async function addCustomFrame() {
+      const frameName = document.getElementById('input-frame-name').value.trim();
+      const photoCount = parseInt(document.getElementById('input-frame-count').value, 10) || 3;
+      const frameTag = document.getElementById('input-frame-tag').value.trim() || "CUSTOM EDITION";
+
+      if (!pendingFrameDataUrl) {
+        showAdminAlert("Peringatan", "Harap pilih file PNG transparan atau masukkan URL gambar frame terlebih dahulu.");
+        return;
+      }
+
+      const newFrame = {
+        name: frameName || `Custom Frame (${photoCount} Foto)`,
+        tag: frameTag.toUpperCase(),
+        count: photoCount,
+        path: pendingFrameDataUrl
+      };
+
+      const updatedFrames = [newFrame, ...activeFrames];
+      await persistFramesToFirestore(updatedFrames, "Bingkai baru berhasil ditambahkan!");
+
+      document.getElementById('input-frame-name').value = '';
+      document.getElementById('input-frame-url').value = '';
+      document.getElementById('frame-file-input').value = '';
+      pendingFrameDataUrl = '';
+      hideFramePreview();
+    }
+
+    function removeFrameAtIndex(index) {
+      if (activeFrames.length <= 1) {
+        showAdminAlert("Tidak Dapat Menghapus", "Minimal harus ada 1 bingkai aktif pada photobooth.");
+        return;
+      }
+      const target = activeFrames[index];
+      showAdminConfirm("Hapus Bingkai", `Hapus bingkai "${target.name}" dari daftar pilihan tamu?`, async (confirmed) => {
+        if (!confirmed) return;
+        const updated = activeFrames.filter((_, i) => i !== index);
+        await persistFramesToFirestore(updated, "Bingkai berhasil dihapus.");
+      }, true);
+    }
+
+    function restoreDefaultFrames() {
+      showAdminConfirm("Reset Bingkai", "Kembalikan daftar bingkai ke 9 desain bawaan Votura Studio?", async (confirmed) => {
+        if (!confirmed) return;
+        await persistFramesToFirestore([...DEFAULT_FRAMES], "Daftar bingkai berhasil dikembalikan ke bawaan.");
+      }, false);
+    }
+
+    async function persistFramesToFirestore(framesArray, successMsg) {
+      try {
+        await db.collection('events').doc(EVENT_ID).set({
+          frames: framesArray,
+          updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+        }, { merge: true });
+        showAdminAlert("Berhasil", successMsg);
+      } catch (err) {
+        showAdminAlert("Gagal", "Gagal memperbarui bingkai (ukuran file terlalu besar): " + err.message);
+      }
+    }
+
+    function renderActiveFrames() {
+      const container = document.getElementById('active-frames-container');
+      document.getElementById('tab-frame-count').innerText = activeFrames.length;
+
+      container.innerHTML = activeFrames.map((f, idx) => `
+        <div class="frame-item-card">
+          <div class="frame-item-thumb">
+            <img src="${escapeHtml(f.path)}" alt="${escapeHtml(f.name)}" loading="lazy">
+          </div>
+          <div>
+            <div class="frame-item-title">${escapeHtml(f.name)}</div>
+            <div class="frame-item-meta">${escapeHtml(f.tag || 'EDITION')} • ${f.count || 3} Foto</div>
+          </div>
+          <button type="button" class="btn-action-icon btn-act-del" onclick="removeFrameAtIndex(${idx})">Hapus</button>
+        </div>
+      `).join('');
+    }
+
+    /* TAB 3: GALERI KIRIMAN TAMU */
+    function renderAdminPosts() {
+      const container = document.getElementById('admin-posts-container');
+      document.getElementById('tab-post-count').innerText = allPosts.length;
+      document.getElementById('gallery-total-badge').innerText = `${allPosts.length} Kiriman`;
+
+      if (allPosts.length === 0) {
+        container.innerHTML = '<p style="font-size: 13.5px; color: var(--ink-muted); text-align: center; padding: 18px 0;">Belum ada foto yang dibagikan tamu.</p>';
+        return;
+      }
+
+      container.innerHTML = `<div class="posts-grid">` + allPosts.map(post => `
+        <div class="post-admin-card">
+          <div class="post-admin-img" onclick="openPostPreviewModal('${post.id}')">
+            <img src="${post.photoData}" alt="${escapeHtml(post.name)}" loading="lazy">
+          </div>
+          <div class="post-admin-body">
+            <div class="post-admin-name">${escapeHtml(post.name || 'Tamu')}</div>
+            <div class="post-admin-date">${escapeHtml(formatDate(post.createdAt))}</div>
+            <div class="post-admin-msg">"${escapeHtml(post.message || '-')}"</div>
+            <div class="post-admin-actions">
+              <button type="button" class="btn-action-icon" onclick="openPostPreviewModal('${post.id}')">Lihat</button>
+              <button type="button" class="btn-action-icon btn-act-del" onclick="deletePhotoboothPost('${post.id}', '${escapeHtml(post.name || 'Tamu')}')">Hapus</button>
+            </div>
+          </div>
+        </div>
+      `).join('') + `</div>`;
+    }
+
+    function openPostPreviewModal(postId) {
+      const post = allPosts.find(p => p.id === postId);
+      if (!post) return;
+      document.getElementById('modal-post-name').innerText = post.name || 'Tamu Undangan';
+      document.getElementById('modal-post-date').innerText = formatDate(post.createdAt);
+      document.getElementById('modal-post-img').src = post.photoData;
+      document.getElementById('modal-post-msg').innerText = `"${post.message || ''}"`;
+
+      const dlBtn = document.getElementById('modal-post-download');
+      dlBtn.href = post.photoData;
+      dlBtn.download = `${(post.name || 'Tamu').replace(/[^\w\s-]/gi, '')} - Votura.jpg`;
+
+      document.getElementById('post-preview-modal').classList.remove('hidden');
+    }
+
+    function closePostPreviewModal() {
+      document.getElementById('post-preview-modal').classList.add('hidden');
+    }
+
+    function deletePhotoboothPost(postId, guestName) {
+      showAdminConfirm("Hapus Kiriman Galeri", `Hapus foto & ucapan dari "${guestName}" secara permanen?`, async (confirmed) => {
+        if (!confirmed) return;
+        try {
+          await db.collection('events').doc(EVENT_ID).collection('photobooth_posts').doc(postId).delete();
+          showAdminAlert("Berhasil", "Kiriman galeri berhasil dihapus.");
+        } catch (err) {
+          showAdminAlert("Gagal", "Gagal menghapus kiriman: " + err.message);
+        }
+      }, true);
+    }
+
+    /* INISIALISASI REAL-TIME FIRESTORE */
+    function initPhotoboothAdmin() {
+      document.getElementById('pb-event-id-badge').innerText = `EVENT: ${EVENT_ID.toUpperCase()}`;
+      document.getElementById('btn-open-photobooth').href = getPublicPhotoboothUrl();
+
+      const eventRef = db.collection('events').doc(EVENT_ID);
+
+      eventRef.onSnapshot(docSnap => {
+        if (docSnap.exists) {
+          const data = docSnap.data();
+          const title = data.name || data.coupleName || "Andri & Ani";
+          const dateText = data.eventDate || "Votura Studio";
+          const quoteText = data.photoboothQuote || DEFAULT_QUOTE;
+          const coverImg = data.photoboothCover || data.heroPhoto || DEFAULT_COVER_IMG;
+
+          document.getElementById('pb-couple-heading').innerText = `Photobooth ${title}`;
+          document.getElementById('pb-date-badge').innerText = dateText;
+          document.getElementById('input-event-name').value = title;
+          document.getElementById('input-event-date').value = data.eventDate || "";
+          document.getElementById('input-welcome-quote').value = quoteText;
+
+          currentCoverDataUrl = coverImg;
+          document.getElementById('cover-preview-img').src = coverImg;
+          if (coverImg.startsWith('http') && coverImg !== DEFAULT_COVER_IMG) {
+            document.getElementById('input-cover-url').value = coverImg;
+          }
+
+          if (Array.isArray(data.frames) && data.frames.length > 0) {
+            activeFrames = data.frames;
+          } else {
+            activeFrames = [...DEFAULT_FRAMES];
+          }
+        } else {
+          document.getElementById('input-event-name').value = "Andri & Ani";
+          document.getElementById('input-welcome-quote').value = DEFAULT_QUOTE;
+          activeFrames = [...DEFAULT_FRAMES];
+        }
+
+        renderActiveFrames();
+        document.getElementById('main-app-container').classList.add('ready');
+      }, err => {
+        console.warn("Gagal memuat event:", err);
+        renderActiveFrames();
+        document.getElementById('main-app-container').classList.add('ready');
+      });
+
+      eventRef.collection('photobooth_posts').onSnapshot(snap => {
+        allPosts = [];
+        snap.forEach(doc => {
+          const d = doc.data();
+          if (d.photoData) {
+            allPosts.push({ id: doc.id, ...d });
+          }
+        });
+        allPosts.sort((a, b) => tsToMillis(b.createdAt) - tsToMillis(a.createdAt));
+        renderAdminPosts();
+      }, err => {
+        console.warn("Gagal memuat galeri:", err);
+      });
+    }
+
+    initPhotoboothAdmin();
   </script>
 </body>
 </html>
