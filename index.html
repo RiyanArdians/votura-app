@@ -3,992 +3,1033 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Votura Studio — Virtual Photobooth &amp; Undangan Digital</title>
-  <link rel="icon" type="image/png" href="assets/votura-icon.png">
-  <link rel="apple-touch-icon" href="assets/votura-icon.png">
+  <title>Votura Studio — Virtual Photobooth &amp; Digital Invitation</title>
+  <meta name="description" content="Abadikan keseruan acara langsung dari ponsel tamu dengan Votura Virtual Photobooth, cetak QR & Kain Sign estetik, serta Undangan Digital elegan.">
+  <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/RiyanArdians/votura-app/main/assets/votura-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --bg-base: #EFECE6;
+      --bg-soft: #E5E0D8;
       --surface: #F8F6F2;
-      --glass: rgba(255, 255, 255, 0.58);
-      --glass-strong: rgba(255, 255, 255, 0.84);
-      --glass-border: rgba(255, 255, 255, 0.78);
+      --card: #FFFFFF;
       --ink: #23211E;
       --ink-muted: #68635C;
-      --accent-warm: #8C7355;
-      --pill-dark: #262421;
+      --accent: #8C7355;
+      --accent-soft: #EFE8DD;
+      --dark: #262421;
+      --success: #15803D;
+      --border: rgba(35, 33, 30, 0.11);
       --radius-xl: 28px;
       --radius-lg: 22px;
+      --radius-md: 16px;
       --radius-pill: 999px;
+      --shadow-sm: 0 8px 24px rgba(35, 33, 30, 0.04);
+      --shadow-md: 0 16px 40px rgba(35, 33, 30, 0.07);
       --transition: cubic-bezier(0.22, 1, 0.36, 1);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; scroll-behavior: smooth; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
 
     body {
       background-color: var(--bg-base);
       color: var(--ink);
-      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Plus Jakarta Sans', sans-serif;
       line-height: 1.6;
       overflow-x: hidden;
-      -webkit-font-smoothing: antialiased;
+      padding-bottom: 112px;
     }
 
-    .serif { font-family: 'Cormorant Garamond', Georgia, serif; font-weight: 500; letter-spacing: -0.02em; }
-    .serif-accent { font-family: 'Cormorant Garamond', Georgia, serif; color: var(--accent-warm); font-weight: 500; }
-
-    .canvas-shell {
-      max-width: 1360px;
-      margin: 18px auto;
-      background: var(--surface);
-      border-radius: 34px;
-      box-shadow: 0 24px 60px rgba(35, 33, 30, 0.08);
-      overflow: hidden;
-      position: relative;
-      border: 1px solid rgba(255, 255, 255, 0.9);
-      transition: opacity 0.35s var(--transition);
+    .container {
+      width: 100%;
+      max-width: 1140px;
+      margin: 0 auto;
+      padding: 0 20px;
     }
 
-    .canvas-shell.is-loading { opacity: 0; }
+    .font-serif-display {
+      font-family: 'Cormorant Garamond', serif;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
 
-    /* TOP NAVIGATION BAR */
-    .top-nav {
+    .accent-italic {
+      color: var(--accent);
+      font-style: italic;
+    }
+
+    /* HEADER / TOPBAR */
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 60;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      background: rgba(239, 236, 230, 0.84);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .topbar-inner {
       display: flex;
+      align-items: center;
       justify-content: space-between;
-      align-items: center;
-      padding: 22px 36px;
-      position: relative;
-      z-index: 30;
-    }
-
-    .brand-logo { display: flex; align-items: center; text-decoration: none; }
-    .brand-logo img { height: 32px; width: auto; object-fit: contain; display: block; }
-
-    .nav-pill-group {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      background: var(--glass);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid var(--glass-border);
-      padding: 6px;
-      border-radius: var(--radius-pill);
-      box-shadow: 0 8px 24px rgba(35, 33, 30, 0.04);
-    }
-
-    .nav-pill-group a {
-      text-decoration: none;
-      color: var(--ink-muted);
-      font-size: 13px;
-      font-weight: 500;
-      padding: 8px 16px;
-      border-radius: var(--radius-pill);
-      transition: all 0.35s var(--transition);
-    }
-
-    .nav-pill-group a:hover { color: var(--ink); background: rgba(255, 255, 255, 0.6); }
-    .nav-pill-group a.active { background: var(--pill-dark); color: #FFFFFF; }
-
-    .cta-pill {
-      display: inline-flex;
-      align-items: center;
+      height: 70px;
       gap: 12px;
-      background: var(--pill-dark);
-      color: #FFFFFF;
-      text-decoration: none;
-      font-size: 13px;
-      font-weight: 500;
-      padding: 6px 6px 6px 20px;
-      border-radius: var(--radius-pill);
-      transition: transform 0.35s var(--transition), box-shadow 0.35s var(--transition);
-      border: none;
-      cursor: pointer;
     }
 
-    .cta-pill:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(38, 36, 33, 0.2); }
-
-    .cta-pill .arrow-badge {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      background: #FFFFFF;
-      color: var(--pill-dark);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.35s var(--transition);
-    }
-
-    .cta-pill:hover .arrow-badge { transform: rotate(45deg); }
-
-    /* FLOATING LEFT DOCK */
-    .side-dock {
-      position: fixed;
-      left: 28px;
-      top: 50%;
-      transform: translateY(-50%);
-      background: var(--glass-strong);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border: 1px solid var(--glass-border);
-      border-radius: var(--radius-pill);
-      padding: 8px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      z-index: 90;
-      box-shadow: 0 12px 32px rgba(35, 33, 30, 0.08);
-    }
-
-    .dock-item {
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: var(--ink-muted);
-      text-decoration: none;
-      transition: all 0.3s var(--transition);
-    }
-
-    .dock-item:hover, .dock-item.active { background: var(--pill-dark); color: #FFFFFF; }
-    .dock-divider { width: 20px; height: 1px; background: rgba(35, 33, 30, 0.12); }
-
-    /* HERO SECTION */
-    .hero-section {
-      position: relative;
-      padding: 28px 36px 40px 96px;
-      min-height: 600px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      background: 
-        radial-gradient(circle at 78% 35%, rgba(214, 198, 178, 0.45) 0%, rgba(248, 246, 242, 0) 55%),
-        linear-gradient(125deg, #F8F6F2 0%, #EFEAE1 52%, #E2D9CC 100%);
-    }
-
-    .hero-top-meta { margin-bottom: 18px; }
-    .eyebrow { font-size: 11px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--ink-muted); font-weight: 600; }
-
-    .hero-main-grid {
-      display: grid;
-      grid-template-columns: 1.12fr 0.88fr;
-      gap: 32px;
-      align-items: center;
-      margin-bottom: 36px;
-    }
-
-    .hero-headline { font-size: clamp(40px, 5vw, 64px); line-height: 1.06; margin-bottom: 18px; color: var(--ink); }
-    .hero-subtitle { font-size: 15px; color: var(--ink-muted); max-width: 490px; margin-bottom: 28px; line-height: 1.7; }
-
-    .hero-cta-row { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
-
-    .btn-dark-pill {
+    .brand {
       display: inline-flex;
       align-items: center;
       gap: 10px;
-      background: var(--pill-dark);
-      color: #FFFFFF;
-      padding: 13px 24px;
-      border-radius: var(--radius-pill);
       text-decoration: none;
+      color: var(--ink);
+      flex-shrink: 0;
+    }
+
+    .brand-logo {
+      width: 34px;
+      height: 34px;
+      border-radius: 10px;
+      object-fit: cover;
+      background: var(--dark);
+    }
+
+    .brand-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 22px;
+      font-weight: 700;
+      line-height: 1;
+    }
+
+    .brand-sub {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--ink-muted);
+      display: block;
+      margin-top: 2px;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--ink-muted);
       font-size: 13.5px;
-      font-weight: 500;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+
+    .nav-links a:hover { color: var(--ink); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 12px 22px;
+      border-radius: var(--radius-pill);
+      font-family: inherit;
+      font-size: 13.5px;
+      font-weight: 600;
+      text-decoration: none;
       border: none;
       cursor: pointer;
-      transition: all 0.35s var(--transition);
+      transition: transform 0.22s var(--transition), box-shadow 0.22s var(--transition), background 0.22s ease;
+      white-space: nowrap;
     }
 
-    .btn-dark-pill:hover { transform: translateY(-2px); box-shadow: 0 12px 24px rgba(38, 36, 33, 0.18); }
+    .btn-dark { background: var(--dark); color: #FFFFFF; }
+    .btn-dark:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(38, 36, 33, 0.2); }
 
-    /* HERO VISUAL SHOWCASE */
-    .hero-visual-card {
-      background: var(--glass);
-      backdrop-filter: blur(18px);
-      border: 1px solid var(--glass-border);
-      border-radius: var(--radius-xl);
-      padding: 18px;
-      box-shadow: 0 20px 45px rgba(35, 33, 30, 0.06);
+    .btn-accent { background: var(--accent); color: #FFFFFF; }
+    .btn-accent:hover { transform: translateY(-1px); opacity: 0.94; }
+
+    .btn-outline {
+      background: #FFFFFF;
+      color: var(--ink);
+      border: 1px solid var(--border);
+    }
+    .btn-outline:hover { background: var(--surface); }
+
+    .btn-sm { padding: 9px 16px; font-size: 12.5px; }
+
+    /* HERO SECTION */
+    .hero {
+      padding: 44px 0 36px;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.15fr 0.95fr;
+      gap: 28px;
+      align-items: center;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 12px;
+    }
+
+    .hero h1 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(38px, 5vw, 58px);
+      line-height: 1.06;
+      color: var(--ink);
+      margin-bottom: 16px;
+    }
+
+    .hero-sub {
+      font-size: 15px;
+      color: var(--ink-muted);
+      margin-bottom: 24px;
+      max-width: 560px;
+    }
+
+    .hero-cta-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .hero-highlights {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px 18px;
+      font-size: 12.5px;
+      color: var(--ink-muted);
+      font-weight: 500;
+    }
+
+    .showcase-card {
       position: relative;
-    }
-
-    .mockup-preview {
-      background: linear-gradient(145deg, #2B2825 0%, #1B1917 100%);
-      background-size: cover;
-      background-position: center;
-      border-radius: 20px;
-      padding: 28px;
-      min-height: 320px;
+      border-radius: var(--radius-xl);
+      overflow: hidden;
+      min-height: 360px;
+      aspect-ratio: 4 / 3;
+      background: var(--dark);
+      box-shadow: var(--shadow-md);
       display: flex;
       flex-direction: column;
       justify-content: flex-end;
-      color: #F8F6F2;
-      position: relative;
-      overflow: hidden;
+      padding: 26px;
+      color: #FFFFFF;
     }
 
-    .mockup-preview::before {
-      content: "";
+    .showcase-card img.showcase-bg {
       position: absolute;
       inset: 0;
-      background: linear-gradient(180deg, rgba(27, 25, 23, 0.18) 0%, rgba(27, 25, 23, 0.88) 100%);
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
       z-index: 0;
     }
 
-    .mockup-preview > * { position: relative; z-index: 1; }
+    .showcase-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(20, 18, 15, 0.12) 0%, rgba(20, 18, 15, 0.55) 55%, rgba(20, 18, 15, 0.88) 100%);
+      z-index: 1;
+    }
 
-    .mockup-badge {
+    .showcase-content {
+      position: relative;
+      z-index: 2;
+    }
+
+    .showcase-badge {
       display: inline-block;
-      align-self: flex-start;
-      font-size: 10px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      padding: 5px 12px;
-      border-radius: var(--radius-pill);
       background: rgba(255, 255, 255, 0.18);
       backdrop-filter: blur(8px);
-      margin-bottom: auto;
-    }
-
-    .mockup-preview h3 { font-size: 26px; margin-bottom: 8px; }
-    .mockup-preview p { font-size: 13px; color: rgba(248, 246, 242, 0.85); margin-bottom: 18px; line-height: 1.65; }
-
-    .mockup-meta-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-top: 14px;
-      border-top: 1px solid rgba(255, 255, 255, 0.16);
-      font-size: 12px;
-      color: rgba(248, 246, 242, 0.9);
-    }
-
-    /* HERO BOTTOM BENTO ROW */
-    .hero-bento-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-    }
-
-    .bento-pill-card {
-      background: var(--glass-strong);
-      backdrop-filter: blur(18px);
-      border: 1px solid var(--glass-border);
-      border-radius: var(--radius-lg);
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .bento-pill-card svg { color: var(--accent-warm); }
-    .bento-pill-card strong { font-size: 15px; font-weight: 700; }
-    .bento-pill-card span { font-size: 12.5px; color: var(--ink-muted); line-height: 1.5; }
-
-    /* CONTENT SECTIONS */
-    .content-section { padding: 64px 36px 64px 96px; border-top: 1px solid rgba(35, 33, 30, 0.06); }
-    .section-head { margin-bottom: 34px; max-width: 680px; }
-    .section-head h2 { font-size: clamp(30px, 3.6vw, 42px); line-height: 1.12; margin-top: 6px; margin-bottom: 10px; }
-    .section-head p { font-size: 14.5px; color: var(--ink-muted); }
-
-    /* DEMO GRID (OTOMATIS MENYESUAIKAN 1, 2, ATAU 3 KARTU) */
-    .demo-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
-    .demo-grid.single-demo {
-      grid-template-columns: 1fr;
-      max-width: 820px;
-    }
-    .demo-grid.single-demo .demo-card {
-      flex-direction: row;
-      align-items: stretch;
-    }
-    .demo-grid.single-demo .demo-thumb {
-      width: 46%;
-      height: auto;
-      min-height: 260px;
-    }
-    .demo-grid.single-demo .demo-body {
-      padding: 30px;
-    }
-
-    .demo-card {
-      background: #FFFFFF;
-      border: 1px solid rgba(35, 33, 30, 0.08);
-      border-radius: var(--radius-xl);
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      transition: transform 0.35s var(--transition), box-shadow 0.35s var(--transition);
-    }
-    .demo-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(35, 33, 30, 0.07); }
-    .demo-thumb {
-      height: 220px;
-      background-color: #E5DFD5;
-      background-size: cover;
-      background-position: center;
-      position: relative;
-    }
-    .demo-tag {
-      position: absolute;
-      top: 14px;
-      left: 14px;
-      background: rgba(38, 36, 33, 0.85);
-      color: #FFFFFF;
-      font-size: 10.5px;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 5px 12px;
+      padding: 4px 12px;
       border-radius: var(--radius-pill);
+      font-size: 11px;
+      font-weight: 600;
+      margin-bottom: 10px;
     }
-    .demo-body { padding: 22px; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
-    .demo-body h3 { font-size: 24px; margin-bottom: 8px; }
-    .demo-body p { font-size: 13.5px; color: var(--ink-muted); margin-bottom: 20px; line-height: 1.65; }
 
-    /* CATALOG TABS & GALLERY */
-    .filter-tabs {
+    .showcase-content h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      line-height: 1.15;
+      margin-bottom: 8px;
+    }
+
+    .showcase-content p {
+      font-size: 13px;
+      color: rgba(255, 255, 255, 0.88);
+      margin-bottom: 12px;
+    }
+
+    .showcase-meta {
+      font-size: 11.5px;
+      color: rgba(255, 255, 255, 0.75);
+      border-top: 1px solid rgba(255, 255, 255, 0.18);
+      padding-top: 10px;
+    }
+
+    /* SECTION WRAPPER */
+    .section-block {
+      padding: 56px 0;
+    }
+
+    .section-header {
+      margin-bottom: 24px;
+    }
+
+    .section-header h2 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(32px, 4vw, 44px);
+      line-height: 1.1;
+      margin-top: 4px;
+      margin-bottom: 10px;
+    }
+
+    .section-header p {
+      font-size: 14.5px;
+      color: var(--ink-muted);
+      max-width: 640px;
+    }
+
+    /* SEGMENTED PILL / TAB BAR (ANTI MELUBER DI HP) */
+    .segmented-wrap {
       display: inline-flex;
+      align-items: center;
       flex-wrap: wrap;
       gap: 6px;
-      background: #EAE5DC;
+      background: var(--bg-soft);
       padding: 6px;
       border-radius: var(--radius-pill);
-      margin-bottom: 28px;
+      margin-bottom: 24px;
+      max-width: 100%;
     }
-    .filter-tab-btn {
+
+    .seg-btn {
       border: none;
       background: transparent;
       color: var(--ink-muted);
       font-family: inherit;
       font-size: 13px;
       font-weight: 600;
-      padding: 9px 20px;
+      padding: 10px 18px;
       border-radius: var(--radius-pill);
       cursor: pointer;
-      transition: all 0.25s ease;
-    }
-    .filter-tab-btn.active {
-      background: var(--pill-dark);
-      color: #FFFFFF;
-      box-shadow: 0 4px 12px rgba(38, 36, 33, 0.15);
+      transition: all 0.2s ease;
+      text-align: center;
     }
 
+    .seg-btn.active {
+      background: var(--dark);
+      color: #FFFFFF;
+      box-shadow: 0 4px 12px rgba(38, 36, 33, 0.14);
+    }
+
+    /* DEMO GRID */
+    .demo-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 20px;
+    }
+
+    .demo-card {
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+    }
+
+    .demo-thumb {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      background: var(--bg-soft);
+    }
+
+    .demo-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .demo-tag {
+      font-size: 10.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      margin-bottom: 6px;
+    }
+
+    .demo-body h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 25px;
+      line-height: 1.15;
+      margin-bottom: 8px;
+    }
+
+    .demo-body p {
+      font-size: 13.5px;
+      color: var(--ink-muted);
+      margin-bottom: 18px;
+      flex: 1;
+    }
+
+    /* CATALOG GRID (RASIO 3:4 PORTRAIT SESUAI PANDUAN FIGMA 900x1200) */
     .catalog-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 18px;
     }
-    .catalog-item {
-      background: #FFFFFF;
-      border: 1px solid rgba(35, 33, 30, 0.08);
-      border-radius: 20px;
+
+    .catalog-card {
+      background: var(--card);
+      border-radius: var(--radius-md);
       overflow: hidden;
-      transition: transform 0.3s ease;
-    }
-    .catalog-item:hover { transform: translateY(-3px); }
-    .catalog-img {
-      aspect-ratio: 3 / 4;
-      width: 100%;
-      object-fit: cover;
-      display: block;
-      background: #EAE5DC;
-    }
-    .catalog-caption {
-      padding: 14px 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 8px;
-    }
-    .catalog-caption strong { font-size: 13.5px; }
-    .catalog-caption span {
-      font-size: 11px;
-      padding: 3px 10px;
-      border-radius: var(--radius-pill);
-      background: var(--bg-base);
-      color: var(--ink-muted);
-      font-weight: 600;
-      white-space: nowrap;
-    }
-
-    /* PRICING GRID */
-    .pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
-
-    .price-card {
-      background: #FFFFFF;
-      border: 1px solid rgba(35, 33, 30, 0.08);
-      border-radius: var(--radius-xl);
-      padding: 30px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+    }
+
+    .catalog-img-wrap {
       position: relative;
-      transition: transform 0.35s var(--transition), box-shadow 0.35s var(--transition);
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      background: var(--bg-soft);
+      overflow: hidden;
     }
 
-    .price-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px rgba(35, 33, 30, 0.06); }
-
-    .price-card.featured {
-      border: 2px solid var(--pill-dark);
-      background: linear-gradient(180deg, #FFFFFF 0%, #FAF8F4 100%);
-    }
-
-    .popular-badge {
-      position: absolute;
-      top: -13px;
-      right: 24px;
-      background: var(--pill-dark);
-      color: #FFFFFF;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
-      padding: 5px 14px;
-      border-radius: var(--radius-pill);
-    }
-
-    .price-tag {
-      display: inline-block;
-      font-size: 11px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.12em;
-      padding: 5px 12px;
-      border-radius: var(--radius-pill);
-      background: var(--bg-base);
-      color: var(--ink);
-      margin-bottom: 14px;
-    }
-
-    .price-card h3 { font-size: 26px; margin-bottom: 8px; }
-    .price-desc { font-size: 13.5px; color: var(--ink-muted); margin-bottom: 18px; line-height: 1.6; }
-
-    .price-amount-box {
-      margin-bottom: 20px;
-      padding-bottom: 18px;
-      border-bottom: 1px solid rgba(35, 33, 30, 0.08);
-    }
-    .price-strike {
+    .catalog-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
       display: block;
+    }
+
+    .catalog-badge {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(38, 36, 33, 0.82);
+      color: #FFFFFF;
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+    }
+
+    .catalog-info {
+      padding: 14px;
+    }
+
+    .catalog-info h3 {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    /* PACKAGES GRID */
+    .packages-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .pkg-card {
+      background: var(--card);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      border: 1px solid var(--border);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .pkg-card.popular {
+      border: 1.5px solid var(--accent);
+      background: var(--surface);
+    }
+
+    .popular-pill {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 10.5px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      text-transform: uppercase;
+    }
+
+    .pkg-tag {
+      font-size: 10.5px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--ink-muted);
+      margin-bottom: 6px;
+    }
+
+    .pkg-name {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 28px;
+      line-height: 1.1;
+      margin-bottom: 8px;
+    }
+
+    .pkg-desc {
       font-size: 13px;
       color: var(--ink-muted);
+      margin-bottom: 16px;
+    }
+
+    .pkg-price-box {
+      padding-bottom: 16px;
+      margin-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .pkg-strike {
+      font-size: 12.5px;
+      color: var(--ink-muted);
       text-decoration: line-through;
-      margin-bottom: 2px;
+      display: block;
     }
-    .price-main { font-size: 30px; font-weight: 700; color: var(--ink); }
-    .price-unit { font-size: 13px; font-weight: 400; color: var(--ink-muted); }
 
-    .clean-list { list-style: none; margin-bottom: 26px; }
-    .clean-list li { display: flex; align-items: flex-start; gap: 10px; font-size: 13.5px; color: var(--ink); margin-bottom: 10px; line-height: 1.5; }
-    .clean-list li svg { color: var(--accent-warm); flex-shrink: 0; margin-top: 3px; }
-
-    /* ADD-ONS BOX */
-    .addons-wrapper {
-      margin-top: 34px;
-      background: #FFFFFF;
-      border: 1px solid rgba(35, 33, 30, 0.08);
-      border-radius: var(--radius-xl);
-      padding: 28px 32px;
+    .pkg-price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      flex-wrap: wrap;
     }
+
+    .pkg-price {
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--ink);
+    }
+
+    .pkg-unit {
+      font-size: 12.5px;
+      color: var(--ink-muted);
+    }
+
+    .pkg-features {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 22px;
+      flex: 1;
+      font-size: 13px;
+      color: var(--ink);
+    }
+
+    .pkg-features li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .pkg-features li::before {
+      content: "✓";
+      color: var(--accent);
+      font-weight: 700;
+      flex-shrink: 0;
+    }
+
+    /* ADDONS GRID */
+    .addons-box {
+      margin-top: 28px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+    }
+
+    .addons-box h3 {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 26px;
+      margin-bottom: 16px;
+    }
+
     .addons-grid {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 14px;
-      margin-top: 18px;
     }
-    .addon-row {
+
+    .addon-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 16px;
       display: flex;
       justify-content: space-between;
       align-items: center;
       gap: 12px;
-      padding: 14px 18px;
-      background: var(--surface);
-      border-radius: 16px;
-      border: 1px solid rgba(35, 33, 30, 0.06);
     }
-    .addon-row strong { display: block; font-size: 14px; }
-    .addon-row span { font-size: 12px; color: var(--ink-muted); }
-    .addon-price { font-weight: 700; font-size: 14px; color: var(--accent-warm); white-space: nowrap; }
 
-    /* SECONDARY CROSS-SELL: WEDDING INVITATION */
-    .wedding-banner {
-      background: linear-gradient(135deg, #262421 0%, #3A352F 100%);
-      color: #F8F6F2;
+    .addon-item strong {
+      display: block;
+      font-size: 14px;
+      margin-bottom: 2px;
+    }
+
+    .addon-item span {
+      font-size: 12.5px;
+      color: var(--ink-muted);
+    }
+
+    .addon-price {
+      font-weight: 700;
+      font-size: 13.5px;
+      color: var(--accent);
+      white-space: nowrap;
+    }
+
+    /* WEDDING BANNER */
+    .wedding-card {
+      background: var(--surface);
+      border: 1px solid #FFFFFF;
       border-radius: var(--radius-xl);
-      padding: 40px;
+      padding: 32px;
+      box-shadow: var(--shadow-sm);
       display: grid;
       grid-template-columns: 1.2fr 0.8fr;
-      gap: 32px;
+      gap: 28px;
       align-items: center;
     }
-    .wedding-banner h2 { font-size: clamp(28px, 3.4vw, 40px); line-height: 1.15; margin: 8px 0 14px; }
-    .wedding-banner p { font-size: 14.5px; color: rgba(248, 246, 242, 0.8); margin-bottom: 24px; line-height: 1.7; }
-    .wedding-card-preview {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      border-radius: 22px;
-      padding: 24px;
-    }
-    .wedding-card-preview ul { list-style: none; margin: 14px 0 20px; }
-    .wedding-card-preview li { font-size: 13px; color: rgba(248, 246, 242, 0.88); margin-bottom: 8px; display: flex; gap: 8px; align-items: center; }
 
-    /* HOW TO USE & FAQ */
-    .steps-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 48px; }
-    .step-card {
-      background: #FFFFFF;
-      border: 1px solid rgba(35, 33, 30, 0.07);
-      border-radius: var(--radius-lg);
-      padding: 26px;
-    }
-    .step-num {
-      width: 36px;
-      height: 36px;
-      border-radius: 50%;
-      background: var(--pill-dark);
-      color: #FFFFFF;
-      font-weight: 700;
-      font-size: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 16px;
-    }
-    .step-card h4 { font-size: 17px; margin-bottom: 8px; }
-    .step-card p { font-size: 13.5px; color: var(--ink-muted); line-height: 1.6; }
-
-    .faq-list { display: flex; flex-direction: column; gap: 12px; max-width: 860px; }
-    .faq-item {
-      background: #FFFFFF;
-      border: 1px solid rgba(35, 33, 30, 0.08);
-      border-radius: 18px;
-      overflow: hidden;
-    }
-    .faq-question {
-      width: 100%;
-      text-align: left;
-      background: none;
-      border: none;
-      padding: 18px 22px;
-      font-family: inherit;
-      font-size: 14.5px;
-      font-weight: 600;
-      color: var(--ink);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      cursor: pointer;
-    }
-    .faq-answer {
-      padding: 0 22px 18px 22px;
-      font-size: 13.5px;
-      color: var(--ink-muted);
-      line-height: 1.65;
-      display: none;
-    }
-    .faq-item.open .faq-answer { display: block; }
-
-    /* TESTIMONIALS & COMMITMENT CARDS */
-    .testi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-    .testi-card {
-      background: #FFFFFF;
-      border-radius: var(--radius-lg);
-      padding: 26px;
-      border: 1px solid rgba(35, 33, 30, 0.07);
+    .wedding-features {
+      list-style: none;
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
+      gap: 10px;
+      margin: 18px 0 22px;
+      font-size: 13.5px;
     }
-    .testi-text { font-size: 14px; color: var(--ink); line-height: 1.65; margin-bottom: 20px; }
-    .testi-client strong { display: block; font-size: 14px; font-weight: 600; }
-    .testi-client span { font-size: 12px; color: var(--ink-muted); }
+
+    .wedding-features li::before {
+      content: "•";
+      color: var(--accent);
+      font-weight: 700;
+      margin-right: 8px;
+    }
+
+    .wedding-price-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 24px;
+      text-align: center;
+    }
+
+    .wedding-price-card .price-big {
+      font-family: 'Cormorant Garamond', serif;
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--ink);
+      margin: 6px 0 14px;
+    }
+
+    /* FAQ & TESTIMONIALS */
+    .faq-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .faq-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      padding: 18px 20px;
+    }
+
+    .faq-q {
+      font-weight: 700;
+      font-size: 14.5px;
+      margin-bottom: 6px;
+      color: var(--ink);
+    }
+
+    .faq-a {
+      font-size: 13.5px;
+      color: var(--ink-muted);
+    }
+
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .testi-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 22px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .testi-card p {
+      font-size: 13.5px;
+      color: var(--ink-muted);
+      margin-bottom: 14px;
+    }
+
+    .testi-author {
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--ink);
+    }
+
+    .testi-role {
+      font-size: 12px;
+      color: var(--accent);
+    }
 
     /* FOOTER */
-    .studio-footer {
-      background: var(--pill-dark);
-      color: #F8F6F2;
-      padding: 48px 36px 48px 96px;
+    footer {
+      padding: 36px 0 24px;
+      border-top: 1px solid var(--border);
+      margin-top: 28px;
+      font-size: 13px;
+      color: var(--ink-muted);
+    }
+
+    .footer-row {
       display: flex;
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
-      gap: 24px;
+      gap: 16px;
     }
 
-    .footer-brand p { font-size: 13px; color: rgba(248, 246, 242, 0.68); margin-top: 8px; max-width: 380px; }
-    .social-pills { display: flex; flex-wrap: wrap; gap: 10px; }
-
-    .social-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 10px 18px;
-      border-radius: var(--radius-pill);
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.16);
-      color: #FFFFFF;
-      text-decoration: none;
-      font-size: 13px;
-      font-weight: 500;
-      transition: all 0.3s ease;
-    }
-
-    .social-pill:hover { background: #FFFFFF; color: var(--pill-dark); }
-
-    .btn-outline-pill {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      padding: 12px 18px;
-      border-radius: var(--radius-pill);
-      border: 1px solid rgba(35, 33, 30, 0.22);
-      background: transparent;
-      color: var(--ink);
-      text-decoration: none;
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.3s ease;
-    }
-
-    .btn-outline-pill:hover { background: var(--bg-base); }
-
-    /* MATCHING GLASS MODAL */
-    .modal-backdrop {
+    /* FLOATING BOTTOM DOCK */
+    .bottom-dock-wrap {
       position: fixed;
-      inset: 0;
-      background: rgba(35, 33, 30, 0.45);
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      display: none;
-      align-items: center;
+      bottom: 18px;
+      left: 0;
+      right: 0;
+      display: flex;
       justify-content: center;
-      padding: 20px;
-      z-index: 300;
+      padding: 0 16px;
+      z-index: 70;
+      pointer-events: none;
     }
 
-    .modal-backdrop.open { display: flex; }
-
-    .modal-panel {
-      background: var(--surface);
+    .bottom-dock {
+      pointer-events: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: rgba(248, 246, 242, 0.94);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
       border: 1px solid #FFFFFF;
-      border-radius: var(--radius-xl);
-      max-width: 420px;
-      width: 100%;
-      padding: 32px;
-      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.18);
-      animation: modalIn 0.35s var(--transition);
+      padding: 6px;
+      border-radius: var(--radius-pill);
+      box-shadow: 0 14px 34px rgba(35, 33, 30, 0.14);
+      max-width: 100%;
     }
 
-    @keyframes modalIn {
-      from { opacity: 0; transform: scale(0.95) translateY(10px); }
-      to { opacity: 1; transform: scale(1) translateY(0); }
+    .dock-item {
+      text-decoration: none;
+      color: var(--ink-muted);
+      font-size: 12px;
+      font-weight: 600;
+      padding: 8px 13px;
+      border-radius: var(--radius-pill);
+      transition: all 0.2s ease;
+      white-space: nowrap;
     }
 
-    @media (max-width: 1024px) {
-      .hero-main-grid, .demo-grid, .pricing-grid, .steps-grid, .wedding-banner { grid-template-columns: 1fr; }
-      .demo-grid.single-demo .demo-card { flex-direction: column; }
-      .demo-grid.single-demo .demo-thumb { width: 100%; height: 240px; }
-      .hero-bento-grid, .catalog-grid { grid-template-columns: repeat(2, 1fr); }
-      .addons-grid, .testi-grid { grid-template-columns: 1fr; }
+    .dock-item.active, .dock-item:hover {
+      background: var(--dark);
+      color: #FFFFFF;
     }
 
-    @media (max-width: 768px) {
-      .canvas-shell { margin: 0; border-radius: 0; border: none; }
-      .top-nav { padding: 18px 20px; }
-      .nav-pill-group { display: none; }
+    /* ================================================= */
+    /* RESPONSIVE MOBILE OVERRIDES (PERBAIKAN UTAMA HP)   */
+    /* ================================================= */
+    @media (max-width: 900px) {
+      .hero-grid, .wedding-card {
+        grid-template-columns: 1fr;
+      }
+      .packages-grid, .testimonials-grid {
+        grid-template-columns: 1fr;
+      }
+      .catalog-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+      }
+      .addons-grid {
+        grid-template-columns: 1fr;
+      }
+      .nav-links {
+        display: none;
+      }
+    }
 
-      .side-dock {
-        left: 50%;
-        top: auto;
-        bottom: 16px;
-        transform: translateX(-50%);
-        flex-direction: row;
-        padding: 6px 14px;
-        gap: 10px;
+    @media (max-width: 600px) {
+      .container {
+        padding: 0 16px;
       }
 
-      .dock-divider { width: 1px; height: 18px; }
-      .hero-section, .content-section, .studio-footer { padding-left: 20px; padding-right: 20px; }
-      .studio-footer { padding-bottom: 92px; }
-      .hero-bento-grid, .catalog-grid { grid-template-columns: 1fr; }
+      .hero {
+        padding: 28px 0 24px;
+      }
+
+      .hero h1 {
+        font-size: 34px;
+        line-height: 1.08;
+      }
+
+      .showcase-card {
+        min-height: 290px;
+        aspect-ratio: 4 / 3;
+        padding: 20px;
+        border-radius: 22px;
+      }
+
+      .showcase-content h2 {
+        font-size: 23px;
+      }
+
+      /* Wadah kapsul berubah menjadi rounded box saat membungkus ke 2 baris di HP */
+      .segmented-wrap {
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+        border-radius: 20px;
+        padding: 6px;
+        gap: 6px;
+      }
+
+      .seg-btn {
+        flex: 1 1 auto;
+        padding: 10px 14px;
+        font-size: 12.5px;
+        border-radius: 14px;
+      }
+
+      .pkg-card {
+        padding: 20px;
+      }
+
+      .wedding-card {
+        padding: 22px 18px;
+        border-radius: 22px;
+      }
+
+      .dock-item {
+        padding: 8px 10px;
+        font-size: 11.5px;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- FLOATING NAVIGATION DOCK -->
-  <aside class="side-dock" aria-label="Navigasi Cepat">
-    <a href="#beranda" class="dock-item active" title="Beranda">
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-    </a>
-    <a href="#demo" class="dock-item" title="Coba Demo">
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><polygon points="5 3 19 12 5 21 5 3"/></svg>
-    </a>
-    <a href="#katalog" class="dock-item" title="Katalog Frame & Cetak">
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-    </a>
-    <a href="#paket" class="dock-item" title="Pricelist Paket">
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg>
-    </a>
-    <div class="dock-divider"></div>
-    <a href="#kontak" class="dock-item" title="Hubungi Kami">
-      <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-    </a>
-  </aside>
-
-  <div class="canvas-shell is-loading" id="beranda">
-    <!-- TOP HEADER -->
-    <header class="top-nav">
-      <a href="#beranda" class="brand-logo">
-        <img src="assets/votura-horizontal.png" alt="Votura Studio">
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a href="#top" class="brand">
+        <img src="https://raw.githubusercontent.com/RiyanArdians/votura-app/main/assets/votura-icon.png" alt="Votura Studio" class="brand-logo" onerror="this.style.display='none'">
+        <div>
+          <span class="brand-name">Votura Studio</span>
+          <span class="brand-sub">Photobooth &amp; Invitation</span>
+        </div>
       </a>
-
-      <nav class="nav-pill-group">
-        <a href="#beranda" class="active">Beranda</a>
+      <nav class="nav-links">
         <a href="#demo">Live Demo</a>
-        <a href="#katalog">Frame &amp; Sign</a>
-        <a href="#paket">Pricelist</a>
-        <a href="#undangan">Undangan Digital</a>
+        <a href="#katalog">Katalog</a>
+        <a href="#paket">Paket</a>
         <a href="#faq">FAQ</a>
       </nav>
+      <a id="nav-cta-btn" href="https://wa.me/6282298966860" target="_blank" class="btn btn-dark btn-sm">Ngobrol Dulu</a>
+    </div>
+  </header>
 
-      <div>
-        <button type="button" class="cta-pill" onclick="openChatModal('Konsultasi Rencana Acara')">
-          <span id="nav-cta-label">Ngobrol Dulu</span>
-          <span class="arrow-badge">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-          </span>
-        </button>
-      </div>
-    </header>
-
-    <!-- 1. HERO SECTION (UTAMA: VIRTUAL PHOTOBOOTH) -->
-    <section class="hero-section">
-      <div class="hero-top-meta">
-        <span class="eyebrow" id="hero-eyebrow">Votura Virtual Photobooth &mdash; Digital Invitation &mdash; Creative Studio</span>
-      </div>
-
-      <div class="hero-main-grid">
+  <main id="top">
+    <!-- HERO SECTION -->
+    <section class="hero">
+      <div class="container hero-grid">
         <div>
-          <h1 class="hero-headline serif" id="hero-headline">
-            Abadikan Serunya Acara<br>
-            Langsung dari <span class="serif-accent">Ponsel Tamu</span>
-          </h1>
-          <p class="hero-subtitle" id="hero-subtitle">
-            Hadirkan pengalaman photobooth interaktif tanpa antre mesin dan tanpa instal aplikasi. Tamu cukup scan QR Code, berfoto dengan frame eksklusif acaramu, dan semua kenangan otomatis tersimpan rapi di galeri pengantin.
-          </p>
-          <div class="hero-cta-row">
-            <a href="#paket" class="btn-dark-pill">
-              <span>Lihat Pilihan Paket</span>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-            </a>
-            <a href="#demo" class="btn-outline-pill">
-              <span>Coba Live Demo</span>
-            </a>
+          <div class="eyebrow" id="hero-eyebrow">Votura Virtual Photobooth — Digital Invitation — Creative Studio</div>
+          <h1 id="hero-title">Abadikan Serunya Acara Langsung dari <span class="accent-italic">Ponsel Tamu</span></h1>
+          <p class="hero-sub" id="hero-subtitle">Hadirkan pengalaman photobooth interaktif tanpa antre mesin dan tanpa instal aplikasi. Tamu cukup scan QR Code, berfoto dengan frame eksklusif acaramu, dan semua kenangan otomatis tersimpan rapi di galeri pengantin.</p>
+          <div class="hero-cta-group">
+            <a href="#paket" class="btn btn-dark">Lihat Pilihan Paket</a>
+            <a href="#demo" class="btn btn-outline">Coba Live Demo</a>
+          </div>
+          <div class="hero-highlights">
+            <span>✓ Tanpa Instal Aplikasi</span>
+            <span>✓ Unlimited Foto Tamu</span>
+            <span>✓ Panel Galeri Mandiri</span>
           </div>
         </div>
 
-        <div class="hero-visual-card">
-          <div class="mockup-preview" id="showcase-box">
-            <span class="mockup-badge">Scan &bull; Pose &bull; Simpan</span>
-            <h3 class="serif" id="showcase-title">Tanpa Antre, Tanpa Batas Jumlah Foto</h3>
+        <div class="showcase-card" id="showcase-box">
+          <img id="hero-showcase-img" class="showcase-bg" src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1000&q=80" alt="Votura Virtual Photobooth Showcase">
+          <div class="showcase-overlay"></div>
+          <div class="showcase-content">
+            <span class="showcase-badge">Scan • Pose • Simpan</span>
+            <h2 id="showcase-title">Tanpa Antre, Tanpa Batas Jumlah Foto</h2>
             <p id="showcase-desc">Dilengkapi opsi cetak Kartu Meja QR, Standing Banner, hingga Kain Sign Gantung estetik yang menyatu dengan dekorasi acaramu.</p>
-            <div class="mockup-meta-row">
-              <span>Langsung Aktif di Browser HP</span>
-              <span>voturastudio.site</span>
+            <div class="showcase-meta">Langsung Aktif di Browser HP &nbsp;|&nbsp; voturastudio.site</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- LIVE DEMO -->
+    <section class="section-block" id="demo">
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">Coba Pengalaman Langsung</div>
+          <h2>Live Demo Virtual <span class="accent-italic">Photobooth</span></h2>
+          <p>Rasakan alur tamu memindai QR, memilih bingkai, berpose, hingga mengunduh hasil foto langsung dari browser ponsel.</p>
+        </div>
+        <div class="demo-grid" id="demo-cards-container"></div>
+      </div>
+    </section>
+
+    <!-- KATALOG FRAME & MEDIA CETAK -->
+    <section class="section-block" id="katalog">
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">Katalog Visual</div>
+          <h2>Pilihan Frame &amp; Media <span class="accent-italic">Display QR</span></h2>
+          <p>Pilih ukuran bingkai favoritmu serta media cetak fisik estetik yang siap dipajang di meja penerima tamu maupun pintu masuk venue.</p>
+        </div>
+
+        <div class="segmented-wrap" id="catalog-filter-bar">
+          <button type="button" class="seg-btn active" onclick="filterCatalog('all', this)">Semua Koleksi</button>
+          <button type="button" class="seg-btn" onclick="filterCatalog('frame', this)">Desain Frame Foto</button>
+          <button type="button" class="seg-btn" onclick="filterCatalog('print', this)">Kartu QR, Banner &amp; Kain Sign</button>
+        </div>
+
+        <div class="catalog-grid" id="catalog-grid-container"></div>
+      </div>
+    </section>
+
+    <!-- PAKET HARGA -->
+    <section class="section-block" id="paket">
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">Investasi Momen</div>
+          <h2>Pilihan Paket Virtual <span class="accent-italic">Photobooth</span></h2>
+          <p>Tersedia opsi <strong>Digital Only</strong> (100% online tanpa ongkir) hingga <strong>Paket Lengkap + Media Cetak Fisik</strong> siap pajang di venue.</p>
+        </div>
+
+        <div class="segmented-wrap" id="package-mode-bar">
+          <button type="button" class="seg-btn active" onclick="switchPackageMode('digital', this)">Paket Digital Only</button>
+          <button type="button" class="seg-btn" onclick="switchPackageMode('physical', this)">Paket Lengkap + Cetak Fisik</button>
+        </div>
+
+        <div class="packages-grid" id="packages-grid-container"></div>
+
+        <div class="addons-box">
+          <h3>Layanan &amp; Media Cetak Tambahan (Add-On)</h3>
+          <div class="addons-grid" id="addons-grid-container"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- UNDANGAN DIGITAL -->
+    <section class="section-block" id="undangan">
+      <div class="container">
+        <div class="wedding-card">
+          <div>
+            <div class="eyebrow">Votura Wedding Invitation</div>
+            <h2 class="font-serif-display" style="font-size: clamp(30px, 3.8vw, 40px); line-height: 1.12; margin-top: 4px;" id="wed-title">Lengkapi Acara dengan <span class="accent-italic">Undangan Digital Elegan</span></h2>
+            <p style="font-size: 14px; color: var(--ink-muted); margin-top: 10px;" id="wed-desc">Sebar kabar bahagia lebih praktis dan berkelas. Tamu cukup membuka satu tautan untuk melihat detail acara, navigasi Google Maps, hingga mengisi RSVP &amp; doa restu secara real-time.</p>
+            <ul class="wedding-features" id="wed-features-list"></ul>
+            <div style="display:flex; flex-wrap:wrap; gap:10px;">
+              <a id="wed-demo-link" href="demo-wedding.html" target="_blank" class="btn btn-outline btn-sm">Lihat Demo Undangan</a>
+              <a id="wed-wa-btn" href="https://wa.me/6282298966860" target="_blank" class="btn btn-dark btn-sm">Pesan Undangan Digital</a>
             </div>
           </div>
-        </div>
-      </div>
 
-      <!-- 4 PILAR KEUNGGULAN -->
-      <div class="hero-bento-grid">
-        <div class="bento-pill-card">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
-          <strong>Tanpa Instal Aplikasi</strong>
-          <span>Tamu cukup scan QR dan kamera langsung terbuka di browser ponsel.</span>
-        </div>
-        <div class="bento-pill-card">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          <strong>Frame &amp; Ucapan Tamu</strong>
-          <span>Tersedia format Strip, Polaroid, 4R, hingga IG Story plus pesan ucapan.</span>
-        </div>
-        <div class="bento-pill-card">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          <strong>Panel Galeri Mandiri</strong>
-          <span>Pengantin bebas kurasi galeri &amp; unduh massal seluruh foto dalam 1 file ZIP.</span>
-        </div>
-        <div class="bento-pill-card">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
-          <strong>Opsi Media Cetak QR</strong>
-          <span>Bisa pilih Digital Only atau terima beres dengan Kartu QR &amp; Kain Sign.</span>
-        </div>
-      </div>
-    </section>
-
-    <!-- 2. INTERACTIVE LIVE DEMO SECTION (1 TEMA DEMO UTAMA) -->
-    <section class="content-section" id="demo">
-      <div class="section-head">
-        <span class="eyebrow">Coba Langsung Sekarang</span>
-        <h2 class="serif">Rasakan Pengalaman <span class="serif-accent">Virtual Photobooth</span></h2>
-        <p>Klik tombol demo di bawah ini untuk mencoba langsung fitur kamera, filter, dan frame di ponselmu.</p>
-      </div>
-
-      <div class="demo-grid" id="demo-grid"></div>
-    </section>
-
-    <!-- 3. KATALOG DESAIN FRAME & MEDIA CETAK QR -->
-    <section class="content-section" id="katalog">
-      <div class="section-head">
-        <span class="eyebrow">Katalog Visual</span>
-        <h2 class="serif">Pilihan Frame &amp; <span class="serif-accent">Media Display QR</span></h2>
-        <p>Pilih ukuran bingkai favoritmu serta media cetak fisik estetik yang siap dipajang di meja penerima tamu maupun pintu masuk venue.</p>
-      </div>
-
-      <div class="filter-tabs" id="catalog-tabs">
-        <button type="button" class="filter-tab-btn active" onclick="filterCatalog('all', this)">Semua Koleksi</button>
-        <button type="button" class="filter-tab-btn" onclick="filterCatalog('frame', this)">Desain Frame Foto</button>
-        <button type="button" class="filter-tab-btn" onclick="filterCatalog('print', this)">Kartu QR, Banner &amp; Kain Sign</button>
-      </div>
-
-      <div class="catalog-grid" id="catalog-grid"></div>
-    </section>
-
-    <!-- 4. PRICELIST VIRTUAL PHOTOBOOTH (DIGITAL VS CETAK FISIK + ADD-ON) -->
-    <section class="content-section" id="paket">
-      <div class="section-head">
-        <span class="eyebrow">Investasi Momen</span>
-        <h2 class="serif">Pilihan Paket <span class="serif-accent">Virtual Photobooth</span></h2>
-        <p>Tersedia opsi <strong>Digital Only</strong> (100% online tanpa ongkir) hingga <strong>Paket Lengkap + Media Cetak Fisik</strong> siap pajang di venue.</p>
-      </div>
-
-      <div class="filter-tabs" id="pricing-tabs">
-        <button type="button" class="filter-tab-btn active" onclick="switchPricingTab('digital', this)">Paket Digital Only</button>
-        <button type="button" class="filter-tab-btn" onclick="switchPricingTab('physical', this)">Paket Lengkap + Cetak Fisik</button>
-      </div>
-
-      <div class="pricing-grid" id="pricing-grid"></div>
-
-      <!-- ADD-ONS SECTION -->
-      <div class="addons-wrapper">
-        <span class="eyebrow">Layanan Tambahan (Opsional)</span>
-        <h3 class="serif" style="font-size: 26px; margin-top: 4px;">Add-On Media Cetak &amp; Custom Desain</h3>
-        <div class="addons-grid" id="addons-grid"></div>
-      </div>
-    </section>
-
-    <!-- 5. SECTION SEKUNDER: VOTURA WEDDING INVITATION -->
-    <section class="content-section" id="undangan">
-      <div class="wedding-banner">
-        <div>
-          <span class="eyebrow" style="color: rgba(248, 246, 242, 0.7);">Layanan Pendamping &bull; Votura Wedding</span>
-          <h2 class="serif" id="wed-title">Lengkapi Acara dengan <span style="color: #D8C3A5;">Undangan Digital Elegan</span></h2>
-          <p id="wed-desc">
-            Sebar kabar bahagia lebih praktis dan berkelas. Tamu cukup membuka satu tautan untuk melihat detail acara, navigasi Google Maps, hingga mengisi RSVP &amp; doa restu secara real-time. Tersedia harga spesial bundling bersama Virtual Photobooth!
-          </p>
-          <div class="hero-cta-row">
-            <a href="demo-wedding.html" target="_blank" id="wed-demo-link" class="btn-dark-pill" style="background: #F8F6F2; color: #23211E;">
-              <span>Lihat Demo Undangan</span>
-            </a>
-            <button type="button" class="btn-outline-pill" style="color: #FFFFFF; border-color: rgba(255,255,255,0.35);" onclick="openChatModal('Paket Bundling Undangan Digital + Virtual Photobooth')">
-              <span>Tanya Paket Bundling</span>
-            </button>
+          <div class="wedding-price-card">
+            <span style="font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent);">Mulai Dari</span>
+            <div class="price-big" id="wed-price">Rp 99.000</div>
+            <p style="font-size: 12.5px; color: var(--ink-muted); margin-bottom: 16px;">Dapatkan potongan khusus saat bundling dengan paket Virtual Photobooth.</p>
+            <a id="wed-bundle-btn" href="https://wa.me/6282298966860" target="_blank" class="btn btn-accent" style="width:100%;">Tanya Paket Bundling</a>
           </div>
         </div>
-
-        <div class="wedding-card-preview">
-          <span class="mockup-badge" style="margin-bottom: 10px;">Mulai dari <strong id="wed-price">Rp 99.000</strong></span>
-          <h3 class="serif" style="font-size: 24px;">Fitur Votura Wedding</h3>
-          <ul id="wed-features-list"></ul>
-        </div>
       </div>
     </section>
 
-    <!-- 6. CARA KERJA & FAQ -->
-    <section class="content-section" id="faq">
-      <div class="section-head">
-        <span class="eyebrow">Panduan Singkat</span>
-        <h2 class="serif">Cara Kerja &amp; <span class="serif-accent">Pertanyaan Umum</span></h2>
+    <!-- FAQ -->
+    <section class="section-block" id="faq">
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow">Pertanyaan Umum</div>
+          <h2>Hal yang Sering <span class="accent-italic">Ditanyakan</span></h2>
+        </div>
+        <div class="faq-list" id="faq-list-container"></div>
       </div>
-
-      <div class="steps-grid">
-        <div class="step-card">
-          <div class="step-num">01</div>
-          <h4>Konsultasi &amp; Pilih Frame</h4>
-          <p>Pilih paket Digital Only atau Paket Lengkap Cetak Fisik, lalu tentukan desain bingkai foto sesuai tema acaramu.</p>
-        </div>
-        <div class="step-card">
-          <div class="step-num">02</div>
-          <h4>Pajang QR Code di Venue</h4>
-          <p>Tamu cukup mengarahkan kamera ponsel ke Kartu Meja QR, Standing Banner, atau Kain Sign Gantung tanpa mengunduh aplikasi apa pun.</p>
-        </div>
-        <div class="step-card">
-          <div class="step-num">03</div>
-          <h4>Kurasi &amp; Unduh Semua Foto</h4>
-          <p>Setelah acara selesai, pengantin dapat meninjau galeri lewat Panel Klien Mandiri dan mengunduh seluruh foto dalam satu klik (ZIP).</p>
-        </div>
-      </div>
-
-      <div class="faq-list" id="faq-list"></div>
     </section>
 
-    <!-- 7. KOMITMEN LAYANAN / TESTIMONI KLIEN -->
-    <section class="content-section" id="testimoni">
-      <div class="section-head">
-        <span class="eyebrow" id="testi-eyebrow">Komitmen Votura Studio</span>
-        <h2 class="serif" id="testi-heading">Dirancang untuk <span class="serif-accent">Momen Tanpa Kendala</span></h2>
-        <p id="testi-sub">Setiap layanan kami disiapkan dengan standar kualitas visual dan kemudahan akses bagi seluruh tamu undangan.</p>
+    <!-- TESTIMONI / KOMITMEN -->
+    <section class="section-block" id="testimoni">
+      <div class="container">
+        <div class="section-header">
+          <div class="eyebrow" id="testi-eyebrow">Komitmen Kami</div>
+          <h2 id="testi-heading">Mengapa Memilih <span class="accent-italic">Votura Studio</span></h2>
+        </div>
+        <div class="testimonials-grid" id="testimonials-grid-container"></div>
       </div>
-
-      <div class="testi-grid" id="testi-grid"></div>
     </section>
+  </main>
 
-    <!-- FOOTER -->
-    <footer class="studio-footer" id="kontak">
-      <div class="footer-brand">
-        <strong style="font-size: 18px; letter-spacing: 0.06em; text-transform: uppercase;">Votura Studio</strong>
-        <p id="footer-desc">Menghadirkan pengalaman Virtual Photobooth interaktif dan Undangan Digital elegan untuk merayakan setiap momen istimewa.</p>
+  <footer>
+    <div class="container footer-row">
+      <div>
+        <strong style="font-family: 'Cormorant Garamond', serif; font-size: 20px; color: var(--ink); display: block;">Votura Studio</strong>
+        <p id="footer-desc" style="max-width: 480px; margin-top: 4px;">Menghadirkan pengalaman Virtual Photobooth interaktif dan Undangan Digital elegan untuk merayakan setiap momen istimewa.</p>
       </div>
-
-      <div class="social-pills">
-        <a href="https://wa.me/6282298966860?text=Halo%20Votura%20Studio,%20boleh%20tanya-tanya%20soal%20Virtual%20Photobooth?" target="_blank" id="footer-wa-link" class="social-pill">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
-          <span>WhatsApp</span>
-        </a>
-        <a href="https://instagram.com/voturastudio" target="_blank" id="footer-ig-link" class="social-pill">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
-          <span>Instagram</span>
-        </a>
-        <a href="https://tiktok.com/@voturastudio" target="_blank" id="footer-tiktok-link" class="social-pill">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5"/></svg>
-          <span>TikTok</span>
-        </a>
-      </div>
-    </footer>
-  </div>
-
-  <!-- MATCHING GLASS MODAL -->
-  <div class="modal-backdrop" id="chat-modal" onclick="closeModalOnOutside(event)">
-    <div class="modal-panel">
-      <span class="eyebrow" style="display: block; margin-bottom: 6px;">Mulai Obrolan</span>
-      <h3 class="serif" style="font-size: 28px; margin-bottom: 10px;" id="modal-topic-title">Tanya Votura Studio</h3>
-      <p style="font-size: 13.5px; color: var(--ink-muted); margin-bottom: 22px; line-height: 1.65;">
-        Ceritakan tanggal dan konsep acaramu lewat WhatsApp. Kami siap bantu kasih rekomendasi terbaik sebelum kamu memutuskan.
-      </p>
-      <div style="display: flex; flex-direction: column; gap: 10px;">
-        <a href="#" id="modal-wa-link" target="_blank" class="btn-dark-pill" style="justify-content: center;">
-          <span>Lanjut Obrolan di WhatsApp</span>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
-        </a>
-        <button type="button" class="btn-outline-pill" onclick="closeChatModal()">Nanti Dulu</button>
+      <div style="display:flex; gap:14px; flex-wrap:wrap; align-items:center;">
+        <a id="footer-ig" href="https://instagram.com/voturastudio" target="_blank" style="color:var(--ink); font-weight:600; text-decoration:none;">Instagram</a>
+        <a id="footer-tiktok" href="https://tiktok.com/@voturastudio" target="_blank" style="color:var(--ink); font-weight:600; text-decoration:none;">TikTok</a>
+        <a id="footer-wa" href="https://wa.me/6282298966860" target="_blank" class="btn btn-dark btn-sm">Chat WhatsApp</a>
       </div>
     </div>
+  </footer>
+
+  <!-- BOTTOM NAVIGATION DOCK -->
+  <div class="bottom-dock-wrap">
+    <nav class="bottom-dock" aria-label="Navigasi Cepat">
+      <a href="#top" class="dock-item active">Beranda</a>
+      <a href="#demo" class="dock-item">Demo</a>
+      <a href="#katalog" class="dock-item">Katalog</a>
+      <a href="#paket" class="dock-item">Paket</a>
+      <a href="#faq" class="dock-item">FAQ</a>
+    </nav>
   </div>
 
   <!-- FIREBASE SDK -->
@@ -1006,12 +1047,7 @@
     firebase.initializeApp(firebaseConfig);
     const db = firebase.firestore();
 
-    let waNumber = "6282298966860";
-    let currentData = {};
-    let currentCatalogFilter = "all";
-    let currentPricingTab = "digital";
-
-    const fallbackData = {
+    const FALLBACK_LANDING = {
       waNumber: "6282298966860",
       navCta: "Ngobrol Dulu",
       igUrl: "https://instagram.com/voturastudio",
@@ -1019,7 +1055,7 @@
       heroEyebrow: "Votura Virtual Photobooth — Digital Invitation — Creative Studio",
       heroTitle: "Abadikan Serunya Acara Langsung dari *Ponsel Tamu*",
       heroSubtitle: "Hadirkan pengalaman photobooth interaktif tanpa antre mesin dan tanpa instal aplikasi. Tamu cukup scan QR Code, berfoto dengan frame eksklusif acaramu, dan semua kenangan otomatis tersimpan rapi di galeri pengantin.",
-      heroImageUrl: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=900&q=80",
+      heroImageUrl: "https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1000&q=80",
       showcaseTitle: "Tanpa Antre, Tanpa Batas Jumlah Foto",
       showcaseDesc: "Dilengkapi opsi cetak Kartu Meja QR, Standing Banner, hingga Kain Sign Gantung estetik yang menyatu dengan dekorasi acaramu.",
       demos: [
@@ -1027,59 +1063,19 @@
           tag: "Interactive Demo",
           title: "Votura Virtual Photobooth",
           desc: "Coba langsung pengalaman ambil foto, ganti filter, tulis pesan ucapan untuk pengantin, dan unduh hasil strip fotonya langsung dari browser HP-mu.",
-          imageUrl: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=700&q=80",
+          imageUrl: "https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=900&q=80",
           demoUrl: "demo-photobooth.html"
         }
       ],
       catalogItems: [
-        {
-          category: "frame",
-          title: "Frame Strip Classic (3 Pose)",
-          badge: "Strip",
-          imageUrl: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=600&q=80"
-        },
-        {
-          category: "frame",
-          title: "Frame Polaroid Minimalist",
-          badge: "Polaroid",
-          imageUrl: "https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=600&q=80"
-        },
-        {
-          category: "frame",
-          title: "Frame 4R Editorial",
-          badge: "4R",
-          imageUrl: "https://images.unsplash.com/photo-1507504031003-b417219a0fde?auto=format&fit=crop&w=600&q=80"
-        },
-        {
-          category: "frame",
-          title: "Frame IG Story 9:16",
-          badge: "IG Story",
-          imageUrl: "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&w=600&q=80"
-        },
-        {
-          category: "print",
-          title: "Kain Sign Gantung Linen QR",
-          badge: "Kain Sign",
-          imageUrl: "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?auto=format&fit=crop&w=600&q=80"
-        },
-        {
-          category: "print",
-          title: "Kartu Meja QR Art Carton",
-          badge: "Kartu QR",
-          imageUrl: "https://images.unsplash.com/photo-1544078751-58fee2d8a03b?auto=format&fit=crop&w=600&q=80"
-        },
-        {
-          category: "print",
-          title: "Standing Welcome Banner QR",
-          badge: "Banner Sign",
-          imageUrl: "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=600&q=80"
-        },
-        {
-          category: "print",
-          title: "Display QR Akrilik / Meja Tamu",
-          badge: "Table Sign",
-          imageUrl: "https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=600&q=80"
-        }
+        { category: "frame", title: "Frame Strip Classic (3 Pose)", badge: "Strip", imageUrl: "https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=900&q=80" },
+        { category: "frame", title: "Frame Polaroid Minimalist", badge: "Polaroid", imageUrl: "https://images.unsplash.com/photo-1537633552985-df8429e8048b?auto=format&fit=crop&w=900&q=80" },
+        { category: "frame", title: "Frame 4R Editorial", badge: "4R", imageUrl: "https://images.unsplash.com/photo-1507504031003-b417219a0fde?auto=format&fit=crop&w=900&q=80" },
+        { category: "frame", title: "Frame IG Story 9:16", badge: "IG Story", imageUrl: "https://images.unsplash.com/photo-1515934751635-c81c6bc9a2d8?auto=format&fit=crop&w=900&q=80" },
+        { category: "print", title: "Kain Sign Gantung Linen QR", badge: "Kain Sign", imageUrl: "https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?auto=format&fit=crop&w=900&q=80" },
+        { category: "print", title: "Kartu Meja QR Art Carton", badge: "Kartu QR", imageUrl: "https://images.unsplash.com/photo-1544078751-58fee2d8a03b?auto=format&fit=crop&w=900&q=80" },
+        { category: "print", title: "Standing Welcome Banner QR", badge: "Banner Sign", imageUrl: "https://images.unsplash.com/photo-1519167758481-83f550bb49b3?auto=format&fit=crop&w=900&q=80" },
+        { category: "print", title: "Display QR Akrilik / Meja Tamu", badge: "Table Sign", imageUrl: "https://images.unsplash.com/photo-1523438885200-e635ba2c371e?auto=format&fit=crop&w=900&q=80" }
       ],
       digitalPackages: [
         {
@@ -1211,262 +1207,275 @@
           a: "Kartu Meja QR, Banner Sign, maupun Kain Sign Gantung dapat kami kirim ke seluruh Indonesia menggunakan ekspedisi reguler maupun kilat. Untuk kebutuhan mendadak, kamu juga bisa memilih Paket Digital Only agar file siap cetak langsung dikirim hari itu juga."
         }
       ],
+      useRealTestimonials: false,
       testimonials: [],
       footerDesc: "Menghadirkan pengalaman Virtual Photobooth interaktif dan Undangan Digital elegan untuk merayakan setiap momen istimewa."
     };
 
-    const launchCommitments = [
+    const COMMITMENT_CARDS = [
       {
-        text: "Aplikasi berbasis web ringan yang langsung terbuka di browser ponsel tamu dalam hitungan detik tanpa perlu mengunduh aplikasi tambahan.",
-        author: "Akses Instan Tanpa Aplikasi",
-        role: "Standar Performa Votura"
+        text: "Proses cepat & siap pakai: tim kami bantu siapkan frame dan QR Code acara sebelum hari-H agar kamu tinggal fokus menikmati momen bersama keluarga.",
+        author: "Pendampingan Praktis",
+        role: "Mulai dari Persiapan hingga Hari-H"
       },
       {
-        text: "Setiap pasangan mendapatkan akses khusus untuk meninjau hasil foto tamu, menyaring foto yang kurang sesuai, dan mengunduh seluruh galeri dalam satu klik ZIP.",
-        author: "Kontrol Penuh Galeri Pengantin",
-        role: "Privasi & Kenyamanan Acara"
+        text: "Semua foto dan ucapan tamu tersimpan rapi dalam satu galeri yang bisa ditinjau dan diunduh kembali kapan saja sesuai masa aktif paket.",
+        author: "Arsip Kenangan Terkelola",
+        role: "Galeri & Unduh Massal Mudah"
       },
       {
-        text: "Tim studio siap membantu mulai dari pemilihan desain frame, penyesuaian warna tema acara, hingga persiapan file siap cetak maupun pengiriman media display QR.",
-        author: "Pendampingan Desain & Teknis",
-        role: "Dukungan Penuh Sebelum Hari-H"
+        text: "Desain bingkai dan media cetak QR dibuat menyatu dengan nuansa acara, baik untuk intimate wedding, resepsi besar, maupun acara komunitas.",
+        author: "Estetika Menyatu dengan Acara",
+        role: "Digital & Cetak Fisik"
       }
     ];
 
-    function formatHeadline(raw) {
-      return String(raw || "").replace(/\*([^*]+)\*/g, '<span class="serif-accent">$1</span>');
+    let activeData = JSON.parse(JSON.stringify(FALLBACK_LANDING));
+    let currentCatalogFilter = 'all';
+    let currentPackageMode = 'digital';
+
+    function escapeHtml(str) {
+      return String(str || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;");
     }
 
-    function applyPageContent(data) {
-      currentData = data;
-      waNumber = data.waNumber || "6282298966860";
+    function formatAccentText(raw) {
+      const safe = escapeHtml(raw || "");
+      return safe.replace(/\*(.+?)\*/g, '<span class="accent-italic">$1</span>');
+    }
 
-      document.getElementById('nav-cta-label').textContent = data.navCta || "Ngobrol Dulu";
-      document.getElementById('hero-eyebrow').textContent = data.heroEyebrow || "";
-      document.getElementById('hero-headline').innerHTML = formatHeadline(data.heroTitle || fallbackData.heroTitle);
-      document.getElementById('hero-subtitle').textContent = data.heroSubtitle || "";
-      document.getElementById('showcase-title').textContent = data.showcaseTitle || "";
-      document.getElementById('showcase-desc').textContent = data.showcaseDesc || "";
+    function buildWaLink(waNumber, text) {
+      const cleanNum = String(waNumber || "6282298966860").replace(/\D/g, "");
+      return `https://wa.me/${cleanNum}?text=${encodeURIComponent(text)}`;
+    }
 
-      const showcaseBox = document.getElementById('showcase-box');
-      showcaseBox.style.backgroundImage = data.heroImageUrl ? `url('${data.heroImageUrl}')` : "";
+    function renderLanding(data) {
+      activeData = {
+        ...JSON.parse(JSON.stringify(FALLBACK_LANDING)),
+        ...data,
+        weddingSection: {
+          ...FALLBACK_LANDING.weddingSection,
+          ...(data.weddingSection || {})
+        }
+      };
 
-      document.getElementById('footer-desc').textContent = data.footerDesc || "";
-      document.getElementById('footer-wa-link').href = `https://wa.me/${waNumber}?text=${encodeURIComponent("Halo Votura Studio, boleh tanya-tanya soal Virtual Photobooth?")}`;
-      document.getElementById('footer-ig-link').href = data.igUrl || "https://instagram.com/voturastudio";
-      document.getElementById('footer-tiktok-link').href = data.tiktokUrl || "https://tiktok.com/@voturastudio";
+      const waNum = activeData.waNumber || FALLBACK_LANDING.waNumber;
+      const navCtaEl = document.getElementById('nav-cta-btn');
+      navCtaEl.textContent = activeData.navCta || "Ngobrol Dulu";
+      navCtaEl.href = buildWaLink(waNum, "Halo Votura Studio, saya ingin tanya-tanya info Virtual Photobooth / Undangan Digital.");
 
-      // 1. Render Live Demos (Otomatis layout elegan jika hanya 1 item)
-      const demos = data.demos && data.demos.length ? data.demos : fallbackData.demos;
-      const demoGrid = document.getElementById('demo-grid');
-      demoGrid.classList.toggle('single-demo', demos.length === 1);
-      demoGrid.innerHTML = demos.map(d => `
-        <article class="demo-card">
-          <div class="demo-thumb" style="background-image: url('${d.imageUrl || ''}');">
-            <span class="demo-tag">${d.tag || 'Demo'}</span>
-          </div>
+      document.getElementById('hero-eyebrow').textContent = activeData.heroEyebrow || "";
+      document.getElementById('hero-title').innerHTML = formatAccentText(activeData.heroTitle || "");
+      document.getElementById('hero-subtitle').textContent = activeData.heroSubtitle || "";
+      document.getElementById('showcase-title').textContent = activeData.showcaseTitle || "";
+      document.getElementById('showcase-desc').textContent = activeData.showcaseDesc || "";
+
+      const heroImg = document.getElementById('hero-showcase-img');
+      if (activeData.heroImageUrl) {
+        heroImg.src = activeData.heroImageUrl;
+        heroImg.style.display = 'block';
+      } else {
+        heroImg.style.display = 'none';
+      }
+
+      renderDemos();
+      renderCatalog();
+      renderPackages();
+      renderAddons();
+      renderWeddingSection(waNum);
+      renderFaqs();
+      renderTestimonials();
+      renderFooter(waNum);
+    }
+
+    function renderDemos() {
+      const container = document.getElementById('demo-cards-container');
+      const demos = activeData.demos || [];
+      container.innerHTML = demos.map(d => `
+        <div class="demo-card">
+          ${d.imageUrl ? `<img class="demo-thumb" src="${escapeHtml(d.imageUrl)}" alt="${escapeHtml(d.title)}">` : ''}
           <div class="demo-body">
-            <div>
-              <h3 class="serif">${d.title || ''}</h3>
-              <p>${d.desc || ''}</p>
-            </div>
-            <a href="${d.demoUrl || 'demo-photobooth.html'}" target="_blank" class="btn-dark-pill" style="justify-content: center;">
-              <span>Coba Demo Photobooth</span>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
-            </a>
+            <span class="demo-tag">${escapeHtml(d.tag || "Live Demo")}</span>
+            <h3>${escapeHtml(d.title || "")}</h3>
+            <p>${escapeHtml(d.desc || "")}</p>
+            <a href="${escapeHtml(d.demoUrl || 'demo-photobooth.html')}" target="_blank" class="btn btn-dark btn-sm">Buka Live Demo</a>
           </div>
-        </article>
-      `).join('');
-
-      // 2. Render Katalog Frame & Print
-      renderCatalogGrid();
-
-      // 3. Render Pricing Packages
-      renderPricingGrid();
-
-      // 4. Render Add-Ons
-      const addons = data.addons && data.addons.length ? data.addons : fallbackData.addons;
-      document.getElementById('addons-grid').innerHTML = addons.map(a => `
-        <div class="addon-row">
-          <div>
-            <strong>${a.name || ''}</strong>
-            <span>${a.desc || ''}</span>
-          </div>
-          <div class="addon-price">${a.price || ''}</div>
         </div>
       `).join('');
+    }
 
-      // 5. Render Wedding Secondary Section
-      const wed = { ...fallbackData.weddingSection, ...(data.weddingSection || {}) };
-      document.getElementById('wed-title').innerHTML = String(wed.title || "").replace(/\*([^*]+)\*/g, '<span style="color: #D8C3A5;">$1</span>');
+    window.filterCatalog = function(cat, btn) {
+      currentCatalogFilter = cat;
+      document.querySelectorAll('#catalog-filter-bar .seg-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      renderCatalog();
+    };
+
+    function renderCatalog() {
+      const container = document.getElementById('catalog-grid-container');
+      const items = (activeData.catalogItems || []).filter(item =>
+        currentCatalogFilter === 'all' || item.category === currentCatalogFilter
+      );
+
+      container.innerHTML = items.map(item => `
+        <div class="catalog-card">
+          <div class="catalog-img-wrap">
+            ${item.imageUrl ? `<img src="${escapeHtml(item.imageUrl)}" alt="${escapeHtml(item.title)}">` : ''}
+            ${item.badge ? `<span class="catalog-badge">${escapeHtml(item.badge)}</span>` : ''}
+          </div>
+          <div class="catalog-info">
+            <h3>${escapeHtml(item.title || "")}</h3>
+          </div>
+        </div>
+      `).join('');
+    }
+
+    window.switchPackageMode = function(mode, btn) {
+      currentPackageMode = mode;
+      document.querySelectorAll('#package-mode-bar .seg-btn').forEach(b => b.classList.remove('active'));
+      if (btn) btn.classList.add('active');
+      renderPackages();
+    };
+
+    function renderPackages() {
+      const container = document.getElementById('packages-grid-container');
+      const list = currentPackageMode === 'physical'
+        ? (activeData.physicalPackages || [])
+        : (activeData.digitalPackages || []);
+      const waNum = activeData.waNumber || FALLBACK_LANDING.waNumber;
+
+      container.innerHTML = list.map(pkg => {
+        const waMsg = `Halo Votura Studio, saya tertarik memesan paket *${pkg.name}* (${pkg.price}). Mohon info ketersediaannya.`;
+        const feats = (pkg.features || []).map(f => `<li>${escapeHtml(f)}</li>`).join('');
+        return `
+          <div class="pkg-card ${pkg.popular ? 'popular' : ''}">
+            ${pkg.popular ? `<span class="popular-pill">Terlaris</span>` : ''}
+            <span class="pkg-tag">${escapeHtml(pkg.tag || "")}</span>
+            <h3 class="pkg-name">${escapeHtml(pkg.name || "")}</h3>
+            <p class="pkg-desc">${escapeHtml(pkg.desc || "")}</p>
+            <div class="pkg-price-box">
+              ${pkg.strikePrice ? `<span class="pkg-strike">${escapeHtml(pkg.strikePrice)}</span>` : ''}
+              <div class="pkg-price-row">
+                <span class="pkg-price">${escapeHtml(pkg.price || "")}</span>
+                ${pkg.unit ? `<span class="pkg-unit">${escapeHtml(pkg.unit)}</span>` : ''}
+              </div>
+            </div>
+            <ul class="pkg-features">${feats}</ul>
+            <a href="${buildWaLink(waNum, waMsg)}" target="_blank" class="btn ${pkg.popular ? 'btn-dark' : 'btn-outline'}" style="width:100%;">Pilih ${escapeHtml(pkg.name)}</a>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderAddons() {
+      const container = document.getElementById('addons-grid-container');
+      const addons = activeData.addons || [];
+      container.innerHTML = addons.map(a => `
+        <div class="addon-item">
+          <div>
+            <strong>${escapeHtml(a.name || "")}</strong>
+            <span>${escapeHtml(a.desc || "")}</span>
+          </div>
+          <span class="addon-price">${escapeHtml(a.price || "")}</span>
+        </div>
+      `).join('');
+    }
+
+    function renderWeddingSection(waNum) {
+      const wed = activeData.weddingSection || FALLBACK_LANDING.weddingSection;
+      document.getElementById('wed-title').innerHTML = formatAccentText(wed.title || "");
       document.getElementById('wed-desc').textContent = wed.desc || "";
       document.getElementById('wed-price').textContent = wed.price || "Rp 99.000";
       document.getElementById('wed-demo-link').href = wed.demoUrl || "demo-wedding.html";
-      document.getElementById('wed-features-list').innerHTML = (wed.features || []).map(f => `
-        <li>
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#D8C3A5" stroke-width="2.2"><polyline points="20 6 9 17 4 12"/></svg>
-          <span>${f}</span>
-        </li>
-      `).join('');
 
-      // 6. Render FAQ
-      const faqs = data.faqs && data.faqs.length ? data.faqs : fallbackData.faqs;
-      document.getElementById('faq-list').innerHTML = faqs.map((item, idx) => `
-        <div class="faq-item ${idx === 0 ? 'open' : ''}">
-          <button type="button" class="faq-question" onclick="this.parentElement.classList.toggle('open')">
-            <span>${item.q || ''}</span>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-          </button>
-          <div class="faq-answer">${item.a || ''}</div>
-        </div>
-      `).join('');
+      document.getElementById('wed-features-list').innerHTML = (wed.features || [])
+        .map(f => `<li>${escapeHtml(f)}</li>`).join('');
 
-    // 7. Render Testimonials (Mode Peluncuran: Tampilkan Komitmen Layanan terlebih dahulu)
-    const validTestis = Array.isArray(data.testimonials) && data.useRealTestimonials === true
-      ? data.testimonials.filter(t => t && (t.text || '').trim() !== '')
-      : [];
+      const waUndangan = buildWaLink(waNum, "Halo Votura Studio, saya ingin info Undangan Digital Votura.");
+      const waBundling = buildWaLink(waNum, "Halo Votura Studio, saya mau tanya harga bundling Virtual Photobooth + Undangan Digital.");
+      document.getElementById('wed-wa-btn').href = waUndangan;
+      document.getElementById('wed-bundle-btn').href = waBundling;
+    }
 
-      const hasRealTestimonials = validTestis.length > 0;
-      document.getElementById('testi-eyebrow').textContent = hasRealTestimonials ? "Ulasan Klien" : "Komitmen Votura Studio";
-      document.getElementById('testi-heading').innerHTML = hasRealTestimonials
-        ? 'Cerita di Balik <span class="serif-accent">Setiap Acara</span>'
-        : 'Dirancang untuk <span class="serif-accent">Momen Tanpa Kendala</span>';
-      document.getElementById('testi-sub').style.display = hasRealTestimonials ? 'none' : 'block';
-
-      const cardsToRender = hasRealTestimonials ? validTestis : launchCommitments;
-      document.getElementById('testi-grid').innerHTML = cardsToRender.map(t => `
-        <div class="testi-card">
-          <p class="testi-text">${hasRealTestimonials ? `&ldquo;${t.text || ''}&rdquo;` : (t.text || '')}</p>
-          <div class="testi-client">
-            <strong>${t.author || ''}</strong>
-            <span>${t.role || ''}</span>
-          </div>
+    function renderFaqs() {
+      const container = document.getElementById('faq-list-container');
+      const faqs = activeData.faqs || [];
+      container.innerHTML = faqs.map(item => `
+        <div class="faq-item">
+          <div class="faq-q">${escapeHtml(item.q || "")}</div>
+          <div class="faq-a">${escapeHtml(item.a || "")}</div>
         </div>
       `).join('');
     }
 
-    function filterCatalog(cat, btn) {
-      currentCatalogFilter = cat;
-      document.querySelectorAll('#catalog-tabs .filter-tab-btn').forEach(b => b.classList.remove('active'));
-      if (btn) btn.classList.add('active');
-      renderCatalogGrid();
-    }
+    function renderTestimonials() {
+      const eyebrowEl = document.getElementById('testi-eyebrow');
+      const headingEl = document.getElementById('testi-heading');
+      const container = document.getElementById('testimonials-grid-container');
 
-    function renderCatalogGrid() {
-      const items = currentData.catalogItems && currentData.catalogItems.length ? currentData.catalogItems : fallbackData.catalogItems;
-      const filtered = currentCatalogFilter === 'all' ? items : items.filter(i => i.category === currentCatalogFilter);
-      document.getElementById('catalog-grid').innerHTML = filtered.map(item => `
-        <div class="catalog-item">
-          <img class="catalog-img" src="${item.imageUrl || ''}" alt="${item.title || ''}" loading="lazy">
-          <div class="catalog-caption">
-            <strong>${item.title || ''}</strong>
-            <span>${item.badge || ''}</span>
+      const hasReal = activeData.useRealTestimonials === true &&
+        Array.isArray(activeData.testimonials) &&
+        activeData.testimonials.some(t => (t.text || "").trim() || (t.author || "").trim());
+
+      if (hasReal) {
+        eyebrowEl.textContent = "Cerita Klien";
+        headingEl.innerHTML = `Apa Kata <span class="accent-italic">Mereka</span>`;
+        const validList = activeData.testimonials.filter(t => (t.text || "").trim());
+        container.innerHTML = validList.map(t => `
+          <div class="testi-card">
+            <p>"${escapeHtml(t.text)}"</p>
+            <div class="testi-author">${escapeHtml(t.author || "Klien Votura")}</div>
+            ${t.role ? `<div class="testi-role">${escapeHtml(t.role)}</div>` : ''}
           </div>
-        </div>
-      `).join('');
-    }
-
-    function switchPricingTab(tab, btn) {
-      currentPricingTab = tab;
-      document.querySelectorAll('#pricing-tabs .filter-tab-btn').forEach(b => b.classList.remove('active'));
-      if (btn) btn.classList.add('active');
-      renderPricingGrid();
-    }
-
-    function renderPricingGrid() {
-      const list = currentPricingTab === 'physical'
-        ? (currentData.physicalPackages && currentData.physicalPackages.length ? currentData.physicalPackages : fallbackData.physicalPackages)
-        : (currentData.digitalPackages && currentData.digitalPackages.length ? currentData.digitalPackages : fallbackData.digitalPackages);
-
-      document.getElementById('pricing-grid').innerHTML = list.map(pkg => `
-        <article class="price-card ${pkg.popular ? 'featured' : ''}">
-          ${pkg.popular ? '<span class="popular-badge">Paling Diminati</span>' : ''}
-          <div>
-            <span class="price-tag">${pkg.tag || ''}</span>
-            <h3 class="serif">${pkg.name || ''}</h3>
-            <p class="price-desc">${pkg.desc || ''}</p>
-            <div class="price-amount-box">
-              ${pkg.strikePrice ? `<span class="price-strike">${pkg.strikePrice}</span>` : ''}
-              <span class="price-main">${pkg.price || ''}</span> <span class="price-unit">${pkg.unit || '/ acara'}</span>
-            </div>
-            <ul class="clean-list">
-              ${(pkg.features || []).map(f => `
-                <li>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
-                  <span>${f}</span>
-                </li>
-              `).join('')}
-            </ul>
+        `).join('');
+      } else {
+        eyebrowEl.textContent = "Komitmen Kami";
+        headingEl.innerHTML = `Mengapa Memilih <span class="accent-italic">Votura Studio</span>`;
+        container.innerHTML = COMMITMENT_CARDS.map(c => `
+          <div class="testi-card">
+            <p>${escapeHtml(c.text)}</p>
+            <div class="testi-author">${escapeHtml(c.author)}</div>
+            <div class="testi-role">${escapeHtml(c.role)}</div>
           </div>
-          <button type="button" class="btn-dark-pill" style="justify-content: center; width: 100%;" onclick="openChatModal('${(pkg.name || '').replace(/'/g, "\\'")} (${(pkg.price || '').replace(/'/g, "\\'")})')">
-            <span>Tanya Paket Ini</span>
-          </button>
-        </article>
-      `).join('');
+        `).join('');
+      }
     }
 
-    function openChatModal(topicName) {
-      document.getElementById('modal-topic-title').textContent = topicName;
-      const text = encodeURIComponent(`Halo Votura Studio, saya mau tanya-tanya dulu seputar ${topicName}. Boleh dibantu infonya?`);
-      document.getElementById('modal-wa-link').href = `https://wa.me/${waNumber}?text=${text}`;
-      document.getElementById('chat-modal').classList.add('open');
+    function renderFooter(waNum) {
+      document.getElementById('footer-desc').textContent = activeData.footerDesc || FALLBACK_LANDING.footerDesc;
+      if (activeData.igUrl) document.getElementById('footer-ig').href = activeData.igUrl;
+      if (activeData.tiktokUrl) document.getElementById('footer-tiktok').href = activeData.tiktokUrl;
+      document.getElementById('footer-wa').href = buildWaLink(waNum, "Halo Votura Studio!");
     }
 
-    function closeChatModal() {
-      document.getElementById('chat-modal').classList.remove('open');
-    }
-
-    function closeModalOnOutside(e) {
-      if (e.target.id === 'chat-modal') closeChatModal();
-    }
-
-    const sections = document.querySelectorAll('section[id], footer[id], div[id="beranda"]');
-    const navLinks = document.querySelectorAll('.nav-pill-group a, .side-dock a');
-
+    // Highlight active dock item on scroll
+    const dockItems = document.querySelectorAll('.dock-item');
+    const sectionIds = ['top', 'demo', 'katalog', 'paket', 'faq'];
     window.addEventListener('scroll', () => {
-      let current = 'beranda';
-      sections.forEach(sec => {
-        if (window.scrollY >= sec.offsetTop - 160) current = sec.getAttribute('id');
+      let current = 'top';
+      sectionIds.forEach(id => {
+        const el = document.getElementById(id);
+        if (el && window.scrollY >= el.offsetTop - 180) {
+          current = id;
+        }
       });
-      navLinks.forEach(link => {
-        link.classList.toggle('active', link.getAttribute('href') === `#${current}`);
+      dockItems.forEach(a => {
+        a.classList.toggle('active', a.getAttribute('href') === `#${current}`);
       });
     }, { passive: true });
 
-    const CACHE_KEY = "votura_landing_cache_v4";
-    const shellEl = document.getElementById("beranda");
-
-    function revealShell() {
-      shellEl.classList.remove("is-loading");
-    }
-
-    const cachedRaw = localStorage.getItem(CACHE_KEY);
-    if (cachedRaw) {
-      try {
-        const cachedData = JSON.parse(cachedRaw);
-        applyPageContent({ ...fallbackData, ...cachedData });
-        revealShell();
-      } catch (e) {
-        console.warn("Cache invalid, menunggu Firestore...");
-      }
-    }
-
+    // Real-time listener ke Firestore settings/landing_page
+    renderLanding(FALLBACK_LANDING);
     db.collection("settings").doc("landing_page").onSnapshot((doc) => {
       if (doc.exists) {
-        const freshData = doc.data();
-        localStorage.setItem(CACHE_KEY, JSON.stringify(freshData));
-        applyPageContent({ ...fallbackData, ...freshData });
-      } else {
-        applyPageContent(fallbackData);
+        renderLanding(doc.data());
       }
-      revealShell();
-    }, (error) => {
-      console.warn("Gagal memuat Firestore, menggunakan fallback:", error);
-      applyPageContent(fallbackData);
-      revealShell();
+    }, () => {
+      // Tetap gunakan FALLBACK_LANDING jika gagal terhubung
     });
-
-    setTimeout(revealShell, 1500);
   </script>
 </body>
 </html>
