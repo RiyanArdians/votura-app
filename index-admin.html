@@ -114,7 +114,6 @@
       line-height: 1.25;
     }
 
-    /* NAVIGASI CARD RINGKAS PER SECTION (ANTI SCROLL PANJANG) */
     .sub-card-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
@@ -302,7 +301,6 @@
 
     .item-header strong { font-size: 13.5px; }
 
-    /* MODE TERKUNCI UNTUK DATA CLIENT YANG SUDAH TERSIMPAN */
     .client-body-wrap.is-locked input:not([type="file"]),
     .client-body-wrap.is-locked select,
     .client-body-wrap.is-locked textarea {
@@ -385,6 +383,17 @@
       flex-shrink: 0;
     }
 
+    .img-preview-pill {
+      width: 58px;
+      height: 86px;
+      border-radius: 999px;
+      object-fit: cover;
+      object-position: center 20%;
+      background: var(--bg-base);
+      border: 2px solid var(--accent);
+      flex-shrink: 0;
+    }
+
     .img-preview-ornament {
       width: 66px;
       height: 66px;
@@ -442,6 +451,57 @@
     }
 
     .client-frame-row:last-child { border-bottom: none; padding-bottom: 0; }
+
+    .pb-posts-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(175px, 1fr));
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .pb-post-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .pb-post-card img {
+      width: 100%;
+      aspect-ratio: 3 / 4;
+      object-fit: cover;
+      background: #1C1A17;
+      display: block;
+    }
+
+    .pb-post-info {
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      flex: 1;
+    }
+
+    .pb-post-info strong {
+      font-size: 12.5px;
+      color: var(--ink);
+    }
+
+    .pb-post-info span {
+      font-size: 10.5px;
+      color: var(--ink-muted);
+    }
+
+    .pb-post-info p {
+      font-size: 11.5px;
+      color: #3A3631;
+      font-style: italic;
+      flex: 1;
+      margin: 2px 0 6px;
+      word-break: break-word;
+    }
 
     .save-bar {
       position: fixed;
@@ -888,11 +948,23 @@
         { file: "templates/wedding-5.html", label: "Wedding 5 — Midnight Velvet Luxe", bgMain: "#121214", accent: "#E2B49A", ink: "#F4F1EE", fontH: "'Bodoni Moda', serif", fontB: "'Montserrat', sans-serif" }
       ],
       photobooth: [
-        { file: "templates/pb-1.html", label: "Photobooth 1 — Classic Editorial Booth (Default)", bgMain: "#EFECE6", accent: "#8C7355", ink: "#23211E", fontH: "'Cormorant Garamond', serif", fontB: "'Plus Jakarta Sans', sans-serif" },
+        { file: "templates/pb-1.html", label: "Photobooth 1 — Royal Crimson & Gold (Default)", bgMain: "#7A3D44", accent: "#D4AF37", ink: "#FFFFFF", fontH: "'Cormorant Garamond', serif", fontB: "'Plus Jakarta Sans', sans-serif" },
         { file: "templates/pb-2.html", label: "Photobooth 2 — Modern Party Studio", bgMain: "#FFFFFF", accent: "#18181B", ink: "#18181B", fontH: "'Space Grotesk', sans-serif", fontB: "'Inter', sans-serif" },
         { file: "templates/pb-3.html", label: "Photobooth 3 — Midnight Glam Booth", bgMain: "#121214", accent: "#E2B49A", ink: "#F4F1EE", fontH: "'Bodoni Moda', serif", fontB: "'Montserrat', sans-serif" }
       ]
     };
+
+    const DEFAULT_PB_CLIENT_FRAMES = [
+      { name: "Classic Royal (3 Foto)", tag: "ROYAL EDITION", count: 3, path: `${GITHUB_RAW_BASE}/frame/dsg3.png` },
+      { name: "Classic Royal (2 Foto)", tag: "ROYAL EDITION", count: 2, path: `${GITHUB_RAW_BASE}/frame/dsg2.png` },
+      { name: "Classic Royal (1 Foto)", tag: "ROYAL EDITION", count: 1, path: `${GITHUB_RAW_BASE}/frame/dsg1.png` },
+      { name: "Floral Romance (3 Foto)", tag: "FLORAL COLLECTION", count: 3, path: `${GITHUB_RAW_BASE}/frame/flower3.png` },
+      { name: "Floral Romance (2 Foto)", tag: "FLORAL COLLECTION", count: 2, path: `${GITHUB_RAW_BASE}/frame/flower2.png` },
+      { name: "Floral Romance (1 Foto)", tag: "FLORAL COLLECTION", count: 1, path: `${GITHUB_RAW_BASE}/frame/flower1.png` },
+      { name: "Minimalist Modern (3 Foto)", tag: "MINIMALIST STYLE", count: 3, path: `${GITHUB_RAW_BASE}/frame/line%203.png` },
+      { name: "Minimalist Modern (2 Foto)", tag: "MINIMALIST STYLE", count: 2, path: `${GITHUB_RAW_BASE}/frame/line%202.png` },
+      { name: "Minimalist Modern (1 Foto)", tag: "MINIMALIST STYLE", count: 1, path: `${GITHUB_RAW_BASE}/frame/line%201.png` }
+    ];
 
     let musicLibrary = [];
 
@@ -1008,7 +1080,7 @@
       await addTrackToMusicLibrary(normalized, songTitle, eventId);
 
       if (infoEl) {
-        infoEl.innerHTML = `<span style="color:var(--success); font-weight:600;">✓ "${escapeHtml(songTitle)}" ditambahkan ke Pilihan Musik Latar</span> — Klik <strong>Putar</strong> untuk tes atau <strong>Simpan Semua Detail</strong>.`;
+        infoEl.innerHTML = `<span style="color:var(--success); font-weight:600;">✓ "${escapeHtml(songTitle)}" ditambahkan ke Pilihan Musik Latar</span> — Klik <strong>Putar</strong> untuk tes atau <strong>Simpan Detail</strong>.`;
       }
     }
 
@@ -1020,7 +1092,7 @@
         const sizeKb = Math.round(file.size / 1024);
         showCmsModal(
           "Ukuran Audio Terlalu Besar (" + sizeKb + " KB)",
-          "Agar undangan cepat dibuka tamu dan muat di database, maksimal file MP3 unggahan langsung adalah 650 KB (durasi sekitar 30-45 detik, bitrate 64-96 kbps).\n\nUntuk lagu full berdurasi panjang (3-4 MB), unggah file .mp3 ke folder GitHub repository kamu lalu tempel link raw-nya di kolom URL Musik."
+          "Agar halaman cepat dibuka tamu dan muat di database, maksimal file MP3 unggahan langsung adalah 650 KB.\n\nUntuk lagu full berdurasi panjang (3-4 MB), unggah file .mp3 ke folder GitHub repository kamu lalu tempel link raw-nya di kolom URL Musik."
         );
         inputEl.value = "";
         return;
@@ -1093,7 +1165,7 @@
         const img = new Image();
         img.onload = function() {
           const canvas = document.createElement('canvas');
-          const maxDim = customMaxDim || (keepTransparency ? 580 : 560);
+          const maxDim = customMaxDim || (keepTransparency ? 680 : 560);
           let width = img.width;
           let height = img.height;
 
@@ -1115,21 +1187,20 @@
 
           let dataUrl;
           if (keepTransparency) {
-            dataUrl = canvas.toDataURL('image/webp', 0.76);
-            if (!dataUrl.startsWith('data:image/webp')) dataUrl = canvas.toDataURL('image/png');
+            dataUrl = canvas.toDataURL('image/png');
           } else {
-            dataUrl = canvas.toDataURL('image/webp', 0.70);
-            if (!dataUrl.startsWith('data:image/webp')) dataUrl = canvas.toDataURL('image/jpeg', 0.70);
+            dataUrl = canvas.toDataURL('image/webp', 0.72);
+            if (!dataUrl.startsWith('data:image/webp')) dataUrl = canvas.toDataURL('image/jpeg', 0.72);
           }
 
           const approxBytes = Math.round((dataUrl.length * 3) / 4);
-          if (approxBytes > 65 * 1024) {
-            const ratio = 400 / Math.max(width, height);
+          if (approxBytes > 120 * 1024) {
+            const ratio = 460 / Math.max(width, height);
             canvas.width = Math.round(width * ratio);
             canvas.height = Math.round(height * ratio);
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-            dataUrl = keepTransparency ? canvas.toDataURL('image/webp', 0.68) : canvas.toDataURL('image/jpeg', 0.64);
+            dataUrl = keepTransparency ? canvas.toDataURL('image/png') : canvas.toDataURL('image/jpeg', 0.65);
           }
 
           if (onSuccess) onSuccess(dataUrl);
@@ -1211,6 +1282,7 @@
     let demoPhotoboothData = JSON.parse(JSON.stringify(defaultDemoPhotobooth));
     let superAdminEvents = [];
     let clientSubPhotosCache = {};
+    let clientPhotoboothPostsCache = {};
 
     function switchAdminTab(tabId, btnEl) {
       activeTabId = tabId;
@@ -1254,6 +1326,16 @@
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;")
         .replace(/"/g, "&quot;");
+    }
+
+    function formatShortDate(ts) {
+      if (!ts) return "";
+      let ms = 0;
+      if (ts.toMillis) ms = ts.toMillis();
+      else if (ts.seconds) ms = ts.seconds * 1000;
+      else ms = new Date(ts).getTime();
+      if (!ms || isNaN(ms)) return "";
+      return new Date(ms).toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
     }
 
     async function initCms() {
@@ -1480,7 +1562,7 @@
     function removeDpFrame(idx) { demoPhotoboothData.frames.splice(idx, 1); renderDpFramesEditor(); }
 
     /* ============================================================
-       4. WEB VISUAL PESANAN KLIEN (DROPDOWN PEMILIH CLIENT + CARD RINGKAS)
+       4. WEB VISUAL PESANAN KLIEN (WEDDING & PHOTOBOOTH TERPADU)
        ============================================================ */
     async function refreshClientsFromServer() {
       const container = document.getElementById('clients-editor-list');
@@ -1499,13 +1581,17 @@
           const evData = doc.data();
           superAdminEvents.push({ id: doc.id, ...evData });
           if (clientEditModes[doc.id] === undefined) {
-            const hasSavedDetail = Boolean(evData.groomFullName || evData.brideFullName || evData.groomPhoto || evData.bridePhoto);
+            const hasSavedDetail = Boolean(evData.groomFullName || evData.brideFullName || evData.groomPhoto || evData.bridePhoto || evData.photoboothQuote || evData.photoboothCover);
             clientEditModes[doc.id] = !hasSavedDetail;
           }
           if (!clientActiveSubCards[doc.id]) {
             clientActiveSubCards[doc.id] = `cl-sec-1-${doc.id}`;
           }
-          if (evData.type === 'wedding') listenClientSubPhotos(doc.id);
+          if (evData.type === 'wedding') {
+            listenClientSubPhotos(doc.id);
+          } else {
+            listenClientPhotoboothPosts(doc.id);
+          }
         });
         const countBadge = document.getElementById('client-count-badge');
         if (countBadge) countBadge.textContent = superAdminEvents.length;
@@ -1529,7 +1615,6 @@
         return;
       }
 
-      // Pastikan selectedClientId valid di dalam daftar hasil filter; jika tidak, pilih client pertama otomatis
       const stillExists = filtered.some(ev => ev.id === selectedClientId) || selectedClientId === 'all';
       if (!stillExists || !selectedClientId) {
         selectedClientId = filtered[0].id;
@@ -1586,6 +1671,50 @@
         const box = document.getElementById(`sa-gal-list-${eventId}`);
         if (box) box.innerHTML = buildClientGalleryRowsHtml(eventId, items);
       });
+    }
+
+    function listenClientPhotoboothPosts(eventId) {
+      if (clientPhotoboothPostsCache[eventId]) return;
+      clientPhotoboothPostsCache[eventId] = [];
+      db.collection("events").doc(eventId).collection("photobooth_posts").onSnapshot((snap) => {
+        const items = [];
+        snap.forEach(d => items.push({ postId: d.id, ...d.data() }));
+        items.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+        clientPhotoboothPostsCache[eventId] = items;
+        const box = document.getElementById(`sa-pb-posts-list-${eventId}`);
+        if (box) box.innerHTML = buildClientPhotoboothPostsHtml(eventId, items);
+        const countSpan = document.getElementById(`sa-pb-posts-count-${eventId}`);
+        if (countSpan) countSpan.textContent = items.length;
+      });
+    }
+
+    function buildClientPhotoboothPostsHtml(eventId, posts) {
+      if (!Array.isArray(posts) || posts.length === 0) {
+        return `<p style="font-size:12.5px; color:var(--ink-muted); padding:10px 0;">Belum ada foto yang diunggah tamu pada acara ini.</p>`;
+      }
+      return `<div class="pb-posts-grid">` + posts.map(p => `
+        <div class="pb-post-card">
+          <img src="${escapeHtml(p.photoData || '')}" alt="${escapeHtml(p.name || 'Tamu')}" loading="lazy">
+          <div class="pb-post-info">
+            <strong>${escapeHtml(p.name || 'Tamu Undangan')}</strong>
+            <span>${escapeHtml(formatShortDate(p.createdAt))}</span>
+            <p>"${escapeHtml(p.message || '-')}"</p>
+            <div style="display:flex; gap:6px;">
+              <a href="${escapeHtml(p.photoData || '')}" download="${escapeHtml((p.name || 'Tamu') + '-Votura.jpg')}" class="btn btn-outline btn-sm" style="flex:1; padding:6px 8px;">Unduh</a>
+              <button type="button" class="btn btn-danger" style="flex:1; padding:6px 8px;" onclick="deleteClientPhotoboothPost('${escapeHtml(eventId)}', '${escapeHtml(p.postId)}')">Hapus</button>
+            </div>
+          </div>
+        </div>
+      `).join('') + `</div>`;
+    }
+
+    async function deleteClientPhotoboothPost(eventId, postId) {
+      try {
+        await db.collection("events").doc(eventId).collection("photobooth_posts").doc(postId).delete();
+        showCmsModal("Kiriman Dihapus", "Foto kiriman tamu telah dihapus dari galeri.");
+      } catch (err) {
+        showCmsModal("Gagal Menghapus", err.message);
+      }
     }
 
     function copyClientUrl(fileName, eventId) {
@@ -1717,7 +1846,7 @@
         const selectedLabel = selectEl?.options[selectEl.selectedIndex]?.text || "Lagu Library";
         if (urlInput) urlInput.value = val;
         if (infoEl) {
-          infoEl.innerHTML = `<span style="color:var(--success); font-weight:600;">✓ Lagu "${escapeHtml(selectedLabel)}" dipilih dari Library.</span> Klik <strong>Putar</strong> untuk tes atau <strong>Simpan Semua Detail</strong>.`;
+          infoEl.innerHTML = `<span style="color:var(--success); font-weight:600;">✓ Lagu "${escapeHtml(selectedLabel)}" dipilih dari Library.</span> Klik <strong>Putar</strong> untuk tes atau <strong>Simpan Detail</strong>.`;
         }
       }
     }
@@ -1930,6 +2059,7 @@
         const stories = Array.isArray(ev.stories) ? ev.stories : [];
         const banks = Array.isArray(ev.banks) ? ev.banks : [];
         const subPhotos = clientSubPhotosCache[ev.id] || [];
+        const pbPosts = clientPhotoboothPostsCache[ev.id] || [];
         const isEditable = clientEditModes[ev.id] !== false;
         const activeCardId = clientActiveSubCards[ev.id] || `cl-sec-1-${ev.id}`;
 
@@ -2132,10 +2262,17 @@
             </div>
           `;
         } else {
+          const pbCoverImg = ev.photoboothCover || ev.heroUrl || defaultPhoto;
+          const pbQuote = ev.photoboothQuote || ev.welcomeQuote || "Satu foto menyimpan sejuta kenangan. Terima kasih telah menjadi bagian dari hari bahagia kami!";
+          const pbEyebrow = ev.eyebrowText || "VIRTUAL PHOTOBOOTH";
+          const pbPrimaryBtn = ev.ctaPrimaryLabel || "TAMBAHKAN MOMEN";
+          const pbGalleryBtn = ev.ctaGalleryLabel || "JELAJAHI KENANGAN";
+
           const pbSubCards = [
-            { id: `cl-sec-1-${ev.id}`, step: '1', name: 'Tema, Warna & Musik' },
-            { id: `cl-sec-2-${ev.id}`, step: '2', name: 'Identitas & Foto Hero' },
-            { id: `cl-sec-3-${ev.id}`, step: '3', name: 'Daftar Frame PNG' }
+            { id: `cl-sec-1-${ev.id}`, step: '1', name: 'Tema & Warna' },
+            { id: `cl-sec-2-${ev.id}`, step: '2', name: 'Halaman Utama & Sampul' },
+            { id: `cl-sec-3-${ev.id}`, step: '3', name: `Daftar Frame PNG (${frames.length})` },
+            { id: `cl-sec-4-${ev.id}`, step: '4', name: `Galeri Tamu (${pbPosts.length})` }
           ];
 
           const pbGridHtml = `
@@ -2152,8 +2289,16 @@
           const framesRowsHtml = frames.map((fr, fIdx) => `
             <div class="client-frame-row">
               <img src="${escapeHtml(fr.path || `${GITHUB_RAW_BASE}/frame/dsg3.png`)}" class="img-preview-frame" alt="Frame">
-              <div style="flex:1; min-width:140px;"><label style="margin-bottom:4px;">Nama Frame</label><input type="text" value="${escapeHtml(fr.name || '')}" onchange="updateClientFrameField('${escapeHtml(ev.id)}', ${fIdx}, 'name', this.value)"></div>
-              <div style="width:120px;"><label style="margin-bottom:4px;">Jumlah Slot</label>
+              <div style="flex:1; min-width:140px;">
+                <label style="margin-bottom:4px;">Nama Frame</label>
+                <input type="text" value="${escapeHtml(fr.name || '')}" onchange="updateClientFrameField('${escapeHtml(ev.id)}', ${fIdx}, 'name', this.value)">
+              </div>
+              <div style="width:130px;">
+                <label style="margin-bottom:4px;">Kategori Tag</label>
+                <input type="text" value="${escapeHtml(fr.tag || 'CUSTOM EDITION')}" onchange="updateClientFrameField('${escapeHtml(ev.id)}', ${fIdx}, 'tag', this.value)">
+              </div>
+              <div style="width:110px;">
+                <label style="margin-bottom:4px;">Jumlah Slot</label>
                 <select onchange="updateClientFrameField('${escapeHtml(ev.id)}', ${fIdx}, 'count', parseInt(this.value, 10))">
                   <option value="1" ${Number(fr.count) === 1 ? 'selected' : ''}>1 Foto</option>
                   <option value="2" ${Number(fr.count) === 2 ? 'selected' : ''}>2 Foto</option>
@@ -2161,7 +2306,7 @@
                 </select>
               </div>
               <div>
-                <label style="margin-bottom:4px;">Desain Bingkai PNG</label>
+                <label style="margin-bottom:4px;">File PNG Transparan</label>
                 <input type="file" id="cl-fr-file-${ev.id}-${fIdx}" accept="image/png,image/webp" style="display:none;" onchange="handleCompressedImage(this, true, (dataUrl) => { updateClientFrameField('${escapeHtml(ev.id)}', ${fIdx}, 'path', dataUrl); renderSuperAdminClients(); })">
                 <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('cl-fr-file-${ev.id}-${fIdx}').click()">Unggah PNG</button>
               </div>
@@ -2174,6 +2319,7 @@
               <div>
                 <strong>ID: ${escapeHtml(ev.id)} — ${escapeHtml(ev.name || 'Tanpa Nama')}</strong>
                 <span class="badge-pill" style="margin-left:6px;">PHOTOBOOTH</span>
+                <span class="badge-pill ${ev.status === 'active' ? 'badge-active' : 'badge-locked'}" style="margin-left:4px;">${escapeHtml(ev.status || 'active')}</span>
               </div>
               <div style="display:flex; gap:6px; flex-wrap:wrap;">
                 <button type="button" class="btn btn-outline btn-sm" onclick="copyClientUrl('${escapeHtml(pageFile)}', '${escapeHtml(ev.id)}')">Salin Link</button>
@@ -2191,17 +2337,50 @@
 
             <div id="cl-sec-2-${ev.id}" class="sub-section-pane ${activeCardId === `cl-sec-2-${ev.id}` ? 'active' : ''}" data-group="client-${escapeHtml(ev.id)}">
               <div class="theme-config-box">
+                <div class="theme-config-header">
+                  <strong style="font-size:13px;">2. Pengaturan Halaman Utama &amp; Sampul Photobooth Client</strong>
+                  <span style="font-size:11px; color:var(--ink-muted);">Tampil di Amplop Pembuka &amp; Beranda</span>
+                </div>
+                <div class="grid-3">
+                  <div class="form-group">
+                    <label>Nama Event / Pasangan Mempelai</label>
+                    <input type="text" id="sa-name-${ev.id}" value="${escapeHtml(ev.name || '')}" placeholder="Misal: Andri & Ani">
+                  </div>
+                  <div class="form-group">
+                    <label>Tanggal Acara</label>
+                    <input type="text" id="sa-date-${ev.id}" value="${escapeHtml(ev.eventDate || '')}" placeholder="Misal: 18 Oktober 2027">
+                  </div>
+                  <div class="form-group">
+                    <label>Label Kecil Atas (Eyebrow)</label>
+                    <input type="text" id="sa-pb-eyebrow-${ev.id}" value="${escapeHtml(pbEyebrow)}" placeholder="VIRTUAL PHOTOBOOTH">
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label>Kalimat Sambutan / Kutipan Beranda</label>
+                  <textarea rows="2" id="sa-pb-quote-${ev.id}" placeholder="Satu foto menyimpan sejuta kenangan...">${escapeHtml(pbQuote)}</textarea>
+                </div>
                 <div class="grid-2">
-                  <div class="form-group"><label>Nama Event / Pasangan</label><input type="text" id="sa-name-${ev.id}" value="${escapeHtml(ev.name || '')}"></div>
-                  <div class="form-group"><label>Tanggal Acara</label><input type="text" id="sa-date-${ev.id}" value="${escapeHtml(ev.eventDate || '')}"></div>
+                  <div class="form-group">
+                    <label>Teks Tombol Utama (Mulai Foto)</label>
+                    <input type="text" id="sa-pb-btn-main-${ev.id}" value="${escapeHtml(pbPrimaryBtn)}" placeholder="TAMBAHKAN MOMEN">
+                  </div>
+                  <div class="form-group">
+                    <label>Teks Tombol Galeri Kenangan</label>
+                    <input type="text" id="sa-pb-btn-gal-${ev.id}" value="${escapeHtml(pbGalleryBtn)}" placeholder="JELAJAHI KENANGAN">
+                  </div>
                 </div>
                 <div class="form-group" style="margin-bottom:0;">
-                  <label>Foto Hero Beranda Photobooth Client</label>
+                  <label>Foto Sampul Utama (Bingkai Kapsul di Halaman Depan)</label>
                   <div class="img-upload-row">
-                    <img src="${escapeHtml(ev.heroUrl || defaultPhoto)}" id="sa-hero-prev-${ev.id}" class="img-preview" alt="Hero Client">
+                    <img src="${escapeHtml(pbCoverImg)}" id="sa-hero-prev-${ev.id}" class="img-preview-pill" alt="Sampul Photobooth">
                     <div class="upload-controls">
-                      <input type="file" id="sa-hero-file-${ev.id}" accept="image/*" style="display:none;" onchange="handleCompressedImage(this, false, (dataUrl) => { setClientPhotoCache('${ev.id}', 'heroUrl', dataUrl); document.getElementById('sa-hero-prev-${ev.id}').src = dataUrl; })">
-                      <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('sa-hero-file-${ev.id}').click()">Unggah Foto Beranda</button>
+                      <input type="file" id="sa-hero-file-${ev.id}" accept="image/*" style="display:none;" onchange="handleCompressedImage(this, false, (dataUrl) => { setClientPhotoCache('${ev.id}', 'heroUrl', dataUrl); setClientPhotoCache('${ev.id}', 'photoboothCover', dataUrl); document.getElementById('sa-hero-prev-${ev.id}').src = dataUrl; document.getElementById('sa-pb-cover-url-${ev.id}').value = ''; })">
+                      <div style="display:flex; gap:6px; flex-wrap:wrap; margin-bottom:8px;">
+                        <button type="button" class="btn btn-dark btn-sm" onclick="document.getElementById('sa-hero-file-${ev.id}').click()">Unggah Foto Sampul</button>
+                        <button type="button" class="btn btn-outline btn-sm" onclick="setClientPhotoCache('${ev.id}', 'heroUrl', '${defaultPhoto}'); setClientPhotoCache('${ev.id}', 'photoboothCover', '${defaultPhoto}'); document.getElementById('sa-hero-prev-${ev.id}').src = '${defaultPhoto}'; document.getElementById('sa-pb-cover-url-${ev.id}').value = '';">Reset Bawaan</button>
+                      </div>
+                      <input type="url" id="sa-pb-cover-url-${ev.id}" value="${pbCoverImg.startsWith('http') ? escapeHtml(pbCoverImg) : ''}" placeholder="Atau tempel URL foto sampul (https://...)" oninput="if(this.value.trim()){ setClientPhotoCache('${ev.id}', 'heroUrl', this.value.trim()); setClientPhotoCache('${ev.id}', 'photoboothCover', this.value.trim()); document.getElementById('sa-hero-prev-${ev.id}').src = this.value.trim(); }">
+                      <div class="upload-hint">Gunakan foto potret vertikal dengan wajah berada di tengah atas agar pas dalam bingkai kapsul.</div>
                     </div>
                   </div>
                 </div>
@@ -2210,12 +2389,32 @@
 
             <div id="cl-sec-3-${ev.id}" class="sub-section-pane ${activeCardId === `cl-sec-3-${ev.id}` ? 'active' : ''}" data-group="client-${escapeHtml(ev.id)}">
               <div class="client-frame-sublist">
-                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-                  <strong style="font-size:12.5px;">Daftar Frame Khusus Client (${frames.length} Frame)</strong>
-                  <button type="button" class="btn btn-accent btn-sm" onclick="addClientFrame('${escapeHtml(ev.id)}')">+ Tambah Frame</button>
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; flex-wrap:wrap; gap:8px;">
+                  <div>
+                    <strong style="font-size:13px;">3. Daftar Frame Khusus Client (${frames.length} Frame)</strong>
+                    <div style="font-size:11.5px; color:var(--ink-muted);">Jika kosong, otomatis memakai 9 frame bawaan Votura Studio.</div>
+                  </div>
+                  <div style="display:flex; gap:6px; flex-wrap:wrap;">
+                    <button type="button" class="btn btn-outline btn-sm" onclick="loadDefaultFramesForClient('${escapeHtml(ev.id)}')">Isi 9 Frame Bawaan</button>
+                    <button type="button" class="btn btn-accent btn-sm" onclick="addClientFrame('${escapeHtml(ev.id)}')">+ Tambah Frame PNG</button>
+                  </div>
                 </div>
-                ${frames.length > 0 ? framesRowsHtml : '<p style="font-size:12px; color:var(--ink-muted);">Belum ada frame khusus.</p>'}
+                ${frames.length > 0 ? framesRowsHtml : '<p style="font-size:12px; color:var(--ink-muted); padding:8px 0;">Belum ada frame custom. Klik "+ Tambah Frame PNG" atau "Isi 9 Frame Bawaan".</p>'}
               </div>
+            </div>
+
+            <div id="cl-sec-4-${ev.id}" class="sub-section-pane ${activeCardId === `cl-sec-4-${ev.id}` ? 'active' : ''}" data-group="client-${escapeHtml(ev.id)}">
+              <div class="client-frame-sublist">
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                  <strong style="font-size:13px;">4. Galeri Kiriman Foto Tamu (<span id="sa-pb-posts-count-${ev.id}">${pbPosts.length}</span> Foto)</strong>
+                </div>
+                <div style="font-size:11.5px; color:var(--ink-muted); margin-bottom:8px;">Foto strip &amp; ucapan doa yang dikirim tamu secara real-time.</div>
+                <div id="sa-pb-posts-list-${ev.id}">${buildClientPhotoboothPostsHtml(ev.id, pbPosts)}</div>
+              </div>
+            </div>
+
+            <div style="margin-top:12px;">
+              <button type="button" class="btn btn-dark" style="width:100%;" onclick="saveSuperAdminClientVisual('${escapeHtml(ev.id)}', 'photobooth')">Simpan Semua Pengaturan Photobooth Client</button>
             </div>
           `;
         }
@@ -2324,7 +2523,15 @@
       const target = superAdminEvents.find(e => e.id === eventId);
       if (!target) return;
       if (!Array.isArray(target.frames)) target.frames = [];
-      target.frames.push({ name: "Frame Custom (3 Foto)", tag: "CUSTOM EDITION", count: 3, path: `${GITHUB_RAW_BASE}/frame/dsg3.png` });
+      target.frames.unshift({ name: "Frame Custom (3 Foto)", tag: "CUSTOM EDITION", count: 3, path: `${GITHUB_RAW_BASE}/frame/dsg3.png` });
+      clientActiveSubCards[eventId] = `cl-sec-3-${eventId}`;
+      renderSuperAdminClients();
+    }
+    function loadDefaultFramesForClient(eventId) {
+      const target = superAdminEvents.find(e => e.id === eventId);
+      if (!target) return;
+      target.frames = JSON.parse(JSON.stringify(DEFAULT_PB_CLIENT_FRAMES));
+      clientActiveSubCards[eventId] = `cl-sec-3-${eventId}`;
       renderSuperAdminClients();
     }
     function updateClientFrameField(eventId, frameIdx, key, val) {
@@ -2333,7 +2540,11 @@
     }
     function removeClientFrame(eventId, frameIdx) {
       const target = superAdminEvents.find(e => e.id === eventId);
-      if (target && target.frames) { target.frames.splice(frameIdx, 1); renderSuperAdminClients(); }
+      if (target && target.frames) {
+        target.frames.splice(frameIdx, 1);
+        clientActiveSubCards[eventId] = `cl-sec-3-${eventId}`;
+        renderSuperAdminClients();
+      }
     }
 
     async function saveSuperAdminClientVisual(eventId, type) {
@@ -2418,23 +2629,31 @@
         payload.turutRekan = document.getElementById(`sa-turut-rekan-${eventId}`)?.value.trim() || "";
         payload.customAssets = target.customAssets || {};
       } else {
-        payload.heroUrl = target.heroUrl || "";
+        const pbCover = target.photoboothCover || target.heroUrl || "";
+        const pbQuote = document.getElementById(`sa-pb-quote-${eventId}`)?.value.trim() || "";
+        payload.heroUrl = pbCover;
+        payload.photoboothCover = pbCover;
+        payload.photoboothQuote = pbQuote;
+        payload.welcomeQuote = pbQuote;
+        payload.eyebrowText = document.getElementById(`sa-pb-eyebrow-${eventId}`)?.value.trim() || "VIRTUAL PHOTOBOOTH";
+        payload.ctaPrimaryLabel = document.getElementById(`sa-pb-btn-main-${eventId}`)?.value.trim() || "TAMBAHKAN MOMEN";
+        payload.ctaGalleryLabel = document.getElementById(`sa-pb-btn-gal-${eventId}`)?.value.trim() || "JELAJAHI KENANGAN";
         payload.frames = Array.isArray(target.frames) ? target.frames : [];
       }
 
       const payloadSizeKb = Math.round(new Blob([JSON.stringify(payload)]).size / 1024);
       if (payloadSizeKb > 980) {
-        showCmsModal("Ukuran Total Terlalu Besar", `Total ukuran foto & musik dalam satu dokumen mencapai ${payloadSizeKb} KB (batas maksimal 980 KB). Silakan gunakan link URL MP3 eksternal atau unggah ulang beberapa foto agar terkompresi lebih ringan.`);
+        showCmsModal("Ukuran Total Terlalu Besar", `Total ukuran foto & frame dalam satu dokumen mencapai ${payloadSizeKb} KB (batas maksimal 980 KB). Silakan gunakan link URL gambar atau kurangi jumlah frame PNG lokal.`);
         return;
       }
 
       try {
         await db.collection("events").doc(eventId).set(payload, { merge: true });
         Object.assign(target, payload);
-        clientEditModes[eventId] = false;
+        if (type === 'wedding') clientEditModes[eventId] = false;
         populateClientSelectorDropdown();
         renderSuperAdminClients();
-        showCmsModal("Tersimpan Permanen (" + payloadSizeKb + " KB)", `Seluruh data, musik latar, foto mempelai, dan ornamen grafis untuk "${updatedName}" telah tersimpan.\n\nKlik tombol "Edit Data" kapan saja jika ingin mengubahnya lagi.`);
+        showCmsModal("Tersimpan Permanen (" + payloadSizeKb + " KB)", `Seluruh pengaturan halaman utama, foto sampul, dan frame untuk "${updatedName}" telah tersimpan dan langsung aktif di web client.`);
       } catch (err) {
         showCmsModal("Gagal Menyimpan", err.message);
       }
