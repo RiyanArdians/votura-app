@@ -26,7 +26,7 @@
       --transition: cubic-bezier(0.22, 1, 0.36, 1);
     }
 
-- { box-sizing: border-box; margin: 0; padding: 0; scroll-behavior: smooth; }
+    * { box-sizing: border-box; margin: 0; padding: 0; scroll-behavior: smooth; }
 
     body {
       background-color: var(--bg-base);
@@ -716,7 +716,27 @@
       .dock-divider { width: 1px; height: 18px; }
       .hero-section, .content-section, .studio-footer { padding-left: 20px; padding-right: 20px; }
       .studio-footer { padding-bottom: 92px; }
-      .hero-bento-grid, .catalog-grid { grid-template-columns: 1fr; }
+      .hero-bento-grid { grid-template-columns: 1fr; }
+
+      /* PERBAIKAN 1: Wadah tab paket & katalog agar tidak meluber saat turun baris di HP */
+      .filter-tabs {
+        display: flex;
+        flex-wrap: wrap;
+        width: 100%;
+        border-radius: 20px;
+      }
+      .filter-tab-btn {
+        flex: 1 1 auto;
+        text-align: center;
+        border-radius: 14px;
+        padding: 9px 14px;
+      }
+
+      /* PERBAIKAN 2: Grid katalog tetap 2 kolom di HP agar kartu tidak melebar penuh */
+      .catalog-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+      }
     }
   </style>
 </head>
@@ -1256,7 +1276,6 @@
       document.getElementById('footer-ig-link').href = data.igUrl || "https://instagram.com/voturastudio";
       document.getElementById('footer-tiktok-link').href = data.tiktokUrl || "https://tiktok.com/@voturastudio";
 
-      // 1. Render Live Demos (Otomatis layout elegan jika hanya 1 item)
       const demos = data.demos && data.demos.length ? data.demos : fallbackData.demos;
       const demoGrid = document.getElementById('demo-grid');
       demoGrid.classList.toggle('single-demo', demos.length === 1);
@@ -1278,13 +1297,9 @@
         </article>
       `).join('');
 
-      // 2. Render Katalog Frame & Print
       renderCatalogGrid();
-
-      // 3. Render Pricing Packages
       renderPricingGrid();
 
-      // 4. Render Add-Ons
       const addons = data.addons && data.addons.length ? data.addons : fallbackData.addons;
       document.getElementById('addons-grid').innerHTML = addons.map(a => `
         <div class="addon-row">
@@ -1296,7 +1311,6 @@
         </div>
       `).join('');
 
-      // 5. Render Wedding Secondary Section
       const wed = { ...fallbackData.weddingSection, ...(data.weddingSection || {}) };
       document.getElementById('wed-title').innerHTML = String(wed.title || "").replace(/\*([^*]+)\*/g, '<span style="color: #D8C3A5;">$1</span>');
       document.getElementById('wed-desc').textContent = wed.desc || "";
@@ -1309,7 +1323,6 @@
         </li>
       `).join('');
 
-      // 6. Render FAQ
       const faqs = data.faqs && data.faqs.length ? data.faqs : fallbackData.faqs;
       document.getElementById('faq-list').innerHTML = faqs.map((item, idx) => `
         <div class="faq-item ${idx === 0 ? 'open' : ''}">
@@ -1321,10 +1334,9 @@
         </div>
       `).join('');
 
-    // 7. Render Testimonials (Mode Peluncuran: Tampilkan Komitmen Layanan terlebih dahulu)
-    const validTestis = Array.isArray(data.testimonials) && data.useRealTestimonials === true
-      ? data.testimonials.filter(t => t && (t.text || '').trim() !== '')
-      : [];
+      const validTestis = Array.isArray(data.testimonials) && data.useRealTestimonials === true
+        ? data.testimonials.filter(t => t && (t.text || '').trim() !== '')
+        : [];
 
       const hasRealTestimonials = validTestis.length > 0;
       document.getElementById('testi-eyebrow').textContent = hasRealTestimonials ? "Ulasan Klien" : "Komitmen Votura Studio";
