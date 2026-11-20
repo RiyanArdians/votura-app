@@ -1321,10 +1321,10 @@
         </div>
       `).join('');
 
-      // 7. Render Testimonials (Jika kosong -> tampilkan Komitmen Layanan)
-      const validTestis = Array.isArray(data.testimonials)
-        ? data.testimonials.filter(t => t && (t.text || '').trim() !== '')
-        : [];
+    // 7. Render Testimonials (Mode Peluncuran: Tampilkan Komitmen Layanan terlebih dahulu)
+    const validTestis = Array.isArray(data.testimonials) && data.useRealTestimonials === true
+      ? data.testimonials.filter(t => t && (t.text || '').trim() !== '')
+      : [];
 
       const hasRealTestimonials = validTestis.length > 0;
       document.getElementById('testi-eyebrow').textContent = hasRealTestimonials ? "Ulasan Klien" : "Komitmen Votura Studio";
